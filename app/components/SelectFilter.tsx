@@ -97,7 +97,7 @@ export function Filter({
     <div className="mt-2">
     <Select
       selectedKeys={[value]}
-      defaultSelectedKeys={[value]}
+      defaultSelectedKeys={[value]} size="sm"
       labelPlacement={placement} label={label} placeholder={placeholder}
       className="w-36 sm:w-44 md:w-52 bg-background rounded-small" radius="sm"
       onChange={(e) => {
