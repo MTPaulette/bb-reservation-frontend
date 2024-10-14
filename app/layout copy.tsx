@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "@/app/styles/globals.css";
-// import { geistSans, geistMono } from "@/app/styles/fonts";
-import { ubuntu } from "@/app/styles/fonts";
+import { geistSans, geistMono } from "@/app/styles/fonts";
+import Navbar from "./components/navbar/Navbar";
+import Footer from "./components/Footer";
 
 import {Provider} from "@/app/utils/Provider"
 
@@ -18,10 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* <body className={`${fredoka.className} antialiased`}> */}
-      {/* <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}> */}
-      <body className={`${ubuntu.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Provider>
-          {children}
+          <div className="relative max-w-full overflow-hidden">
+            <Navbar />
+            <main className="bg-secondary-200">
+              {children}
+            </main>
+                  {/* <BackToTop /> */}
+            <Footer />
+          </div>
         </Provider>
       </body>
     </html>

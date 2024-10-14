@@ -53,24 +53,36 @@ const config: Config = {
         light: {
           colors: {
             background: "#ffffff",
-            foreground: "#111",
-            divider: "rgba(17,17,17,0.15)",
-            focus: "#006FEE",
-            content1: "#ffffff",
-            content2: "#f3f4f6",
-            content3: "#eee", // "#e4e4e7",
-            content4: "#d4d4d8",
-            default: "#d4d4d8", //gris pour les hover des dropdown
-            primary: {
-              DEFAULT: "#262262",// bleu //"#666"
-              foreground: "#fff",
+            foreground: "#08062F", //"#0D001A",
+            focus: "#F182F6",
+            default: {
+              foreground: "#000000",
+            },
+            primary: { 
+              100: "#FEF4CC",
+              200: "#FDE699",
+              300: "#FBD466",
+              400: "#F7C040",
+              500: "#F2A304",
+              600: "#D08502",
+              700: "#AE6902",
+              800: "#8C4F01",
+              900: "#743E00",
+              DEFAULT: "#F2A304",
             },
             secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
-              foreground: "#111",
+              100: "#F8F8F9",
+              200: "#F1F1F4",
+              300: "#DBDBDF",
+              400: "#BCBCC0",
+              500: "#929296",
+              600: "#222222",
+              700: "#49496C",
+              800: "#2E2E57",
+              900: "#1C1C48",
+              DEFAULT: "#929296",
+              foreground: "#000",
             },
-            success: "#0B9444", // vert
-            warning: "#F2A304", //orange //FDE699
           },
           layout: {
             disabledOpacity: "0.3",
@@ -102,24 +114,36 @@ const config: Config = {
           },
           colors: {
             background: "#000000",
-            foreground: "#ECEDEE",
-            divider: "rgba(255,255,255,0.15)",
-            focus: "#006FEE",
-            content1: "#18181b",
-            content2: "#27272a",
-            content3: "#3f3f46",
-            content4: "#52525b",
-            default: "#3f3f46", //gris pour les hover des dropdown
-            primary: {
-              DEFAULT: "#929296", // bleu //"#666"
-              foreground: "#fff",
+            foreground: "#DBDBDF",//"#DBDBDF",
+            focus: "#F182F6",
+            default: {
+              foreground: "#ffffff",
+            },
+            primary: { 
+              100: "#FEF4CC",
+              200: "#FDE699",
+              300: "#FBD466",
+              400: "#F7C040",
+              500: "#F2A304",
+              600: "#D08502",
+              700: "#AE6902",
+              800: "#8C4F01",
+              900: "#743E00",
+              DEFAULT: "#F2A304",
             },
             secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
-              foreground: "#111",
+              100: "#F8F8F9",
+              200: "#F1F1F4",
+              300: "#DBDBDF",
+              400: "#BCBCC0",
+              500: "#929296",
+              600: "#222222",
+              700: "#49496C",
+              800: "#2E2E57",
+              900: "#1C1C48",
+              DEFAULT: "#929296",
+              foreground: "#000",
             },
-            success: "#0B9444", // vert
-            warning: "#F2A304", //orange //FDE699
           },
         },
       },

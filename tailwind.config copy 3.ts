@@ -60,17 +60,11 @@ const config: Config = {
             content2: "#f3f4f6",
             content3: "#eee", // "#e4e4e7",
             content4: "#d4d4d8",
-            default: "#d4d4d8", //gris pour les hover des dropdown
-            primary: {
-              DEFAULT: "#262262",// bleu //"#666"
-              foreground: "#fff",
-            },
-            secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
-              foreground: "#111",
-            },
+            default: "#d4d4d8", //gris 0B9444
+            primary: "#F2A304", //orange //FDE699
+            secondary: "#262262",// bleu //"#666",
+            
             success: "#0B9444", // vert
-            warning: "#F2A304", //orange //FDE699
           },
           layout: {
             disabledOpacity: "0.3",
@@ -109,17 +103,10 @@ const config: Config = {
             content2: "#27272a",
             content3: "#3f3f46",
             content4: "#52525b",
-            default: "#3f3f46", //gris pour les hover des dropdown
-            primary: {
-              DEFAULT: "#929296", // bleu //"#666"
-              foreground: "#fff",
-            },
-            secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
-              foreground: "#111",
-            },
-            success: "#0B9444", // vert
-            warning: "#F2A304", //orange //FDE699
+            default: "#3f3f46",
+            primary: "#F2A304",
+            secondary: "#929296",
+            success: "#0B9444"
           },
         },
       },

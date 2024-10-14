@@ -53,24 +53,37 @@ const config: Config = {
         light: {
           colors: {
             background: "#ffffff",
-            foreground: "#111",
-            divider: "rgba(17,17,17,0.15)",
-            focus: "#006FEE",
-            content1: "#ffffff",
-            content2: "#f3f4f6",
-            content3: "#eee", // "#e4e4e7",
-            content4: "#d4d4d8",
-            default: "#d4d4d8", //gris pour les hover des dropdown
+            foreground: "#08062F", //"#0D001A",
+            focus: "#F182F6",
+            default: {
+              foreground: "#000000",
+            },
             primary: {
-              DEFAULT: "#262262",// bleu //"#666"
-              foreground: "#fff",
+              100: "#D9D6F7",
+              200: "#B5B0EF",
+              300: "#847ECF",
+              400: "#5752A0",
+              500: "#262262",
+              600: "#1C1854",
+              700: "#131146",
+              800: "#0C0A38",
+              900: "#08062F",
+              50: "green",
+              DEFAULT: "#5752A0",
             },
             secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
-              foreground: "#111",
+              100: "#F8F8F9",
+              200: "#F1F1F4",
+              300: "#DBDBDF",
+              400: "#BCBCC0",
+              500: "#929296",
+              600: "#6A6A81",
+              700: "#49496C",
+              800: "#2E2E57",
+              900: "#1C1C48",
+              DEFAULT: "#929296",
+              foreground: "#000",
             },
-            success: "#0B9444", // vert
-            warning: "#F2A304", //orange //FDE699
           },
           layout: {
             disabledOpacity: "0.3",
@@ -85,8 +98,6 @@ const config: Config = {
             },
           },
         },
-
-
         dark: {
           layout: {
             disabledOpacity: "0.3",
@@ -102,24 +113,37 @@ const config: Config = {
           },
           colors: {
             background: "#000000",
-            foreground: "#ECEDEE",
-            divider: "rgba(255,255,255,0.15)",
-            focus: "#006FEE",
-            content1: "#18181b",
-            content2: "#27272a",
-            content3: "#3f3f46",
-            content4: "#52525b",
-            default: "#3f3f46", //gris pour les hover des dropdown
+            foreground: "#DBDBDF",//"#DBDBDF",
+            focus: "#F182F6",
+            default: {
+              foreground: "#ffffff",
+            },
             primary: {
-              DEFAULT: "#929296", // bleu //"#666"
-              foreground: "#fff",
+              100: "#D9D6F7",
+              200: "#B5B0EF",
+              300: "#847ECF",
+              400: "#5752A0",
+              500: "#262262",
+              600: "#1C1854",
+              700: "#131146",
+              800: "#0C0A38",
+              900: "#08062F",
+              50: "green",
+              DEFAULT: "#262262",
             },
             secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
-              foreground: "#111",
+              100: "#F8F8F9",
+              200: "#F1F1F4",
+              300: "#DBDBDF",
+              400: "#BCBCC0",
+              500: "#929296",
+              600: "#6A6A81",
+              700: "#49496C",
+              800: "#2E2E57",
+              900: "#1C1C48",
+              DEFAULT: "#929296",
+              foreground: "#000",
             },
-            success: "#0B9444", // vert
-            warning: "#F2A304", //orange //FDE699
           },
         },
       },
@@ -127,3 +151,14 @@ const config: Config = {
   ],
 };
 export default config;
+
+{
+  "color-primary-100": "#CBF9CC",
+  "color-primary-200": "#99F4A4",
+  "color-primary-300": "#63DE7D",
+  "color-primary-400": "#3ABE64",
+  "color-primary-500": "#0B9444",
+  "color-primary-600": "#087F45",
+  "color-primary-700": "#056A43",
+  "color-primary-800": "#03553E",
+  "color-primary-900": "#02473A",
