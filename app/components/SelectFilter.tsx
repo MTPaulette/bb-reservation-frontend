@@ -40,7 +40,7 @@ export default function SelectFilter({
           </Button>
         </div>
       </div>
-      <div className={`"flex sm:hidden mt-3 flex-wrap items-end" ${showFilter ? "flex" : "hidden"}`}>
+      <div className={`"flex sm:hidden mt-3 flex-wrap gap-x-4 items-end" ${showFilter ? "flex" : "hidden"}`}>
         {items.map((filter, index) => (
           <Filter
             items={filter.items} key={index}
@@ -49,7 +49,7 @@ export default function SelectFilter({
           />
         ))}
       </div>
-      <div className="hidden sm:flex w-full flex-wrap items-end gap-y-4 gap-x-4 md:gap-x-6">
+      <div className="hidden sm:flex w-full flex-wrap items-end gap-y-4 gap-x-4 md:gap-x-6 bg-red-300">
       {items.map((filter, index) => (
           <Filter
             items={filter.items} key={index}

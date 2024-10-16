@@ -1,9 +1,9 @@
 'use client';
 
 import React from "react";
-import { Time, today, getLocalTimeZone, startOfWeek, endOfWeek, CalendarDate, startOfMonth } from "@internationalized/date";
+import { today, getLocalTimeZone, startOfWeek, endOfWeek, CalendarDate, startOfMonth } from "@internationalized/date";
 
-import { Button, TimeInput, DatePicker } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import {ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 import Title from "@/app/components/Title"
@@ -20,15 +20,14 @@ export default function Calendar({
     setPeriod(periodValue);
     changePeriod(periodValue);
     pressToday(periodValue);
-    
-  };
 
+  };
 
   const thisday = today(getLocalTimeZone());
   const [activePeriod, setActivePeriod] = React.useState<React.ReactNode>(thisday.toString());
-  const [currentDate, setCurrentDate] = React.useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = React.useState<Date>(formatDateLocalTimeZone(thisday));
+
   const monthTag =["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
-  const dayTag =["Dim","Lun","Mar","Mer","Jeu","Ven", "Sam"];
   let year = currentDate.getFullYear();
   let month = currentDate.getMonth();
   let dayOfMonth = currentDate.getDate();
@@ -48,11 +47,11 @@ export default function Calendar({
       let startWeek = startOfWeek(thisday, "fr-FR");
       let endWeek = endOfWeek(thisday, "fr-FR");
       setActivePeriod(`Du ${startWeek} - Au ${endWeek}`);
-      onChange(`Du ${startWeek} - Au ${endWeek}`);
+      onChange(`${startWeek}_${endWeek}`);
     }
     if(period == "month") {
-      setActivePeriod(monthTag[month]);
-      onChange(monthTag[month]);
+      setActivePeriod(`${monthTag[month]} ${year}`);
+      onChange(`${monthTag[month]}_${year}`);
     }
   }
 
@@ -71,21 +70,22 @@ export default function Calendar({
       let endWeek = endOfWeek(week_prev_next, "fr-FR");
       setActivePeriod(`Du ${startWeek} - Au ${endWeek}`);
       setCurrentDate(formatDateLocalTimeZone(startWeek));
-      onChange(`Du ${startWeek} - Au ${endWeek}`);
+      onChange(`${startWeek}_${endWeek}`);
     }
     if(period == "month") {
       // let month_prev = today_calendar_date.subtract({months: 1});
       let month_prev_next = value == "prev" ? today_calendar_date.subtract({months: 1}) : today_calendar_date.add({months: 1});
       let month_index = formatDateLocalTimeZone(month_prev_next).getMonth();
       let startMonth = startOfMonth(month_prev_next);
-      setActivePeriod(monthTag[month_index]);
+      setActivePeriod(`${monthTag[month_index]} ${formatDateLocalTimeZone(startMonth).getFullYear()}`);
       setCurrentDate(formatDateLocalTimeZone(startMonth));
-      onChange(monthTag[month_index]);
+
+      onChange(`${monthTag[month_index]}_${formatDateLocalTimeZone(startMonth).getFullYear()}`);
     }
   }
 
   return (
-    <div>
+    <>
     <div className="w-full flex flex-wrap items-end justify-between my-5">
       <div className="flex flex-wrap items-center gap-3">
         <Button
@@ -118,7 +118,7 @@ export default function Calendar({
           Aujourd'hui
         </Button>
         <div className="flex gap-x-1">
-          <Button 
+          <Button
             onClick={() => pressPrevNext("prev")}
             isIconOnly radius="md" size="sm"
             className="data-[hover=true]:text-white data-[hover=true]:bg-primary"
@@ -126,7 +126,7 @@ export default function Calendar({
           >
             <ChevronLeftIcon className="w-5" />
           </Button>
-          <Button 
+          <Button
             onClick={() => pressPrevNext("next")}
             isIconOnly radius="md" size="sm"
             className="data-[hover=true]:text-white data-[hover=true]:bg-primary"
@@ -138,7 +138,7 @@ export default function Calendar({
 
       </div>
     </div>
-    <Title className="block sm:hidden w-full text-center mt-5 mb-3 text-2xl">{activePeriod}</Title>
-    </div>
+    <Title className="block sm:hidden w-full text-center mt-5 mb-3 text-xl">{activePeriod} - currentDate {currentDate.toString()}</Title>
+    </>
   );
 };

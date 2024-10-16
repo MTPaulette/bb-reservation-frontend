@@ -9,7 +9,7 @@ import { CalendarIcon, ViewColumnsIcon, CalendarDateRangeIcon, ClockIcon, ArrowR
 import Title from "@/app/components/Title"
 import SelectFilter from "@/app/components/SelectFilter"
 import PeriodFilter from "@/app/components/PeriodFilter"
-import Calendar from "@/app/components/Calendar"
+import Calendar from "@/app/components/calendar/Calendar"
 
 import _agencies from '@/app/database/Agencies'
 import _validities from "@/app/database/Validities.js"
@@ -17,12 +17,12 @@ import _service_types from "@/app/database/Service_types.js"
 
 
 function DisplayElement({
-  calendarDisplay, period, activePeriod
+  calendarDisplay, calendarFilters
 } : { 
-  calendarDisplay: boolean, period: string, activePeriod: React.ReactNode
+  calendarDisplay: boolean, calendarFilters: { period: string, activePeriod: React.ReactNode }
 }) {
   if(calendarDisplay){
-    return <Calendar period={period} activePeriod={activePeriod} />
+    return <Calendar filters={calendarFilters} />
   } else {
     return <div> card </div>
   }
@@ -58,9 +58,28 @@ export default function Reservations({
    */
   const [period, setPeriod] = React.useState<string>("day");
   const [activePeriod, setActivePeriod] = React.useState<React.ReactNode>(today(getLocalTimeZone()).toString());
-  const pressToday_prev_next = (active_period: React.ReactNode) => {
-    setActivePeriod(active_period);
+
+  const [calendarFilters, setCalendarFilters] = React.useState<{ period: string, activePeriod: React.ReactNode }>(
+    {
+      period: "day",
+      activePeriod: today(getLocalTimeZone()).toString()
+    }
+  );
+
+  const changePeriod = (period: string) => {
+    setPeriod(period);
+    setCalendarFilters({ period: period, activePeriod: activePeriod});
   }
+
+  const changeActivePeriod = (active_period: React.ReactNode) => {
+    setActivePeriod(active_period);
+    setCalendarFilters({ period: period, activePeriod: active_period});
+  }
+
+  const changeCalendarFilters = (filtersValue: { period: string, activePeriod: React.ReactNode }) => {
+    setCalendarFilters(filtersValue);
+  }
+
   /* */
   // const setPeriod = ( period: String ) => {
   //   period = period;
@@ -74,7 +93,7 @@ export default function Reservations({
       <Title className="text-2xl sm:text-3xl lg:text-4xl">Réservations</Title>
       <p className="text-primary text-small md:text-medium">Cherche à travers tous les ressources et trouve celui qui convient le mieux à tes besoins.</p>
       <div className="flex md:block justify-between items-end w-full m-4 md:mb-0 pl-0 ml-0">
-        {/* <div>Filters: agency: {agency} validity: {validity} service_type: {service_type}</div> */}
+        {/* <div>calendarFilters: agency: {agency} validity: {validity} service_type: {service_type}</div> */}
         <SelectFilter placement="outside" items={allFilters} />
         <div className="flex items-center gap-x-4 md:w-full md:justify-end md:mt-4">
           <Button onClick={() => {toggledisplaymode(false)}}
@@ -141,13 +160,15 @@ export default function Reservations({
 
       {/* filter for ressource */}
       {/* <PeriodFilter changePeriod={setPeriod} /> */}
+      {period}
       <PeriodFilter 
-        changePeriod={(period: string) => setPeriod(period)}
-        onChange={pressToday_prev_next}
+        // changePeriod={(period: string) => setPeriod(period)}
+        onChange={changeActivePeriod}
+        changePeriod={changePeriod}
         //onPressToday={() => pressToday()} onPressPrev={() => pressPrev()} onPressNext={() => pressNext()}
       />
       <div className="bg-background rounded-small p-4 md:p-5">
-        <DisplayElement calendarDisplay={calendarDisplay} period={period} activePeriod={activePeriod} />
+        <DisplayElement calendarDisplay={calendarDisplay} calendarFilters={calendarFilters} />
       </div>
     </div>
     </>

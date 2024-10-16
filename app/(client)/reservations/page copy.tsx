@@ -9,7 +9,7 @@ import { CalendarIcon, ViewColumnsIcon, CalendarDateRangeIcon, ClockIcon, ArrowR
 import Title from "@/app/components/Title"
 import SelectFilter from "@/app/components/SelectFilter"
 import PeriodFilter from "@/app/components/PeriodFilter"
-import Calendar from "@/app/components/Calendar"
+import Calendar from "@/app/components/calendar/Calendar"
 
 import _agencies from '@/app/database/Agencies'
 import _validities from "@/app/database/Validities.js"
