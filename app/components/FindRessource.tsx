@@ -26,7 +26,7 @@ export default function FindRessource() {
           //   handleSelectionChange(e.target.value, queryName);
           // }}
         />
-        <div className="flex flex-wrapp items-start gap-x-2">
+        <div className="flex flex-wrapp items-start">
           <TimeInput 
             label="Heure de debut" labelPlacement="inside" color="primary"
             hourCycle={24}
@@ -36,7 +36,7 @@ export default function FindRessource() {
             endContent={<ClockIcon className="w-6" />}
             className="w-32 md:w-36 rounded-small" radius="sm"
           />
-          <ArrowRightStartOnRectangleIcon className="w-6 mt-4 flex-shrink-0 text-primary" />
+          <ArrowRightStartOnRectangleIcon className="w-6 mt-4 flex-shrink-0 text-foreground/50" />
           <TimeInput 
             label="Heure de fin" labelPlacement="inside" color="primary"
             hourCycle={24}

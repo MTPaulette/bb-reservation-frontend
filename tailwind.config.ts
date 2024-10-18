@@ -62,11 +62,11 @@ const config: Config = {
             content4: "#d4d4d8",
             default: "#d4d4d8", //gris pour les hover des dropdown
             primary: {
-              DEFAULT: "#262262",// bleu //"#666"
+              DEFAULT: "#262262",// bleu rgb(38, 34, 98)
               foreground: "#fff",
             },
             secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
+              DEFAULT: "#fff",
               foreground: "#111",
             },
             success: "#0B9444", // vert
@@ -111,14 +111,14 @@ const config: Config = {
             content4: "#52525b",
             default: "#3f3f46", //gris pour les hover des dropdown
             primary: {
-              DEFAULT: "#929296", // bleu //"#666"
+              DEFAULT: "#929296", // bleu
               foreground: "#fff",
             },
             secondary: {
-              DEFAULT: "#fff",// bleu //"#666"
+              DEFAULT: "#fff",
               foreground: "#111",
             },
-            success: "#0B9444", // vert
+            success: "#0B9444", // vert rgb(11, 148, 68)
             warning: "#F2A304", //orange //FDE699
           },
         },

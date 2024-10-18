@@ -49,7 +49,7 @@ export default function SelectFilter({
           />
         ))}
       </div>
-      <div className="hidden sm:flex w-full flex-wrap items-end gap-y-4 gap-x-4 md:gap-x-6 bg-red-300">
+      <div className="hidden sm:flex w-full flex-wrap items-end gap-y-4 gap-x-4 md:gap-x-6">
       {items.map((filter, index) => (
           <Filter
             items={filter.items} key={index}

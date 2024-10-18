@@ -1,4 +1,12 @@
+import { Inter, Fredoka } from 'next/font/google';
 import localFont from "next/font/local";
+ 
+export const inter = Inter({ subsets: ['latin'] });
+
+export const fredoka = Fredoka({
+  weight: ['400', '700'],
+  subsets: ['latin']
+});
 
 export const geistSans = localFont({
   src: "./../../public/fonts/GeistVF.woff",

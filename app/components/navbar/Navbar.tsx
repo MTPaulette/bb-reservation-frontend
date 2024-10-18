@@ -51,7 +51,7 @@ export default function App() {
   return (
     <Navbar
       isBordered
-      className="shadow-medium bg-background text-primary text-small py-2"
+      className="shadow-medium bg-background text-foreground/50 text-small py-2"
       classNames={{
         item: [
           "flex",
@@ -65,7 +65,7 @@ export default function App() {
           "data-[active=true]:after:right-0",
           "data-[active=true]:after:h-[2px]",
           "data-[active=true]:after:rounded-[2px]",
-          "data-[active=true]:after:bg-primary",
+          "data-[active=true]:after:bg-warning",
         ],
       }}
     >
@@ -109,7 +109,7 @@ export default function App() {
               // className="data-[hover=true]:bg-primary"
             >
               <Link
-                href={item.href} color={pathname === item.href ? "primary" : "foreground"}
+                href={item.href} color={pathname === item.href ? "warning" : "foreground"}
                 className="whitespace-nowrap" size="sm"
                 aria-current={pathname === item.href ? "page" : "false"}
               >{item.name}</Link>
@@ -149,7 +149,7 @@ export default function App() {
               key={`${item}-${index}`}
             >
               <Link
-                href={item.href} color={pathname === item.href ? "primary" : "foreground"}
+                href={item.href} color={pathname === item.href ? "warning" : "foreground"}
                 className="whitespace-nowrap" size="sm"
                 aria-current={pathname === item.href ? "page" : "false"}
               >{item.name}</Link>
