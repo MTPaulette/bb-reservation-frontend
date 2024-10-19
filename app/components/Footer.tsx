@@ -73,7 +73,7 @@ export default function Footer() {
       <Divider className="my-6 lg:my-8" />
       <div className="sm:flex sm:items-center sm:justify-between">
         <span className="sm:text-center text-small">
-          © { new Date().getFullYear() } <span className="pointer-events-none">Brain-Booster™</span>. Tous droits reserves.
+          © { new Date().getFullYear() } <span className="pointer-events-none">Brain-Booster™</span>. Tous droits réservés.
         </span>
         <ul className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
           {socialNetwork.map((item, index) => (

@@ -10,10 +10,7 @@ import Calendar from "@/app/components/Calendar";
 import FindRessource from "@/app/components/FindRessource";
 import RessourceCard from "@/app/components/card/Ressource";
 
-import _agencies from '@/app/database/Agencies';
-import _validities from "@/app/database/Validities.js";
-import _service_types from "@/app/database/Service_types.js";
-
+import { _agencies, _service_types, _validities } from '@/app/lib/data';
 
 export default function Reservations({
   searchParams,

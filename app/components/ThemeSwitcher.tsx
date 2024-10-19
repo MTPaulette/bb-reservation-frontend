@@ -3,8 +3,7 @@
 import {useTheme} from "next-themes";
 import { useEffect, useState } from "react";
 
-import { MoonIcon } from "@heroicons/react/24/solid";
-import { SunIcon } from "@heroicons/react/24/solid";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 
 export default function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false)

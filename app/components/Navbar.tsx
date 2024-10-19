@@ -10,8 +10,8 @@ import {
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { usePathname } from "next/navigation";
 
-import {BbLogo} from "@/app/components/BbLogo";
-import ThemeSwitcher from "@/app/components/navbar/tools/ThemeSwitcher";
+import { BbLogo } from "@/app/components/BbLogo";
+import ThemeSwitcher from "@/app/components/ThemeSwitcher";
 
 export default function App() {
   const pathname = usePathname();
