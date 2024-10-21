@@ -46,8 +46,8 @@ export default function Calendar() {
 
   return (
     <>
-    <div className="block md:hidden">
-      <Alert message="Attention! Faites pivoter votre appareil en position horizontale pour voir un meilleur rendu du calendrier" />
+    <div className="block md:hidden my-4 md:my-4">
+      <Alert color="warning" message="Faites pivoter votre appareil en position horizontale pour voir un meilleur rendu du calendrier" />
     </div>
     <div className="bg-background rounded-small mt-7 p-4 md:p-5">
       <Modal

@@ -1,10 +1,15 @@
 "use client"
+
+import React from "react";
+import { Button, Checkbox, Input, Link} from "@nextui-org/react";
+import { EnvelopeIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z, ZodType } from "zod"
-import { useEffect, useState } from "react"
-import Link from "next/link"
+import { useState } from "react"
 import { signIn } from "next-auth/react"
+import { useRouter, useSearchParams } from "next/navigation";
+import Alert from "@/app/components/Alert";
 
 type TSignInForm = {
   email: string
@@ -16,17 +21,17 @@ const schema: ZodType<TSignInForm> = z
     email: z.string().email({
       message: "Must be a valid email",
     }),
-    password: z.string(), //.min(5, { message: "password at least 5 characters" }),
-  })
+    password: z.string().min(1, { message: "the password is required" }),
+  });
 
-const LoginPage = () => {
-  const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState(false)
-  const [err, setErr] = useState(false)
-  const message =
-    toast && !err
-      ? "Your registration was successful."
-      : "An error occurred while processing your request."
+export default function LoginPage() {
+  const [isVisible, setIsVisible] = React.useState<boolean>(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const router = useRouter();
+  const query = useSearchParams();
 
   const {
     register,
@@ -38,135 +43,96 @@ const LoginPage = () => {
   })
 
   const handleFormSubmit = async (data: TSignInForm) => {
-    console.log(data);
-    /* */
-    try {
-      setErr(false)
-      setToast(false)
-      await signIn("credentials", { callbackUrl: "/dashboard"});
-      // console.log("signinressult");
-      // console.log(signinressult)
-    } catch (e) {
-      setErr(true)
-      setToast(true)
-    }
-  }
-
-  useEffect(() => {
-    if (setToast) {
-      const timer = setTimeout(() => {
-        setToast(false)
-        setErr(false)
-      }, 5000)
-
-      return () => {
-        clearTimeout(timer)
+    setError("")
+    setLoading(true);
+    await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+    })
+    .then((res) => {
+      setLoading(false);
+      if(res?.ok) {
+        router.push(query.get("callbackUrl"));
+      } else {
+        if(res?.error === "CredentialsSignin"){
+          setError("Invalid credentials.")
+        } else {
+          setError("Something went wrong.")
+        }
       }
-    }
-  }, [toast])
+    })
+    .catch(err => {
+      console.log("login error: ");
+      console.log(err);
+    })
+  }
 
   return (
-    <div className="font-sans antialiased bg-grey-lightest h-screen">
-      <div className="w-full bg-grey-lightest" style={{ paddingTop: "4rem" }}>
-        <div className="container mx-auto py-8">
-          <div className="w-5/6 lg:w-1/2 mx-auto bg-white rounded shadow">
-            {toast && (
-              <div
-                className={`flex justify-between py-4 px-8 ${
-                  err
-                    ? "bg-[#fad2e1]  text-[#7c193d]"
-                    : "bg-[#98f5e1]  text-[#236c5b"
-                }]`}
-              >
-                <p className="font-sans">{message}</p>
-                <button className="font-bold">&#10005;</button>
-              </div>
+    <>
+    {error != "" ? (
+      <Alert color="danger" message={error} />
+    ) : null}
+    <h1 className="flex flex-col gap-1">Log in</h1>
+    <form
+      action="#" className="space-y-3"
+      onSubmit={handleSubmit(handleFormSubmit)}
+    >
+      <Input
+        autoFocus
+        endContent={
+          <EnvelopeIcon className="w-4" />
+        }
+        label="Email"
+        type="email"
+        placeholder="Enter your email"
+        variant="bordered"
+        {...register("email")}
+        isInvalid={errors.email ? true: false}
+        errorMessage={errors.email ? errors.email?.message: null}
+      />
+      <Input
+        label="Password"
+        variant="bordered"
+        placeholder="Enter your password"
+        endContent={
+          <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+            {isVisible ? (
+              <EyeSlashIcon className="w-4" />
+            ) : (
+              <EyeIcon className="w-4" />
             )}
-            <div className="py-4 px-8 text-black text-xl border-b border-grey-lighter">
-              Sign in
-            </div>
-            <form
-              className="py-4 px-8"
-              onSubmit={handleSubmit(handleFormSubmit)}
-            >
-              <div className="mb-4">
-                <label className="block text-grey-darker text-sm font-bold mb-2">
-                  Email Address
-                </label>
-                <input
-                  className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-                  id="email"
-                  type="email"
-                  placeholder="Your email address"
-                  {...register("email")}
-                />
-                {errors.email ? (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.email?.message}
-                  </p>
-                ) : null}
-              </div>
-              <div className="mb-4">
-                <label className="block text-grey-darker text-sm font-bold mb-2">
-                  Password
-                </label>
-                <input
-                  className="appearance-none border rounded w-full py-2 px-3 text-grey-darker"
-                  id="password"
-                  type="password"
-                  placeholder="Your secure password"
-                  {...register("password")}
-                />
-                {errors.password ? (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.password?.message}
-                  </p>
-                ) : null}
-              </div>
-              <div className="flex items-center justify-between mt-8">
-                <button
-                  className="bg-blue-500 hover:bg-blue-dark text-white font-bold py-2 px-4 rounded-full"
-                  onClick={() => console.log("eer")}
-                >
-                  Sign Up
-                </button>
-              </div>
-            </form>
-          </div>
-          <p className="text-center my-4">
-            <Link
-              href="/auth/api/login"
-              className="text-grey-dark text-sm no-underline hover:text-grey-darker"
-            >
-              I already have an account
-            </Link>
-          </p>
-        </div>
+          </button>
+        }
+        type={isVisible ? "text" : "password"}
+        {...register("password")}
+        isInvalid={errors.password ? true: false}
+        errorMessage={errors.password ? errors.password?.message: null}
+      />
+      <div className="flex py-2 px-1 justify-between">
+        <Checkbox
+          classNames={{
+            label: "text-small",
+          }}
+        >
+          Remember me
+        </Checkbox>
+        <Link color="primary" href="#" size="sm">
+          Forgot password?
+        </Link>
       </div>
-    </div>
+      <div className="w-full">
+        <Button 
+          type="submit"
+          color="primary"
+          isLoading={loading}
+          className="w-full"
+        >
+          Sign in
+        </Button>
+      </div>
+    </form>
+    </>
   )
 }
-export default LoginPage
 
-/*
-const handleFormSubmit = async (data: TSignInForm) => {
-  try {
-    setErr(false)
-    setToast(false)
-    const response = await fetch("http://127.0.0.1:8000/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-    const res = await response.json()
-    if (res.status) {
-      setToast(true)
-    }
-    setLoading(false)
-    reset()
-  } catch (e) {
-    setErr(true)
-    setToast(true)
-  }
-}
-  */

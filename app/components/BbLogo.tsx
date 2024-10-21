@@ -1,5 +1,10 @@
-import Image from "next/image";
+import {Image} from "@nextui-org/react";
 
-export const BbLogo = ({width=72, height=72}) => (
-  <Image src="/images/logo_bb.png" width={width} height={height} alt="bb logo"/>
+export const BbLogo = ({width=72}) => (
+  <Image 
+    src="/images/logo_bb.png"
+    height="auto"
+    width={width} 
+    alt="bb logo"
+  />
 );
