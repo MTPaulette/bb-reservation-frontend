@@ -1,9 +1,10 @@
 "use client"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z, ZodType } from "zod"
-import { useEffect, useState } from "react"
-import Link from "next/link"
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z, ZodType } from "zod";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type TRegisterForm = {
   name: string
@@ -33,8 +34,8 @@ const schema: ZodType<TRegisterForm> = z
   })
 
 const RegisterForm = () => {
-  const [loading, setLoading] = useState(false)
-  const [toast, setToast] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(false);
   const [err, setErr] = useState(false)
   const message =
     toast && !err

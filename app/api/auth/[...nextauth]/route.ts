@@ -65,24 +65,26 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, account, user }) {
-      console.log("je suis dansle callback");
-      console.log(user);
       if (user) {
         token.user = user
         token.accessToken = user.access_token
       }
+      console.log("je suis dansle callback jwt de route.js");
       console.log(token);
       return token
     },
     async session({ session, token }) {
-      console.log("je suis dansle session");
-      console.log(token);
       console.log(session);
       session.accessToken = token.access_token
       session.user = token.user
+
+      console.log("je suis dansle session");
+      console.log(session);
+
       return session
     },
-  }
+  },
 }
 const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }
+// export { handler as GET, handler as POST, handler as DELETE, handler as UPDATE }

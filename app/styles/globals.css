@@ -117,3 +117,40 @@ img {
   --fc-now-indicator-color: red;
   */
 }
+
+.fc .fc-toolbar {
+  flex-wrap: wrap;
+  row-gap: 16px;
+  margin-bottom: 40px !important;
+}
+
+.fc-toolbar-title {
+  font-size: var(--nextui-font-size-large) !important;
+  font-weight: 700 !important;
+  text-transform: capitalize !important;
+}
+
+.fc-col-header-cell-cushion {
+  font-size: var(--nextui-font-size-medium) !important;
+  font-weight: 500 !important;
+}
+
+.fc .fc-button {
+  padding: 6px 14px !important;
+  border-radius: var(--nextui-radius-small) !important;
+  /* background-color: var(--nextui-primary) !important; */
+}
+
+.fc .fc-button-group{
+  column-gap: 10px !important;
+}
+
+.fc .fc-button:focus {
+  box-shadow: none !important;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  /* border: none !important; */
+  /* background-color: transparent !important; */
+}

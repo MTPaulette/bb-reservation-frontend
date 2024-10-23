@@ -3,12 +3,12 @@
 import React from "react";
 import { Button, Checkbox, Input, Link} from "@nextui-org/react";
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z, ZodType } from "zod"
-import { useState } from "react"
-import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z, ZodType } from "zod";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Alert from "@/app/components/Alert";
 
 type TSignInForm = {
@@ -31,7 +31,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const router = useRouter();
-  const query = useSearchParams();
+  // const query = useSearchParams();
 
   const {
     register,
@@ -43,7 +43,7 @@ export default function LoginPage() {
   })
 
   const handleFormSubmit = async (data: TSignInForm) => {
-    setError("")
+    setError("");
     setLoading(true);
     await signIn("credentials", {
         email: data.email,
@@ -53,12 +53,13 @@ export default function LoginPage() {
     .then((res) => {
       setLoading(false);
       if(res?.ok) {
-        router.push(query.get("callbackUrl"));
+        // router.push(query.get("callbackUrl"));
+        router.push("/dashboard");
       } else {
         if(res?.error === "CredentialsSignin"){
-          setError("Invalid credentials.")
+          setError("Invalid credentials.");
         } else {
-          setError("Something went wrong.")
+          setError("Something went wrong.");
         }
       }
     })
@@ -70,10 +71,11 @@ export default function LoginPage() {
 
   return (
     <>
+    <div className="max-w-xs">
     {error != "" ? (
       <Alert color="danger" message={error} />
     ) : null}
-    <h1 className="flex flex-col gap-1">Log in</h1>
+    <h1 className="flex flex-col gap-1 mb-2">Log in</h1>
     <form
       action="#" className="space-y-3"
       onSubmit={handleSubmit(handleFormSubmit)}
@@ -132,6 +134,12 @@ export default function LoginPage() {
         </Button>
       </div>
     </form>
+    <div className="mt-2">
+      <Link color="primary" href="/auth/register" size="sm">
+        S&apos;inscrire
+      </Link>
+    </div>
+    </div>
     </>
   )
 }
