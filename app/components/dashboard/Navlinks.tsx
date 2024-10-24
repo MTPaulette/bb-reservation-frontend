@@ -30,14 +30,14 @@ export default function NavLinks() {
             href={link.href}
             className={clsx(
               // "flex grow-0 md:grow h-[48px] md:h-[36px] items-center justify-center gap-2 rounded-md p-3 text-sm font-medium bg-content2 hover:bg-background hover:text-warning md:flex-none md:justify-start md:p-2 md:px-3",
-              "flex grow-0 md:grow h-[48px] md:h-[36px] items-center justify-center gap-2 rounded-md p-3 text-sm font-medium hover:bg-content2 hover:text-warning md:flex-none md:justify-start md:p-2 md:px-3",
+              "flex groww-0 md:groww h-[48px] md:h-[36px] items-center justify-center gap-2 rounded-md p-3 text-sm font-medium hover:no-underline hover:bg-content2 hover:text-warning md:flex-none md:justify-start md:p-2 md:px-3",
               {
                 "text-warning": pathname === link.href,
               },
             )}
             aria-current={pathname === link.href ? "page" : "false"}
           >
-            <LinkIcon className="w-6" />
+            <LinkIcon className="w-5" />
             <p>{link.name}</p>
           </Link>
         );

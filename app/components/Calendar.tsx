@@ -129,7 +129,7 @@ export default function Calendar() {
           left: "dayGridMonth,timeGridWeek,timeGridDay",
           center: "title",
           // right: "prevYear,prev,next,nextYear today",
-          right: "today prev,next",
+          right: "prev,next today",
         }}
         nowIndicator={true}
         weekends={true}

@@ -1,29 +1,72 @@
-import React from "react";
+"use client";
+
+import React, { Suspense } from "react";
+import { Metadata } from 'next';
+import { useSearchParams } from 'next/navigation';
 import {Card, CardBody, Image, Button} from "@nextui-org/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import FindRessource from "@/app/components/FindRessource";
+import Pagination from "@/app/components/Pagination";
+import { InvoicesTableSkeleton } from '@/app/components/Skeletons';
+import { fetchRessources } from '@/app/lib/data';
 
-export default function RessourceCard() {
+export const metadata: Metadata = {
+  title: 'Resevations',
+};
+
+
+export default function RessourcesWrapper() {
+  const searchParams = useSearchParams();
+  
+  const agency = searchParams.get("agency") || '';
+  const validity = searchParams.get("validity") || '';
+  const service_type = searchParams.get("service_type") || '';
+  const page = Number(searchParams.get("page")) || 1;
+
+  const ressources = fetchRessources(page);
+
+  return (
+    <>
+    <div>ressources: {ressources} </div>
+    <div>Filters: agency: {agency} <br/> validity: {validity} <br/> service_type: {service_type}<br/> page: {page}</div>
+    <div> 
+      <FindRessource />
+      <Suspense fallback={<InvoicesTableSkeleton />}>
+      <div className="mt-8 mb-12 w-full flex flex-wrap justify-center sm:justify-around items-center gap-6">
+        <RessourceCard />
+        <RessourceCard />
+        <RessourceCard />
+        <RessourceCard />
+        <RessourceCard />
+        <RessourceCard />
+      </div>
+      </Suspense>
+      <div className="w-full flex justify-center items-center mb-8">
+        <Pagination totalPages={8} />
+      </div>
+    </div>
+    </>
+  );
+};
+
+
+export function RessourceCard() {
   return (
     <>
     <Card
       isBlurred
-      //className="border-none border-0 shadow-none bg-transparent w-[510px] h-[200px]"
       radius="md"
-      className="border-none bg-background dark:bg-background/70 w-[500px] md:w-[390px] xl:w-[500px]"
+      className="border-none bg-background dark:bg-background/70 w-full lg:w-[420px] xl:w-[550px]"
       classNames={{
         body: "p-0 m-0"
       }}
-      
-      // className="border-none bg-background dark:bg-background/70 w-[510px] h-[200px]"
     >
       <CardBody>
         <div className="grid grid-cols-12 items-start justify-center">
-        {/* <div className="grid grid-cols-12 items-start justify-center"> */}
-          <div className="relative col-span-4 h-[150px] md:h-[180px] overflow-hidden bg-red-400">
+          <div className="relative col-span-4 h-[150px] md:h-[180px] overflow-hidden">
             <Image
               alt="Album cover"
               className="lg:object-cover"
-              //height="100%"
               height={180}
               shadow="md"
               radius="none"
@@ -33,7 +76,6 @@ export default function RessourceCard() {
           </div>
 
           <div className="col-span-8 h-full flex flex-col justify-between p-3 pt-1 md:p-4 md:pt-1">
-          {/* <div className="col-span-7 h-full flex flex-col justify-between bg-background dark:bg-background/70 p-2 border rounded-md"> */}
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0">
                 <h3 className="font-semibold text-foreground/90 h-[20px] truncate mt-1 md:mt-2 w-full whitespace-normal">Daily Mix</h3>

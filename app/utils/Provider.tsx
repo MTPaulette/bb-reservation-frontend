@@ -1,4 +1,3 @@
-// app/providers.tsx
 "use client";
 
 import {NextUIProvider} from '@nextui-org/react'
@@ -12,8 +11,4 @@ export function Provider({children}: { children: React.ReactNode }) {
       </NextThemesProvider>
     </NextUIProvider>
   )
-}
-
-export function capitalize({str}: {str: string}) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
 }

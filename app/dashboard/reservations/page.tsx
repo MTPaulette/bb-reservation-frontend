@@ -1,11 +1,9 @@
 'use client';
 
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
-import { CardsSkeleton } from "@/app/components/Skeletons";
 import DashboardSkeleton from "@/app/components/Skeletons";
 import Breadcrumbs from "@/app/components/dashboard/Breadcrumbs";
-import CardWrapper from "@/app/components/dashboard/Cards";
 import Search from "@/app/components/dashboard/Search";
 
 
@@ -23,36 +21,29 @@ export default function DashboardPage() {
 
   return (
     <>
-    <div>
-      <div>
+    <div className="min-h-screen flex flex-col px-4 pt-6 md:pt-10">
+      <div className="flex flex-wrap justify-between items-center">
         <Breadcrumbs
           breadcrumbs={[
-            { label: 'Invoices', href: '/dashboard/invoices' },
+            { label: 'Reservations', href: '/dashboard/reservations' },
             {
               label: 'Create Invoice',
-              href: '/dashboard/invoices/create',
+              href: '/dashboard/reservations/create',
               active: true,
             },
           ]}
         />
       </div>
-      <div className="w-full flex justify-end mt-2 mb-6 md:mb-10">
-        <div className="w-full sm:w-[250px]">
+        <div className="w-full flex justify-end mt-2">
+        <div className="w-full md:w-[250px]">
           <Search placeholder="Type to search..." />
         </div>
-      </div>
+        </div>
       {
-        loading ? 
+        loading ? (
           <DashboardSkeleton />
-        :
-        // <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-        <Suspense fallback={<CardsSkeleton />}>
-          <CardWrapper />
-        </Suspense>
-
-
-        <div className="grid grid-cols-2 text-white pt-10">
+        ):
+        <div className="grid grid-cols-2 text-white p-4">
           <div className="text-center">
             <h1 className="text-black text-xl font-bold">
               Hi {session?.user?.user.name}!
@@ -70,7 +61,6 @@ export default function DashboardPage() {
               <pre className="text-black">{JSON.stringify(session, null, 2)}</pre>
             ) : null}
           </div>
-        </div>
         </div>
       }
     </div>

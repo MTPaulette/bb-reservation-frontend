@@ -1,62 +1,51 @@
 "use client";
 
 import React from "react";
+import { useSession } from "next-auth/react";
+
 import {
-  Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button,
+  Navbar, NavbarContent, NavbarItem, Link, Button,
   DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar,
   NavbarMenuToggle, NavbarMenu,
 } from "@nextui-org/react";
 
 import { usePathname } from "next/navigation";
 
-import { BbLogo } from "@/app/components/BbLogo";
 import ThemeSwitcher from "@/app/components/ThemeSwitcher";
 import NavLinks from "@/app/components/dashboard/Navlinks";
 import Logout from "@/app/components/form/Logout";
+import User from "@/app/components/dashboard/User";
+import Title from "@/app/components/Title";
 
-export default function App() {
+export default function NavBarDashboardComponent() {
+  const { data: session } = useSession();
+  const user = session?.user?.user;
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   return (
     <Navbar
       isBordered
-      className="shadow-medium bg-background justify-between text-foreground/50 text-small py-2"
+      className="justify-between bg-transparent text-foreground/50 h-16 text-small"
     >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="md:hidden"
         />
-        <NavbarBrand>
-          <BbLogo />
-        </NavbarBrand>
+        <Title className="text-lg md:text-base lg:text-lg hidden md:block">{pathname.split("/")[1]}</Title>
+        {/* <Title className="text-lg md:text-lg hidden md:block">danshboard</Title> */}
       </NavbarContent>
-      {/* <NavbarContent className="hidden md:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#" size="sm">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page" size="sm">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#" size="sm">
-            Integrations
-          </Link>
-        </NavbarItem>
-      </NavbarContent> */}
-
       <NavbarContent as="div" justify="end">
         <NavbarItem>
           <ThemeSwitcher />
         </NavbarItem>
   
         <NavbarItem>
-          <Button as={Link} href="/login" className="bg-gradient-to-tr from-success to-[#262262] text-white hover:no-underline shadow-lg">
+          <Button
+            as={Link} href="/login" size="sm"
+            className="bg-gradient-to-tr from-success to-[#262262] text-white hover:no-underline shadow-lg"
+          >
             Sign Up
           </Button>
         </NavbarItem>
@@ -68,15 +57,25 @@ export default function App() {
               as="button"
               className="transition-transform"
               color="warning"
-              name="Jason Hughes"
+              name={user? user.name: ""}
               size="sm"
               src="/images/brain-orange-400.png"
             />
+            {/* <div>
+              <div className="block md:hidden">
+              </div>
+              <div className="hidden md:block">
+              <User name={user? user.name: ""} role="admin" src="/images/brain-orange-400.png" />
+              </div>
+            </div> */}
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
+            <DropdownItem>
+              <User name={user? user.name: ""} role="admin" src="/images/brain-orange-400.png" />
+            </DropdownItem>
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold">{user? user.email : ""}</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="team_settings">Team Settings</DropdownItem>
@@ -93,7 +92,9 @@ export default function App() {
 
       <NavbarMenu className="pt-8 pb-6 bg-background">
         <NavLinks />
-        <Logout />
+        <div>
+          <Logout />
+        </div>
       </NavbarMenu>
     </Navbar>
   );

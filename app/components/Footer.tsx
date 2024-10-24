@@ -5,9 +5,9 @@ import {
 } from "@nextui-org/react";
 
 import { usePathname } from "next/navigation";
-import {Facebook, X, Whatsapp, Instagram} from "./SocialIcon";
+import {Facebook, X, Whatsapp, Instagram} from "@/app/components/SocialIcon";
 
-import {BbLogo} from "./BbLogo";
+import { BbLogo } from "@/app/components/BbLogo";
 
 export default function Footer() {
   const pathname = usePathname();

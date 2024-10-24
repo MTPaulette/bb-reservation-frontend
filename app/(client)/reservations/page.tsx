@@ -7,12 +7,10 @@ import { CalendarIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
 import Title from "@/app/components/Title";
 import SelectFilter from "@/app/components/SelectFilter";
 import Calendar from "@/app/components/Calendar";
-import FindRessource from "@/app/components/FindRessource";
-import RessourceCard from "@/app/components/card/Ressource";
-
+import RessourcesWrapper from "@/app/components/Ressources";
 import { _agencies, _service_types, _validities } from '@/app/lib/data';
 
-export default function Reservations({
+export default function Reservations(/*{
   searchParams,
 }: {
   searchParams?: {
@@ -20,11 +18,12 @@ export default function Reservations({
     validity?: string;
     service_type?: string;
   };
-}) {
-  
-  // const agency = searchParams?.agency || '';
-  // const validity = searchParams?.validity || '';
-  // const service_type = searchParams?.service_type || '';
+}*/) {
+  /*
+  const agency = searchParams?.agency || '';
+  const validity = searchParams?.validity || '';
+  const service_type = searchParams?.service_type || '';
+  */
 
   const allFilters = [
     { label: "Agence", queryName: "agency", placeholder: "Selectionner une agence", items: _agencies },
@@ -32,39 +31,10 @@ export default function Reservations({
     { label: "Type de service", queryName: "service_type", placeholder: "Selectionner un type", items: _service_types },
   ];
 
-  const [calendarDisplay, setCalendarDisplay] = React.useState<boolean>(true);
+  const [calendarDisplay, setCalendarDisplay] = React.useState<boolean>(false);
   const toggledisplaymode = (mode: boolean) => {
     setCalendarDisplay(mode);
   };
-
-  function DisplayElement({
-    calendarDisplay,
-  } : { 
-    calendarDisplay: boolean,
-  }) {
-    if(calendarDisplay){
-      return (
-        <div>
-          <Calendar />
-        </div>
-      )
-    } else {
-      return (
-        <div> 
-          <FindRessource />
-          {/* <div className="bg-background rounded-small p-4 md:p-5"> */}
-          <div className="my-8 w-full flex flex-wrap justify-center sm:justify-around items-center gap-6">
-            <RessourceCard />
-            <RessourceCard />
-            <RessourceCard />
-            <RessourceCard />
-            <RessourceCard />
-            <RessourceCard />
-          </div>
-        </div>
-      )
-    }
-  }
 
   return (
     <>
@@ -95,7 +65,11 @@ export default function Reservations({
         </div>
       </div>
       <div>
-        <DisplayElement calendarDisplay={calendarDisplay} />
+      { calendarDisplay ?
+        <Calendar />
+        :
+        <RessourcesWrapper />
+      }
       </div>
     </div>
     </>

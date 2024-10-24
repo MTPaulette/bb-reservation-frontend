@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 import { BbLogo } from "@/app/components/BbLogo";
 import ThemeSwitcher from "@/app/components/ThemeSwitcher";
 
-export default function App() {
+export default function NavBarComponent() {
   const pathname = usePathname();
 
   const communityItems = [

@@ -126,13 +126,18 @@ img {
 
 .fc-toolbar-title {
   font-size: var(--nextui-font-size-large) !important;
-  font-weight: 700 !important;
+  font-weight: bolder !important;
   text-transform: capitalize !important;
 }
 
 .fc-col-header-cell-cushion {
   font-size: var(--nextui-font-size-medium) !important;
-  font-weight: 500 !important;
+  font-weight: normal !important;
+}
+
+.fc-daygrid-day-number, .fc-daygrid-day-bottom {
+  font-size:  var(--nextui-font-size-small) !important;
+  font-weight: normal !important;
 }
 
 .fc .fc-button {
@@ -151,6 +156,7 @@ img {
 
 .fc-prev-button,
 .fc-next-button {
-  /* border: none !important; */
-  /* background-color: transparent !important; */
+  border: none !important;
+  background-color: transparent !important;
+  color: inherit !important;
 }
