@@ -8,7 +8,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import FindRessource from "@/app/components/FindRessource";
 import Pagination from "@/app/components/Pagination";
 import { InvoicesTableSkeleton } from '@/app/components/Skeletons';
-import { fetchRessources } from '@/app/lib/data';
+// import { fetchRessources } from '@/app/lib/data';
 
 export const metadata: Metadata = {
   title: 'Resevations',
@@ -23,11 +23,11 @@ export default function RessourcesWrapper() {
   const service_type = searchParams.get("service_type") || '';
   const page = Number(searchParams.get("page")) || 1;
 
-  const ressources = fetchRessources(page);
+  // const ressources = fetchRessources(page);
 
   return (
     <>
-    <div>ressources: {ressources} </div>
+    {/* <div>ressources: {ressources} </div> */}
     <div>Filters: agency: {agency} <br/> validity: {validity} <br/> service_type: {service_type}<br/> page: {page}</div>
     <div> 
       <FindRessource />

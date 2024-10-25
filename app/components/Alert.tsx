@@ -1,6 +1,6 @@
 export default function Alert({message, color}: {message: string, color: "default"|"warning"|"danger"|"success"}) {
   return (
-    <div 
+    <div
       className={`flex p-3 text-sm border rounded-lg
         ${color === "default"? "text-zinc-800 border-zinc-300 bg-zinc-50 dark:bg-zinc-900/10 dark:text-zinc-300 dark:border-zinc-800" : " "}
         ${color === "warning"? "text-yellow-800  border-yellow-300 bg-yellow-50 dark:bg-yellow-900/10 dark:text-yellow-300 dark:border-yellow-800" : " "}

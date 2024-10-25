@@ -30,16 +30,16 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
   return (
     <Input
-      label="Search"
+      // label="Search"
       isClearable
       radius="lg"
-      size="sm"
+      size="md"
       classNames={{
         label: "text-black/50 dark:text-white/90",
         input: [
           "bg-transparent",
           "text-black/90 dark:text-white/90",
-          "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+          "placeholder:text-foreground/50 dark:placeholder:text-white/60",
         ],
         innerWrapper: "bg-transparent",
         inputWrapper: [
