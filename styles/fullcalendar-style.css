@@ -1,0 +1,60 @@
+/* ================ fullcalendar custom css =================*/
+:root {
+  --fc-today-bg-color: rgba(0, 217, 255, .3);
+  /* --fc-today-bg-color: rgba(255, 197, 7, 0.3); */
+  --fc-button-bg-color: #929296;
+  --fc-button-border-color: rgb(212, 212, 216, .65);
+
+  --fc-button-hover-bg-color: #262262;
+  --fc-button-hover-border-color: #262262;
+
+  --fc-button-active-bg-color: #262262;
+  --fc-button-active-border-color: #262262;
+  --fc-border-color: rgb(221, 221, 221, .4);
+  
+  --fc-event-bg-color: rgb(11, 148, 68, .3);
+  --fc-event-border-color: rgb(11, 148, 68, .8);
+}
+
+.fc .fc-toolbar {
+  flex-wrap: wrap;
+  row-gap: 16px;
+  margin-bottom: 40px !important;
+}
+
+.fc-toolbar-title {
+  font-size: var(--nextui-font-size-large) !important;
+  font-weight: bolder !important;
+  text-transform: capitalize !important;
+}
+
+.fc-col-header-cell-cushion {
+  font-size: var(--nextui-font-size-medium) !important;
+  font-weight: normal !important;
+}
+
+.fc-daygrid-day-number, .fc-daygrid-day-bottom {
+  font-size:  var(--nextui-font-size-small) !important;
+  font-weight: normal !important;
+}
+
+.fc .fc-button {
+  padding: 6px 14px !important;
+  border-radius: var(--nextui-radius-small) !important;
+  /* background-color: var(--nextui-primary) !important; */
+}
+
+.fc .fc-button-group{
+  column-gap: 10px !important;
+}
+
+.fc .fc-button:focus {
+  box-shadow: none !important;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  border: none !important;
+  background-color: transparent !important;
+  color: inherit !important;
+}

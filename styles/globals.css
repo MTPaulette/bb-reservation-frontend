@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+      /* @apply relative z-1 p-0 m-0 bg-whiten font-satoshi text-base font-normal text-body; */
+      @apply relative z-1 p-0 m-0 bg-background font-satoshi text-base font-normal text-foreground;
+    }
+
+    /* body {
+      color: var(--nextui-foreground);
+      background: var(--nextui-background);
+    } */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    a {
+      /* color: #0070f3; */
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+}
+
+@layer components {
+}
+
+@layer utilities {
+    /* Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .chat-height {
+        @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
+    }
+
+    .inbox-height {
+        @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
+    }
+
+    .over-x {
+      overflow-x: scroll;
+    }
+    .over-y {
+      overflow-y: scroll;
+    }
+
+    .over-x::-webkit-scrollbar{
+      height: 2px;
+    }
+
+    .over-y::-webkit-scrollbar{
+      width: 2px;
+    }
+
+    .over-x::-webkit-scrollbar-track,
+    .over-y::-webkit-scrollbar-track{
+      box-shadow: inset 0 0 6px transparent;
+    }
+
+    .over-x::-webkit-scrollbar-thumb,
+    .over-y::-webkit-scrollbar-thumb{
+      outline: 1px solid #C4C4C4;
+      background: #C4C4C4;
+      border-radius: 8px;
+    }
+}

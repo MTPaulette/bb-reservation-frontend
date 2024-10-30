@@ -1,0 +1,25 @@
+'use client';
+
+import { SessionProvider } from "next-auth/react";
+import Sidebar from "@/components/dashboard1/Sidebar";
+import Footer from "@/components/dashboard1/Footer";
+import Navbar from "@/components/dashboard1/Navbar";
+
+export default function DashboardLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <SessionProvider>
+      <Sidebar />
+      <div className="md:ml-52 xl:ml-64 bg-content2">
+        <Navbar />
+        <main className="min-h-screen flex flex-col px-4 pt-6 md:pt-10">
+          {children}
+        </main>
+        <Footer />
+      </div>
+    </SessionProvider>
+  );
+}

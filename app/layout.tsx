@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import "@/app/styles/globals.css";
-// import { geistSans, geistMono } from "@/app/styles/fonts";
-import { ubuntu } from "@/app/styles/fonts";
+import "@/styles/globals.css";
+import "@/styles/fullcalendar-style.css";
+// import { geistSans, geistMono } from "@/styles/fonts";
+import { ubuntu } from "@/styles/fonts";
 
-import {Provider} from "@/app/utils/Provider"
+import {Provider} from "@/utils/Provider"
 
 export const metadata: Metadata = {
   title: "BB-RESERVATION",

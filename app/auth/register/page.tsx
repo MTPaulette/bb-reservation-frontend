@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Alert from "@/app/components/Alert";
+import Alert from "@/components/Alert";
 
 type TSignInForm = {
   email: string

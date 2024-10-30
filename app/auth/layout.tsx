@@ -1,6 +1,6 @@
 
 
-import { BbLogo } from "@/app/components/BbLogo";
+import { BbLogo } from "@/components/BbLogo";
 
 export default function AuthLayout({
   children,

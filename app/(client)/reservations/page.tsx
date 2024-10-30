@@ -4,11 +4,11 @@ import React from "react";
 import { Button } from "@nextui-org/react";
 import { CalendarIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
 
-import Title from "@/app/components/Title";
-import SelectFilter from "@/app/components/SelectFilter";
-import Calendar from "@/app/components/Calendar";
-import RessourcesWrapper from "@/app/components/Ressources";
-import { _agencies, _service_types, _validities } from '@/app/lib/data';
+import Title from "@/components/Title";
+import SelectFilter from "@/components/SelectFilter";
+import Calendar from "@/components/Calendar";
+import RessourcesWrapper from "@/components/Ressources";
+import { _agencies, _service_types, _validities } from '@/lib/data';
 
 export default function Reservations(/*{
   searchParams,
