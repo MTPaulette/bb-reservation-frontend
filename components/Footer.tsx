@@ -5,7 +5,7 @@ import {
 } from "@nextui-org/react";
 
 import { usePathname } from "next/navigation";
-import {Facebook, X, Whatsapp, Instagram} from "@/components/SocialIcon";
+import { FacebookIcon, InstagramIcon, LinkedlinIcon, TwitterIcon, WhatsappIcon, WorldIcon } from "@/components/Icons";
 
 import { BbLogo } from "@/components/BbLogo";
 
@@ -13,10 +13,12 @@ export default function Footer() {
   const pathname = usePathname();
 
   const socialNetwork = [
-    { name: "facebook", href: "#", icon: <Facebook fill="currentColor" height={20} width={20} size={20} /> },
-    { name: "instagram", href: "#", icon: <Instagram fill="currentColor" height={20} width={20} size={20} /> },
-    { name: "x", href: "#", icon: <X fill="currentColor" height={20} width={20} size={20} /> },
-    { name: "whatsapp", href: "#", icon: <Whatsapp fill="currentColor" height={20} width={20} size={20} /> },
+    { name: "facebook", href: "#", icon: <FacebookIcon fill="currentColor" size={20} /> },
+    { name: "instagram", href: "#", icon: <InstagramIcon fill="currentColor" size={20} /> },
+    { name: "linkledin", href: "#", icon: <LinkedlinIcon fill="currentColor" size={20} /> },
+    { name: "x", href: "#", icon: <TwitterIcon fill="currentColor" size={20} /> },
+    { name: "whatsapp", href: "#", icon: <WhatsappIcon fill="currentColor" size={20} /> },
+    { name: "web site", href: "#", icon: <WorldIcon fill="currentColor" size={20} /> },
   ];
 
   const menuItems = [
@@ -75,7 +77,7 @@ export default function Footer() {
         <span className="sm:text-center text-small">
           © { new Date().getFullYear() } <span className="pointer-events-none">Brain-Booster™</span>. Tous droits réservés.
         </span>
-        <ul className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
+        <ul className="flex mt-4 gap-4.5 items-center justify-center sm:mt-0">
           {socialNetwork.map((item, index) => (
           <li
             key={index}

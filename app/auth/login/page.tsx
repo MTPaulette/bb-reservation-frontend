@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button, Checkbox, Input, Link} from "@nextui-org/react";
-import { EnvelopeIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { EnvelopIcon, EyeIcon, EyeSlashIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
@@ -83,7 +83,7 @@ export default function LoginPage() {
       <Input
         autoFocus
         endContent={
-          <EnvelopeIcon className="w-4" />
+          <EnvelopIcon fill="currentColor" size={18} />
         }
         label="Email"
         type="email"
@@ -100,9 +100,9 @@ export default function LoginPage() {
         endContent={
           <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
             {isVisible ? (
-              <EyeSlashIcon className="w-4" />
+              <EyeSlashIcon fill="currentColor" size={18} />
             ) : (
-              <EyeIcon className="w-4" />
+              <EyeIcon fill="currentColor" size={18} />
             )}
           </button>
         }

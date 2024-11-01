@@ -4,7 +4,7 @@ import React from "react";
 import { today, getLocalTimeZone, startOfWeek, endOfWeek, CalendarDate, startOfMonth } from "@internationalized/date";
 
 import { Button } from "@nextui-org/react";
-import {ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import {ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons";
 
 import Title from "@/components/Title"
 
@@ -124,7 +124,7 @@ export default function Calendar({
             className="data-[hover=true]:text-white data-[hover=true]:bg-primary"
             aria-label="vue de carte"
           >
-            <ChevronLeftIcon className="w-5" />
+            <ChevronLeftIcon fill="currentColor" size={18} />
           </Button>
           <Button
             onClick={() => pressPrevNext("next")}
@@ -132,7 +132,7 @@ export default function Calendar({
             className="data-[hover=true]:text-white data-[hover=true]:bg-primary"
             aria-label="vue de carte"
           >
-            <ChevronRightIcon className="w-5" />
+            <ChevronRightIcon fill="currentColor" size={18} />
           </Button>
         </div>
       </div>

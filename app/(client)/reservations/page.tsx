@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@nextui-org/react";
-import { CalendarIcon, ViewColumnsIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon, ViewColumnsIcon } from "@/components/Icons";
 
 import Title from "@/components/Title";
 import SelectFilter from "@/components/SelectFilter";
@@ -39,9 +39,11 @@ export default function Reservations(/*{
   return (
     <>
     <div className="">
-      <Title className="text-3xl sm:text-3xl lg:text-4xl">Réservations</Title>
-      <p className="text-foreground/50 text-small md:text-medium">Cherche à travers tous les ressources et trouve celui qui convient le mieux à tes besoins.</p>
-      <div className="flex md:block justify-between items-end w-full m-4 md:mb-0 pl-0 ml-0">
+      <Title className="text-3xl sm:text-3xl lg:text-4xl mb-1.5">Réservations</Title>
+      <p className="text-foreground/80 font-light">
+        Cherche à travers tous les ressources et trouve celui qui convient le mieux à tes besoins.
+      </p>
+      <div className="flex md:block justify-between items-end w-full m-6 md:my-12 pl-0 ml-0">
         {/* <div>Filters: agency: {agency} validity: {validity} service_type: {service_type}</div> */}
         <div className="text-foreground/90">
           <SelectFilter placement="outside" items={allFilters} />
@@ -52,7 +54,7 @@ export default function Reservations(/*{
             className={`data-[hover=true]:bg-default ${!calendarDisplay ? "text-white bg-primary" : "text-foreground/50 bg-transparent"}`}
             aria-label="vue de carte"
           >
-            <ViewColumnsIcon className="w-6" />
+            <ViewColumnsIcon fill="currentColor" size={24} />
           </Button>
           
           <Button onClick={() => {toggledisplaymode(true)}}
@@ -60,7 +62,7 @@ export default function Reservations(/*{
             className={`data-[hover=true]:bg-default ${calendarDisplay ? "text-white bg-primary" : "text-foreground/50 bg-transparent"}`}
             title="vue calendaire"
           >
-            <CalendarIcon className="w-6" />
+            <CalendarIcon fill="currentColor" size={22} />
           </Button>
         </div>
       </div>

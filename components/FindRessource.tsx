@@ -4,7 +4,7 @@ import React from "react";
 import { Time, today, getLocalTimeZone } from "@internationalized/date";
 
 import { Button, TimeInput, DatePicker } from "@nextui-org/react";
-import { CalendarDateRangeIcon, ClockIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon, ClockIcon, ArrowRightIcon } from "@/components/Icons";
 
 export default function FindRessource() {
 
@@ -26,17 +26,19 @@ export default function FindRessource() {
           //   handleSelectionChange(e.target.value, queryName);
           // }}
         />
-        <div className="flex flex-wrapp items-start">
+        <div className="flex gap-2 items-start">
           <TimeInput 
             label="Heure de debut" labelPlacement="inside" color="primary"
             hourCycle={24}
             defaultValue={new Time(thishour, 0)}
             minValue={new Time(8)}
             maxValue={new Time(21)}
-            endContent={<ClockIcon className="w-6" />}
+            endContent={<ClockIcon fill="currentColor" size={18} />}
             className="w-32 md:w-36 rounded-small" radius="sm"
           />
-          <ArrowRightStartOnRectangleIcon className="w-6 mt-4 flex-shrink-0 text-foreground/50" />
+          <span className="mt-4 text-foreground/50">
+            <ArrowRightIcon fill="currentColor" size={16} />
+          </span>
           <TimeInput 
             label="Heure de fin" labelPlacement="inside" color="primary"
             hourCycle={24}
@@ -50,7 +52,7 @@ export default function FindRessource() {
       <div>
         <Button
           disableRipple radius="md" variant="solid" color="primary"
-          startContent={<CalendarDateRangeIcon className="w-6" />}
+          startContent={<CalendarIcon fill="currentColor" size={18} />}
         >
           Montrer disponibilités
         </Button>

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Breadcrumb from "@/components/dashboard/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
-import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
+import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 
 export const metadata: Metadata = {
   title: "Next.js Buttons | TailAdmin - Next.js Dashboard Template",
@@ -15,9 +15,9 @@ const Buttons = () => {
       <Breadcrumb pageName="Buttons" />
 
       {/* <!-- Normal Button Items --> */}
-      <div className="mb-10 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-          <h3 className="font-medium text-black dark:text-white">
+      <div className="mb-10 rounded-sm border border-divider bg-background shadow-default">
+        <div className="border-b border-divider px-7 py-4">
+          <h3 className="font-medium text-foreground">
             Normal Button
           </h3>
         </div>
@@ -116,9 +116,9 @@ const Buttons = () => {
       </div>
 
       {/* <!-- Button With Icon Items --> */}
-      <div className="mb-10 rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="border-b border-stroke px-7 py-4 dark:border-strokedark">
-          <h3 className="font-medium text-black dark:text-white">
+      <div className="mb-10 rounded-sm border border-divider bg-background shadow-default">
+        <div className="border-b border-divider px-7 py-4">
+          <h3 className="font-medium text-foreground">
             Button With Icon
           </h3>
         </div>

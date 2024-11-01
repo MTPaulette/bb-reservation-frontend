@@ -7,7 +7,7 @@ import {
   Divider
 } from "@nextui-org/react";
 
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@/components/Icons";
 import { usePathname } from "next/navigation";
 
 import { BbLogo } from "@/components/BbLogo";
@@ -71,7 +71,9 @@ export default function NavBarComponent() {
     >
 
       <NavbarBrand className="block md:hidden">
-        <BbLogo />
+        <Link href="/">
+          <BbLogo />
+        </Link>
       </NavbarBrand>
 
       <NavbarContent className="hidden md:flex sm:gap-4 md:gap-1.5 lg:gap-4" justify="center">
@@ -89,7 +91,7 @@ export default function NavBarComponent() {
               <Button
                 disableRipple
                 className="p-0 text-foreground bg-transparent data-[hover=true]:bg-transparent"
-                endContent={<ChevronDownIcon className="w-4" />}
+                endContent={<ChevronDownIcon fill="currentColor" size={10} />}
                 radius="sm"
                 variant="light"
               >
@@ -129,7 +131,7 @@ export default function NavBarComponent() {
               <Button
                 disableRipple
                 className="p-0 text-foreground bg-transparent data-[hover=true]:bg-transparent"
-                endContent={<ChevronDownIcon className="w-4" />}
+                endContent={<ChevronDownIcon fill="currentColor" size={10} />}
                 radius="sm"
                 variant="light"
               >

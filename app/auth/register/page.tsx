@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button, Input, Link} from "@nextui-org/react";
-import { EnvelopeIcon, EyeIcon, EyeSlashIcon, UserIcon } from '@heroicons/react/24/outline';
+import { EnvelopIcon, EyeIcon, EyeSlashIcon, UserIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
@@ -11,7 +11,8 @@ import { useRouter } from "next/navigation";
 import Alert from "@/components/Alert";
 
 type TSignInForm = {
-  email: string
+  name: string,
+  email: string,
   password: string
 }
 
@@ -86,7 +87,7 @@ export default function RegisterPage() {
       <Input
         autoFocus
         endContent={
-          <UserIcon className="w-4" />
+          <UserIcon fill="currentColor" size={18} />
         }
         label="Name"
         type="text"
@@ -98,7 +99,7 @@ export default function RegisterPage() {
       />
       <Input
         endContent={
-          <EnvelopeIcon className="w-4" />
+          <EnvelopIcon fill="currentColor" size={18} />
         }
         label="Email"
         type="email"
@@ -115,9 +116,9 @@ export default function RegisterPage() {
         endContent={
           <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
             {isVisible ? (
-              <EyeSlashIcon className="w-4" />
+              <EyeSlashIcon fill="currentColor" size={18} />
             ) : (
-              <EyeIcon className="w-4" />
+              <EyeIcon fill="currentColor" size={18} />
             )}
           </button>
         }

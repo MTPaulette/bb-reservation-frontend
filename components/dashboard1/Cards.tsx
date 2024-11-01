@@ -4,7 +4,7 @@ import {
   UserGroupIcon,
   InboxIcon,
   ShoppingBagIcon,
-} from '@heroicons/react/24/outline';
+} from "@heroicons/react/24/outline";
 
 import { fetchCardData } from '@/lib/data';
 

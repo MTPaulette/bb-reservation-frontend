@@ -6,7 +6,7 @@ export const BbLogo = ({width=72}) => (
   <Image 
     src="/images/logo/bb_logo.png"
     height="auto"
-    width={width} 
+    width={width}
     alt="bb logo"
   />
   </div>
@@ -14,7 +14,7 @@ export const BbLogo = ({width=72}) => (
   <Image 
     src="/images/logo/bb_logo_white.png"
     height="auto"
-    width={width} 
+    width={width}
     alt="bb logo"
   />
   </div>

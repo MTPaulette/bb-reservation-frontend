@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 import { nextui } from "@nextui-org/react";
 import defaultTheme from "tailwindcss/defaultTheme";
-import colors from "tailwindcss/colors";
+// import colors from "tailwindcss/colors";
 
 const config: Config = {
   content: [
@@ -23,10 +23,11 @@ const config: Config = {
     },
     extend: {
       colors: {
-        /*
+        
         current: "currentColor",
         transparent: "transparent",
         white: "#FFFFFF",
+        /*
         black: {
           // ...colors.black,
           DEFAULT: "#1C2434",
@@ -40,9 +41,8 @@ const config: Config = {
         bodydark: "#AEB7C0",
         bodydark1: "#DEE4EE",
         bodydark2: "#8A99AF",
-        primary: "#3C50E0",
+        // primary: "#3C50E0",
         secondary: "#80CAEE",
-        stroke: "#E2E8F0",
         gray: {
           ...colors.gray,
           DEFAULT: "#EFF4FB",
@@ -54,24 +54,25 @@ const config: Config = {
         whiter: "#F5F7FD",
         boxdark: "#24303F",
         "boxdark-2": "#1A222C",
+        success: "#219653",
+        danger: "#D34053",
+        warning: "#FFA70B",*/
+        stroke: "#E2E8F0",
         strokedark: "#2E3A47",
         "form-strokedark": "#3d4d60",
         "form-input": "#1d2a39",
-        success: "#219653",
-        danger: "#D34053",
-        warning: "#FFA70B",
-        */
+        
         meta: {
-          1: "#DC3545",
-          2: "#EFF2F7",
-          3: "#10B981",
-          4: "#313D4A",
-          5: "#259AE6",
-          6: "#FFBA00",
-          7: "#FF6766",
-          8: "#F0950C",
-          9: "#E5E7EB",
-          10: "#0FADCF",
+          1: "#DC3545", //red intense
+          2: "#EFF2F7", //white
+          3: "#10B981", //green
+          4: "#313D4A", //grey intense
+          5: "#259AE6", //blue intense
+          6: "#FFBA00", //orange
+          7: "#FF6766", //red
+          8: "#F0950C", //orange intense
+          9: "#E5E7EB", //grey
+          10: "#0FADCF", //blue
         },
       },
       fontSize: {

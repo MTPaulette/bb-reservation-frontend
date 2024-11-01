@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import "@/styles/fullcalendar-style.css";
-// import { geistSans, geistMono } from "@/styles/fonts";
-import { ubuntu } from "@/styles/fonts";
 
 import {Provider} from "@/utils/Provider"
 
@@ -18,13 +16,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      {/* <body className={`${fredoka.className} antialiased`}> */}
-      {/* <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}> */}
-      <body className={`${ubuntu.variable} antialiased`}>
+    <body>
+      <div className="bg-background text-foreground">
         <Provider>
           {children}
         </Provider>
-      </body>
+      </div>
+    </body>
     </html>
   );
 }

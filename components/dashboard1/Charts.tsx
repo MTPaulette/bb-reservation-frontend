@@ -1,4 +1,4 @@
-import { CalendarIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon } from "@/components/Icons";
 import BarChart, { DoughnutChart } from "@/components/chart/BarChart";
 import Title from "@/components/Title";
 
@@ -14,7 +14,7 @@ export default function Charts() {
           <DoughnutChart />
         </div>
         <div className="flex items-center pb-2 pt-6">
-          <CalendarIcon className="h-5 w-5 text-foreground" />
+          <CalendarIcon fill="currentColor" size={18} />
           <h3 className="ml-2 text-sm text-foreground">Last 12 months</h3>
         </div>
       </div>

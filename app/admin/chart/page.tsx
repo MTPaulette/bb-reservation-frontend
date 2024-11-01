@@ -1,6 +1,6 @@
-import Chart from "@/components/dashboard/Charts/page";
+import Chart from "@/components/admin/Charts/page";
 import { Metadata } from "next";
-import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
+import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 import React from "react";
 
 export const metadata: Metadata = {

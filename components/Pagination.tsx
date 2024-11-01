@@ -3,7 +3,7 @@
 import React from "react";
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Pagination, Button } from "@nextui-org/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@/components/Icons";
 
 export default function PaginationComponent({
   totalPages
@@ -36,7 +36,7 @@ export default function PaginationComponent({
           className="bg-transparent"
           onPress={() => changePage(currentPage > 1 ? currentPage - 1 : currentPage)}
         >
-          <ChevronLeftIcon className="w-5" />
+          <ChevronLeftIcon fill="currentColor" size={18} />
         </Button>
 
         <Pagination
@@ -58,7 +58,7 @@ export default function PaginationComponent({
           className="bg-transparent"
           onPress={() => changePage(currentPage < totalPages ? currentPage + 1 : currentPage)}
         >
-          <ChevronRightIcon className="w-5" />
+          <ChevronRightIcon fill="currentColor" size={18} />
         </Button>
       </div>
     </div>

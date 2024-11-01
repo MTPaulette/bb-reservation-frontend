@@ -3,8 +3,7 @@
 import {Select, SelectItem, Button} from "@nextui-org/react";
 import React from "react";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-
-import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { PlusIcon, CloseIcon } from "@/components/Icons";
 
 export default function SelectFilter({
   placement, items
@@ -26,7 +25,7 @@ export default function SelectFilter({
         <div className={`${showFilter ? "hidden" : "block"}`}>
           <Button onClick={() => {toogledisplayfilter(true)}}
             size="md" color="default" variant="ghost"
-            startContent={<PlusIcon className="w-4 h-4 flex-shrink-0" />}
+            startContent={<PlusIcon fill="currentColor" size={12} />}
           >
             Filtres
           </Button>
@@ -34,7 +33,7 @@ export default function SelectFilter({
         <div className={`${showFilter ? "block" : "hidden"}`}>
           <Button onClick={() => {toogledisplayfilter(false)}}
             size="md" color="default" variant="ghost"
-            startContent={<XMarkIcon className="w-4 h-4 flex-shrink-0" />}
+            startContent={<CloseIcon fill="currentColor" size={12} />}
           >
             Masquer les filtres
           </Button>

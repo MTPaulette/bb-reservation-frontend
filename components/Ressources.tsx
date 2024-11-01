@@ -3,8 +3,8 @@
 import React, { Suspense } from "react";
 import { Metadata } from 'next';
 import { useSearchParams } from 'next/navigation';
-import {Card, CardBody, Image, Button} from "@nextui-org/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
+import { Image, Button } from "@nextui-org/react";
+import { CheckIcon } from "@/components/Icons";
 import FindRessource from "@/components/FindRessource";
 import Pagination from "@/components/Pagination";
 import { InvoicesTableSkeleton } from '@/components/Skeletons';
@@ -17,18 +17,17 @@ export const metadata: Metadata = {
 
 export default function RessourcesWrapper() {
   const searchParams = useSearchParams();
-  
+  /*
   const agency = searchParams.get("agency") || '';
   const validity = searchParams.get("validity") || '';
   const service_type = searchParams.get("service_type") || '';
   const page = Number(searchParams.get("page")) || 1;
 
+  */
   // const ressources = fetchRessources(page);
 
   return (
     <>
-    {/* <div>ressources: {ressources} </div> */}
-    <div>Filters: agency: {agency} <br/> validity: {validity} <br/> service_type: {service_type}<br/> page: {page}</div>
     <div> 
       <FindRessource />
       <Suspense fallback={<InvoicesTableSkeleton />}>
@@ -49,57 +48,47 @@ export default function RessourcesWrapper() {
   );
 };
 
-
 export function RessourceCard() {
   return (
     <>
-    <Card
-      isBlurred
-      radius="md"
-      className="border-none bg-background dark:bg-background/70 w-full lg:w-[420px] xl:w-[550px]"
-      classNames={{
-        body: "p-0 m-0"
-      }}
-    >
-      <CardBody>
-        <div className="grid grid-cols-12 items-start justify-center">
-          <div className="relative col-span-4 h-[150px] md:h-[180px] overflow-hidden">
-            <Image
-              alt="Album cover"
-              className="lg:object-cover"
-              height={180}
-              shadow="md"
-              radius="none"
-              src="/images/brain-orange-400.png"
-              width="auto"
-            />
-          </div>
+    <div className="border-none bg-background dark:bg-background/70 w-full lg:w-[420px] xl:w-[550px] rounded-md">
+      <div className="grid grid-cols-12 items-start justify-center p-0 m-0">
+        <div className="relative col-span-4 h-[150px] md:h-[180px] overflow-hidden">
+          <Image
+            alt="Album cover"
+            className="lg:object-cover rounded-tl-md rounded-bl-md shadow-default"
+            height={180}
+            shadow="md"
+            radius="none"
+            src="/images/brain-orange-400.png"
+            width="auto"
+          />
+        </div>
 
-          <div className="col-span-8 h-full flex flex-col justify-between p-3 pt-1 md:p-4 md:pt-1">
-            <div className="flex justify-between items-start">
-              <div className="flex flex-col gap-0">
-                <h3 className="font-semibold text-foreground/90 h-[20px] truncate mt-1 md:mt-2 w-full whitespace-normal">Daily Mix</h3>
-                <p className="text-small text-foreground/80">12 Tracks</p>
-                <h1 className="text-small text-justify font-medium text-foreground/60 h-[40px] md:h-[60px] truncate mt-2 w-full whitespace-normal">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla harum omnis inventore beatae
-                  incidunt facilis, dicta ipsam, tempore consectetur blanditiis voluptatum quod iure tempo
-                  ra officiis aliquam dolore rerum voluptas numquam?
-                </h1>
-              </div>
+        <div className="col-span-8 h-full flex flex-col justify-between p-3 pt-1 md:p-4 md:pt-1">
+          <div className="flex justify-between items-start">
+            <div className="flex flex-col gap-0">
+              <h3 className="font-semibold text-foreground/90 h-[20px] truncate mt-1 md:mt-2 w-full whitespace-normal">Daily Mix</h3>
+              <p className="text-small text-foreground/80">12 Tracks</p>
+              <h1 className="text-small text-justify font-medium text-foreground/60 h-[40px] md:h-[60px] truncate mt-2 w-full whitespace-normal">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla harum omnis inventore beatae
+                incidunt facilis, dicta ipsam, tempore consectetur blanditiis voluptatum quod iure tempo
+                ra officiis aliquam dolore rerum voluptas numquam?
+              </h1>
             </div>
-            <div className="w-full flex justify-end mt-1 md:mt-0">
-              <Button
-                disableRipple radius="sm" variant="solid"
-                size="sm" color="primary"
-                startContent={<CheckIcon className="w-4" />}
-              >
-                Réservez maintenant
-              </Button>
-            </div>
+          </div>
+          <div className="w-full flex justify-end mt-1 md:mt-0">
+            <Button
+              disableRipple radius="sm" variant="solid"
+              size="sm" color="primary"
+              startContent={<CheckIcon fill="currentColor" size={10} />}
+            >
+              Réservez maintenant
+            </Button>
           </div>
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </div>
     </>
   );
 }

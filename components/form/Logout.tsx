@@ -1,6 +1,6 @@
 "use client"
 
-import { PowerIcon } from '@heroicons/react/24/outline';
+import { LogoutIcon } from "@/components/Icons";
 import { signOut } from 'next-auth/react';
 import { useState } from "react";
 import { useSession, getCsrfToken } from "next-auth/react";
@@ -45,7 +45,7 @@ export default function Logout() {
         p-3 text-sm font-medium hover:bg-danger/20 text-danger md:flex-none md:justify-start 
         md:p-2 md:px-3 ${loading ? "cursor-progress": ""}`}
     >
-      <PowerIcon className="w-5" />
+      <LogoutIcon fill="currentColor" size={24} />
       <div>Log Out</div>
     </button>
   );

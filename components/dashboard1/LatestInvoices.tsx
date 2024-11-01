@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { Image } from "@nextui-org/react";
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { CalendarIcon } from "@/components/Icons";
 import Title from "@/components/Title";
 import { fetchLatestInvoices } from '@/lib/data';
 
@@ -50,7 +50,7 @@ export default function LatestInvoices() {
           })}
         </div>
         <div className="flex items-center pb-2 pt-6">
-          <ArrowPathIcon className="h-5 w-5 text-foreground" />
+          <CalendarIcon fill="currentColor" size={18} />
           <h3 className="ml-2 text-sm text-foreground">Updated just now</h3>
         </div>
       </div>

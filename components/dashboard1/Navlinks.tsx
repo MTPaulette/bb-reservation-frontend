@@ -3,18 +3,18 @@
 import Link from "next/link";
 import clsx from "clsx";
 
-import { UserGroupIcon, HomeIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import { PeopleIcon, ContactIcon, DashboardIcon } from "@/components/Icons";
 import { usePathname } from "next/navigation";
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: "Home", href: "/dashboard", icon: HomeIcon },
+  { name: "Home", href: "/dashboard", icon: DashboardIcon },
   {
     name: "Invoices",
     href: "/dashboard/invoices",
-    icon: DocumentDuplicateIcon,
+    icon: ContactIcon,
   },
-  { name: "Customers", href: "/dashboard/customers", icon: UserGroupIcon },
+  { name: "Customers", href: "/dashboard/customers", icon: PeopleIcon },
 ];
 
 export default function NavLinks() {
@@ -37,7 +37,7 @@ export default function NavLinks() {
             )}
             aria-current={pathname === link.href ? "page" : "false"}
           >
-            <LinkIcon className="w-5" />
+            <LinkIcon fill="currentColor" size={18} />
             <p>{link.name}</p>
           </Link>
         );

@@ -1,6 +1,6 @@
-import ECommerce from "@/components/dashboard/Dashboard/E-commerce";
+import ECommerce from "@/components/admin/Dashboard/E-commerce";
 import { Metadata } from "next";
-import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
+import DefaultLayout from "@/components/admin/Layouts/DefaultLayout";
 
 export const metadata: Metadata = {
   title:

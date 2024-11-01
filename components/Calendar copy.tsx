@@ -8,7 +8,7 @@ import timeGridPlugin from "@fullcalendar/timegrid"
 import interactionPlugin from "@fullcalendar/interaction"
 
 import { Button } from "@nextui-org/react";
-import {ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon } from "@/components/Icons";
 import PeriodFilter from "@/components/PeriodFilter"
 
 
@@ -55,7 +55,7 @@ export default function Calendar() {
       className="data-[hover=true]:text-white data-[hover=true]:bg-primary"
       aria-label="vue de carte"
     >
-      <ChevronLeftIcon className="w-5" />
+      <ChevronLeftIcon fill="currentColor" size={18} />
     </Button>
   )}
 

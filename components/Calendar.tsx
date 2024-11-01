@@ -79,9 +79,13 @@ const events = [
 const renderEventContent = (eventInfo: any) => {
   return (
     <>
-      <div className="w-full h-auto items-center overflow-hidden bg-success/30 text-tiny text-foreground p-1 rounded">
-        <p className="font-semibold italic whitespace-break-spaces">{eventInfo.event.title}</p>
-        <p>{eventInfo.timeText} &nbsp;</p>
+      <div className="flex w-full flex-col rounded-sm border-l-[3px] border-primary bg-default bg-opacity-30 dark:bg-opacity-80 p-1 text-left">
+        <span className="event-name text-sm font-semibold text-foreground truncate">
+        {eventInfo.event.title}
+        </span>
+        <span className="time text-sm font-medium text-foreground">
+        {eventInfo.timeText}
+        </span>
       </div>
     </>
   )
@@ -134,11 +138,13 @@ export default function Calendar() {
         nowIndicator={true}
         weekends={true}
         editable={true}
+        /*
         selectable={true}
         selectMirror={true}
         fixedWeekCount={true}
         navLinks={true} // can click day/week names to navigate views
         dayMaxEvents={true}
+        */
       />
     </div>
     </>

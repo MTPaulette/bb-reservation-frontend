@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react";
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { SearchIcon } from "@/components/Icons";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 import { Input } from "@nextui-org/react";
@@ -57,7 +57,9 @@ export default function Search({ placeholder }: { placeholder: string }) {
       }}
       placeholder={placeholder}
       startContent={
-        <MagnifyingGlassIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0 w-4" />
+        <span className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0 w-4">
+          <SearchIcon fill="currentColor" size={16} />
+        </span>
       }
       value={value}
       onValueChange={(value) => {

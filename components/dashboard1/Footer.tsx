@@ -13,7 +13,7 @@ export default function Footer() {
 
 
   return (
-    <footer className="pb-3 text-foreground/60">
+    <footer className="pb-3 text-foreground/60 w-full">
       <Divider className="my-2 lg:my-4" />
       {/* <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between"> */}
       <div className="sm:flex sm:items-center sm:justify-between px-4">
