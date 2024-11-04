@@ -57,16 +57,16 @@ const SelectGroupTwo: React.FC = () => {
             isOptionSelected ? "text-foreground" : ""
           }`}
         >
-          <option value="" disabled className="text-body dark:text-bodydark">
+          <option value="" disabled>
             Select Country
           </option>
-          <option value="USA" className="text-body dark:text-bodydark">
+          <option value="USA">
             USA
           </option>
-          <option value="UK" className="text-body dark:text-bodydark">
+          <option value="UK">
             UK
           </option>
-          <option value="Canada" className="text-body dark:text-bodydark">
+          <option value="Canada">
             Canada
           </option>
         </select>

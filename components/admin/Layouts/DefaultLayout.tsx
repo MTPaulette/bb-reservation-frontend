@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/components/admin/Sidebar";
 import Header from "@/components/admin/Header";
-import Footer from "@/components/dashboard1/Footer";
+import Footer from "@/components/admin/Footer";
 
 export default function DefaultLayout({
   children,
@@ -19,7 +19,7 @@ export default function DefaultLayout({
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
-        <div className="relative flex flex-1 flex-col lg:ml-72.5">
+        <div className="relative flex flex-1 flex-col lg:ml-67">
           {/* <!-- ===== Header Start ===== --> */}
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           {/* <!-- ===== Header End ===== --> */}

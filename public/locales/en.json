@@ -1,0 +1,21 @@
+{
+  "hello": "Hello",
+  "goodbye": "Goodbye",
+  "HomePage": {
+    "hello": "Hello home page",
+    "goodbye": "Goodbye home page"
+  },
+  "LocaleSwitcher": {
+    "label" : "Change language",
+    "locale": "{locale, select, en{English} fr{French} other {Unknown}}"
+  },
+  "Error": {
+    "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
+    "title": "Something went wrong!"
+  },
+  "NotFoundPage": {
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
+    "title": "Page not found",
+    "back": "Go back"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "hello": "bonjour",
+  "goodbye": "Aurevoir",
+  "HomePage": {
+    "hello": "bonjour home page",
+    "goodbye": "Aurevoir home page"
+  },
+  "LocaleSwitcher": {
+    "label" : "Changer de langue",
+    "locale": "{locale, select, en{Anglais} fr{Francais} other {Unknown}}"
+  },
+  "Error": {
+    "description": "<p>NOus avons malheureusement rencontré une erreur.</p><p>Vous pouvez essayer de <retry>recharger la page</retry> que vous visitiez.</p>",
+    "title": "Une erreur s'est produite!"
+  },
+  "NotFoundPage": {
+    "description": "Veuillez reverifiez la barre d'adresse du navigateur ou utiliser le navigateur pour aller à une page connue.",
+    "title": "Page non trouvée",
+    "back": "Retour"
+  }
+}

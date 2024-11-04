@@ -63,7 +63,7 @@ const menuGroups = [
           <SettingIcon fill="none" size={18} />
         ),
         label: "Settings",
-        route: "/admin/settings",
+        route: "/admin/settings?group=general",
       },
     ],
   },
@@ -109,7 +109,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
       <aside
-        className={`fixed left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-background bgg-[#131033] duration-300 ease-linear lg:translate-x-0 ${
+        className={`fixed left-0 top-0 z-9999 flex h-screen w-67 flex-col overflow-y-hidden bg-background bgg-[#131033] duration-300 ease-linear lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

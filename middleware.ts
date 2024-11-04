@@ -1,8 +1,16 @@
-import { withAuth } from "next-auth/middleware"
+import { withAuth } from "next-auth/middleware";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
-// middleware is applied to all routes, use conditionals to select
 
-export default withAuth(function middleware(req) {}, {
+export default createMiddleware(routing);
+
+export const config = {
+  matcher: ['/', '/(fr|en)/:path*']
+}
+
+export const authMdw = withAuth(function middleware(req) {}, {
+// export default withAuth(function middleware(req) {}, {
   pages: {
     signIn: "auth/login"
   },

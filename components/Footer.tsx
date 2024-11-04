@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { FacebookIcon, InstagramIcon, LinkedlinIcon, TwitterIcon, WhatsappIcon, WorldIcon } from "@/components/Icons";
 
 import { BbLogo } from "@/components/BbLogo";
+import LocalSwitcher from "./locale/LocalSwitcher";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -52,6 +53,9 @@ export default function Footer() {
           <p className="text-justify">
             ipsum dolor sit amet consectetur adipisicing elit. Iure nulla inventore fugiat. Recusandae nisi eum, asper
           </p>
+          <div className="mt-4">
+            <LocalSwitcher />
+          </div>
         </div>
         {menuItems.map((menuItem, index) => (
         <div className="col-span-1 md:col-span-1" key={index}>

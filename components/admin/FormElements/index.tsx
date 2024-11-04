@@ -1,5 +1,5 @@
 "use client";
-import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "@/components/admin/Breadcrumb";
 import CheckboxFive from "@/components/admin/Checkboxes/CheckboxFive";
 import CheckboxFour from "@/components/admin/Checkboxes/CheckboxFour";
 import CheckboxOne from "@/components/admin/Checkboxes/CheckboxOne";

@@ -1,18 +1,14 @@
-import Link from 'next/link';
-import { FaceFrownIcon } from "@/components/Icons";
 
-export default function NotFound() {
+import NotFoundPage from '@/components/NotFoundPage';
+import BaseLayout from '@/components/layout/BaseLayout';
+import { routing } from "@/i18n/routing";
+
+export default function GlobalNotFoundPage() {
   return (
-    <main className="flex h-full flex-col items-center justify-center gap-2">
-      <FaceFrownIcon fill="none" size={40} />
-      <h2 className="text-xl font-semibold">404 Not Found</h2>
-      <p>Could not find the requested invoice.</p>
-      <Link
-        href="/dashboard/invoices"
-        className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
-      >
-        Go Back
-      </Link>
-    </main>
+    <BaseLayout locale={routing.defaultLocale}>
+      <main className="flex h-screen w-screen flex-col items-center justify-center p-6">
+        <NotFoundPage />
+      </main>
+    </BaseLayout>
   );
 }
