@@ -8,33 +8,39 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 
 type TSignInForm = {
-  name: string,
+  lastname: string,
+  firstname: string,
   email: string,
   password: string
 }
 
-const schema: ZodType<TSignInForm> = z
-  .object({
-    name: z.string().min(1, { message: "the username is required" }),
-    email: z.string().email({
-      message: "Must be a valid email",
-    }),
-    password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long" })
-    .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
-      message:
-        "Password must contain at least one number and one special character",
-    }),
+export default function RegisterPage() {
+  const t = useTranslations("Input");
+  const t_error = useTranslations("InputError");
+  const locale = useLocale();
+
+  const schema: ZodType<TSignInForm> = z
+    .object({
+      lastname: z.string().min(1, { message: t_error("lastname") }),
+      firstname: z.string().min(1, { message: t_error("firstname") }),
+      email: z.string().email({
+        message:  t_error("email"),
+      }),
+      password: z
+      .string()
+      .min(8, { message: t_error("passwordLenght")})
+      .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
+        message: t_error("password")
+      }),
   });
 
-export default function RegisterPage() {
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const router = useRouter();
@@ -54,32 +60,56 @@ export default function RegisterPage() {
     try {
       const response = await fetch("http://127.0.0.1:8000/api/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          //"Accept": "application/json",
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(data),
       })
       if(response.ok){
-        router.push("/auth/login");
+        await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+        })
+        .then((res) => {
+          setLoading(false);
+          if(res?.ok) {
+            // router.push('/fr/dashboard1');
+            router.push(`/${locale}/dashboard1`);
+          } else {
+            if(res?.error === "CredentialsSignin"){
+              setError(t_error("invalid_credentials"));
+            } else {
+              setError(t_error("invalid_credentials"));
+            }
+          }
+        })
+        .catch(err => {
+          console.log("login error: ");
+          console.log(err);
+        })
+
+
       } else {
         const res = await response.json()
-        console.log("====================================");
-        console.log(res.errors.email[0]);
         setError(res.errors.email[0]);
       }
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      setError("Something went wrong.");
+      setError(t_error("invalid_credentials"));
       console.log(err);
     }
   }
 
   return (
     <>
-    <div className="max-w-xs">
+    <div className="max-w-md !p-0">
     {error != "" ? (
       <Alert color="danger" message={error} />
     ) : null}
-    <h1 className="flex flex-col gap-1 my-2">Register</h1>
+    <h1 className="flex flex-col gap-1 my-2 capitalize">{t("register")}</h1>
     <form
       action="#" className="space-y-3"
       onSubmit={handleSubmit(handleFormSubmit)}
@@ -89,30 +119,43 @@ export default function RegisterPage() {
         endContent={
           <UserIcon fill="currentColor" size={18} />
         }
-        label="Name"
+        label={t("lastname")}
         type="text"
-        placeholder="Enter your name"
+        placeholder={t("lastnamePlaceholder")}
         variant="bordered"
-        {...register("name")}
-        isInvalid={errors.name ? true: false}
-        errorMessage={errors.name ? errors.name?.message: null}
+        {...register("lastname")}
+        isInvalid={errors.lastname ? true: false}
+        errorMessage={errors.lastname ? errors.lastname?.message: null}
+      />
+      <Input
+        autoFocus
+        endContent={
+          <UserIcon fill="currentColor" size={18} />
+        }
+        label={t("firstname")}
+        type="text"
+        placeholder={t("firstnamePlaceholder")}
+        variant="bordered"
+        {...register("firstname")}
+        isInvalid={errors.firstname ? true: false}
+        errorMessage={errors.firstname ? errors.firstname?.message: null}
       />
       <Input
         endContent={
           <EnvelopIcon fill="currentColor" size={18} />
         }
-        label="Email"
+        label={t("email")}
         type="email"
-        placeholder="Enter your email"
+        placeholder={t("emailPlaceholder")}
         variant="bordered"
         {...register("email")}
         isInvalid={errors.email ? true: false}
         errorMessage={errors.email ? errors.email?.message: null}
       />
       <Input
-        label="Password"
+        label={t("password")}
         variant="bordered"
-        placeholder="Enter your password"
+        placeholder={t("passwordPlaceholder")}
         endContent={
           <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
             {isVisible ? (
@@ -134,13 +177,13 @@ export default function RegisterPage() {
           isLoading={loading}
           className="w-full"
         >
-          Register
+          {t("register")}
         </Button>
       </div>
     </form>
     <div className="flex justify-end mt-2">
-      <Link color="primary" href="/auth/login" size="sm">
-        You already have an account ? Sign in
+      <Link color="primary" href={`/${locale}/auth/login`} size="sm">
+        {t("have_account_link")}
       </Link>
     </div>
     </div>

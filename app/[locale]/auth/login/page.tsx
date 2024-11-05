@@ -8,7 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from "next/navigation";
+
 import Alert from "@/components/Alert";
 
 type TSignInForm = {
@@ -16,22 +18,25 @@ type TSignInForm = {
   password: string
 }
 
-const schema: ZodType<TSignInForm> = z
-  .object({
-    email: z.string().email({
-      message: "Must be a valid email",
-    }),
-    password: z.string().min(1, { message: "the password is required" }),
+export default function LoginPage() {
+  const t = useTranslations("Input");
+  const t_error = useTranslations("InputError");
+  const locale = useLocale();
+
+  const schema: ZodType<TSignInForm> = z
+    .object({
+      email: z.string().email({
+        message: t_error("email"),
+      }),
+      password: z.string().min(1, { message: t_error("passwordLenght") }),
   });
 
-export default function LoginPage() {
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const router = useRouter();
-  // const query = useSearchParams();
 
   const {
     register,
@@ -53,13 +58,12 @@ export default function LoginPage() {
     .then((res) => {
       setLoading(false);
       if(res?.ok) {
-        // router.push(query.get("callbackUrl"));
-        router.push("/dashboard");
+          router.push(`/${locale}/dashboard1`);
       } else {
         if(res?.error === "CredentialsSignin"){
-          setError("Invalid credentials.");
+          setError(t_error("invalid_credentials"));
         } else {
-          setError("Something went wrong.");
+          setError(t_error("invalid_credentials"));
         }
       }
     })
@@ -71,11 +75,11 @@ export default function LoginPage() {
 
   return (
     <>
-    <div className="max-w-xs">
+    <div className="max-w-sm">
     {error != "" ? (
       <Alert color="danger" message={error} />
     ) : null}
-    <h1 className="flex flex-col gap-1 mb-2">Log in</h1>
+    <h1 className="flex flex-col gap-1 mb-2 capitalize">{t("login")}</h1>
     <form
       action="#" className="space-y-3"
       onSubmit={handleSubmit(handleFormSubmit)}
@@ -85,18 +89,18 @@ export default function LoginPage() {
         endContent={
           <EnvelopIcon fill="currentColor" size={18} />
         }
-        label="Email"
+        label={t("email")}
         type="email"
-        placeholder="Enter your email"
+        placeholder={t("emailPlaceholder")}
         variant="bordered"
         {...register("email")}
         isInvalid={errors.email ? true: false}
         errorMessage={errors.email ? errors.email?.message: null}
       />
       <Input
-        label="Password"
+        label={t("password")}
         variant="bordered"
-        placeholder="Enter your password"
+        placeholder={t("passwordPlaceholder")}
         endContent={
           <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
             {isVisible ? (
@@ -117,10 +121,10 @@ export default function LoginPage() {
             label: "text-small",
           }}
         >
-          Remember me
+          {t("remember_me")}
         </Checkbox>
         <Link color="primary" href="#" size="sm">
-          Forgot password?
+          {t("forgot_password_link")}
         </Link>
       </div>
       <div className="w-full">
@@ -130,13 +134,13 @@ export default function LoginPage() {
           isLoading={loading}
           className="w-full"
         >
-          Sign in
+          {t("login")}
         </Button>
       </div>
     </form>
-    <div className="mt-2">
-      <Link color="primary" href="/auth/register" size="sm">
-        S&apos;inscrire
+    <div className="mt-2 capitalize">
+      <Link color="primary" href={`/${locale}/auth/register`} size="sm">
+        {t("register")}
       </Link>
     </div>
     </div>

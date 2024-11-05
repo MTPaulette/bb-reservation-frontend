@@ -1,14 +1,11 @@
 "use client";
 
-import {
-  Link, Divider
-} from "@nextui-org/react";
-
+import { Link, Divider } from "@nextui-org/react";
 import { usePathname } from "next/navigation";
 import { FacebookIcon, InstagramIcon, LinkedlinIcon, TwitterIcon, WhatsappIcon, WorldIcon } from "@/components/Icons";
 
 import { BbLogo } from "@/components/BbLogo";
-import LocalSwitcher from "./locale/LocalSwitcher";
+import LocalSwitcher from "./LocalSwitcher";
 
 export default function Footer() {
   const pathname = usePathname();

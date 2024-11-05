@@ -1,6 +1,37 @@
 {
-  "hello": "Hello",
-  "goodbye": "Goodbye",
+  "InputError": {
+    "lastname": "the lastname is required",
+    "firstname": "the firstname is required",
+    "email": "Must be a valid email",
+    "passwordLenght": "Password must be at least 8 characters long",
+    "password": "Password must contain at least one number and one special character",
+    "invalid_credentials": "Invalid credentials.",
+    "something_wrong": "Something went wrong."
+  },
+  "Input": {
+    "register": "Register",
+    "have_account_link": "You already have an account ? Sign in",
+    "lastname": "Lastname",
+    "firstname": "Firstname",
+    "email": "Email",
+    "password": "Password",
+    "login": "Log in",
+    "lastnamePlaceholder": "Enter your lastname",
+    "firstnamePlaceholder": "Enter your firstname",
+    "emailPlaceholder": "Enter your email",
+    "passwordPlaceholder": "Enter your password",
+    "forgot_password_link": "Forgot password?",
+    "remember_me": "remember me"
+  },
+  "Footer": {
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "copyright": "All right reserved"
+  },
+
+
+
+
   "HomePage": {
     "hello": "Hello home page",
     "goodbye": "Goodbye home page"
@@ -17,5 +48,10 @@
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
     "title": "Page not found",
     "back": "Go back"
+  },
+  "Sidebar": {
+    "dashboard": "dashboard",
+    "calendar": "calendar",
+    "profile": "profile"
   }
 }

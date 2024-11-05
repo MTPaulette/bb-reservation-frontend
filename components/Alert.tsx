@@ -2,7 +2,7 @@ import { CheckIcon, ExclamationTriangleIcon, CloseIcon } from "@/components/Icon
 
 export default function Alert({message, color}: {message: string, color: "default"|"warning"|"danger"|"success"}) {
   return (
-    <div className={`flex w-full border-l-6 bg-opacity-[15%] px-5 py-6 shadow-md dark:bg-black dark:bg-opacity-20 md:p-9
+    <div className={`flex w-full border-l-6 bg-opacity-[15%] px-5 py-3 shadow-md dark:bg-black dark:bg-opacity-20 md:p-9
       ${color === "warning"? "text-warning border-warning bg-warning" : " "}
       ${color === "danger"? "text-red-400 border-red-400 bg-red-400" : " "}
       ${color === "success"? "text-green-500 border-green-500 bg-green-500" : " "}

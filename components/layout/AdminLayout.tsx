@@ -1,25 +1,30 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
-import Sidebar from "@/components/dashboard1/Sidebar";
+import React, { useState } from "react";
+import Sidebar from "@/components/admin/Sidebar";
+import Header from "@/components/admin/Header";
 import Footer from "@/components/admin/Footer";
-import Navbar from "@/components/dashboard1/Navbar";
 
 export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <SessionProvider>
-      <Sidebar />
-      <div className="md:ml-52 xl:ml-64 bg-content2">
-        <Navbar />
-        <main className="min-h-screen flex flex-col px-4 pt-6 md:pt-10">
-          {children}
+    <div className="flex bg-content2 text-foreground">
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div className="relative flex flex-1 flex-col lg:ml-67">
+        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <main>
+          <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            {children}
+          </div>
         </main>
-        <Footer />
+        <Footer/>
       </div>
-    </SessionProvider>
+    </div>
   );
 }

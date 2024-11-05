@@ -3,12 +3,18 @@
 import { Link, Divider } from "@nextui-org/react";
 
 import { usePathname } from "next/navigation";
+import LocalSwitcher from "./../LocalSwitcher";
+import { useLocale, useTranslations } from "next-intl";
+
 
 export default function Footer() {
+  const t = useTranslations("Footer");
+  const locale = useLocale();
+
   const pathname = usePathname();
   const menuItems = [
-    { name: "Terms & Conditions", href: "/terms"},
-    { name: "Privacy Policy", href: "/policy"},
+    { name: t("terms"), href: `${locale}/terms`},
+    { name: t("privacy"), href: `${locale}/policy`},
   ];
 
 
@@ -16,15 +22,15 @@ export default function Footer() {
     <footer className="pb-3 text-foreground/60 w-full">
       <Divider className="my-2 lg:my-4" />
       {/* <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between"> */}
-      <div className="sm:flex sm:items-center sm:justify-between px-4">
-        <span className="sm:text-center text-small">
-          © { new Date().getFullYear() } <span className="pointer-events-none">Brain-Booster™</span>. Tous droits réservés.
-        </span>
-        <ul className="flex mt-1 lg:mt-4 justify-end space-x-6 sm:justify-center sm:mt-0">
+      {/* <div className="sm:flex items-center justify-between px-4 mt-1 lg:mt-4 w-full"> */}
+      <div className="flex flex-wrap items-center justify-between px-4 mt-1 lg:mt-4 w-full">
+        <p className="sm:text-center text-small mb-3 md:mb-0 whitespace-nowrap">
+          © { new Date().getFullYear() } <span className="pointer-events-none">Brain-Booster™</span>. {t("copyright")}.
+        </p>
+        <ul className="flex justify-end w-full md:w-auto space-x-6 md:justify-center">
           {menuItems.map((item, index) => (
             <li
               key={index}
-              className="mb-2"
             >
               <Link
                 href={item.href} color={pathname === item.href ? "warning" : "foreground"}
@@ -32,6 +38,9 @@ export default function Footer() {
               >{item.name}</Link>
             </li>
           ))}
+          <li>
+            <LocalSwitcher />
+          </li>
         </ul>
       </div>
     </footer>

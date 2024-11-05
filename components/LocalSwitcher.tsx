@@ -5,6 +5,7 @@ import { Select, SelectItem } from '@nextui-org/react';
 import { useParams } from "next/navigation";
 import { ChangeEvent, useTransition } from "react";
 import { Locale, usePathname, useRouter } from "@/i18n/routing";
+import { LanguageIcon } from './Icons';
 
 export default function LocalSwitcher() {
   const t = useTranslations("LocaleSwitcher");
@@ -35,7 +36,8 @@ export default function LocalSwitcher() {
       size="sm"
       disabled={isPending}
       onChange={onSelectChange}
-      className="w-36 bg-background rounded-small" radius="sm"
+      className="w-32 bg-transparent"
+      startContent={<LanguageIcon fill="currentColor" size={24} />}
     >
       {
         routing.locales.map((cur) => (

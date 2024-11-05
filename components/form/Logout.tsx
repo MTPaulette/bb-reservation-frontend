@@ -28,7 +28,7 @@ export default function Logout() {
 
       if(response.ok) {
         await signOut({
-          callbackUrl: "/reservations"
+          callbackUrl: "/fr/reservations"
         });
       }
   

@@ -7,12 +7,18 @@ import ClickOutside from "@/components/admin/ClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { BbLogo } from "@/components/BbLogo";
 import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon } from "@/components/Icons";
+import { useLocale, useTranslations } from "next-intl";
 
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
+
+const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+  const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
+  const t = useTranslations("Sidebar");
+  const locale = useLocale();
 
 const menuGroups = [
   {
@@ -22,23 +28,23 @@ const menuGroups = [
         icon: (
           <DashboardIcon fill="none" size={18} />
         ),
-        label: "Dashboard",
+        label: t("dashboard"),
         route: "#",
-        children: [{ label: "eCommerce", route: "/admin" }],
+        children: [{ label: "eCommerce", route: `/${locale}/admin` }],
       },
       {
         icon: (
           <CalendarIcon fill="none" size={18} />
         ),
-        label: "Calendar",
-        route: "/admin/calendar",
+        label: t("calendar"),
+        route: `/${locale}/admin/calendar`,
       },
       {
         icon: (
           <UserIcon fill="none" size={18} />
         ),
         label: "Profile",
-        route: "/admin/profile",
+        route: `/${locale}/admin/profile`,
       },
       {
         icon: (
@@ -47,8 +53,8 @@ const menuGroups = [
         label: "Forms",
         route: "#",
         children: [
-          { label: "Form Elements", route: "/admin/forms/form-elements" },
-          { label: "Form Layout", route: "/admin/forms/form-layout" },
+          { label: "Form Elements", route: `/${locale}/admin/forms/form-elements` },
+          { label: "Form Layout", route: `/${locale}/admin/forms/form-layout` },
         ],
       },
       {
@@ -56,14 +62,14 @@ const menuGroups = [
           <TableIcon fill="none" size={18} />
         ),
         label: "Tables",
-        route: "/admin/tables",
+        route: `/${locale}/admin/tables`,
       },
       {
         icon: (
           <SettingIcon fill="none" size={18} />
         ),
         label: "Settings",
-        route: "/admin/settings?group=general",
+        route: `/${locale}/admin/settings?group=general`,
       },
     ],
   },
@@ -75,7 +81,7 @@ const menuGroups = [
           <ChartIcon fill="none" size={18} />
         ),
         label: "Chart",
-        route: "/admin/chart",
+        route: `/${locale}/admin/chart`,
       },
       {
         icon: (
@@ -84,8 +90,8 @@ const menuGroups = [
         label: "UI Elements",
         route: "#",
         children: [
-          { label: "Alerts", route: "/admin/ui/alerts" },
-          { label: "Buttons", route: "/admin/ui/buttons" },
+          { label: "Alerts", route: `/${locale}/admin/ui/alerts` },
+          { label: "Buttons", route: `/${locale}/admin/ui/buttons` },
         ],
       },
       {
@@ -95,16 +101,14 @@ const menuGroups = [
         label: "Authentication",
         route: "#",
         children: [
-          { label: "Sign In", route: "/admin/auth/signin" },
-          { label: "Sign Up", route: "/admin/auth/signup" },
+          { label: "Sign In", route: `/${locale}/admin/auth/signin` },
+          { label: "Sign Up", route: `/${locale}/admin/auth/signup` },
         ],
       },
     ],
   },
 ];
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-  const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
