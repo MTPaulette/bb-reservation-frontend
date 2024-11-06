@@ -23,7 +23,7 @@ export default function AuthLayout({
           {children}
         </div>
         <div className="mt-6 w-full">
-        <Footer/>
+          <Footer/>
         </div>
         </div>
       </main>

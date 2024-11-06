@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import DashboardSkeleton from "@/components/Skeletons";
 import Breadcrumbs from "@/components/dashboard1/Breadcrumbs";
-import Search from "@/components/dashboard1/Search";
+import Search from "@/components/Search";
 
 
 export default function DashboardPage() {

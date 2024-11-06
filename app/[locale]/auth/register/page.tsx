@@ -105,7 +105,7 @@ export default function RegisterPage() {
 
   return (
     <>
-    <div className="max-w-md !p-0">
+    <div className="w-[270px]">
     {error != "" ? (
       <Alert color="danger" message={error} />
     ) : null}

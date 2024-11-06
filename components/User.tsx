@@ -7,10 +7,15 @@ export default function MyUser({
 }) {
   return (
     <User
+      isFocusable
       name={name}
       description={role}
       avatarProps={{
-        src: src? src: ""
+        src: src? src: "",
+        isBordered: true,
+        as: "button",
+        className: "transition-transform mr-1 truncate whitespace-nowrap",
+        color: "warning",
       }}
     />
   );

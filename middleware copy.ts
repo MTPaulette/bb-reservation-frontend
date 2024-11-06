@@ -26,3 +26,38 @@ export const authMdw = withAuth(function middleware(req) {}, {
     },
   },
 })
+
+// middleware/auth.js
+import axios from 'axios';
+
+const authMiddleware = async (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Vous devez être connecté' });
+  }
+
+  try {
+    const response = await axios.get('http://localhost:8000/api/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.data.user) {
+      return res.status(401).json({ error: 'Vous devez être connecté' });
+    }
+
+    // Vérification des permissions
+    const permissions = response.data.user.permissions;
+    if (!permissions.includes('accès-ressource')) {
+      return res.status(403).json({ error: 'Accès refusé' });
+    }
+
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Vous devez être connecté' });
+  }
+};
+
+export default authMiddleware;

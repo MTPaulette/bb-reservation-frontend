@@ -21,12 +21,20 @@
     "emailPlaceholder": "Enter your email",
     "passwordPlaceholder": "Enter your password",
     "forgot_password_link": "Forgot password?",
-    "remember_me": "remember me"
+    "remember_me": "remember me",
+    "logout": "Log Out"
   },
   "Footer": {
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
     "copyright": "All right reserved"
+  },
+  "Header": {
+    "signedAs": "Signed as",
+    "profile": "my profile",
+    "settings": "Account settings",
+    "searchPlaceholder": "Type to search..."
+
   },
 
 
@@ -52,6 +60,10 @@
   "Sidebar": {
     "dashboard": "dashboard",
     "calendar": "calendar",
-    "profile": "profile"
+    "profile": "profile",
+    "users": "users",
+    "clients": "clients",
+    "staff": "staff",
+    "settings": "settings"
   }
 }

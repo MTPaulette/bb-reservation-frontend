@@ -8,3 +8,7 @@ export const formatCurrency = (amount: number) => {
     currency: 'XAF',
   });
 };
+
+export const getUsername = (lastname: string, firstname: string) => {
+  return capitalize(firstname)+" "+lastname.toUpperCase()
+}

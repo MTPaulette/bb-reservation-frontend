@@ -21,22 +21,21 @@
     "emailPlaceholder": "Entrer votre email",
     "passwordPlaceholder": "Entrer votre mot de passe",
     "forgot_password_link": "Mot de passe oublié?",
-    "remember_me": "se souvenir de moi"
+    "remember_me": "se souvenir de moi",
+    "logout": "Se déconnecter"
   },
   "Footer": {
     "terms": "Termes et Conditions",
     "privacy": "Privacy Ploicy",
     "copyright": " Tous droits réservés"
   },
-
-
-
-
-
-  "HomePage": {
-    "hello": "bonjour home page",
-    "goodbye": "Aurevoir home page"
+  "Header": {
+    "signedAs": "Connecté(e) comme",
+    "profile": "Mon profile",
+    "settings": "Paramètre du compte",
+    "searchPlaceholder": "Saisir pour rechercher..."
   },
+
   "LocaleSwitcher": {
     "label" : "Changer de langue",
     "locale": "{locale, select, en{Anglais} fr{Francais} other {Unknown}}"
@@ -53,6 +52,10 @@
   "Sidebar": {
     "dashboard": "tableau de bord",
     "calendar": "calendier",
-    "profile": "profile"
+    "profile": "profile",
+    "users": "utilisateurs",
+    "clients": "clients",
+    "staff": "staff",
+    "settings": "Paramètre"
   }
 }

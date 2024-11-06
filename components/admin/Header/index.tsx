@@ -1,15 +1,29 @@
+"use client";
+
 import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import DropdownMessage from "./DropdownMessage";
 import DropdownNotification from "./DropdownNotification";
-import DropdownUser from "./DropdownUser";
+import User from "@/components/User";
 import Image from "next/image";
-import { SearchIcon } from "@/components/Icons";
+import { ChevronDownIcon, SettingIcon, UserIcon } from "@/components/Icons";
+import Logout from "@/components/form/Logout";
+import { useSession } from "next-auth/react";
+import { useLocale, useTranslations } from 'next-intl';
+
+import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
+import { getUsername } from "@/lib/utils";
+import Search from "@/components/Search";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+
+  const { data: session } = useSession();
+  const user = session?.user?.user;
+  const t = useTranslations("Header");
+  const locale = useLocale();
+
   return (
     <header className="sticky top-0 z-999 flex w-full bg-content2 drop-shadow-1 dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -68,20 +82,9 @@ const Header = (props: {
         </div>
 
         <div className="hidden sm:block">
-          <form action="https://formbold.com/s/unique_form_id" method="POST">
-            <div className="relative">
-              {/* <button className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none"> */}
-              <button className="absolute left-0 top-1/2 -translate-y-1/2 text-black/50 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0">
-                <SearchIcon fill="text-primary/50" size={20} />
-              </button>
-
-              <input
-                type="text"
-                placeholder="Type to search..."
-                className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
-              />
-            </div>
-          </form>
+          <div className="w-full sm:w-[250px] xl:w-125">
+            <Search placeholder={t("searchPlaceholder")} />
+          </div>
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
@@ -93,15 +96,62 @@ const Header = (props: {
             {/* <!-- Notification Menu Area --> */}
             <DropdownNotification />
             {/* <!-- Notification Menu Area --> */}
-
-            {/* <!-- Chat Notification Area --> */}
-            <DropdownMessage />
-            {/* <!-- Chat Notification Area --> */}
           </ul>
 
           {/* <!-- User Area --> */}
-          <DropdownUser />
-          {/* <!-- User Area --> */}
+          <Dropdown>
+            <DropdownTrigger>
+              <div>
+                <div className="block md:hidden">
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    color="warning"
+                    name={user? getUsername(user.lastname, user.firstname): ""}
+                    size="sm"
+                    src="/images/brain-orange-400.png"
+                  />
+                </div>
+                <div className="hidden md:flex items-center gap-3">
+                  <User
+                    name={user? getUsername(user.lastname, user.firstname): ""}
+                    role="admin"
+                    src="/images/brain-orange-400.png"
+                  />
+                  <ChevronDownIcon fill="currentColor" size={10} />
+                </div>
+              </div>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <DropdownItem className="block md:hidden">
+                <User
+                  name={user? getUsername(user.lastname, user.firstname): ""}
+                  role="admin"
+                  src="/images/brain-orange-400.png"
+                />
+              </DropdownItem>
+              <DropdownItem key="profile" className="h-14 gap-2">
+                <p className="font-semibold truncate">{t("signedAs")}</p>
+                <p className="font-semibold">{user? user.email : ""}</p>
+              </DropdownItem>
+              <DropdownItem key="prodile" className="p-0 m-0">
+                <Link href={`/${locale}/admin/profile`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
+                  <UserIcon fill="currentColor" size={18} />
+                  {t("profile")}
+                </Link>
+              </DropdownItem>
+              <DropdownItem key="team_settings" className="p-0 m-0">
+                <Link href={`/${locale}/admin/settings?group=general`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
+                  <SettingIcon fill="currentColor" size={18} />
+                  {t("settings")}
+                </Link>
+              </DropdownItem>
+              <DropdownItem key="logout" className="p-0 m-0 mt-2 border-t-1 border-divider rounded-none">
+                <Logout />
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
     </header>

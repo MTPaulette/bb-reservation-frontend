@@ -24,7 +24,7 @@ export default function Footer() {
       {/* <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between"> */}
       {/* <div className="sm:flex items-center justify-between px-4 mt-1 lg:mt-4 w-full"> */}
       <div className="flex flex-wrap items-center justify-between px-4 mt-1 lg:mt-4 w-full">
-        <p className="sm:text-center text-small mb-3 md:mb-0 whitespace-nowrap">
+        <p className="sm:text-center text-small mb-3 md:mb-2 whitespace-nowrap">
           © { new Date().getFullYear() } <span className="pointer-events-none">Brain-Booster™</span>. {t("copyright")}.
         </p>
         <ul className="flex justify-end w-full md:w-auto space-x-6 md:justify-center">

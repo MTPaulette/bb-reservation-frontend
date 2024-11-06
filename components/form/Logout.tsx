@@ -4,8 +4,10 @@ import { LogoutIcon } from "@/components/Icons";
 import { signOut } from 'next-auth/react';
 import { useState } from "react";
 import { useSession, getCsrfToken } from "next-auth/react";
+import { useTranslations } from 'next-intl';
 
 export default function Logout() {
+  const t = useTranslations("Input");
   const [loading, setLoading] = useState<boolean>(false);
   const { data: session } = useSession();
 
@@ -41,14 +43,20 @@ export default function Logout() {
   return (
     <button onClick={handleLogout}
       className={`
-        flex h-[48px] md:h-[36px] w-full items-center justify-center gap-2 rounded-md 
-        p-3 text-sm font-medium hover:bg-danger/20 text-danger md:flex-none md:justify-start 
-        md:p-2 md:px-3 ${loading ? "cursor-progress": ""}`}
+        rounded-sm px-4 py-2 duration-300 ease-in-out
+        flex w-full items-center justify-center gap-2.5 rounded-mdd text-foreground
+        p-3 text-sm font-medium hover:bg-danger/20 hover:text-danger md:flex-none md:justify-start 
+        ${loading ? "cursor-progress": ""}`}
     >
-      <LogoutIcon fill="currentColor" size={24} />
-      <div>Log Out</div>
+      <LogoutIcon fill="currentColor" size={18} />
+      <div>{t("logout")}</div>
     </button>
   );
 }
 
 
+
+// className={`
+//   flex h-[48px] md:h-[36px] w-full items-center justify-center gap-2 rounded-md 
+//   p-3 text-sm font-medium hover:bg-danger/20 text-danger md:flex-none md:justify-start 
+//   md:p-2 md:px-3 ${loading ? "cursor-progress": ""}`}

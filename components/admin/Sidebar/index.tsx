@@ -6,8 +6,9 @@ import SidebarItem from "@/components/admin/Sidebar/SidebarItem";
 import ClickOutside from "@/components/admin/ClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { BbLogo } from "@/components/BbLogo";
-import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon } from "@/components/Icons";
+import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from "next-intl";
+import Logout from "@/components/form/Logout";
 
 
 interface SidebarProps {
@@ -34,17 +35,28 @@ const menuGroups = [
       },
       {
         icon: (
+          <UserIcon fill="none" size={18} />
+        ),
+        label: t("profile"),
+        route: `/${locale}/admin/profile`,
+      },
+      {
+        icon: (
+          <PeopleIcon fill="currentColor" size={18} />
+        ),
+        label: t("users"),
+        route: "#",
+        children: [
+          { label: t("clients"), route: `/${locale}/admin/clients` },
+          { label: t("staff"), route: `/${locale}/admin/staff` },
+        ],
+      },
+      {
+        icon: (
           <CalendarIcon fill="none" size={18} />
         ),
         label: t("calendar"),
         route: `/${locale}/admin/calendar`,
-      },
-      {
-        icon: (
-          <UserIcon fill="none" size={18} />
-        ),
-        label: "Profile",
-        route: `/${locale}/admin/profile`,
       },
       {
         icon: (
@@ -68,7 +80,7 @@ const menuGroups = [
         icon: (
           <SettingIcon fill="none" size={18} />
         ),
-        label: "Settings",
+        label: t("settings"),
         route: `/${locale}/admin/settings?group=general`,
       },
     ],
@@ -154,6 +166,9 @@ const menuGroups = [
                 </ul>
               </div>
             ))}
+            <div className="-mt-3.5 mb-6">
+              <Logout />
+            </div>
           </nav>
           {/* <!-- Sidebar Menu --> */}
         </div>

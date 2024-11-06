@@ -30,7 +30,33 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
   return (
     <Input
-      // label="Search"
+      variant="flat"
+      isClearable
+      size="md"
+      classNames={{
+        label: "text-black/50 dark:text-white/90",
+        input: [
+          "bg-transparent",
+          "text-black/90 dark:text-white/90",
+          "placeholder:text-foreground/50 dark:placeholder:text-white/60 placeholder:text-base",
+        ],
+        innerWrapper: "bg-transparent",
+      }}
+      placeholder={placeholder}
+      startContent={
+        <span className="text-black/50 mb-0.5 mr-2 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0 w-5">
+          <SearchIcon fill="currentColor" size={20} />
+        </span>
+      }
+      value={value}
+      onValueChange={(value) => {
+        handleSearch(value);
+      }}
+    />
+  );
+}
+{/*
+  
       isClearable
       radius="lg"
       size="md"
@@ -55,16 +81,4 @@ export default function Search({ placeholder }: { placeholder: string }) {
           "!cursor-text",
         ],
       }}
-      placeholder={placeholder}
-      startContent={
-        <span className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0 w-4">
-          <SearchIcon fill="currentColor" size={16} />
-        </span>
-      }
-      value={value}
-      onValueChange={(value) => {
-        handleSearch(value);
-      }}
-    />
-  );
-}
+ */}
