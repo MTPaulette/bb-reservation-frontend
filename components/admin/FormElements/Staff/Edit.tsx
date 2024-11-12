@@ -1,0 +1,184 @@
+"use client"
+
+import React from "react";
+import { Button, Input, Select, SelectItem} from "@nextui-org/react";
+import { EnvelopIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z, ZodType } from "zod";
+import { useState } from "react";
+import { useTranslations } from 'next-intl';
+import Alert from "@/components/Alert";
+import { agencies, roles } from "@/lib/data";
+import { UserType, UserFormType } from "@/lib/definitions";
+import { updateStaff } from "@/lib/action/staff";
+
+
+export default function EditStaff({ user }: { user: UserType} ) {
+  const t = useTranslations("Input");
+  const t_error = useTranslations("InputError");
+
+  const schema: ZodType<UserFormType> = z
+    .object({
+      lastname: z.string().min(1, { message: t_error("lastname") }),
+      firstname: z.string().min(1, { message: t_error("firstname") }),
+      phonenumber: z.string(),
+      role_id: z.string().length(1),
+      agency_id: z.string().length(1),
+  });
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<UserFormType>({
+    resolver: zodResolver(schema),
+  })
+
+  const handleFormSubmit = async (data: UserFormType) => {
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    updateStaff(data, user.id)
+    .then(async (res) => {
+      setLoading(false);
+      if(res?.ok) {
+        setTimeout(() => {
+          setSuccess(t("update_account_success_msg"));
+          window.location.reload();
+        }, 500);
+      } else {
+        // console.log(await res.text());
+        const err = await res.json();
+        setError(JSON.stringify(err.errors))
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
+
+  return (
+    <>
+    <div className="w-full">
+      {error != "" ? (
+        <Alert color="danger" message={error} />
+      ) : null}
+      {success != "" ? (
+        <Alert color="success" message={success} />
+      ) : null}
+      <form
+        action="#" className="space-y-4 mt-4"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
+        <div className="flex gap-4">
+          <Input
+            autoFocus
+            endContent={
+              <UserIcon fill="currentColor" size={18} />
+            }
+            label={t("lastname")}
+            type="text"
+            placeholder={t("lastnamePlaceholder")}
+            variant="bordered"
+            defaultValue={user.lastname? user.lastname: ""}
+            {...register("lastname")}
+            isInvalid={errors.lastname ? true: false}
+            errorMessage={errors.lastname ? errors.lastname?.message: null}
+          />
+          <Input
+            endContent={
+              <UserIcon fill="currentColor" size={18} />
+            }
+            label={t("firstname")}
+            type="text"
+            placeholder={t("firstnamePlaceholder")}
+            variant="bordered"
+            defaultValue={user.firstname? user.firstname: ""}
+            {...register("firstname")}
+            isInvalid={errors.firstname ? true: false}
+            errorMessage={errors.firstname ? errors.firstname?.message: null}
+          />
+        </div>
+        <Input
+          isDisabled
+          endContent={
+            <EnvelopIcon fill="currentColor" size={18} />
+          }
+          label={t("email")}
+          type="email"
+          placeholder={t("emailPlaceholder")}
+          defaultValue={user.email? user.email: ""}
+          variant="bordered"
+          {...register("email")}
+          isInvalid={errors.email ? true: false}
+          errorMessage={errors.email ? errors.email?.message: null}
+        />
+        <Input
+          endContent={
+            <TelephoneIcon fill="currentColor" size={18} />
+          }
+          label={t("phonenumber")}
+          type="text"
+          variant="bordered"
+          defaultValue={user.phonenumber? user.phonenumber: ""}
+          {...register("phonenumber")}
+          isInvalid={errors.phonenumber ? true: false}
+          errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
+        />
+        <div className="flex gap-4">
+          <Select
+            label={t("role")}
+            variant="bordered"
+            placeholder={t("rolePlaceholder")}
+            isInvalid={errors.role_id ? true: false}
+            errorMessage={errors.role_id ? errors.role_id?.message: null}
+            defaultSelectedKeys={[user.role_id.toString()]}
+            className="w-full bg-background rounded-small"
+            {...register("role_id")}
+          >
+            {roles.map((role) => (
+              <SelectItem key={role.id} value={role.id}>
+                {role.name}
+              </SelectItem>
+            ))}
+          </Select>
+          <Select
+            label={t("agency")}
+            variant="bordered"
+            placeholder={t("agencyPlaceholder")}
+            isInvalid={errors.agency_id ? true: false}
+            errorMessage={errors.agency_id ? errors.agency_id?.message: null}
+            defaultSelectedKeys={[user.work_at.toString()]}
+            className="w-full bg-background rounded-small"
+            {...register("agency_id")}
+          >
+            {agencies.map((agency) => (
+              <SelectItem key={agency.id} value={agency.id}>
+                {agency.name}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
+
+        <div className="w-full">
+          <Button 
+            type="submit"
+            color="primary"
+            isLoading={loading}
+            className="w-full"
+          >
+            {t("save")}
+          </Button>
+        </div>
+      </form>
+    </div>
+    </>
+  )
+}
+

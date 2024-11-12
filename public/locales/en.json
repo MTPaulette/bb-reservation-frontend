@@ -1,4 +1,10 @@
 {
+  "Alert": {
+    "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur rendu du calendrier",
+    "note": "Note",
+    "attention": "Attention!",
+    "error": "Error"
+  },
   "InputError": {
     "lastname": "the lastname is required",
     "firstname": "the firstname is required",
@@ -6,8 +12,10 @@
     "passwordLenght": "Password must be at least 8 characters long",
     "password": "Password must contain at least one number and one special character",
     "invalid_credentials": "Invalid credentials.",
-    "something_wrong": "Something went wrong."
-  },
+    "something_wrong": "Something went wrong.",
+    "suspend_warning": "Are you sure that you want to continue this action ? Please, confirm with your password.",
+    "wrongPassword": "Wrong password"
+ },
   "Input": {
     "register": "Register",
     "have_account_link": "You already have an account ? Sign in",
@@ -16,13 +24,35 @@
     "email": "Email",
     "password": "Password",
     "login": "Log in",
-    "lastnamePlaceholder": "Enter your lastname",
-    "firstnamePlaceholder": "Enter your firstname",
-    "emailPlaceholder": "Enter your email",
-    "passwordPlaceholder": "Enter your password",
+    "phonenumber": "Phonenumber",
+    "role": "Role",
+    "agency": "Agency",
+    "lastnamePlaceholder": "Enter lastname",
+    "firstnamePlaceholder": "Enter firstname",
+    "emailPlaceholder": "Enter email",
+    "passwordPlaceholder": "Enter password",
+    "phonenumberPlaceholder": "Enter phonenumber",
+    "rolePlaceholder": "Enter role",
+    "agencyPlaceholder": "Enter agency",
     "forgot_password_link": "Forgot password?",
     "remember_me": "remember me",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "save": "Save",
+    "confirm": "Confirm",
+
+    "new_account_success_msg": "Account successfully created.",
+    "update_account_success_msg": "Account successfully updated.",
+    "suspend_account_success_msg": "Account successfully suspended.",
+    "cancel_suspension_account_success_msg": "Suspension cancelled.",
+    "delete_account_success_msg": "Account successfully deleted.",
+
+    "newClient": "New client",
+    "editClient": "Edit client",
+    "deleteClient": "Delete client",
+
+    "newStaff": "New staff",
+    "editStaff": "Edit staff",
+    "deleteStaff": "Delete staff"
   },
   "Footer": {
     "terms": "Terms & Conditions",
@@ -34,9 +64,7 @@
     "profile": "my profile",
     "settings": "Account settings",
     "searchPlaceholder": "Type to search..."
-
   },
-
 
 
 
@@ -52,6 +80,9 @@
     "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
     "title": "Something went wrong!"
   },
+  "Modal": {
+    "close": "Close"
+  },
   "NotFoundPage": {
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
     "title": "Page not found",
@@ -64,6 +95,36 @@
     "users": "users",
     "clients": "clients",
     "staff": "staff",
-    "settings": "settings"
+    "utilities": "utilities",
+    "settings": "settings",
+    "agencies": "agencies",
+    "roles": "roles"
+  },
+  "Table": {
+    "view": "View",
+    "edit": "Edit",
+    "suspend": "Suspend",
+    "cancel_suspend": "Cancel Suspension",
+    "delete": "Delete",
+    "searchPlaceholder": "Search by name...",
+    "status": "Status",
+    "colunms": "Colunms",
+    "new": "Add new",
+    "total": "Total",
+    "row_per_page": "Row per page:",
+    "of": "of",
+    "selected": "selected",
+    "noItems": "No item found",
+
+    "newClient": "New client",
+    "editClient": "Edit client",
+    "deleteClient": "Delete client",
+
+    "newStaff": "New staff",
+    "editStaff": "Edit staff",
+    "suspendStaff": "Suspend staff",
+    "deleteStaff": "Delete staff"
+  },
+  "newClient":{
   }
 }

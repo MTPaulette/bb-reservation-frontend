@@ -6,7 +6,7 @@ import DropdownNotification from "./DropdownNotification";
 import User from "@/components/User";
 import Image from "next/image";
 import { ChevronDownIcon, SettingIcon, UserIcon } from "@/components/Icons";
-import Logout from "@/components/form/Logout";
+import Logout from "@/components/admin/FormElements/Logout";
 import { useSession } from "next-auth/react";
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -25,7 +25,7 @@ const Header = (props: {
   const locale = useLocale();
 
   return (
-    <header className="sticky top-0 z-999 flex w-full bg-content2 drop-shadow-1 dark:drop-shadow-none">
+    <header className="sticky top-0 z-10 flex w-full bg-content2 drop-shadow-1 dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
           {/* <!-- Hamburger Toggle BTN --> */}

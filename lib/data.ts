@@ -1,8 +1,3 @@
-
-
-import { formatCurrency } from "@/lib/utils";
-
-
 export const _agencies = [
   'Elig Essono',
   'Etoa-Meki'
@@ -24,88 +19,45 @@ export const _validities = [
   '01 year'
 ]
 
-export function fetchCardData() {
-  try {
-    const numberOfInvoices = 78;
-    const numberOfCustomers = 298;
-    const totalPaidInvoices = formatCurrency(217000);
-    const totalPendingInvoices = formatCurrency(378500);
+export const columnsClient = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
+  {name_en: "ROLE", name_fr: "ROLE", uid: "role"},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
 
-    return {
-      numberOfCustomers,
-      numberOfInvoices,
-      totalPaidInvoices,
-      totalPendingInvoices,
-    };
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch card data.');
-  }
-}
 
-export function fetchRessources(page: number) {
-  try {
-    /*
-    const data = await sql<CustomerField>`
-      SELECT
-        id,
-        name
-      FROM customers
-      ORDER BY name ASC
-    `;
+export const columnsStaff = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
+  {name_en: "ROLE", name_fr: "ROLE", uid: "role", sortable: true},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "WORK AT", name_fr: "TRAVAILLE A", uid: "agency", sortable: true},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
 
-    const customers = data.rows;
-    */
-    return page;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch all customers.');
-  }
-}
+export const statusUser = [
+  {name_en: "Active", name_fr: "Actif", uid: "active"},
+  {name_en: "Suspended", name_fr: "Suspendu(e)", uid: "suspended"},
+];
 
-export function fetchLatestInvoices() {
-  try {
-  const latestInvoices = [
-    {
-      id: 1,
-      image_url: "/images/brain-orange-400.png",
-      name: "invoice",
-      email: "client@contact.fr",
-      amount: formatCurrency(217000)
-    },
-    {
-      id: 2,
-      image_url: "/images/brain-orange-400.png",
-      name: "invoice",
-      email: "client@contact.fr",
-      amount: formatCurrency(217000)
-    },
-    {
-      id: 3,
-      image_url: "/images/brain-orange-400.png",
-      name: "invoice",
-      email: "client@contact.fr",
-      amount: formatCurrency(10500)
-    },
-    {
-      id: 4,
-      image_url: "/images/brain-orange-400.png",
-      name: "invoice",
-      email: "client@contact.fr",
-      amount: formatCurrency(7000)
-    },
-    {
-      id: 5,
-      image_url: "/images/brain-orange-400.png",
-      name: "invoice",
-      email: "client@contact.fr",
-      amount: formatCurrency(21700)
-    }
-  ];
+export const statusOptions = [
+  {name: "Active", uid: "active"},
+  {name: "Paused", uid: "paused"},
+  {name: "Vacation", uid: "vacation"},
+];
 
-  return latestInvoices;
-} catch (err) {
-  console.error('Database Error:', err);
-  throw new Error('Failed to fetch all customers.');
-}
-}
+export const roles = [
+  {id: 1, name: "admin"},
+  // {id: 2, name: "client"},
+  {id: 3, name: "superadmin"},
+]
+
+
+export const agencies = [
+  {id: 1, name: "Elig Essono"},
+  {id: 2, name: "Etoa-Meki"},
+]

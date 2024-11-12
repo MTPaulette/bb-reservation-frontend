@@ -10,6 +10,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
+import { useTranslations } from 'next-intl';
+
 
 
 const events = [
@@ -92,6 +94,7 @@ const renderEventContent = (eventInfo: any) => {
 }
 
 export default function Calendar() {
+  const t_alert = useTranslations("Alert");
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [selectedCell, setSelectedCell] = React.useState<any>();
 
@@ -106,7 +109,7 @@ export default function Calendar() {
   return (
     <>
     <div className="block md:hidden my-4 md:my-4">
-      <Alert color="warning" message="Faites pivoter votre appareil en position horizontale pour un meilleur rendu du calendrier" />
+      <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
     </div>
     <div className="bg-background rounded-small mt-7 p-4 md:p-5">
       <Modal

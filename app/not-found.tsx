@@ -6,7 +6,7 @@ import { routing } from "@/i18n/routing";
 export default function GlobalNotFoundPage() {
   return (
     <BaseLayout locale={routing.defaultLocale}>
-      <main className="flex h-screen w-screen flex-col items-center justify-center p-6 bg-red-300">
+      <main className="flex h-screen w-screen flex-col items-center justify-center p-6">
         <NotFoundPage />
       </main>
     </BaseLayout>

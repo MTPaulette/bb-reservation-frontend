@@ -1,18 +1,18 @@
 import { Metadata } from "next";
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import ClientsTable from "@/components/admin/Lists/Clients";
+import RolesTable from "@/components/admin/Lists/Roles";
 
 export const metadata: Metadata = {
-  title: "Clients",
+  title: "Role",
   description:
-    "Show all clients of system",
+    "Show all possible roles in system",
 };
 
 const TablesPage = () => {
   return (
     <>
-      <Breadcrumb pageName="clients" />
-      <ClientsTable />
+      <Breadcrumb pageName="roles" />
+      <RolesTable />
     </>
   )
 };

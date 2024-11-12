@@ -1,5 +1,3 @@
-
-
 import Footer from "@/components/admin/Footer";
 import { BbLogo } from "@/components/BbLogo";
 import BaseLayout from '@/components/layout/BaseLayout';

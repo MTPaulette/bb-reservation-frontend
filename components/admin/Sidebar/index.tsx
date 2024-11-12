@@ -6,9 +6,9 @@ import SidebarItem from "@/components/admin/Sidebar/SidebarItem";
 import ClickOutside from "@/components/admin/ClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { BbLogo } from "@/components/BbLogo";
-import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon } from "@/components/Icons";
+import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon, ActivityIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from "next-intl";
-import Logout from "@/components/form/Logout";
+import Logout from "@/components/admin/FormElements/Logout";
 
 
 interface SidebarProps {
@@ -42,6 +42,17 @@ const menuGroups = [
       },
       {
         icon: (
+          <ActivityIcon fill="currentColor" size={18} />
+        ),
+        label: t("utilities"),
+        route: "#",
+        children: [
+          { label: t("agencies"), route: `/${locale}/admin/agencies` },
+          { label: t("roles"), route: `/${locale}/admin/roles` },
+        ],
+      },
+      {
+        icon: (
           <PeopleIcon fill="currentColor" size={18} />
         ),
         label: t("users"),
@@ -49,6 +60,7 @@ const menuGroups = [
         children: [
           { label: t("clients"), route: `/${locale}/admin/clients` },
           { label: t("staff"), route: `/${locale}/admin/staff` },
+          { label: t("agencies"), route: `/${locale}/admin/agencies` },
         ],
       },
       {
@@ -125,7 +137,7 @@ const menuGroups = [
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
       <aside
-        className={`fixed left-0 top-0 z-9999 flex h-screen w-67 flex-col overflow-y-hidden bg-background bgg-[#131033] duration-300 ease-linear lg:translate-x-0 ${
+        className={`fixed left-0 top-0 z-20 flex h-screen w-67 flex-col overflow-y-hidden bg-background bgg-[#131033] duration-300 ease-linear lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

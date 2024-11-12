@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { capitalize } from "@/lib/utils";
+
 
 const SidebarDropdown = ({ item }: any) => {
   const pathname = usePathname();
@@ -12,11 +14,11 @@ const SidebarDropdown = ({ item }: any) => {
           <li key={index}>
             <Link
               href={item.route}
-              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-foreground/50 duration-300 ease-in-out hover:text-whitee ${
+              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-base text-foreground/50 duration-300 ease-in-out hover:text-whitee ${
                 pathname === item.route ? "text-foreground" : ""
               }`}
             >
-              {item.label}
+              {capitalize(item.label)}
             </Link>
           </li>
         ))}

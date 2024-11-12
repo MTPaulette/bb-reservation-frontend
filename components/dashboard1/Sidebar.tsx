@@ -1,5 +1,5 @@
 import NavLinks from "@/components/dashboard1/Navlinks";
-import Logout from "@/components/form/Logout";
+import Logout from "@/components/admin/FormElements/Logout";
 import { BbLogo } from "@/components/BbLogo";
 
 export default function SideNav() {

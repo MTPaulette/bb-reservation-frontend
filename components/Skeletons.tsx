@@ -1,6 +1,17 @@
 // Loading animation
 const shimmer =
-  'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';
+  'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent';
+
+
+export function UserTableSkeleton() {
+  return (
+    <div
+      className="flex flex-col items-center justify-center w-full h-[calc(100vh_-_15rem)]"
+    >
+      <div className={`${shimmer} w-full relative overflow-hidden rounded-xl shadow-sm p-30 bg-defaultt/50`} />
+    </div>
+  );
+}
 
 export function CardSkeleton() {
   return (

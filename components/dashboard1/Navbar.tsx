@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import NavLinks from "@/components/dashboard1/Navlinks";
-import Logout from "@/components/form/Logout";
+import Logout from "@/components/admin/FormElements/Logout";
 import User from "@/components/User";
 import Title from "@/components/Title";
 

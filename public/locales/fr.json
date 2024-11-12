@@ -1,4 +1,10 @@
 {
+  "Alert": {
+    "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur rendu du calendrier",
+    "note": "Note",
+    "attention": "Attention!",
+    "error": "Erreur"
+  },
   "InputError": {
     "lastname": "Le nom est obligatoire",
     "firstname": "Le prénom est obligatoire",
@@ -6,7 +12,9 @@
     "passwordLenght": "Le mot de passe doit avoir au moins 8 caractères",
     "password": "Le mot de passe doit contenir au moins un nombre et un charactere special",
     "invalid_credentials": "Données invalides.",
-    "something_wrong": "quelque chose s'est passé."
+    "something_wrong": "quelque chose s'est passé.",
+    "suspend_warning": "Etes-vous sur(e) de vouloir continuer cette action ? Veuillez, confirmer en saisissant votre mot de passe.",
+    "wrongPassword": "Mauvais mot de passe"
   },
   "Input": {
     "register": "S'inscrire",
@@ -16,13 +24,35 @@
     "email": "Email",
     "password": "Mot de passe",
     "login": "Se connecter",
-    "lastnamePlaceholder": "Entrer votre nom",
-    "firstnamePlaceholder": "Entrer votre prénom",
-    "emailPlaceholder": "Entrer votre email",
-    "passwordPlaceholder": "Entrer votre mot de passe",
+    "role": "Role",
+    "agency": "Agence",
+    "phonenumber": "Téléphone",
+    "lastnamePlaceholder": "Entrer le nom",
+    "firstnamePlaceholder": "Entrer le prénom",
+    "emailPlaceholder": "Entrer le email",
+    "passwordPlaceholder": "Entrer le mot de passe",
+    "phonenumberPlaceholder": "Entrer le  numéro de téléphone",
+    "rolePlaceholder": "Selectionner un role",
+    "agencyPlaceholder": "Selectionner une agence ",
     "forgot_password_link": "Mot de passe oublié?",
     "remember_me": "se souvenir de moi",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "save": "Enregistrer",
+    "confirm": "Confirmer",
+
+    "new_account_success_msg": "Compte créé avec succès.",
+    "update_account_success_msg": "Compte mis à jour avec succès.",
+    "suspend_account_success_msg": "Compte suspendu avec succès.",
+    "cancel_suspension_account_success_msg": "Suspension annulée.",
+    "delete_account_success_msg": "Compte supprimé avec succès.",
+    
+    "newClient": "Nouveau client",
+    "editClient": "Editer client",
+    "deleteClient": "Supprimer client",
+
+    "newStaff": "Nouveau staff",
+    "editStaff": "Editer staff",
+    "deleteStaff": "Supprimer staff"
   },
   "Footer": {
     "terms": "Termes et Conditions",
@@ -44,6 +74,9 @@
     "description": "<p>NOus avons malheureusement rencontré une erreur.</p><p>Vous pouvez essayer de <retry>recharger la page</retry> que vous visitiez.</p>",
     "title": "Une erreur s'est produite!"
   },
+  "Modal": {
+    "close": "Fermer"
+  },
   "NotFoundPage": {
     "description": "Veuillez reverifiez la barre d'adresse du navigateur ou utiliser le navigateur pour aller à une page connue.",
     "title": "Page non trouvée",
@@ -56,6 +89,35 @@
     "users": "utilisateurs",
     "clients": "clients",
     "staff": "staff",
-    "settings": "Paramètre"
-  }
+    "settings": "Paramètre",
+    "utilities": "utilitaires",
+    "agencies": "agences",
+    "roles": "roles"
+  },
+  "Table": {
+    "view": "Voir",
+    "edit": "Editer",
+    "suspend": "Suspendre",
+    "cancel_suspend": "Annuler suspension",
+    "delete": "Supprimer",
+    "searchPlaceholder": "Rechercher par nom...",
+    "status": "Status",
+    "colunms": "Colonnes",
+    "new": "Nouveau",
+    "total": "Total",
+    "row_per_page": "Ligne par page:",
+    "of": "de",
+    "selected": "selectionné(s)",
+    "noItems": "Aucun élément trouvé",
+    
+    "newClient": "Nouveau client",
+    "editClient": "Editer client",
+    "deleteClient": "Supprimer client",
+
+    "newStaff": "Nouveau staff",
+    "editStaff": "Editer staff",
+    "suspendStaff": "Suspendre staff",
+    "deleteStaff": "Supprimer staff"
+  },
+  "EditClient": {}
 }

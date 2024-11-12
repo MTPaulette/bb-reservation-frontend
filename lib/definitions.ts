@@ -2,11 +2,53 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
-export type User = {
+export type Userrfgh = {
   id: string;
   name: string;
   email: string;
   password: string;
+};
+
+export type UserFormType = {
+  lastname: string,
+  firstname: string,
+  email: string,
+  password: string,
+  phonenumber: string,
+  role_id: string,
+  agency_id: number|undefined;
+};
+
+export type ConfirmPasswordType = {
+  password: string
+}
+
+export type UserType = {
+  id: number;
+  lastname: string;
+  firstname: string;
+  email: string;
+  password: string;
+  phonenumber: string;
+  image: string|undefined;
+  status: string;
+  role_id: number;
+  work_at: string
+};
+
+export type TableColunmsType = ({
+  name: string;
+  uid: string;
+  sortable: boolean;
+} | {
+  name: string;
+  uid: string;
+  sortable?: undefined;
+});
+
+export type StatusUserType = {
+  name: string;
+  uid: string;
 };
 
 export type Customer = {

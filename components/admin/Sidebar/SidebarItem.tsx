@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import SidebarDropdown from "@/components/admin/Sidebar/SidebarDropdown";
 import { usePathname } from "next/navigation";
+import { capitalize } from "@/lib/utils";
+
 
 const SidebarItem = ({ item, pageName, setPageName }: any) => {
   const handleClick = () => {
@@ -28,10 +30,10 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
         <Link
           href={item.route}
           onClick={handleClick}
-          className={`${isItemActive ? "bg-default" : ""} capitalize group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default`}
+          className={`${isItemActive ? "bg-default" : ""} group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default`}
         >
           {item.icon}
-          {item.label}
+          {capitalize(item.label)}
           {item.children && (
             <svg
               className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
