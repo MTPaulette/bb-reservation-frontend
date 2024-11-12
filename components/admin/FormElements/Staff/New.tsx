@@ -61,17 +61,31 @@ export default function NewStaff() {
         setTimeout(() => {
           setSuccess(t("new_account_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 200);
       } else {
-        // console.log(await res.text());
-        const err = await res.json();
-        setError(JSON.stringify(err.errors))
+        const status = res.status;
+        switch (status) {
+          case 422:
+            const err = await res.json();
+            setError(JSON.stringify(err.errors));
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
       }
     })
     .catch((error) => {
-      console.error(error)
+      setError(t_error("something_wrong"));
+      console.error(error);
     })
   }
+
 
   return (
     <>
@@ -155,6 +169,7 @@ export default function NewStaff() {
           label={t("phonenumber")}
           type="text"
           variant="bordered"
+          placeholder={t("phonenumberPlaceholder")}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
           errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}

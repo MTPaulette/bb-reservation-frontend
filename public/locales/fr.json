@@ -115,6 +115,7 @@
     
     "newClient": "Nouveau client",
     "editClient": "Editer client",
+    "suspendClient": "Suspendre client",
     "deleteClient": "Supprimer client",
 
     "newStaff": "Nouveau staff",

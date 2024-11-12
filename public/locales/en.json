@@ -121,6 +121,7 @@
 
     "newClient": "New client",
     "editClient": "Edit client",
+    "suspendClient": "Suspend client",
     "deleteClient": "Delete client",
 
     "newStaff": "New staff",

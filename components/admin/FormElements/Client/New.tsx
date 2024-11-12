@@ -1,30 +1,22 @@
 "use client"
 
 import React from "react";
-import { Button, Input, Link} from "@nextui-org/react";
-import { EnvelopIcon, EyeIcon, EyeSlashIcon, UserIcon } from "@/components/Icons";
+import { Button, Input } from "@nextui-org/react";
+import { EnvelopIcon, EyeIcon, EyeSlashIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-
-type TSignInForm = {
-  lastname: string,
-  firstname: string,
-  email: string,
-  password: string
-}
+import { UserFormType } from "@/lib/definitions";
+import { createClient } from "@/lib/action/clients";
 
 export default function NewClient() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
-  const locale = useLocale();
 
-  const schema: ZodType<TSignInForm> = z
+  const schema: ZodType<UserFormType> = z
     .object({
       lastname: z.string().min(1, { message: t_error("lastname") }),
       firstname: z.string().min(1, { message: t_error("firstname") }),
@@ -37,156 +29,159 @@ export default function NewClient() {
       .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
         message: t_error("password")
       }),
+      phonenumber: z.string(),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
+  const [success, setSuccess] = useState<string>("");
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TSignInForm>({
+  } = useForm<UserFormType>({
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: TSignInForm) => {
-    setError("")
+  const handleFormSubmit = async (data: UserFormType) => {
+    setError("");
+    setSuccess("");
     setLoading(true);
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/register", {
-        method: "POST",
-        headers: {
-          //"Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
-      })
-      if(response.ok){
-        await signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          redirect: false,
-        })
-        .then((res) => {
-          setLoading(false);
-          if(res?.ok) {
-            // router.push('/fr/dashboard1');
-            router.push(`/${locale}/dashboard1`);
-          } else {
-            if(res?.error === "CredentialsSignin"){
-              setError(t_error("invalid_credentials"));
-            } else {
-              setError(t_error("invalid_credentials"));
-            }
-          }
-        })
-        .catch(err => {
-          console.log("login error: ");
-          console.log(err);
-        })
-
-
+    createClient(data)
+    .then(async (res) => {
+      setLoading(false);
+      if(res?.ok) {
+        setTimeout(() => {
+          setSuccess(t("new_account_success_msg"));
+          window.location.reload();
+        }, 200);
       } else {
-        const res = await response.json()
-        setError(res.errors.email[0]);
+        const status = res.status;
+        switch (status) {
+          case 422:
+            const err = await res.json();
+            setError(JSON.stringify(err.errors));
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
       }
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      setError(t_error("invalid_credentials"));
-      console.log(err);
-    }
+    })
+    .catch((error) => {
+      setError(t_error("something_wrong"));
+      console.error(error);
+    })
   }
+
 
   return (
     <>
-    <div className="w-full bg-red-200">
-    {error != "" ? (
-      <Alert color="danger" message={error} />
-    ) : null}
-    <h1 className="flex flex-col gap-1 my-2 capitalize">{t("newClient")}</h1>
-    <form
-      action="#" className="space-y-3"
-      onSubmit={handleSubmit(handleFormSubmit)}
-    >
-      <Input
-        isRequired
-        autoFocus
-        endContent={
-          <UserIcon fill="currentColor" size={18} />
-        }
-        label={t("lastname")}
-        type="text"
-        placeholder={t("lastnamePlaceholder")}
-        variant="bordered"
-        {...register("lastname")}
-        isInvalid={errors.lastname ? true: false}
-        errorMessage={errors.lastname ? errors.lastname?.message: null}
-      />
-      <Input
-        autoFocus
-        endContent={
-          <UserIcon fill="currentColor" size={18} />
-        }
-        label={t("firstname")}
-        type="text"
-        placeholder={t("firstnamePlaceholder")}
-        variant="bordered"
-        {...register("firstname")}
-        isInvalid={errors.firstname ? true: false}
-        errorMessage={errors.firstname ? errors.firstname?.message: null}
-      />
-      <Input
-        endContent={
-          <EnvelopIcon fill="currentColor" size={18} />
-        }
-        label={t("email")}
-        type="email"
-        placeholder={t("emailPlaceholder")}
-        variant="bordered"
-        {...register("email")}
-        isInvalid={errors.email ? true: false}
-        errorMessage={errors.email ? errors.email?.message: null}
-      />
-      <Input
-        label={t("password")}
-        variant="bordered"
-        placeholder={t("passwordPlaceholder")}
-        endContent={
-          <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-            {isVisible ? (
-              <EyeSlashIcon fill="currentColor" size={18} />
-            ) : (
-              <EyeIcon fill="currentColor" size={18} />
-            )}
-          </button>
-        }
-        type={isVisible ? "text" : "password"}
-        {...register("password")}
-        isInvalid={errors.password ? true: false}
-        errorMessage={errors.password ? errors.password?.message: null}
-      />
-      <div className="w-full">
-        <Button 
-          type="submit"
-          color="primary"
-          isLoading={loading}
-          className="w-full"
-        >
-          {t("register")}
-        </Button>
-      </div>
-    </form>
-    <div className="flex justify-end mt-2">
-      <Link color="primary" href={`/${locale}/auth/login`} size="sm">
-        {t("have_account_link")}
-      </Link>
-    </div>
+    <div className="w-full">
+      {error != "" ? (
+        <Alert color="danger" message={error} />
+      ) : null}
+      {success != "" ? (
+        <Alert color="success" message={success} />
+      ) : null}
+      {/* <h1 className="flex flex-col gap-1 my-2 capitalize">{t("newClient")}</h1> */}
+      <form
+        action="#" className="space-y-4 mt-4"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
+        <div className="flex gap-4">
+          <Input
+            isRequired
+            autoFocus
+            endContent={
+              <UserIcon fill="currentColor" size={18} />
+            }
+            label={t("lastname")}
+            type="text"
+            placeholder={t("lastnamePlaceholder")}
+            variant="bordered"
+            {...register("lastname")}
+            isInvalid={errors.lastname ? true: false}
+            errorMessage={errors.lastname ? errors.lastname?.message: null}
+          />
+          <Input
+            isRequired
+            endContent={
+              <UserIcon fill="currentColor" size={18} />
+            }
+            label={t("firstname")}
+            type="text"
+            placeholder={t("firstnamePlaceholder")}
+            variant="bordered"
+            {...register("firstname")}
+            isInvalid={errors.firstname ? true: false}
+            errorMessage={errors.firstname ? errors.firstname?.message: null}
+          />
+        </div>
+        <Input
+          isRequired
+          endContent={
+            <EnvelopIcon fill="currentColor" size={18} />
+          }
+          label={t("email")}
+          type="email"
+          placeholder={t("emailPlaceholder")}
+          variant="bordered"
+          {...register("email")}
+          isInvalid={errors.email ? true: false}
+          errorMessage={errors.email ? errors.email?.message: null}
+        />
+        <Input
+          isRequired
+          label={t("password")}
+          variant="bordered"
+          placeholder={t("passwordPlaceholder")}
+          endContent={
+            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+              {isVisible ? (
+                <EyeSlashIcon fill="currentColor" size={18} />
+              ) : (
+                <EyeIcon fill="currentColor" size={18} />
+              )}
+            </button>
+          }
+          type={isVisible ? "text" : "password"}
+          {...register("password")}
+          isInvalid={errors.password ? true: false}
+          errorMessage={errors.password ? errors.password?.message: null}
+        />
+        <Input
+          endContent={
+            <TelephoneIcon fill="currentColor" size={18} />
+          }
+          label={t("phonenumber")}
+          type="text"
+          variant="bordered"
+          placeholder={t("phonenumberPlaceholder")}
+          {...register("phonenumber")}
+          isInvalid={errors.phonenumber ? true: false}
+          errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
+        />
+        <div className="w-full">
+          <Button 
+            type="submit"
+            color="primary"
+            isLoading={loading}
+            className="w-full"
+          >
+            {t("save")}
+          </Button>
+        </div>
+      </form>
     </div>
     </>
   )

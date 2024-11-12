@@ -1,128 +1,126 @@
 "use client"
 
 import React from "react";
-import { Button, Input, Link} from "@nextui-org/react";
-import { EnvelopIcon, EyeIcon, EyeSlashIcon, UserIcon } from "@/components/Icons";
+import { Button, Input } from "@nextui-org/react";
+import { EyeIcon, EyeSlashIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { UserType } from "@/lib/definitions";
+import { ConfirmPasswordType } from "@/lib/definitions";
+import { deleteClient } from "@/lib/action/clients";
+import Title from "@/components/Title";
 
-
-type TSignInForm = {
-  lastname: string,
-  firstname: string,
-  email: string,
-  password: string
-}
-
-export default function DeleteClient({ user }: { user: UserType} ) {
-
+export default function DeleteClient({ id }: { id: number} ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
-  const locale = useLocale();
 
-  const schema: ZodType<TSignInForm> = z
+  const schema: ZodType<ConfirmPasswordType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
-      email: z.string().email({
-        message:  t_error("email"),
-      }),
-      password: z
-      .string()
-      .min(8, { message: t_error("passwordLenght")})
-      .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
-        message: t_error("password")
-      }),
+      password: z.string().min(1),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
+  const [success, setSuccess] = useState<string>("");
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TSignInForm>({
+  } = useForm<ConfirmPasswordType>({
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: TSignInForm) => {
-    setError("")
+  const handleFormSubmit = async (data: ConfirmPasswordType) => {
+    setError("");
+    setSuccess("");
     setLoading(true);
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/register", {
-        method: "POST",
-        headers: {
-          //"Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
-      })
-      if(response.ok){
-        await signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          redirect: false,
-        })
-        .then((res) => {
-          setLoading(false);
-          if(res?.ok) {
-            // router.push('/fr/dashboard1');
-            router.push(`/${locale}/dashboard1`);
-          } else {
-            if(res?.error === "CredentialsSignin"){
-              setError(t_error("invalid_credentials"));
-            } else {
-              setError(t_error("invalid_credentials"));
-            }
-          }
-        })
-        .catch(err => {
-          console.log("login error: ");
-          console.log(err);
-        })
-
-
+    deleteClient(data, id)
+    .then(async (res) => {
+      setLoading(false);
+      if(res?.ok) {
+        setTimeout(() => {
+          setSuccess(t("delete_account_success_msg"));
+          window.location.reload();
+        }, 200);
       } else {
-        const res = await response.json()
-        setError(res.errors.email[0]);
+        const status = res.status;
+        switch (status) {
+          case 404:
+            setError(t_error("user_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setError(err.password? t_error("wrongPassword"): "")
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
       }
-      setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      setError(t_error("invalid_credentials"));
-      console.log(err);
-    }
+    })
+    .catch((error) => {
+      setError(t_error("something_wrong"));
+      console.error(error);
+    })
   }
 
   return (
     <>
     <div className="w-full">
-    {error != "" ? (
-      <Alert color="danger" message={error} />
-    ) : null}
-    <h1 className="flex flex-col gap-1 my-2 capitalize">{t("register")}</h1>
-    {/* {JSON.stringify(user, null, 2)} */}
-    <div className="flex gap-2.5 w-full justify-end">
-      <Button color="primary" variant="solid">
-        Delete
-      </Button>
-      <Button color="danger" variant="solid">
-      {/* <Button color="default" variant="flat" onPress={() => {onClose ; close()}}> */}
-        {t("cancel")}
-      </Button>
-    </div>
+      {error != "" ? (
+        <Alert color="danger" message={error} />
+      ) : null}
+      {success != "" ? (
+        <Alert color="success" message={success} />
+      ) : null}
+      <Title className="text-base mt-4">{t_error("suspend_warning")}</Title>
+      <form
+        action="#" className="space-y-4 mt-4"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
+        <Input
+          isRequired
+          label={t("password")}
+          variant="bordered"
+          placeholder={t("passwordPlaceholder")}
+          endContent={
+            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+              {isVisible ? (
+                <EyeSlashIcon fill="currentColor" size={18} />
+              ) : (
+                <EyeIcon fill="currentColor" size={18} />
+              )}
+            </button>
+          }
+          type={isVisible ? "text" : "password"}
+          {...register("password")}
+          isInvalid={errors.password ? true: false}
+          errorMessage={errors.password ? errors.password?.message: null}
+        />
+
+        <div className="w-full">
+          <Button 
+            type="submit"
+            color="danger"
+            isLoading={loading}
+            className="w-full"
+          >
+            {t("confirm")}
+          </Button>
+        </div>
+      </form>
     </div>
     </>
   )

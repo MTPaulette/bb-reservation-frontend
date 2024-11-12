@@ -51,7 +51,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
         setTimeout(() => {
           setSuccess(t("update_account_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 200);
       } else {
         const status = res.status;
         switch (status) {
@@ -142,6 +142,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
           label={t("phonenumber")}
           type="text"
           variant="bordered"
+          placeholder={t("phonenumberPlaceholder")}
           defaultValue={user.phonenumber? user.phonenumber: ""}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}

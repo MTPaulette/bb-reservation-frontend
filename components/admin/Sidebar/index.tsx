@@ -60,7 +60,6 @@ const menuGroups = [
         children: [
           { label: t("clients"), route: `/${locale}/admin/clients` },
           { label: t("staff"), route: `/${locale}/admin/staff` },
-          { label: t("agencies"), route: `/${locale}/admin/agencies` },
         ],
       },
       {

@@ -10,18 +10,18 @@ import {
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { UserType } from "@/lib/definitions";
 import { capitalize, getUsername } from "@/lib/utils";
-import { columnsStaff as columns, statusUser as statusOptions } from "@/lib/data";
+import { columnsClient as columns, statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewStaff from "../FormElements/Staff/New";
-import EditStaff from "../FormElements/Staff/Edit";
-import DeleteStaff from "../FormElements/Staff/Delete";
-import { getStaff } from '@/lib/action/staff';
-import SuspendStaff from '../FormElements/Staff/Suspend';
+import NewClient from "../FormElements/Client/New";
+import EditClient from "../FormElements/Client/Edit";
+import DeleteClient from "../FormElements/Client/Delete";
+import { getClients } from '@/lib/action/clients';
+import SuspendClient from '../FormElements/Client/Suspend';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -29,14 +29,14 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   suspended: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "role", "phonenumber", "agency", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "role", "phonenumber", "status", "actions"];
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getStaff()
+    getClients()
       .then(response => {
         setUsers(response);
         setLoading(false);
@@ -161,7 +161,7 @@ export default function UsersTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/admin/staff/${user.id}`}>
+                  <Link href={`/${locale}/admin/client/${user.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
@@ -172,6 +172,7 @@ export default function UsersTable() {
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
+                  isReadOnly
                   color="warning"
                   onClick={() => {
                     setSelectedUser(user);
@@ -411,30 +412,30 @@ export default function UsersTable() {
 
       <Modal
         open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newStaff")}
+        title={t_table("newClient")}
       >
-        <NewStaff />
+        <NewClient />
       </Modal>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editStaff")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
+        title={`${t_table("editClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
       >
-        <EditStaff user={selectedUser} />
+        <EditClient user={selectedUser} />
       </Modal>
     
       <Modal
         open={showSuspendModal} close={() => setShowSuspendModal(false)}
-        title={`${t_table("suspendStaff")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
+        title={`${t_table("suspendClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
       >
-        <SuspendStaff id={selectedUser?.id} status={selectedUser?.status} />
+        <SuspendClient id={selectedUser?.id} status={selectedUser?.status} />
       </Modal>
       
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteStaff")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
+        title={`${t_table("deleteClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
       >
-        <DeleteStaff id={selectedUser?.id} />
+        <DeleteClient id={selectedUser?.id} />
       </Modal>
       </div>
       )}
