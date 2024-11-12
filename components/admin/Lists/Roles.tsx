@@ -16,7 +16,7 @@ import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
-import { UserTableSkeleton } from '@/components/Skeletons';
+import { CommonSkeleton } from '@/components/Skeletons';
 import NewStaff from "../FormElements/Staff/New";
 import EditStaff from "../FormElements/Staff/Edit";
 import DeleteStaff from "../FormElements/Staff/Delete";
@@ -357,7 +357,7 @@ export default function RolesTable() {
   return (
     <>
       {loading ? (
-        <UserTableSkeleton />
+        <CommonSkeleton />
       ) : (
       <div>
       <Table

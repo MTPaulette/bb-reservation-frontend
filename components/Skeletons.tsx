@@ -3,7 +3,7 @@ const shimmer =
   'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/80 before:to-transparent';
 
 
-export function UserTableSkeleton() {
+export function CommonSkeleton() {
   return (
     <div
       className="flex flex-col items-center justify-center w-full h-[calc(100vh_-_15rem)]"

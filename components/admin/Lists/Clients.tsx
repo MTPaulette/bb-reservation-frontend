@@ -9,18 +9,19 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { UserType } from "@/lib/definitions";
-import { capitalize } from "@/lib/utils";
-import { columnsClient as columns, statusUser as statusOptions } from "@/lib/data";
+import { capitalize, getUsername } from "@/lib/utils";
+import { columnsStaff as columns, statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
-import { UserTableSkeleton } from '@/components/Skeletons';
-import NewClient from "../FormElements/Client/New";
-import EditClient from "../FormElements/Client/Edit";
-import DeleteClient from "../FormElements/Client/Delete";
-import { getClients } from '@/lib/action/clients';
+import { CommonSkeleton } from '@/components/Skeletons';
+import NewStaff from "../FormElements/Staff/New";
+import EditStaff from "../FormElements/Staff/Edit";
+import DeleteStaff from "../FormElements/Staff/Delete";
+import { getStaff } from '@/lib/action/staff';
+import SuspendStaff from '../FormElements/Staff/Suspend';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -28,14 +29,14 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   suspended: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "role", "phonenumber", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "role", "phonenumber", "agency", "status", "actions"];
 
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getClients()
+    getStaff()
       .then(response => {
         setUsers(response);
         setLoading(false);
@@ -65,6 +66,7 @@ export default function UsersTable() {
   const t_table = useTranslations("Table");
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
+  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedUser, setSelectedUser] = React.useState<UserType>();
   const locale = useLocale();
@@ -159,7 +161,7 @@ export default function UsersTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/clients/${user.id}`}>
+                  <Link href={`/${locale}/admin/staff/${user.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
@@ -169,6 +171,13 @@ export default function UsersTable() {
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
+                <DropdownItem
+                  color="warning"
+                  onClick={() => {
+                    setSelectedUser(user);
+                    setShowSuspendModal(true);
+                  }}
+                >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                 <DropdownItem
                   color="danger"
                   onClick={() => {
@@ -184,7 +193,7 @@ export default function UsersTable() {
         return cellValue;
     }
   }, []);
-
+  
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
@@ -311,7 +320,7 @@ export default function UsersTable() {
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="py-2 px-2 flex justify-between items-center z-1">
         <Pagination
           showControls
           classNames={{
@@ -357,7 +366,7 @@ export default function UsersTable() {
   return (
     <>
       {loading ? (
-        <UserTableSkeleton />
+        <CommonSkeleton />
       ) : (
       <div>
       <Table
@@ -402,23 +411,30 @@ export default function UsersTable() {
 
       <Modal
         open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newClient")}
+        title={t_table("newStaff")}
       >
-        <NewClient />
+        <NewStaff />
       </Modal>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={t_table("editClient")}
+        title={`${t_table("editStaff")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
       >
-        <EditClient user={selectedUser} />
+        <EditStaff user={selectedUser} />
       </Modal>
-
+    
+      <Modal
+        open={showSuspendModal} close={() => setShowSuspendModal(false)}
+        title={`${t_table("suspendStaff")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
+      >
+        <SuspendStaff id={selectedUser?.id} status={selectedUser?.status} />
+      </Modal>
+      
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={t_table("editClient")}
+        title={`${t_table("deleteStaff")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
       >
-        <DeleteClient user={selectedUser} />
+        <DeleteStaff id={selectedUser?.id} />
       </Modal>
       </div>
       )}

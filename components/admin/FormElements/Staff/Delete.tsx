@@ -50,13 +50,29 @@ export default function DeleteStaff({ id }: { id: number} ) {
           window.location.reload();
         }, 500);
       } else {
-        const err = await res.json();
-        // setError(err.password? JSON.stringify(err.password): '')
-        setError(err.password? t_error("wrongPassword"): "")
+        const status = res.status;
+        switch (status) {
+          case 404:
+            setError(t_error("user_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setError(err.password? t_error("wrongPassword"): "")
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
       }
     })
     .catch((error) => {
-      console.error(error)
+      setError(t_error("something_wrong"));
+      console.error(error);
     })
   }
 

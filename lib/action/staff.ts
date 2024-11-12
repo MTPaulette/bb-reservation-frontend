@@ -31,10 +31,25 @@ export async function getStaff() {
   return response.json();
 }
 
+export async function getStaffById(id: number) {
+  const token = getToken();
+  // const response = await fetch(`http://127.0.0.1:8000/api/clients`, {
+  const response = await fetch(`${api_url}/staff/${id}`, {
+    method: "GET",
+    headers: {
+      "Accept": "application/json",
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    }
+  })
+  return response.json();
+}
+
 export async function updateStaff(data: UserFormType, id: number) {
-  const response = await fetch(`${api_url}/staff/${id}/update`, { 
+  const response = await fetch(`${api_url}/staff/${id}/update`, {
     method: "PUT",
     headers: {
+      "Accept": "application/json",
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
     },
@@ -44,7 +59,7 @@ export async function updateStaff(data: UserFormType, id: number) {
 }
 
 export async function suspendStaff(data: ConfirmPasswordType, id: number, status: string) {
-  const response = await fetch(`${api_url}/staff/${id}/suspend`, { 
+  const response = await fetch(`${api_url}/staff/${id}/suspend`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

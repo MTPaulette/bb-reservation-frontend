@@ -16,7 +16,7 @@ import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
-import { UserTableSkeleton } from '@/components/Skeletons';
+import { CommonSkeleton } from '@/components/Skeletons';
 import NewStaff from "../FormElements/Staff/New";
 import EditStaff from "../FormElements/Staff/Edit";
 import DeleteStaff from "../FormElements/Staff/Delete";
@@ -161,7 +161,7 @@ export default function UsersTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/staff/${user.id}`}>
+                  <Link href={`/${locale}/admin/staff/${user.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
@@ -366,7 +366,7 @@ export default function UsersTable() {
   return (
     <>
       {loading ? (
-        <UserTableSkeleton />
+        <CommonSkeleton />
       ) : (
       <div>
       <Table
@@ -434,7 +434,7 @@ export default function UsersTable() {
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
         title={`${t_table("deleteStaff")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
       >
-        <DeleteStaff id={selectedUser.id} />
+        <DeleteStaff id={selectedUser?.id} />
       </Modal>
       </div>
       )}

@@ -116,8 +116,8 @@ const Header = (props: {
                 <div className="hidden md:flex items-center gap-3">
                   <User
                     name={user? getUsername(user.lastname, user.firstname): ""}
-                    role="admin"
-                    src="/images/brain-orange-400.png"
+                    role={user? user.role: ""}
+                    src={user? user.image: "/images/brain-orange-400.png"}
                   />
                   <ChevronDownIcon fill="currentColor" size={10} />
                 </div>
