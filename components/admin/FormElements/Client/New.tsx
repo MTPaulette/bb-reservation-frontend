@@ -58,7 +58,7 @@ export default function NewClient() {
         setTimeout(() => {
           setSuccess(t("new_account_success_msg"));
           window.location.reload();
-        }, 200);
+        }, 300);
       } else {
         const status = res.status;
         switch (status) {

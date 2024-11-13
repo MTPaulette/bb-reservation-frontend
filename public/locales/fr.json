@@ -16,7 +16,8 @@
     "suspend_warning": "Etes-vous sur(e) de vouloir continuer cette action ? Veuillez, confirmer en saisissant votre mot de passe.",
     "wrongPassword": "Mauvais mot de passe",
     "acces_denied": "accès interdit",
-    "user_not_found": "Utilisateur non trouvé"
+    "user_not_found": "Utilisateur non trouvé",
+    "role_not_found": "Role non trouvé"
   },
   "Input": {
     "register": "S'inscrire",
@@ -47,6 +48,7 @@
     "suspend_account_success_msg": "Compte suspendu avec succès.",
     "cancel_suspension_account_success_msg": "Suspension annulée.",
     "delete_account_success_msg": "Compte supprimé avec succès.",
+    "update_role_success_msg": "Role mis à jour avec succès.",
     
     "newClient": "Nouveau client",
     "editClient": "Editer client",
@@ -95,7 +97,8 @@
     "settings": "Paramètre",
     "utilities": "utilitaires",
     "agencies": "agences",
-    "roles": "roles"
+    "roles": "roles",
+    "logs": "logs"
   },
   "Table": {
     "view": "Voir",

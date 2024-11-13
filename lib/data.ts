@@ -19,6 +19,7 @@ export const _validities = [
   '01 year'
 ]
 
+
 export const columnsClient = [
   {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
   {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
@@ -37,6 +38,11 @@ export const columnsStaff = [
   {name_en: "WORK AT", name_fr: "TRAVAILLE A", uid: "agency", sortable: true},
   {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+export const columnsRole = [
+  {name_en: "ROLE", name_fr: "ROLE", uid: "role", sortable: true},
+  {name_en: "PERMISSIONS", name_fr: "PERMISSIONS", uid: "permissions", sortable: true},
 ];
 
 export const statusUser = [

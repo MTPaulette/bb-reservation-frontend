@@ -48,7 +48,7 @@ export default function EditClient({ user }: { user: UserType} ) {
         setTimeout(() => {
           setSuccess(t("update_account_success_msg"));
           window.location.reload();
-        }, 200);
+        }, 300);
       } else {
         const status = res.status;
         switch (status) {

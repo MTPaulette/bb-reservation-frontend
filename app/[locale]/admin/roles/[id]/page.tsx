@@ -1,122 +1,170 @@
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import Image from "next/image";
+import { getAllPermissions, getRoleById, updateRole } from '@/lib/action/roles';
+import { notFound } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import Title from '@/components/Title';
+import { Button, Checkbox } from '@nextui-org/react';
+import { CommonSkeleton } from '@/components/Skeletons';
+import Alert from '@/components/Alert';
+/*
 import { Metadata } from "next";
-import { CameraIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
-  title: "Next.js Profile | TailAdmin - Next.js Dashboard Template",
+  title: "User Profile",
   description:
-    "This is Next.js Profile page for TailAdmin - Next.js Tailwind CSS Admin Dashboard Template",
+    "See more about user",
 };
+*/
 
-const Profile = () => {
+export default function Page({ params }: { params: { id: string } }) {
+  const id = params.id;
+  const t = useTranslations("Input");
+  const t_error = useTranslations("InputError");
+
+  const [role, setRole] = useState([]);
+  const locale = useLocale();
+  const [permissions, setPermissions] = useState([]);
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [save, setSave] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+
+
+  let perms = [];
+  useEffect(() => {
+    getRoleById(Number(id))
+      .then(response => {
+        setRole(response[0]);
+        response[0].permissions.forEach(permission => {
+          perms.push(permission.id);
+        });
+        setSelectedPermissions(perms);
+        perms = [];
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    
+    getAllPermissions()
+    .then(response => {
+      setPermissions(response);
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  }, []);
+
+  if (!role) {
+    notFound();
+  }
+ 
+
+  const handleCheckboxChange = (e) => {
+    const permissionId = parseInt(e.target.value);
+    const isChecked = e.target.checked;
+
+    if (isChecked) {
+      setSelectedPermissions((prevPermissions) => [...prevPermissions, permissionId]);
+    } else {
+      setSelectedPermissions((prevPermissions) =>
+        prevPermissions.filter((permission) => permission !== permissionId)
+      );
+    }
+  };
+  
+    const handleFormSubmit = async () => {
+    setError("");
+    setSuccess("");
+    setSave(true);
+    updateRole(selectedPermissions, Number(id))
+    .then(async (res) => {
+      setSave(false);
+      if(res?.ok) {
+        setTimeout(() => {
+          setSuccess(t("update_role_success_msg"));
+        }, 1000);
+        // window.location.reload();
+      } else {
+        const status = res.status;
+        switch (status) {
+          case 404:
+            setError(t_error("role_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setError(err.password? t_error("wrongPassword"): "")
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch((error) => {
+      setError(t_error("something_wrong"));
+      console.error(error);
+    })
+  }
+
+  type PermissionType = typeof permissions[0];
+
   return (
     <>
-      <div className="mx-auto max-w-242.5">
-        <Breadcrumb pageName="Profile" />
-
-        <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default">
-          <div className="relative z-20 h-35 md:h-65">
-            <Image
-              src={"/images/cover/cover-01.png"}
-              alt="profile cover"
-              className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
-              width={970}
-              height={260}
-              style={{
-                width: "auto",
-                height: "auto",
-              }}
-            />
-            <div className="absolute bottom-1 right-1 z-10 xsm:bottom-4 xsm:right-4">
-              <label
-                htmlFor="cover"
-                className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-2 py-1 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
-              >
-                <input
-                  type="file"
-                  name="cover"
-                  id="cover"
-                  className="sr-only"
-                />
-                <span>
-                  <CameraIcon fill="white" size={14} />
+      <Breadcrumb pageName={`Role ${role.name? role.name: ''}`} />
+      {loading ? (
+        <CommonSkeleton />
+      ) : (
+      <div className="w-full">
+        {error != "" ? (
+          <Alert color="danger" message={error} />
+        ) : null}
+        {success != "" ? (
+          <Alert color="success" message={success} />
+        ) : null}
+        <Title className="text-xl font-medium my-4">Permissions</Title>
+        {/* <form onSubmit={handleFormSubmit}> */}
+          {permissions.map((permission: PermissionType) => (
+            <div key={permission.id} className="flex gap-4 p-1">
+              <Checkbox
+                value={permission.id}
+                onChange={handleCheckboxChange}
+                isSelected={selectedPermissions.includes(permission.id)}
+              />
+              <p className="font-light text-sm text-foreground">
+                {permission.id}.
+                <span className="font-medium text-sm mx-4">
+                  {permission.name}
                 </span>
-                <span>Edit</span>
-              </label>
+                <span>
+                  {locale === "en" ? permission.description_en: permission.description_fr}
+                </span>
+              </p>
             </div>
-          </div>
-          <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
-            <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
-              <div className="relative drop-shadow-2">
-                <Image
-                  src={"/images/user/user-06.png"}
-                  width={160}
-                  height={160}
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                  }}
-                  alt="profile"
-                />
-                <label
-                  htmlFor="profile"
-                  className="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
-                >
-                  <CameraIcon fill="white" size={14} />
-                  <input
-                    type="file"
-                    name="profile"
-                    id="profile"
-                    className="sr-only"
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="mt-4">
-              <h3 className="mb-1.5 text-2xl font-semibold text-foreground">
-                Danish Heilium
-              </h3>
-              <p className="font-medium">Ui/Ux Designer</p>
-              <div className="mx-auto mb-5.5 mt-4.5 grid max-w-94 grid-cols-3 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
-                <div className="flex flex-col items-center justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
-                  <span className="font-semibold text-foreground">
-                    259
-                  </span>
-                  <span className="text-sm">Posts</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
-                  <span className="font-semibold text-foreground">
-                    129K
-                  </span>
-                  <span className="text-sm">Followers</span>
-                </div>
-                <div className="flex flex-col items-center justify-center gap-1 px-4 xsm:flex-row">
-                  <span className="font-semibold text-foreground">
-                    2K
-                  </span>
-                  <span className="text-sm">Following</span>
-                </div>
-              </div>
-
-              <div className="mx-auto max-w-180">
-                <h4 className="font-semibold text-foreground">
-                  About Me
-                </h4>
-                <p className="mt-4.5">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Pellentesque posuere fermentum urna, eu condimentum mauris
-                  tempus ut. Donec fermentum blandit aliquet. Etiam dictum
-                  dapibus ultricies. Sed vel aliquet libero. Nunc a augue
-                  fermentum, pharetra ligula sed, aliquam lacus.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+          ))}
+          <Button 
+            // type="submit"
+            color="primary"
+            isLoading={save}
+            size="md"
+            className="mt-4"
+            onClick={handleFormSubmit}
+          >
+            {t("save")}
+          </Button>
+        {/* </form> */}
       </div>
+      )}
     </>
   );
-};
-
-export default Profile;
+}

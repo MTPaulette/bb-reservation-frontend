@@ -48,7 +48,7 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
         setTimeout(() => {
           setSuccess(status == 'active' ? t("suspend_account_success_msg"): t("cancel_suspension_account_success_msg"));
           window.location.reload();
-        }, 200);
+        }, 300);
       } else {
         const status = res.status;
         switch (status) {
