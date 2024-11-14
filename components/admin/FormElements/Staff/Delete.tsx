@@ -48,7 +48,7 @@ export default function DeleteStaff({ id }: { id: number} ) {
         setTimeout(() => {
           setSuccess(t("delete_account_success_msg"));
           window.location.reload();
-        }, 300);
+        }, 500);
       } else {
         const status = res.status;
         switch (status) {
@@ -94,7 +94,7 @@ export default function DeleteStaff({ id }: { id: number} ) {
           isRequired
           label={t("password")}
           variant="bordered"
-          placeholder={t("passwordPlaceholder")}
+          placeholder={t("password_placeholder")}
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
               {isVisible ? (

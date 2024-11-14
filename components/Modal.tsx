@@ -22,14 +22,15 @@ export default function MyModal({
 
   return (
     <>
-      {/* <Button onPress={onOpen}>Open Modal</Button> */}
+      {/* <Button onPress={onOpen}>Open Modal</Button> 
+        classNames = {{
+          base: "top-12"
+        }}*/}
       <Modal 
         backdrop="blur"
         size="2xl"
         isOpen={open}
-        classNames = {{
-          base: "top-12"
-        }}
+        scrollBehavior="outside"
         onOpenChange={onOpenChange}
         motionProps={{
           variants: {

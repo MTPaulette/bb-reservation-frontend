@@ -58,7 +58,7 @@ export default function NewClient() {
         setTimeout(() => {
           setSuccess(t("new_account_success_msg"));
           window.location.reload();
-        }, 300);
+        }, 500);
       } else {
         const status = res.status;
         switch (status) {
@@ -107,7 +107,7 @@ export default function NewClient() {
             }
             label={t("lastname")}
             type="text"
-            placeholder={t("lastnamePlaceholder")}
+            placeholder={t("lastname_placeholder")}
             variant="bordered"
             {...register("lastname")}
             isInvalid={errors.lastname ? true: false}
@@ -120,7 +120,7 @@ export default function NewClient() {
             }
             label={t("firstname")}
             type="text"
-            placeholder={t("firstnamePlaceholder")}
+            placeholder={t("firstname_placeholder")}
             variant="bordered"
             {...register("firstname")}
             isInvalid={errors.firstname ? true: false}
@@ -134,7 +134,7 @@ export default function NewClient() {
           }
           label={t("email")}
           type="email"
-          placeholder={t("emailPlaceholder")}
+          placeholder={t("email_placeholder")}
           variant="bordered"
           {...register("email")}
           isInvalid={errors.email ? true: false}
@@ -144,7 +144,7 @@ export default function NewClient() {
           isRequired
           label={t("password")}
           variant="bordered"
-          placeholder={t("passwordPlaceholder")}
+          placeholder={t("password_placeholder")}
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
               {isVisible ? (
@@ -166,7 +166,7 @@ export default function NewClient() {
           label={t("phonenumber")}
           type="text"
           variant="bordered"
-          placeholder={t("phonenumberPlaceholder")}
+          placeholder={t("phonenumber_placeholder")}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
           errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}

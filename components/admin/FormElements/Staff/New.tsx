@@ -61,7 +61,7 @@ export default function NewStaff() {
         setTimeout(() => {
           setSuccess(t("new_account_success_msg"));
           window.location.reload();
-        }, 300);
+        }, 500);
       } else {
         const status = res.status;
         switch (status) {
@@ -110,7 +110,7 @@ export default function NewStaff() {
             }
             label={t("lastname")}
             type="text"
-            placeholder={t("lastnamePlaceholder")}
+            placeholder={t("lastname_placeholder")}
             variant="bordered"
             {...register("lastname")}
             isInvalid={errors.lastname ? true: false}
@@ -123,7 +123,7 @@ export default function NewStaff() {
             }
             label={t("firstname")}
             type="text"
-            placeholder={t("firstnamePlaceholder")}
+            placeholder={t("firstname_placeholder")}
             variant="bordered"
             {...register("firstname")}
             isInvalid={errors.firstname ? true: false}
@@ -137,7 +137,7 @@ export default function NewStaff() {
           }
           label={t("email")}
           type="email"
-          placeholder={t("emailPlaceholder")}
+          placeholder={t("email_placeholder")}
           variant="bordered"
           {...register("email")}
           isInvalid={errors.email ? true: false}
@@ -147,7 +147,7 @@ export default function NewStaff() {
           isRequired
           label={t("password")}
           variant="bordered"
-          placeholder={t("passwordPlaceholder")}
+          placeholder={t("password_placeholder")}
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
               {isVisible ? (
@@ -169,7 +169,7 @@ export default function NewStaff() {
           label={t("phonenumber")}
           type="text"
           variant="bordered"
-          placeholder={t("phonenumberPlaceholder")}
+          placeholder={t("phonenumber_placeholder")}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
           errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
@@ -179,7 +179,7 @@ export default function NewStaff() {
             isRequired
             label={t("role")}
             variant="bordered"
-            placeholder={t("rolePlaceholder")}
+            placeholder={t("role_placeholder")}
             isInvalid={errors.role_id ? true: false}
             errorMessage={errors.role_id ? errors.role_id?.message: null}
             // selectedKeys={value}
@@ -197,7 +197,7 @@ export default function NewStaff() {
             isRequired
             label={t("agency")}
             variant="bordered"
-            placeholder={t("agencyPlaceholder")}
+            placeholder={t("agency_placeholder")}
             isInvalid={errors.agency_id ? true: false}
             errorMessage={errors.agency_id ? errors.agency_id?.message: null}
             // selectedKeys={value}

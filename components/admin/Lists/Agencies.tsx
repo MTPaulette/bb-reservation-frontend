@@ -1,66 +1,77 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Chip, User, Pagination, Selection, ChipProps, SortDescriptor
+  DropdownItem, Chip, Pagination, Selection, ChipProps, SortDescriptor
 } from "@nextui-org/react";
-import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { TableColunmsType, StatusUserType, UserType } from "@/lib/definitions";
+
+import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon, EnvelopIcon, TelephoneIcon } from "@/components/Icons";
+import { AgencyType } from "@/lib/definitions";
 import { capitalize } from "@/lib/utils";
-import Alert from "@/components/Alert";
+import { columnsAgency as columns, statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
+import Link from "next/link";
 
 import Modal from "@/components/Modal";
-import NewClient from "../FormElements/Client/New";
-import EditClient from "../FormElements/Client/Edit";
-import DeleteClient from "../FormElements/Client/Delete";
-import Link from "next/link";
+import Alert from "@/components/Alert";
+import { CommonSkeleton } from '@/components/Skeletons';
+import NewAgency from "../FormElements/Agency/New";
+import EditAgency from "../FormElements/Agency/Edit";
+import DeleteAgency from "../FormElements/Agency/Delete";
+import { getAgencies } from '@/lib/action/agencies';
+import SuspendAgency from '../FormElements/Agency/Suspend';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
-  paused: "danger",
-  vacation: "warning",
+  suspended: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "email", "role", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "email", "address", "contact", "openingdays", "actions"];
 
-// type User = typeof users[0];
+export default function AgenciesTable() {
+  const [agencies, setAgencies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-interface UsersTableprops {
-  columns: TableColunmsType[],
-  users: UserType[],
-  statusOptions: StatusUserType[]
-}
+  useEffect(() => {
+    getAgencies()
+      .then(response => {
+        setAgencies(response);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
 
-export default function UsersTable({ columns, users, statusOptions }: UsersTableprops) {
 
-  type User = typeof users[0];
+  type Agency = typeof agencies[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "age",
+    column: "email",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(agencies.length / rowsPerPage);
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
+  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = React.useState<UserType>();
+  const [selectedAgency, setSelectedAgency] = React.useState<AgencyType>();
   const locale = useLocale();
 
-  // const changeSelectedUser
+  // const changeSelectedAgency
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -71,21 +82,21 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredAgencies = [...agencies];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredAgencies = filteredAgencies.filter((agency) =>
+        agency.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+      filteredAgencies = filteredAgencies.filter((agency) =>
+        Array.from(statusFilter).includes(agency.status),
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredAgencies;
+  }, [agencies, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -95,44 +106,58 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: Agency, b: Agency) => {
+      const first = a[sortDescriptor.column as keyof Agency] as number;
+      const second = b[sortDescriptor.column as keyof Agency] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = React.useCallback((agency: Agency, columnKey: React.Key) => {
+    const cellValue = agency[columnKey as keyof Agency];
 
     switch (columnKey) {
       case "name":
         return (
-          <User
-            avatarProps={{radius: "full", size: "sm", src: user.avatar}}
-            classNames={{
-              description: "text-default-500",
-            }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
+          <p className="font-semibold">
+            {agency.name}
+          </p>
         );
-      case "role":
+      case "address":
         return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p>
+          <p className="font-medium text-small min-w-30">{cellValue}</p>
+        );
+      case "contact":
+        return (
+          <div>
+            <p className="font-medium text-small flex items-center gap-2 mb-1 whitespace-nowrap">
+              <EnvelopIcon fill="currentColor" size={18} />
+              {agency.email? agency.email : ''}
+            </p>
+            <p className="font-medium text-small flex items-center gap-2">
+              <TelephoneIcon fill="currentColor" size={20} />
+              {agency.phonenumber? agency.phonenumber : ''}
+            </p>
           </div>
         );
+      case "openingdays":
+        return (
+          <div className="text-sm">
+            {agency.openingdays.map((item) => (
+              <div key={item.id}>
+                <span className="font-semibold mr-1.5">{capitalize(locale === "en" ? item.name_en: item.name_fr)}</span>
+                <span className="font-light text-xs">{`(${item.from} - ${item.to})`}</span>
+              </div>
+            ))}
+            </div>
+          );
       case "status":
         return (
           <Chip
             className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[user.status]}
+            color={statusColorMap[agency.status]}
             size="sm"
             variant="dot"
           >
@@ -150,20 +175,27 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/clients/${user.id}`}>
+                  <Link href={`/${locale}/admin/agency/${agency.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => {
-                    setSelectedUser(user);
+                    setSelectedAgency(agency);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
+                  color="warning"
+                  onClick={() => {
+                    setSelectedAgency(agency);
+                    setShowSuspendModal(true);
+                  }}
+                >{agency.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
+                <DropdownItem
                   color="danger"
                   onClick={() => {
-                    setSelectedUser(user);
+                    setSelectedAgency(agency);
                     setShowDeleteModal(true);
                   }}
                 >{t_table("delete")}</DropdownItem>
@@ -197,7 +229,7 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
       </div>
-      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 bg-background shadow-default sm:px-7.5 xl:pb-1">
+      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 bg-background shadow-default sm:px-7.5 xl:pb-2">
         <div className="max-w-full overflow-x-auto">
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap justify-between gap-3 items-end">
@@ -235,8 +267,8 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
                     onSelectionChange={setStatusFilter}
                   >
                     {statusOptions.map((status) => (
-                      <DropdownItem key={status.uid} className="capitalize">
-                        {capitalize(status.name)}
+                      <DropdownItem key={status.uid}>
+                        {capitalize(locale === "en" ? status.name_en: status.name_fr)}
                       </DropdownItem>
                     ))}
                   </DropdownMenu>
@@ -260,8 +292,8 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
                     onSelectionChange={setVisibleColumns}
                   >
                     {columns.map((column) => (
-                      <DropdownItem key={column.uid} className="capitalize">
-                        {capitalize(column.name)}
+                      <DropdownItem key={column.uid}>
+                        {capitalize(locale === "en" ? column.name_en: column.name_fr)}
                       </DropdownItem>
                     ))}
                   </DropdownMenu>
@@ -277,12 +309,13 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {users.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {agencies.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
                   className="bg-transparent outline-none text-default-400 text-small"
                   onChange={onRowsPerPageChange}
+                  defaultValue={15}
                 >
                   <option value="5">5</option>
                   <option value="10">10</option>
@@ -297,11 +330,11 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
       </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, ]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, agencies.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="py-2 px-2 flex justify-between items-center z-1">
         <Pagination
           showControls
           classNames={{
@@ -346,66 +379,79 @@ export default function UsersTable({ columns, users, statusOptions }: UsersTable
 
   return (
     <>
-    <Table
-      isCompact
-      removeWrapper
-      aria-label="bb-reservation table"
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      checkboxesProps={{
-        classNames: {
-          wrapper: "after:bg-foreground after:text-background text-background",
-        },
-      }}
-      classNames={classNames}
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={t_table("noItems")} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+      {loading ? (
+        <CommonSkeleton />
+      ) : (
+      <div>
+      <Table
+        isCompact
+        removeWrapper
+        aria-label="bb-reservation table"
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        checkboxesProps={{
+          classNames: {
+            wrapper: "after:bg-foreground after:text-background text-background",
+          },
+        }}
+        classNames={classNames}
+        selectedKeys={selectedKeys}
+        selectionMode="multiple"
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {locale === "en" ? column.name_en: column.name_fr}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={t_table("noItems")} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
 
-    <Modal
-      open={showNewModal} close={() => setShowNewModal(false)}
-      title={t_table("newUser")}
-    >
-      <NewClient />
-    </Modal>
+      <Modal
+        open={showNewModal} close={() => setShowNewModal(false)}
+        title={t_table("newAgency")}
+      >
+        <NewAgency />
+      </Modal>
 
-    <Modal
-      open={showEditModal} close={() => setShowEditModal(false)}
-      title={t_table("editUser")}
-    >
-      <EditClient user={selectedUser} />
-    </Modal>
-  
-    <Modal
-      open={showDeleteModal} close={() => setShowDeleteModal(false)}
-      title={t_table("editUser")}
-    >
-      <DeleteClient user={selectedUser} />
-    </Modal>
+      <Modal
+        open={showEditModal} close={() => setShowEditModal(false)}
+        title={`${t_table("editAgency")} "${selectedAgency? selectedAgency.name: ''}"`}
+      >
+        <EditAgency agency={selectedAgency} />
+      </Modal>
+    
+      <Modal
+        open={showSuspendModal} close={() => setShowSuspendModal(false)}
+        title={`${t_table("suspendAgency")} "${selectedAgency? selectedAgency.name: ''}"`}
+      >
+        <SuspendAgency id={selectedAgency?.id} status={selectedAgency?.status} />
+      </Modal>
+      
+      <Modal
+        open={showDeleteModal} close={() => setShowDeleteModal(false)}
+        title={`${t_table("deleteAgency")} "${selectedAgency? selectedAgency.name: ''}"`}
+      >
+        <DeleteAgency id={selectedAgency?.id} />
+      </Modal>
+      </div>
+      )}
     </>
   );
 }

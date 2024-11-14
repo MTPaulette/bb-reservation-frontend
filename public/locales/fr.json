@@ -6,6 +6,7 @@
     "error": "Erreur"
   },
   "InputError": {
+    "name": "Le nom est obligatoire",
     "lastname": "Le nom est obligatoire",
     "firstname": "Le prénom est obligatoire",
     "email": "L'email doit etre valide",
@@ -17,11 +18,13 @@
     "wrongPassword": "Mauvais mot de passe",
     "acces_denied": "accès interdit",
     "user_not_found": "Utilisateur non trouvé",
-    "role_not_found": "Role non trouvé"
+    "role_not_found": "Role non trouvé",
+    "agency_not_found": "Agence non trouvé"
   },
   "Input": {
     "register": "S'inscrire",
     "have_account_link": "Vous avez déja un compte ? Se connecter",
+    "name": "nom",
     "lastname": "nom",
     "firstname": "prénom",
     "email": "Email",
@@ -29,14 +32,23 @@
     "login": "Se connecter",
     "role": "Role",
     "agency": "Agence",
+    "address": "Adresse",
+    "openingdays": "Jours d'ouverture",
+    "from": "De",
+    "to": "A",
+    "reason_for_suspension_fr": "Raison de la suspension (en francais)",
+    "reason_for_suspension_en": "Raison de la suspension (en anglais)",
     "phonenumber": "Téléphone",
-    "lastnamePlaceholder": "Entrer le nom",
-    "firstnamePlaceholder": "Entrer le prénom",
-    "emailPlaceholder": "Entrer le email",
-    "passwordPlaceholder": "Entrer le mot de passe",
-    "phonenumberPlaceholder": "Entrer le  numéro de téléphone",
-    "rolePlaceholder": "Selectionner un role",
-    "agencyPlaceholder": "Selectionner une agence ",
+    "name_placeholder": "Entrer le nom",
+    "lastname_placeholder": "Entrer le nom",
+    "firstname_placeholder": "Entrer le prénom",
+    "email_placeholder": "Entrer le email",
+    "password_placeholder": "Entrer le mot de passe",
+    "address_placeholder": "Entrer l'adresse",
+    "phonenumber_placeholder": "Entrer le  numéro de téléphone",
+    "role_placeholder": "Selectionner un role",
+    "agency_placeholder": "Selectionner une agence ",
+    "reason_for_suspension_placeholder": "Entrer la raison de la suspension",
     "forgot_password_link": "Mot de passe oublié?",
     "remember_me": "se souvenir de moi",
     "logout": "Se déconnecter",
@@ -46,8 +58,10 @@
     "new_account_success_msg": "Compte créé avec succès.",
     "update_account_success_msg": "Compte mis à jour avec succès.",
     "suspend_account_success_msg": "Compte suspendu avec succès.",
+    "suspend_agency_success_msg": "Agence suspendue avec succès.",
     "cancel_suspension_account_success_msg": "Suspension annulée.",
     "delete_account_success_msg": "Compte supprimé avec succès.",
+    "delete_agency_success_msg": "Agence supprimé avec succès.",
     "update_role_success_msg": "Role mis à jour avec succès.",
     
     "newClient": "Nouveau client",
@@ -67,7 +81,7 @@
     "signedAs": "Connecté(e) comme",
     "profile": "Mon profile",
     "settings": "Paramètre du compte",
-    "searchPlaceholder": "Saisir pour rechercher..."
+    "search_placeholder": "Saisir pour rechercher..."
   },
 
   "LocaleSwitcher": {
@@ -106,7 +120,7 @@
     "suspend": "Suspendre",
     "cancel_suspend": "Annuler suspension",
     "delete": "Supprimer",
-    "searchPlaceholder": "Rechercher par nom...",
+    "search_placeholder": "Rechercher par nom...",
     "status": "Status",
     "colunms": "Colonnes",
     "new": "Nouveau",
@@ -124,7 +138,12 @@
     "newStaff": "Nouveau staff",
     "editStaff": "Editer staff",
     "suspendStaff": "Suspendre staff",
-    "deleteStaff": "Supprimer staff"
+    "deleteStaff": "Supprimer staff",
+
+    "newAgency": "Nouvel agence",
+    "editAgency": "Editer agence",
+    "suspendAgency": "Suspendre agence",
+    "deleteAgency": "Supprimer agence"
   },
   "Profile":{
     "edit": "éditer",

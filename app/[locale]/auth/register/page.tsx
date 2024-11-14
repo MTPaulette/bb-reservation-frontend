@@ -76,7 +76,7 @@ export default function RegisterPage() {
           setLoading(false);
           if(res?.ok) {
             // router.push('/fr/dashboard1');
-            router.push(`/${locale}/dashboard1`);
+            router.push(`/${locale}/admin`);
           } else {
             if(res?.error === "CredentialsSignin"){
               setError(t_error("invalid_credentials"));
@@ -121,7 +121,7 @@ export default function RegisterPage() {
         }
         label={t("lastname")}
         type="text"
-        placeholder={t("lastnamePlaceholder")}
+        placeholder={t("lastname_placeholder")}
         variant="bordered"
         {...register("lastname")}
         isInvalid={errors.lastname ? true: false}
@@ -134,7 +134,7 @@ export default function RegisterPage() {
         }
         label={t("firstname")}
         type="text"
-        placeholder={t("firstnamePlaceholder")}
+        placeholder={t("firstname_placeholder")}
         variant="bordered"
         {...register("firstname")}
         isInvalid={errors.firstname ? true: false}
@@ -146,7 +146,7 @@ export default function RegisterPage() {
         }
         label={t("email")}
         type="email"
-        placeholder={t("emailPlaceholder")}
+        placeholder={t("email_placeholder")}
         variant="bordered"
         {...register("email")}
         isInvalid={errors.email ? true: false}
@@ -155,7 +155,7 @@ export default function RegisterPage() {
       <Input
         label={t("password")}
         variant="bordered"
-        placeholder={t("passwordPlaceholder")}
+        placeholder={t("password_placeholder")}
         endContent={
           <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
             {isVisible ? (

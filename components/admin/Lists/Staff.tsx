@@ -225,7 +225,7 @@ export default function UsersTable() {
                   base: "w-full sm:max-w-[44%]",
                   inputWrapper: "border-1",
                 }}
-                placeholder={t_table("searchPlaceholder")}
+                placeholder={t_table("search_placeholder")}
                 size="sm"
                 startContent={<SearchIcon fill="currentColor" size={18} />}
                 value={filterValue}

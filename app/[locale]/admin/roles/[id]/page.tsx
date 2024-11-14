@@ -140,6 +140,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 value={permission.id}
                 onChange={handleCheckboxChange}
                 isSelected={selectedPermissions.includes(permission.id)}
+                className="z-1"
               />
               <p className="font-light text-sm text-foreground">
                 {permission.id}.

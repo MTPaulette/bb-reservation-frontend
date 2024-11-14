@@ -51,7 +51,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
         setTimeout(() => {
           setSuccess(t("update_account_success_msg"));
           window.location.reload();
-        }, 300);
+        }, 500);
       } else {
         const status = res.status;
         switch (status) {
@@ -100,7 +100,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
             }
             label={t("lastname")}
             type="text"
-            placeholder={t("lastnamePlaceholder")}
+            placeholder={t("lastname_placeholder")}
             variant="bordered"
             defaultValue={user.lastname? user.lastname: ""}
             {...register("lastname")}
@@ -113,7 +113,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
             }
             label={t("firstname")}
             type="text"
-            placeholder={t("firstnamePlaceholder")}
+            placeholder={t("firstname_placeholder")}
             variant="bordered"
             defaultValue={user.firstname? user.firstname: ""}
             {...register("firstname")}
@@ -128,7 +128,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
           }
           label={t("email")}
           type="email"
-          placeholder={t("emailPlaceholder")}
+          placeholder={t("email_placeholder")}
           defaultValue={user.email? user.email: ""}
           variant="bordered"
           {...register("email")}
@@ -142,7 +142,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
           label={t("phonenumber")}
           type="text"
           variant="bordered"
-          placeholder={t("phonenumberPlaceholder")}
+          placeholder={t("phonenumber_placeholder")}
           defaultValue={user.phonenumber? user.phonenumber: ""}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
@@ -152,7 +152,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
           <Select
             label={t("role")}
             variant="bordered"
-            placeholder={t("rolePlaceholder")}
+            placeholder={t("role_placeholder")}
             isInvalid={errors.role_id ? true: false}
             errorMessage={errors.role_id ? errors.role_id?.message: null}
             defaultSelectedKeys={[user.role_id.toString()]}
@@ -168,7 +168,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
           <Select
             label={t("agency")}
             variant="bordered"
-            placeholder={t("agencyPlaceholder")}
+            placeholder={t("agency_placeholder")}
             isInvalid={errors.agency_id ? true: false}
             errorMessage={errors.agency_id ? errors.agency_id?.message: null}
             defaultSelectedKeys={[user.work_at.toString()]}

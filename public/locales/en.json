@@ -6,6 +6,7 @@
     "error": "Error"
   },
   "InputError": {
+    "name": "the name is required",
     "lastname": "the lastname is required",
     "firstname": "the firstname is required",
     "email": "Must be a valid email",
@@ -17,11 +18,13 @@
     "wrongPassword": "Wrong password",
     "acces_denied": "acces denied",
     "user_not_found": "User not found",
-    "role_not_found": "Role not found"
+    "role_not_found": "Role not found",
+    "agency_not_found": "Agency not found"
  },
   "Input": {
     "register": "Register",
     "have_account_link": "You already have an account ? Sign in",
+    "name": "Name",
     "lastname": "Lastname",
     "firstname": "Firstname",
     "email": "Email",
@@ -30,13 +33,22 @@
     "phonenumber": "Phonenumber",
     "role": "Role",
     "agency": "Agency",
-    "lastnamePlaceholder": "Enter lastname",
-    "firstnamePlaceholder": "Enter firstname",
-    "emailPlaceholder": "Enter email",
-    "passwordPlaceholder": "Enter password",
-    "phonenumberPlaceholder": "Enter phonenumber",
-    "rolePlaceholder": "Enter role",
-    "agencyPlaceholder": "Enter agency",
+    "address": "Address",
+    "openingdays": "Opening days",
+    "from": "from",
+    "to": "to",
+    "reason_for_suspension_fr": "Reason for suspension (in french)",
+    "reason_for_suspension_en": "Reason for suspension (in english)",
+    "name_placeholder": "Enter name",
+    "lastname_placeholder": "Enter lastname",
+    "firstname_placeholder": "Enter firstname",
+    "email_placeholder": "Enter email",
+    "password_placeholder": "Enter password",
+    "address_placeholder": "Enter address",
+    "phonenumber_placeholder": "Enter phonenumber",
+    "role_placeholder": "Enter role",
+    "agency_placeholder": "Enter agency",
+    "reason_for_suspension_placeholder": "Enter reason for suspension",
     "forgot_password_link": "Forgot password?",
     "remember_me": "remember me",
     "logout": "Log Out",
@@ -46,8 +58,10 @@
     "new_account_success_msg": "Account successfully created.",
     "update_account_success_msg": "Account successfully updated.",
     "suspend_account_success_msg": "Account successfully suspended.",
+    "suspend_agency_success_msg": "Agency successfully suspended.",
     "cancel_suspension_account_success_msg": "Suspension cancelled.",
     "delete_account_success_msg": "Account successfully deleted.",
+    "delete_agency_success_msg": "Agency successfully deleted.",
     "update_role_success_msg": "Role successfully updated.",
 
 
@@ -68,7 +82,7 @@
     "signedAs": "Signed as",
     "profile": "my profile",
     "settings": "Account settings",
-    "searchPlaceholder": "Type to search..."
+    "search_placeholder": "Type to search..."
   },
 
 
@@ -113,7 +127,7 @@
     "suspend": "Suspend",
     "cancel_suspend": "Cancel Suspension",
     "delete": "Delete",
-    "searchPlaceholder": "Search by name...",
+    "search_placeholder": "Search by name...",
     "status": "Status",
     "colunms": "Colunms",
     "new": "Add new",
@@ -131,7 +145,12 @@
     "newStaff": "New staff",
     "editStaff": "Edit staff",
     "suspendStaff": "Suspend staff",
-    "deleteStaff": "Delete staff"
+    "deleteStaff": "Delete staff",
+
+    "newAgency": "New agency",
+    "editAgency": "Edit agency",
+    "suspendAgency": "Suspend agency",
+    "deleteAgency": "Delete agency"
   },
   "Profile":{
     "edit": "edit",

@@ -1,27 +1,29 @@
 "use client"
 
 import React from "react";
-import { Button, Input } from "@nextui-org/react";
-import { EnvelopIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
+import { Button, Input, Textarea } from "@nextui-org/react";
+import { EnvelopIcon, LocalisationIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { UserType, UserFormType } from "@/lib/definitions";
-import { updateClient } from "@/lib/action/clients";
+import { AgencyFormType } from "@/lib/definitions";
+import { createAgency } from "@/lib/action/agencies";
 
-
-export default function EditClient({ user }: { user: UserType} ) {
+export default function NewAgency() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
-  const schema: ZodType<UserFormType> = z
+  const schema: ZodType<AgencyFormType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
-      phonenumber: z.string(),
+      name: z.string().min(1, { message: t_error("name") }),
+      email: z.string().email({
+        message:  t_error("email"),
+      }),
+      phonenumber: z.string().min(1),
+      address: z.string().min(1),
   });
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,28 +35,25 @@ export default function EditClient({ user }: { user: UserType} ) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UserFormType>({
+  } = useForm<AgencyFormType>({
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: UserFormType) => {
+  const handleFormSubmit = async (data: AgencyFormType) => {
     setError("");
     setSuccess("");
     setLoading(true);
-    updateClient(data, user.id)
+    createAgency(data)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("update_account_success_msg"));
+          setSuccess(t("new_account_success_msg"));
           window.location.reload();
         }, 500);
       } else {
         const status = res.status;
         switch (status) {
-          case 404:
-            setError(t_error("user_not_found"));
-            break;
           case 422:
             const err = await res.json();
             setError(JSON.stringify(err.errors));
@@ -76,6 +75,7 @@ export default function EditClient({ user }: { user: UserType} ) {
     })
   }
 
+
   return (
     <>
     <div className="w-full">
@@ -89,50 +89,35 @@ export default function EditClient({ user }: { user: UserType} ) {
         action="#" className="space-y-4 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
-        <div className="flex gap-4">
-          <Input
-            autoFocus
-            endContent={
-              <UserIcon fill="currentColor" size={18} />
-            }
-            label={t("lastname")}
-            type="text"
-            placeholder={t("lastname_placeholder")}
-            variant="bordered"
-            defaultValue={user.lastname? user.lastname: ""}
-            {...register("lastname")}
-            isInvalid={errors.lastname ? true: false}
-            errorMessage={errors.lastname ? errors.lastname?.message: null}
-          />
-          <Input
-            endContent={
-              <UserIcon fill="currentColor" size={18} />
-            }
-            label={t("firstname")}
-            type="text"
-            placeholder={t("firstname_placeholder")}
-            variant="bordered"
-            defaultValue={user.firstname? user.firstname: ""}
-            {...register("firstname")}
-            isInvalid={errors.firstname ? true: false}
-            errorMessage={errors.firstname ? errors.firstname?.message: null}
-          />
-        </div>
         <Input
-          isDisabled
+          isRequired
+          autoFocus
+          endContent={
+            <UserIcon fill="currentColor" size={18} />
+          }
+          label={t("name")}
+          type="text"
+          placeholder={t("name_placeholder")}
+          variant="bordered"
+          {...register("name")}
+          isInvalid={errors.name ? true: false}
+          errorMessage={errors.name ? errors.name?.message: null}
+        />
+        <Input
+          isRequired
           endContent={
             <EnvelopIcon fill="currentColor" size={18} />
           }
           label={t("email")}
           type="email"
           placeholder={t("email_placeholder")}
-          defaultValue={user.email? user.email: ""}
           variant="bordered"
           {...register("email")}
           isInvalid={errors.email ? true: false}
           errorMessage={errors.email ? errors.email?.message: null}
         />
         <Input
+          isRequired
           endContent={
             <TelephoneIcon fill="currentColor" size={18} />
           }
@@ -140,12 +125,22 @@ export default function EditClient({ user }: { user: UserType} ) {
           type="text"
           variant="bordered"
           placeholder={t("phonenumber_placeholder")}
-          defaultValue={user.phonenumber? user.phonenumber: ""}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
           errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
         />
-
+        <Textarea
+          isRequired
+          endContent={
+            <LocalisationIcon fill="currentColor" size={18} />
+          }
+          label={t("address")}
+          placeholder={t("address_placeholder")}
+          variant="bordered"
+          {...register("address")}
+          isInvalid={errors.address ? true: false}
+          errorMessage={errors.address ? errors.address?.message: null}
+        />
         <div className="w-full">
           <Button 
             type="submit"

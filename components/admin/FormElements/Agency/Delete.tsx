@@ -10,10 +10,10 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { suspendStaff } from "@/lib/action/staff";
+import { deleteAgency } from "@/lib/action/agencies";
 import Title from "@/components/Title";
 
-export default function SuspendStaff({ id, status }: { id: number, status: string } ) {
+export default function DeleteAgency({ id }: { id: number} ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
@@ -41,19 +41,19 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
     setError("");
     setSuccess("");
     setLoading(true);
-    suspendStaff(data, id, status)
+    deleteAgency(data, id)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(status == 'active' ? t("suspend_account_success_msg"): t("cancel_suspension_account_success_msg"));
+          setSuccess(t("delete_agency_success_msg"));
           window.location.reload();
         }, 500);
       } else {
         const status = res.status;
         switch (status) {
           case 404:
-            setError(t_error("user_not_found"));
+            setError(t_error("agency_not_found"));
             break;
           case 422:
             const err = await res.json();
@@ -125,3 +125,4 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
     </>
   )
 }
+

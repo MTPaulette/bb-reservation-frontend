@@ -21,6 +21,8 @@ const Header = (props: {
 
   const { data: session } = useSession();
   const user = session?.user?.user;
+  const token = session?.user?.token;
+  console.log("token "+token);
   const t = useTranslations("Header");
   const locale = useLocale();
 
@@ -83,7 +85,7 @@ const Header = (props: {
 
         <div className="hidden sm:block">
           <div className="w-full sm:w-[250px] xl:w-125">
-            <Search placeholder={t("searchPlaceholder")} />
+            <Search placeholder={t("search_placeholder")} />
           </div>
         </div>
 

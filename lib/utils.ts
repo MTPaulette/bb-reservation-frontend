@@ -15,9 +15,9 @@ export const getUsername = (lastname: string, firstname: string) => {
 
 export const getToken = () => {
   // const token = sessionStorage.getItem("user");
-  const token = "2|jLwITbJzBmm48FZrJRavlas1g5QikM6POPfXuF0Ma8947d48";
+  const token = "1|m7JTmi3XnG3MqwGpMtXpkCMgkokQgkVUZ2vpSVkB77a0683c";
 
   //client
-  //const token = "3|FeLbpKq2b6OjW9frg3ypQZLcBq7MMAnEsqGturbh883a773d";
+  //const token = "2|vVhhYcKaZCOln2CLhuWVYxVRMxzscAtK2E4L93Hv33851da1";
   return token; 
 };

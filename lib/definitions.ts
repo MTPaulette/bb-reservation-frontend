@@ -23,6 +23,12 @@ export type ConfirmPasswordType = {
   password: string
 }
 
+export type SuspensionFormType = {
+  password: string;
+  reason_for_suspension_en: string;
+  reason_for_suspension_fr: string;
+}
+
 export type UserType = {
   id: number;
   lastname: string;
@@ -35,6 +41,30 @@ export type UserType = {
   role_id: number;
   work_at: string
 };
+
+export type AgencyType = {
+  id: number;
+  name: string;
+  address: string;
+  email: string;
+  phonenumber: string;
+  status: string;
+  reason_for_suspension_en: string;
+  reason_for_suspension_fr: string;
+  openingdays: []
+};
+
+export type AgencyFormType = {
+  name: string;
+  address: string;
+  email: string;
+  phonenumber: string;
+  status: string;
+  reason_for_suspension_en: string;
+  reason_for_suspension_fr: string;
+  openingdays: []
+};
+
 
 export type TableColunmsType = ({
   name: string;
@@ -50,6 +80,53 @@ export type StatusUserType = {
   name: string;
   uid: string;
 };
+
+export type HorairesType = {
+  monday: {
+    from: string;
+    to: string;
+  };
+  tuesday: {
+    from: string;
+    to: string;
+  };
+  wednesday: {
+    from: string;
+    to: string;
+  };
+  thursday: {
+    from: string;
+    to: string;
+  };
+  friday: {
+    from: string;
+    to: string;
+  };
+  saturday: {
+    from: string;
+    to: string;
+  };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export type Customer = {
   id: string;

@@ -4,7 +4,6 @@ import { ConfirmPasswordType, UserFormType } from "../definitions";
 const api_url = 'http://127.0.0.1:8000/api';
 const token = getToken();
 
-
 export async function createStaff(data: UserFormType) {
   const response = await fetch(`${api_url}/staff/store`, { 
     method: "POST",
@@ -18,7 +17,6 @@ export async function createStaff(data: UserFormType) {
 }
 
 export async function getStaff() {
-  const token = getToken();
   // const response = await fetch(`http://127.0.0.1:8000/api/clients`, {
   const response = await fetch(`${api_url}/staff`, {
     method: "GET",
@@ -32,7 +30,6 @@ export async function getStaff() {
 }
 
 export async function getStaffById(id: number) {
-  const token = getToken();
   // const response = await fetch(`http://127.0.0.1:8000/api/clients`, {
   const response = await fetch(`${api_url}/staff/${id}`, {
     method: "GET",

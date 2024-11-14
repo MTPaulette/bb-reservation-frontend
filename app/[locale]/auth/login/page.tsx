@@ -58,7 +58,7 @@ export default function LoginPage() {
     .then((res) => {
       setLoading(false);
       if(res?.ok) {
-          router.push(`/${locale}/dashboard1`);
+          router.push(`/${locale}/admin`);
       } else {
         if(res?.error === "CredentialsSignin"){
           setError(t_error("invalid_credentials"));
@@ -91,7 +91,7 @@ export default function LoginPage() {
         }
         label={t("email")}
         type="email"
-        placeholder={t("emailPlaceholder")}
+        placeholder={t("email_placeholder")}
         variant="bordered"
         {...register("email")}
         isInvalid={errors.email ? true: false}
@@ -100,7 +100,7 @@ export default function LoginPage() {
       <Input
         label={t("password")}
         variant="bordered"
-        placeholder={t("passwordPlaceholder")}
+        placeholder={t("password_placeholder")}
         endContent={
           <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
             {isVisible ? (
