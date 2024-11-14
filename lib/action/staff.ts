@@ -26,12 +26,12 @@ export async function getStaff() {
       "Authorization": `Bearer ${token}`,
     }
   })
-  return response.json();
+  return response;//.json();
 }
 
 export async function getStaffById(id: number) {
-  // const response = await fetch(`http://127.0.0.1:8000/api/clients`, {
   const response = await fetch(`${api_url}/staff/${id}`, {
+    //const response = await fetch(`${api_url}/staff/60`, {
     method: "GET",
     headers: {
       "Accept": "application/json",
@@ -39,7 +39,7 @@ export async function getStaffById(id: number) {
       "Authorization": `Bearer ${token}`,
     }
   })
-  return response.json();
+  return response;//.json();
 }
 
 export async function updateStaff(data: UserFormType, id: number) {

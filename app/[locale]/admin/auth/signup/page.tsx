@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const SignUp: React.FC = () => {
   return (
     <>
-      <Breadcrumb pageName="Sign Up" />
+      <Breadcrumb pageName="logout" />
 
       <div className="rounded-sm border border-divider bg-background shadow-default">
         <div className="flex flex-wrap items-center">

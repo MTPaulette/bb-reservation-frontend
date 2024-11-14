@@ -7,13 +7,13 @@ interface BreadcrumbProps {
   pageName: string;
 }
 const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
-  const t = useTranslations("Sidebar");
+  const t = useTranslations("Breadcrumb");
   const locale = useLocale();
 
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <Title className="text-2xl">
-        {pageName}
+        {capitalize(t(pageName))}
       </Title>
 
       <nav>
@@ -23,7 +23,7 @@ const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
               { capitalize(t("dashboard")) } /
             </Link>
           </li>
-          <li className="font-medium text-foreground">{capitalize(pageName)}</li>
+          <li className="font-medium text-foreground"> {capitalize(t(pageName))}</li>
         </ol>
       </nav>
     </div>

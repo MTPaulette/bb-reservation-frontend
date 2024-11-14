@@ -108,7 +108,19 @@ export type HorairesType = {
   };
 }
 
-
+export type LogType = {
+  id: number;
+  description: string;
+  url: string;
+  method: string;
+  ip: string;
+  agent: string;
+  user_id: number;
+  created_at: Date;
+  updated_at: Date;
+  firstname: string;
+  lastname: string;
+}
 
 
 

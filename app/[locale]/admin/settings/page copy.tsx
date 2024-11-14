@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Breadcrumb from "@/components/admin/Breadcrumb";
 import Title from "@/components/Title";
-import Profile from "@/components/admin/Settings/Profile";
+import Profile from "@/components/admin/FormElements/Settings/Profile";
 
 export const metadata: Metadata = {
   title: "Next.js Settings | TailAdmin - Next.js Dashboard Template",
@@ -34,7 +34,7 @@ const Settings = () => {
   return (
     <>
       <div className="mx-auto max-w-270">
-        <Breadcrumb pageName="Settings" />
+        <Breadcrumb pageName="settings" />
         <div className="grid grid-cols-12 md:gap-8">
           <div className="col-span-12 md:col-span-4 xl:col-span-3 min-ww-45 mb-8 md:mb-0">
             <div className="flex flex-col md:gap-y-8">

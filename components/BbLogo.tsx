@@ -3,7 +3,7 @@ import { Image } from "@nextui-org/react";
 export const BbLogo = ({width=72}) => (
   <>
   <div className="block dark:hidden">
-  <Image 
+  <Image
     src="/images/logo/bb_logo.png"
     height="auto"
     width={width}

@@ -4,7 +4,7 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { CameraIcon } from "@/components/Icons";
-import { getStaffById } from '@/lib/action/staff';
+import { getClientById } from '@/lib/action/clients';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
@@ -18,13 +18,13 @@ import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem } from "@
 import { VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
-import EditStaff from "@/components/admin/FormElements/Staff/Edit";
-import DeleteStaff from "@/components/admin/FormElements/Staff/Delete";
-import SuspendStaff from '@/components/admin/FormElements/Staff/Suspend';
+import EditClient from "@/components/admin/FormElements/Client/Edit";
+import DeleteClient from "@/components/admin/FormElements/Client/Delete";
+import SuspendClient from '@/components/admin/FormElements/Client/Suspend';
 import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
 
-export default function ViewStaff({id}: {id: string}) {
+export default function ViewClient({id}: {id: string}) {
   const { data: session } = useSession();
   const authUserId = session?.user?.user.id;
   const [user, setUser] = useState([]);
@@ -40,11 +40,11 @@ export default function ViewStaff({id}: {id: string}) {
 
   useEffect(() => {
     setError("");
-    getStaffById(Number(id))
+    getClientById(Number(id))
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setUser(response[0]);
+          setUser(response);
           setLoading(false);
         }else {
           const status = res.status;
@@ -242,23 +242,23 @@ export default function ViewStaff({id}: {id: string}) {
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editStaff")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+        title={`${t_table("editClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
       >
-        <EditStaff user={user} />
+        <EditClient user={user} />
       </Modal>
     
       <Modal
         open={showSuspendModal} close={() => setShowSuspendModal(false)}
-        title={`${t_table("suspendStaff")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+        title={`${t_table("suspendClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
       >
-        <SuspendStaff id={user?.id} status={user?.status} />
+        <SuspendClient id={user?.id} status={user?.status} />
       </Modal>
       
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteStaff")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+        title={`${t_table("deleteClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
       >
-        <DeleteStaff id={user?.id} />
+        <DeleteClient id={user?.id} />
       </Modal>
 
     </div>

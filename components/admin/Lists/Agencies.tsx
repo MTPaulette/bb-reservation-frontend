@@ -22,6 +22,7 @@ import EditAgency from "../FormElements/Agency/Edit";
 import DeleteAgency from "../FormElements/Agency/Delete";
 import { getAgencies } from '@/lib/action/agencies';
 import SuspendAgency from '../FormElements/Agency/Suspend';
+import { signOut } from 'next-auth/react';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -34,18 +35,47 @@ const INITIAL_VISIBLE_COLUMNS = ["name", "email", "address", "contact", "opening
 export default function AgenciesTable() {
   const [agencies, setAgencies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>("");
+  const locale = useLocale();
+  const t_error = useTranslations("InputError");
+  const t_alert = useTranslations("Alert");
+  const t_table = useTranslations("Table");
 
   useEffect(() => {
+    setError("");
     getAgencies()
-      .then(response => {
-        setAgencies(response);
+      .then(async (res) => {
         setLoading(false);
+        if(res?.ok){
+          setAgencies(await res.json());
+        }else {
+          const status = res.status;
+          switch (status) {
+            case 401:
+              setError(t_error("unauthenticated"));
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+              break;
+            case 403:
+              setError(t_error("acces_denied"));
+              break;
+            case 404:
+              setError(t_error("server_not_found"));
+              break;
+            case 500:
+              setError(t_error("something_wrong"));
+              break;
+            default:
+              break;
+          }
+        }
       })
       .catch(error => {
+        setError(t_error("something_wrong"));
         console.error(error);
       });
   }, []);
-
 
   type Agency = typeof agencies[0];
 
@@ -62,14 +92,11 @@ export default function AgenciesTable() {
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(agencies.length / rowsPerPage);
-  const t_alert = useTranslations("Alert");
-  const t_table = useTranslations("Table");
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedAgency, setSelectedAgency] = React.useState<AgencyType>();
-  const locale = useLocale();
 
   // const changeSelectedAgency
 
@@ -414,7 +441,7 @@ export default function AgenciesTable() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={t_table("noItems")} items={sortedItems}>
+        <TableBody emptyContent={error? <Alert color="danger" message={error} />: t_table("noItems")} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

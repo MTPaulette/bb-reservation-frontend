@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const CalendarPage = () => {
   return (
     <div className="mx-auto max-w-7xl">
-      <Breadcrumb pageName="Calendar" />
+      <Breadcrumb pageName="calendar" />
 
       <div className="w-full max-w-full rounded-sm border border-divider bg-background shadow-default">
         <table className="w-full">

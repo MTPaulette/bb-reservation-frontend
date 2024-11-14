@@ -53,3 +53,10 @@ export default function Logout() {
     </button>
   );
 }
+
+
+{/* <button type="button"
+ @click="logout()" :class="logout_processing?'cursor-progress':''" 
+ class="flex items-center w-full px-4 py-2 hover:text-danger">
+  Logout
+</button> */}

@@ -121,7 +121,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Breadcrumb pageName={`Role ${role.name? role.name: ''}`} />
+      <Breadcrumb pageName="role" />
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -132,7 +132,7 @@ export default function Page({ params }: { params: { id: string } }) {
         {success != "" ? (
           <Alert color="success" message={success} />
         ) : null}
-        <Title className="text-xl font-medium my-4">Permissions</Title>
+        <Title className="text-xl font-medium my-4">Permissions {`Role ${role.name? role.name: ''}`} </Title>
         {/* <form onSubmit={handleFormSubmit}> */}
           {permissions.map((permission: PermissionType) => (
             <div key={permission.id} className="flex gap-4 p-1">

@@ -1,20 +1,185 @@
 "use client";
 
+import React from "react";
+import { useSession } from "next-auth/react";
+import { useTranslations } from 'next-intl';
 import Image from "next/image";
-import { EnvelopIcon, PencilSquareIcon, UploadIcon, UserIcon } from "@/components/Icons";
+import { PencilSquareIcon, UploadIcon, EnvelopIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import Title from "@/components/Title";
+import { CommonSkeleton } from "@/components/Skeletons";
+import { Avatar, Button, Input } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z, ZodType } from "zod";
+import { useState } from "react";
+import Alert from "@/components/Alert";
+import { UserFormType } from "@/lib/definitions";
+import { updateClient } from "@/lib/action/clients";
 
-const Profile = () => {
+
+export default function Profile () {
+  const { data: session } = useSession();
+  const user = session?.user?.user;
+  const t = useTranslations("Input");
+  const t_settings = useTranslations("Settings");
+  const t_error = useTranslations("InputError");
+
+  const schema: ZodType<UserFormType> = z
+    .object({
+      lastname: z.string().min(1, { message: t_error("lastname") }),
+      firstname: z.string().min(1, { message: t_error("firstname") }),
+      phonenumber: z.string(),
+  });
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<UserFormType>({
+    resolver: zodResolver(schema),
+  })
+
+  const handleFormSubmit = async (data: UserFormType) => {
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    updateClient(data, user.id)
+    .then(async (res) => {
+      setLoading(false);
+      if(res?.ok) {
+        setTimeout(() => {
+          setSuccess(t("update_account_success_msg"));
+          window.location.reload();
+        }, 500);
+      } else {
+        const status = res.status;
+        switch (status) {
+          case 404:
+            setError(t_error("user_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setError(JSON.stringify(err.errors));
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch((error) => {
+      setError(t_error("something_wrong"));
+      console.error(error);
+    })
+  }
+
   return (
+    <>
+    {!user ? (
+      <CommonSkeleton />
+    ) : (
     <div className="grid grid-cols-5 gap-8">
       <div className="col-span-5 xl:col-span-3">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
-            <Title className="font-medium text-foreground">
-              Personal Information
-            </Title>
+            <Title className="font-medium text-foreground">{t_settings("personal_informations")}</Title>
           </div>
-          <div className="p-7">
+          <div className="px-7 py-4">
+            {error != "" ? (
+              <Alert color="danger" message={error} />
+            ) : null}
+            {success != "" ? (
+              <Alert color="success" message={success} />
+            ) : null}
+            <form
+              action="#" className="space-y-10 my-4"
+              onSubmit={handleSubmit(handleFormSubmit)}
+            >
+              <div className="flex gap-4">
+                <Input
+                  autoFocus
+                  endContent={
+                    <UserIcon fill="currentColor" size={18} />
+                  }
+                  label={t("lastname")}
+                  labelPlacement="outside"
+                  type="text"
+                  placeholder={t("lastname_placeholder")}
+                  variant="bordered"
+                  defaultValue={user.lastname? user.lastname: ""}
+                  {...register("lastname")}
+                  isInvalid={errors.lastname ? true: false}
+                  errorMessage={errors.lastname ? errors.lastname?.message: null}
+                />
+                <Input
+                  endContent={
+                    <UserIcon fill="currentColor" size={18} />
+                  }
+                  label={t("firstname")}
+                  labelPlacement="outside"
+                  type="text"
+                  placeholder={t("firstname_placeholder")}
+                  variant="bordered"
+                  defaultValue={user.firstname? user.firstname: ""}
+                  {...register("firstname")}
+                  isInvalid={errors.firstname ? true: false}
+                  errorMessage={errors.firstname ? errors.firstname?.message: null}
+                />
+              </div>
+              <Input
+                isDisabled
+                endContent={
+                  <EnvelopIcon fill="currentColor" size={18} />
+                }
+                label={t("email")}
+                labelPlacement="outside"
+                type="email"
+                placeholder={t("email_placeholder")}
+                defaultValue={user.email? user.email: ""}
+                variant="bordered"
+                {...register("email")}
+                isInvalid={errors.email ? true: false}
+                errorMessage={errors.email ? errors.email?.message: null}
+              />
+              <Input
+                endContent={
+                  <TelephoneIcon fill="currentColor" size={18} />
+                }
+                label={t("phonenumber")}
+                labelPlacement="outside"
+                type="text"
+                variant="bordered"
+                placeholder={t("phonenumber_placeholder")}
+                defaultValue={user.phonenumber? user.phonenumber: ""}
+                {...register("phonenumber")}
+                isInvalid={errors.phonenumber ? true: false}
+                errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
+              />
+
+              <div className="w-full -mt-12">
+                <Button 
+                  type="submit"
+                  color="primary"
+                  isLoading={loading}
+                  className="w-full"
+                >
+                  {t("save")}
+                </Button>
+              </div>
+            </form>
+          </div>
+
+          {/* <div className="p-7">
             <form action="#">
               <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                 <div className="w-full sm:w-1/2">
@@ -134,37 +299,37 @@ const Profile = () => {
                 </button>
               </div>
             </form>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="col-span-5 xl:col-span-2">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
-            <Title className="font-medium text-foreground">
-              Your Photo
-            </Title>
+            <Title className="font-medium text-foreground">{t_settings("photo")}</Title>
           </div>
           <div className="p-7">
             <form action="#">
               <div className="mb-4 flex items-center gap-3">
                 <div className="h-14 w-14 rounded-full">
-                  <Image
-                    src={"/images/user/user-03.png"}
-                    width={55}
-                    height={55}
-                    alt="User"
+                  <Avatar
+                    as="button"
+                    className="transition-transform"
+                    color="default"
+                    // name={user? user.lastname : ""}
+                    size="lg"
+                    src={user? user.image: ""}
                   />
                 </div>
                 <div>
-                  <span className="mb-1.5 text-foreground">
-                    Edit your photo
+                  <span className="mb-1.5 text-foreground capitalize">
+                    {t_settings("edit_photo")}
                   </span>
-                  <span className="flex gap-2.5">
-                    <button className="text-sm hover:text-primary">
-                      Delete
+                  <span className="flex text-sm capitalize gap-2.5">
+                    <button className="hover:text-danger hover:font-medium">
+                      {t_settings("delete")}
                     </button>
-                    <button className="text-sm hover:text-primary">
-                      Update
+                    <button className="hover:text-success hover:font-medium">
+                      {t_settings("update")}
                     </button>
                   </span>
                 </div>
@@ -172,7 +337,7 @@ const Profile = () => {
       
               <div
                 id="FileUpload"
-                className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-gray px-4 py-4 dark:bg-meta-4 sm:py-7.5"
+                className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-transparent dark:bg-content2 px-4 py-4 sm:py-7.5"
               >
                 <input
                   type="file"
@@ -191,27 +356,24 @@ const Profile = () => {
                   <p>(max, 800 X 800px)</p>
                 </div>
               </div>
-      
-              <div className="flex justify-end gap-4.5">
-                <button
-                  className="flex justify-center rounded border border-divider px-6 py-2 font-medium text-black hover:shadow-1 dark:text-white"
+
+              <div className="w-full">
+                <Button 
                   type="submit"
+                  color="primary"
+                  isLoading={loading}
+                  className="w-full"
                 >
-                  Cancel
-                </button>
-                <button
-                  className="flex justify-center rounded bg-primary px-6 py-2 font-medium text-gray hover:bg-opacity-90"
-                  type="submit"
-                >
-                  Save
-                </button>
+                  {t("save")}
+                </Button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
+    )}
+    </>
   );
 };
 
-export default Profile;

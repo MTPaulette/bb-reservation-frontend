@@ -26,7 +26,7 @@ export async function getClients() {
       "Authorization": `Bearer ${token}`,
     }
   })
-  return response.json();
+  return response;//.json();
 }
 
 export async function getClientById(id: number) {
@@ -39,7 +39,7 @@ export async function getClientById(id: number) {
       "Authorization": `Bearer ${token}`,
     }
   })
-  return response.json();
+  return response;//.json();
 }
 
 export async function updateClient(data: UserFormType, id: number) {

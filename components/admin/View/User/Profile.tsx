@@ -3,49 +3,37 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { CameraIcon } from "@/components/Icons";
-import { getStaffById } from '@/lib/action/staff';
-import { notFound } from 'next/navigation';
+import { CameraIcon } from "@/components/Icons"
 import { useTranslations } from 'next-intl';
-import { useState, useEffect } from "react";
-import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize, getUsername } from "@/lib/utils";
 import CardDataStats from "@/components/admin/CardDataStats";
+
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
+import Modal from "@/components/Modal";
+import EditClient from "@/components/admin/FormElements/Client/Edit";
+import DeleteClient from "@/components/admin/FormElements/Client/Delete";
+import SuspendClient from '@/components/admin/FormElements/Client/Suspend';
+import { CommonSkeleton } from "@/components/Skeletons";
 
-export default function ViewStaff({id}: {id: string}) {
+export default function ViewProfile() {
   const { data: session } = useSession();
-  const authUserId = session?.user?.user.id;
+  const user = session?.user?.user;
+  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
+  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const t = useTranslations("Profile");
-
-  const [user, setUser] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getStaffById(Number(id))
-      .then(response => {
-        setUser(response[0]);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, []);
-
-
-  if (!user) {
-    notFound();
-  }
+  const t_table = useTranslations("Table");
 
   return (
     <>
-    {loading ? (
+    {!user ? (
       <CommonSkeleton />
     ) : (
     <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default">
       <div className="relative z-2 h-35 md:h-65">
         <Image
+          priority
           src={"/images/cover/cover-01.png"}
           alt="profile cover"
           className="h-full w-full rounded-tl-sm rounded-tr-sm object-cover object-center"
@@ -56,7 +44,7 @@ export default function ViewStaff({id}: {id: string}) {
             height: "auto",
           }}
         />
-        <div className={`${user.id == authUserId? 'absolute': 'hidden'} bottom-1 right-1 z-1 xsm:bottom-4 xsm:right-4`}>
+        <div className={`hidden bottom-1 right-1 z-1 xsm:bottom-4 xsm:right-4`}>
           <label
             htmlFor="cover"
             className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-2 py-1 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
@@ -75,7 +63,7 @@ export default function ViewStaff({id}: {id: string}) {
         </div>
       </div>
       <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
-        <div className={`relative z-3 mx-auto -mt-22 h-30 w-full max-w-30 sm:h-44 sm:max-w-44 sm:p-3 rounded-full p-1 backdrop-blur bg-opacity-20 dark:bg-opacity-70 ${user.status == 'active'? 'bg-success': 'bg-danger/20'}`}>
+        <div className={`relative z-3 mx-auto flex justify-center items-center -mt-22 h-32 w-full max-w-30 sm:h-44 sm:max-w-44 sm:p-3 rounded-full p-1 backdrop-blur bg-opacity-40 dark:bg-opacity-70 ${user.status == 'active'? 'bg-success': 'bg-danger'}`}>
         {/* <div className="relative z-3 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full p-1 bg-white/20 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3"> */}
           <div className="relative drop-shadow-2 h-30 w-30 sm:h-40 sm:w-40">
             <Image
@@ -86,9 +74,10 @@ export default function ViewStaff({id}: {id: string}) {
               className="rounded-full h-full w-full"
               alt="profile"
             />
+
             <label
               htmlFor="profile"
-              className={`${user.id == authUserId? 'absolute': 'hidden'} bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2`}
+              className={`hidden bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2`}
             >
               <CameraIcon fill="white" size={14} />
               <input
@@ -101,9 +90,13 @@ export default function ViewStaff({id}: {id: string}) {
           </div>
         </div>
         <div className="mt-4">
-          <Title className="mb-1.5 text-2xl font-semibold text-foreground">
-            {getUsername(user.lastname, user.firstname)}
-          </Title>
+          
+          <div className="relative flex justify-center items-center gap-1">
+            <Title className="text-2xl font-semibold text-foreground">
+              {getUsername(user.lastname, user.firstname)}
+            </Title>
+          </div>
+
           <p className="font-medium capitalize"> {user.role} {user.agency? ' | '+ user.agency: ""}</p>
           <p className="mt-2 font-light"> {user.email} {user.phonenumber? ' | '+ user.phonenumber: ""}</p>
           <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-3 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
@@ -157,9 +150,31 @@ export default function ViewStaff({id}: {id: string}) {
           </div>
         </div>
       </div>
+
+
+      <Modal
+        open={showEditModal} close={() => setShowEditModal(false)}
+        title={`${t_table("editClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+      >
+        <EditClient user={user} />
+      </Modal>
+    
+      <Modal
+        open={showSuspendModal} close={() => setShowSuspendModal(false)}
+        title={`${t_table("suspendClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+      >
+        <SuspendClient id={user?.id} status={user?.status} />
+      </Modal>
+      
+      <Modal
+        open={showDeleteModal} close={() => setShowDeleteModal(false)}
+        title={`${t_table("deleteClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+      >
+        <DeleteClient id={user?.id} />
+      </Modal>
+
     </div>
     )}
     </>
   )
 }
-

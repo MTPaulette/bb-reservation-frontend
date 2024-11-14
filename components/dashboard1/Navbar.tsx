@@ -59,15 +59,9 @@ export default function NavBarDashboardComponent() {
               color="warning"
               name={user? user.name: ""}
               size="sm"
-              src="/images/brain-orange-400.png"
+              src={user? user.image: ""}
+              // src="/images/brain-orange-400.png"
             />
-            {/* <div>
-              <div className="block md:hidden">
-              </div>
-              <div className="hidden md:block">
-              <User name={user? user.name: ""} role="admin" src="/images/brain-orange-400.png" />
-              </div>
-            </div> */}
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem>

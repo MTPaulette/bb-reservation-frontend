@@ -25,7 +25,7 @@ export async function getAgencies() {
       "Authorization": `Bearer ${token}`,
     }
   })
-  return response;//.json();
+  return response.json();
 }
 
 export async function getAgencyById(id: number) {

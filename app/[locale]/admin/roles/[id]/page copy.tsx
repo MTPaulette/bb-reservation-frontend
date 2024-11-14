@@ -88,9 +88,9 @@ export default function Page({ params }: { params: { id: string } }) {
       <CommonSkeleton />
     ) : (
     <div>
-      <Breadcrumb pageName={`Role ${role.name}`} />
+      <Breadcrumb pageName="role" />
       <div>
-        <Title className="text-xl font-medium mb-2">Permissions</Title>
+        <Title className="text-xl font-medium my-4">Permissions {`Role ${role.name? role.name: ''}`} </Title>
         <div className="bg-green-100 my-4">
           {JSON.stringify(selectedPermissions)}
         </div>

@@ -10,7 +10,8 @@ export default function AuthLayout({
 }>) {
   return (
     <BaseLayout locale={routing.defaultLocale}>
-      <main className="flex items-center justify-center h-screen bg-gradient-to-t to-background from-success/25 dark:from-success/20">
+      {/* <main className="flex items-center justify-center h-screen bg-gradient-to-t to-background from-success/25 via-foreground/50 dark:from-success/20"> */}
+      <main className="flex items-center justify-center h-screen bg-gradient-to-t to-background from-success/60 via-success/10 dark:from-success/20">
       <div className="h-full max-w-[400px] flex flex-col items-center justify-center">
         <div className="relative mx-auto flex flex-col space-y-2.5 pt-4 md:-mt-32">
           <div className="flex h-20 w-full items-end rounded-lg p-3 md:h-36">

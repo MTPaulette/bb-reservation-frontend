@@ -4,36 +4,26 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Chip, User, Pagination, Selection, ChipProps, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor
 } from "@nextui-org/react";
 
-import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { UserType } from "@/lib/definitions";
+import { SearchIcon, ChevronDownIcon, TrashIcon } from "@/components/Icons";
+import { LogType } from "@/lib/definitions";
 import { capitalize, getUsername } from "@/lib/utils";
-import { columnsClient as columns, statusUser as statusOptions } from "@/lib/data";
+import { columnsLog as columns } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
-import Link from "next/link";
-
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewClient from "../FormElements/Client/New";
-import EditClient from "../FormElements/Client/Edit";
-import DeleteClient from "../FormElements/Client/Delete";
-import { getClients } from '@/lib/action/clients';
-import SuspendClient from '../FormElements/Client/Suspend';
+import ClearLog from "../FormElements/Log/Clear";
+import { getLogs } from '@/lib/action/logs';
 import { signOut } from 'next-auth/react';
 
+// const INITIAL_VISIBLE_COLUMNS = ["description", "url", "agent", "author", "created_at"];
+const INITIAL_VISIBLE_COLUMNS = ["description", "agent", "author", "created_at"];
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  suspended: "danger"
-};
-
-const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "role", "phonenumber", "status", "actions"];
-
-export default function UsersTable() {
-  const [users, setUsers] = useState([]);
+export default function LogsTable() {
+  const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
@@ -43,11 +33,11 @@ export default function UsersTable() {
 
   useEffect(() => {
     setError("");
-    getClients()
+    getLogs()
       .then(async (res) => {
         setLoading(false);
         if(res?.ok){
-          setUsers(await res.json());
+          setLogs(await res.json());
         }else {
           const status = res.status;
           switch (status) {
@@ -77,8 +67,7 @@ export default function UsersTable() {
       });
   }, []);
 
-
-  type User = typeof users[0];
+  type Log = typeof logs[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
@@ -86,20 +75,17 @@ export default function UsersTable() {
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "email",
+    column: "created_at",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
-  const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = React.useState<UserType>();
+  const pages = Math.ceil(logs.length / rowsPerPage);
+  const [showClearModal, setShowClearModal] = React.useState<boolean>(false);
+  const [selectedLog, setSelectedLog] = React.useState<LogType>();
 
-  // const changeSelectedUser
+  // const changeSelectedLog
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -110,21 +96,16 @@ export default function UsersTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredLogs = [...logs];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.lastname.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+      filteredLogs = filteredLogs.filter((log) =>
+        log.description.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredLogs;
+  }, [logs, filterValue,]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -134,96 +115,35 @@ export default function UsersTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: Log, b: Log) => {
+      const first = a[sortDescriptor.column as keyof Log] as number;
+      const second = b[sortDescriptor.column as keyof Log] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = React.useCallback((log: Log, columnKey: React.Key) => {
+    const cellValue = log[columnKey as keyof Log];
 
     switch (columnKey) {
-      case "lastname":
+      case "description":
         return (
-          <User
-            avatarProps={{radius: "full", size: "sm", src: user.image}}
-            classNames={{
-              description: "text-foreground/60 font-medium",
-            }}
-            description={user.firstname}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            {/* <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p> */}
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="dot"
-          >
+          <p className="font-medium text-foreground">
             {cellValue}
-          </Chip>
+          </p>
         );
-      case "actions":
+      case "author":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon fill="none" size={24} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>
-                  <Link href={`/${locale}/admin/clients/${user.id}`}>
-                    {t_table("view")}
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setShowEditModal(true);
-                  }}
-                >{t_table("edit")}</DropdownItem>
-                <DropdownItem
-                  isReadOnly
-                  color="warning"
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setShowSuspendModal(true);
-                  }}
-                >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
-                <DropdownItem
-                  color="danger"
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setShowDeleteModal(true);
-                  }}
-                >{t_table("delete")}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+          <p className="font-medium text-small">{log? getUsername(log.lastname, log.firstname): ""}</p>
+          // <p className="font-medium text-small">{log.user_id}</p>
         );
       default:
         return cellValue;
     }
   }, []);
   
-
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
@@ -270,31 +190,6 @@ export default function UsersTable() {
                       size="sm"
                       variant="flat"
                     >
-                      {t_table("status")}
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu
-                    disallowEmptySelection
-                    aria-label="Table Columns"
-                    closeOnSelect={false}
-                    selectedKeys={statusFilter}
-                    selectionMode="multiple"
-                    onSelectionChange={setStatusFilter}
-                  >
-                    {statusOptions.map((status) => (
-                      <DropdownItem key={status.uid}>
-                        {capitalize(locale === "en" ? status.name_en: status.name_fr)}
-                      </DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                </Dropdown>
-                <Dropdown>
-                  <DropdownTrigger className="flex z-1">
-                    <Button
-                      endContent={<ChevronDownIcon fill="currentColor" size={10} />}
-                      size="sm"
-                      variant="flat"
-                    >
                       {t_table("colunms")}
                     </Button>
                   </DropdownTrigger>
@@ -315,16 +210,16 @@ export default function UsersTable() {
                 </Dropdown>
                 <Button
                   // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
+                  endContent={<TrashIcon fill="currentColor" size={14} />}
+                  size="sm" variant="solid" color="danger"
+                  onClick={() => setShowClearModal(true)}
                 >
-                  {t_table("new")}
+                  {t_table("clear_log")}
                 </Button>
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {users.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {logs.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -345,7 +240,7 @@ export default function UsersTable() {
       </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, ]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, logs.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -376,10 +271,11 @@ export default function UsersTable() {
       wrapper: ["max-h-[382px]", "max-w-3xl"],
       // table: ["rounded-sm border border-divider bg-background px-5 pb-2.5 pt-6 shadow-default sm:px-7.5 xl:pb-1"], lg:h-[calc(100vh_-_5.625rem)]
       // table: ["bg-green-300"],
-      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
+      th: ["bg-transparent", "border-b", "border-divider"],
       td: [
         // changing the rows border radius
         // first
+        "font-light", "text-sm",
         "group-data-[first=true]:first:before:rounded-none",
         "group-data-[first=true]:last:before:rounded-none",
         // middle
@@ -437,33 +333,12 @@ export default function UsersTable() {
           )}
         </TableBody>
       </Table>
-
-      <Modal
-        open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newClient")}
-      >
-        <NewClient />
-      </Modal>
-
-      <Modal
-        open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
-      >
-        <EditClient user={selectedUser} />
-      </Modal>
-    
-      <Modal
-        open={showSuspendModal} close={() => setShowSuspendModal(false)}
-        title={`${t_table("suspendClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
-      >
-        <SuspendClient id={selectedUser?.id} status={selectedUser?.status} />
-      </Modal>
       
       <Modal
-        open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
+        open={showClearModal} close={() => setShowClearModal(false)}
+        title={`${t_table("clear_log")}`}
       >
-        <DeleteClient id={selectedUser?.id} />
+        <ClearLog id={selectedLog?.id} />
       </Modal>
       </div>
       )}

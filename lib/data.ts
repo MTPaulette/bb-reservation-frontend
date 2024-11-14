@@ -69,6 +69,16 @@ export const columnsAgency = [
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 
+export const columnsLog = [
+  {name_en: "DESCRIPTION", name_fr: "DESCRIPTION", uid: "description", sortable: true},
+  {name_en: "URL", name_fr: "URL", uid: "url"},
+  {name_en: "METHOD", name_fr: "METHODE", uid: "method"},
+  {name_en: "IP", name_fr: "IP", uid: "ip"},
+  {name_en: "AGENT", name_fr: "AGENT", uid: "agent"},
+  {name_en: "AUTHOR", name_fr: "AUTEUR", uid: "author"},
+  {name_en: "DATE", name_fr: "DATE", uid: "created_at"},
+];
+
 
 export const columnsRole = [
   {name_en: "ROLE", name_fr: "ROLE", uid: "role", sortable: true},

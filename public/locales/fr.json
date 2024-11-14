@@ -19,7 +19,9 @@
     "acces_denied": "accès interdit",
     "user_not_found": "Utilisateur non trouvé",
     "role_not_found": "Role non trouvé",
-    "agency_not_found": "Agence non trouvé"
+    "server_not_found": "Ressource non trouvé dans le serveur",
+    "agency_not_found": "Agence non trouvé",
+    "unauthenticated": "vous n'etes pas connecté"
   },
   "Input": {
     "register": "S'inscrire",
@@ -63,7 +65,8 @@
     "delete_account_success_msg": "Compte supprimé avec succès.",
     "delete_agency_success_msg": "Agence supprimé avec succès.",
     "update_role_success_msg": "Role mis à jour avec succès.",
-    
+    "delete_log_success_msg": "Logs supprimés avec succès.",
+
     "newClient": "Nouveau client",
     "editClient": "Editer client",
     "deleteClient": "Supprimer client",
@@ -127,6 +130,7 @@
     "total": "Total",
     "row_per_page": "Ligne par page:",
     "of": "de",
+    "clear_log": "Effacer les logs",
     "selected": "selectionné(s)",
     "noItems": "Aucun élément trouvé",
     
@@ -151,5 +155,33 @@
     "given_gift": "cadeau(x) offert(s)",
     "receiven_gift": "cadeau(x) recu(s)",
     "about": "A propos"
+  },
+  "Breadcrumb": {
+    "dashboard": "dashboard",
+    "client": "client",
+    "clients": "clients",
+    "agencies": "agences",
+    "agency": "agence",
+    "login": "connecter",
+    "logout": "déconnecter",
+    "calendar": "calendrier",
+    "logs": "logs",
+    "roles": "roles",
+    "role": "role",
+    "settings": "paramètre",
+    "staff": "staff",
+    "profile": "mon profil"
+  },
+  "Settings": {
+    "general": "général",
+    "profile": "mon profil",
+    "email": "email",
+    "finance": "finace",
+    "pdf": "pdf",
+    "photo": "votre photo",
+    "edit_photo": "Editer sa photo",
+    "delete": "supprimer",
+    "update": "mettre à jour",
+    "personal_informations": "Informations personnelles"
   }
 }

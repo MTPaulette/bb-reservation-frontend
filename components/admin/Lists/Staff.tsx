@@ -22,6 +22,8 @@ import EditStaff from "../FormElements/Staff/Edit";
 import DeleteStaff from "../FormElements/Staff/Delete";
 import { getStaff } from '@/lib/action/staff';
 import SuspendStaff from '../FormElements/Staff/Suspend';
+import { signOut } from 'next-auth/react';
+import { notFound } from 'next/navigation';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -34,14 +36,44 @@ const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "role", "phonenumber", "ag
 export default function UsersTable() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>("");
+  const locale = useLocale();
+  const t_error = useTranslations("InputError");
+  const t_alert = useTranslations("Alert");
+  const t_table = useTranslations("Table");
 
   useEffect(() => {
+    setError("");
     getStaff()
-      .then(response => {
-        setUsers(response);
+      .then(async (res) => {
         setLoading(false);
+        if(res?.ok){
+          setUsers(await res.json());
+        }else {
+          const status = res.status;
+          switch (status) {
+            case 401:
+              setError(t_error("unauthenticated"));
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+              break;
+            case 403:
+              setError(t_error("acces_denied"));
+              break;
+            case 404:
+              setError(t_error("server_not_found"));
+              break;
+            case 500:
+              setError(t_error("something_wrong"));
+              break;
+            default:
+              break;
+          }
+        }
       })
       .catch(error => {
+        setError(t_error("something_wrong"));
         console.error(error);
       });
   }, []);
@@ -62,14 +94,11 @@ export default function UsersTable() {
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(users.length / rowsPerPage);
-  const t_alert = useTranslations("Alert");
-  const t_table = useTranslations("Table");
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedUser, setSelectedUser] = React.useState<UserType>();
-  const locale = useLocale();
 
   // const changeSelectedUser
 
@@ -400,7 +429,7 @@ export default function UsersTable() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={t_table("noItems")} items={sortedItems}>
+        <TableBody emptyContent={error? <Alert color="danger" message={error} /> : t_table("noItems")} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

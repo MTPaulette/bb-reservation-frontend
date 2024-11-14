@@ -25,7 +25,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <>
       <div className="mx-auto max-w-242.5">
-        <Breadcrumb pageName="Profile" />
+        <Breadcrumb pageName="staff" />
         <ViewStaff id={id} />
       </div>
     </>
