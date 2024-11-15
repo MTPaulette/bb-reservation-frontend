@@ -1,5 +1,6 @@
-import NextAuth, { NextAuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+const api_url = process.env.API_URL;
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,7 +11,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const res = await fetch("http://127.0.0.1:8000/api/csrf-cookie", {
+        const res =await fetch(`${api_url}/csrf-cookie`, {
           method: "GET",
         })
 
@@ -52,7 +53,7 @@ export const authOptions: NextAuthOptions = {
           headers,
           body: JSON.stringify(data),
         }
-        const response = await fetch("http://127.0.0.1:8000/api/login", options)
+        const response = await fetch(`${api_url}/login`, options)
         
         // console.log(response)
         if (response.status == 201) {
@@ -74,7 +75,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       console.log(session);
       session.accessToken = token.access_token
-      session.user = token.user
+      session.user = token.user;
       return session
     },
   },

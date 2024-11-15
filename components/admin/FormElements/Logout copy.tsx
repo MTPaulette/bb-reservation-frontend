@@ -5,8 +5,6 @@ import { signOut } from 'next-auth/react';
 import { useState } from "react";
 import { useSession, getCsrfToken } from "next-auth/react";
 import { useTranslations } from 'next-intl';
-import { getCSRFToken } from "@/lib/utils";
-import { logoutUser } from "@/lib/action/authentication";
 
 export default function Logout() {
   const t = useTranslations("Input");
@@ -16,35 +14,38 @@ export default function Logout() {
   const handleLogout = async () => {
     setLoading(true);
     const csrfToken = await getCsrfToken();
-    console.log("**************************** csrftoken");
-    console.log(csrfToken);
-  
-    const CSRFToken = await getCSRFToken();
-    console.log("------------------------CSRFToken ");
-    console.log(CSRFToken);
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/logout", {
+        method: "DELETE",
+        headers: {
+          "Accept": "application/json",
+          "X-XSRF-TOKEN": csrfToken,
+          Authorization: "Bearer "+session?.user.token,
+        },
+        withCredentials: true,
+        withXSRFToken: true,
+      });
 
-    logoutUser()
-    .then(async (res) => {
       setLoading(false);
-      if(res?.ok) {
+
+      if(response.ok) {
         await signOut({
           callbackUrl: "/fr/reservations"
         });
       }
-    })
-    .catch((error) => {
+  
+    } catch (err) {
       setLoading(false);
-      console.log("Logout error: ");
-      console.log(error);
-    })
+      console.log(err);
+    }
   }
 
   return (
     <button onClick={handleLogout}
       className={`
         rounded-sm px-4 py-2 duration-300 ease-in-out
-        flex w-full items-center gap-2.5 text-foreground
-        p-3 font-medium hover:bg-danger/20 hover:text-danger flex-none justify-start 
+        flex w-full items-center justify-center gap-2.5 rounded-mdd text-foreground
+        p-3 font-medium hover:bg-danger/20 hover:text-danger md:flex-none md:justify-start 
         ${loading ? "cursor-progress": ""}`}
     >
       <LogoutIcon fill="currentColor" size={18} />
@@ -58,5 +59,4 @@ export default function Logout() {
  @click="logout()" :class="logout_processing?'cursor-progress':''" 
  class="flex items-center w-full px-4 py-2 hover:text-danger">
   Logout
-</button> 
-        // p-3 font-medium hover:bg-danger/20 hover:text-danger md:flex-none md:justify-start */}
+</button> */}

@@ -75,7 +75,7 @@ export default function LoginPage() {
 
   return (
     <>
-    <div className="w-[270px]">
+    <div className="w-[270px] md:w-[350px]">
     {error != "" ? (
       <Alert color="danger" message={error} />
     ) : null}

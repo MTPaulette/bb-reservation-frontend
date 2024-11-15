@@ -1,16 +1,12 @@
-import { getToken } from "../utils";
+import { headerOptions, getCSRFToken, getToken } from "../utils";
 import { ConfirmPasswordType, AgencyFormType, SuspensionFormType, HorairesType } from "../definitions";
 
-const api_url = 'http://127.0.0.1:8000/api';
-const token = getToken();
+const api_url = process.env.API_URL;
 
 export async function createAgency(data: AgencyFormType) {
   const response = await fetch(`${api_url}/agency/store`, { 
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
+    headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify(data),
   })
   return response;
@@ -19,23 +15,15 @@ export async function createAgency(data: AgencyFormType) {
 export async function getAgencies() {
   const response = await fetch(`${api_url}/agencies`, {
     method: "GET",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    }
+    headers: headerOptions(await getCSRFToken(), await getToken())
   })
-  return response.json();
+  return response;//.json();
 }
 
 export async function getAgencyById(id: number) {
   const response = await fetch(`${api_url}/agency/${id}`, {
     method: "GET",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    }
+    headers: headerOptions(await getCSRFToken(), await getToken())
   })
   return response.json();
 }
@@ -43,11 +31,7 @@ export async function getAgencyById(id: number) {
 export async function updateAgency(data: AgencyFormType, id: number, horaires: HorairesType) {
   const response = await fetch(`${api_url}/agency/${id}/update`, {
     method: "PUT",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
+    headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify({
       "name": data.name,
       "email": data.email,
@@ -63,10 +47,7 @@ export async function suspendAgency(data: SuspensionFormType, id: number, status
   console.log(data);
   const response = await fetch(`${api_url}/agency/${id}/suspend`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
+    headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify({
       "password": data.password,
       "cancel_suspension": status == 'active'? false : true,
@@ -80,12 +61,9 @@ export async function suspendAgency(data: SuspensionFormType, id: number, status
 
 export async function deleteAgency(data: ConfirmPasswordType, id: number) {
   console.log(id);
-  const response = await fetch(`${api_url}/agency/${id}/delete`, { 
+  const response = await fetch(`${api_url}/agency/${id}/delete`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    },
+    headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify(data),
   })
   return response;

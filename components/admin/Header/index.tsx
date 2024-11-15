@@ -21,8 +21,6 @@ const Header = (props: {
 
   const { data: session } = useSession();
   const user = session?.user?.user;
-  const token = session?.user?.token;
-  console.log("token "+token);
   const t = useTranslations("Header");
   const locale = useLocale();
 

@@ -11,20 +11,16 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
+import { AuthUserType } from "@/lib/definitions";
+import { createAccount } from "@/lib/action/authentication";
 
-type TSignInForm = {
-  lastname: string,
-  firstname: string,
-  email: string,
-  password: string
-}
 
 export default function RegisterPage() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
   const locale = useLocale();
 
-  const schema: ZodType<TSignInForm> = z
+  const schema: ZodType<AuthUserType> = z
     .object({
       lastname: z.string().min(1, { message: t_error("lastname") }),
       firstname: z.string().min(1, { message: t_error("firstname") }),
@@ -50,23 +46,17 @@ export default function RegisterPage() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TSignInForm>({
+  } = useForm<AuthUserType>({
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: TSignInForm) => {
+  const handleFormSubmit = async (data: AuthUserType) => {
     setError("")
     setLoading(true);
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/register", {
-        method: "POST",
-        headers: {
-          //"Accept": "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
-      })
-      if(response.ok){
+    createAccount(data)
+    .then(async (res) => {
+      setLoading(false);
+      if(res?.ok) {
         await signIn("credentials", {
           email: data.email,
           password: data.password,
@@ -89,23 +79,21 @@ export default function RegisterPage() {
           console.log("login error: ");
           console.log(err);
         })
-
-
       } else {
-        const res = await response.json()
-        setError(res.errors.email[0]);
+        const response = await res.json()
+        setError(response.errors.email[0]);
       }
-      setLoading(false);
-    } catch (err) {
+    })
+    .catch((error) => {
       setLoading(false);
       setError(t_error("invalid_credentials"));
-      console.log(err);
-    }
+      console.log(error);
+    })
   }
 
   return (
     <>
-    <div className="w-[270px]">
+    <div className="w-[270px] md:w-[350px]">
     {error != "" ? (
       <Alert color="danger" message={error} />
     ) : null}
@@ -190,4 +178,5 @@ export default function RegisterPage() {
     </>
   )
 }
+
 

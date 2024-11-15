@@ -1,3 +1,14 @@
+import { getSession, getCsrfToken } from "next-auth/react";
+
+export const getToken = async () => {
+  const session = await getSession();
+  return session?.user.token;
+};
+
+export const getCSRFToken = async () => {
+  return await getCsrfToken();
+};
+
 export const capitalize = (str: string) => {
   return str? str.charAt(0).toUpperCase() + str.slice(1): "";
 }
@@ -13,12 +24,13 @@ export const getUsername = (lastname: string, firstname: string) => {
   return capitalize(firstname)+" "+lastname.toUpperCase();
 }
 
-export const getToken = () => {
-  // const token = sessionStorage.getItem("user");
-  //const token = "2|GkscTcM21RErmT1mCtPDAAlene1wEpaRBwSGjrAM7c0220c8";
-  const token = "4|ietyUgzpOqzbVTFk8raNf1ozhNnnYS40fmg919wkef2c0f9b";
-
-  //client
-  //const token = "2|vVhhYcKaZCOln2CLhuWVYxVRMxzscAtK2E4L93Hv33851da1";
-  return token; 
-};
+export const headerOptions = (csrftoken: string|undefined, token: string|undefined) => {
+  return {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "X-XSRF-TOKEN": `${csrftoken}`,
+    "X-CSRF-TOKEN": `${csrftoken}`,
+    "X-Requested-With": "XMLHttpRequest",
+    "Authorization": `Bearer ${token}`,
+  }
+}
