@@ -32,6 +32,10 @@
       max-width: 100%;
       display: block;
     }
+
+    label {
+      z-index: 1 !important;
+    }
 }
 
 @layer components {

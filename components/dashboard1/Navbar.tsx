@@ -19,7 +19,7 @@ import Title from "@/components/Title";
 
 export default function NavBarDashboardComponent() {
   const { data: session } = useSession();
-  const user = session?.user?.user;
+  const user = session?.user;
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 

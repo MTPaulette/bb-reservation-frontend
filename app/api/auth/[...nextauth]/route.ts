@@ -68,14 +68,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, user }) {
       if (user) {
         token.user = user
-        token.accessToken = user.access_token
+        token.accessToken = user.token
       }
       return token
     },
     async session({ session, token }) {
-      console.log(session);
-      session.accessToken = token.access_token
-      session.user = token.user;
+      console.log("=========================== dans route.ts");
+      console.log(token.user.token);
+      // session.accessToken = token.access_token
+      session.accessToken = token.user.token
+      session.user = token.user.user;
       return session
     },
   },

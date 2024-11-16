@@ -18,7 +18,7 @@ import { CommonSkeleton } from "@/components/Skeletons";
 
 export default function ViewProfile() {
   const { data: session } = useSession();
-  const user = session?.user?.user;
+  const user = session?.user;
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);

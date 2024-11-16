@@ -24,12 +24,39 @@ export async function suspendClient(data: ConfirmPasswordType, id: number, statu
   return response;
 }
 
-
 export async function deleteClient(data: ConfirmPasswordType, id: number) {
   const response = await fetch(`${api_url}/client/${id}/delete`, { 
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify(data),
+  })
+  return response;
+}
+
+export async function uploadImage(data: FormData) {
+  const response = await fetch(`${api_url}/profile/image/store`, { 
+    method: "POST",
+    headers: {
+      // "Content-Type": "application/json",
+      // Content-Type: image/png
+      "Authorization": `Bearer ${await getToken()}`,
+      "X-XSRF-TOKEN": `${await getCSRFToken()}`,
+      "X-CSRF-TOKEN": `${await getCSRFToken()}`,
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: data,
+  })
+  return response;
+}
+
+export async function changePassword(current_password: string, password: string) {
+  const response = await fetch(`${api_url}/password`, { 
+    method: "PUT",
+    headers: headerOptions(await getCSRFToken(), await getToken()),
+    body: JSON.stringify({
+      current_password: current_password,
+      password: password
+    }),
   })
   return response;
 }

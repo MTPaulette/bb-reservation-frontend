@@ -26,11 +26,12 @@
   "Input": {
     "register": "S'inscrire",
     "have_account_link": "Vous avez déja un compte ? Se connecter",
-    "name": "nom",
-    "lastname": "nom",
-    "firstname": "prénom",
+    "name": "Nom",
+    "lastname": "Nom",
+    "firstname": "Prénom",
     "email": "Email",
     "password": "Mot de passe",
+    "current_password": "Mot de passe actuel",
     "login": "Se connecter",
     "role": "Role",
     "agency": "Agence",
@@ -46,6 +47,7 @@
     "firstname_placeholder": "Entrer le prénom",
     "email_placeholder": "Entrer le email",
     "password_placeholder": "Entrer le mot de passe",
+    "current_password_placeholder": "Entrer le mot de passe actuel",
     "address_placeholder": "Entrer l'adresse",
     "phonenumber_placeholder": "Entrer le  numéro de téléphone",
     "role_placeholder": "Selectionner un role",
@@ -182,6 +184,14 @@
     "edit_photo": "Editer sa photo",
     "delete": "supprimer",
     "update": "mettre à jour",
-    "personal_informations": "Informations personnelles"
+    "drap_drop": "Cliquer pour charger ou glisser et deposer",
+    "personal_informations": "Informations personnelles",
+    "security_informations": "Informations de sécurité"
+  },
+  "Requirements": {
+    "pwd_label": "Assurez-vous que ces exigences soient respectées:",
+    "pwd_1": "Au moins 8 caractères (et jusqu'à 100 caractères)",
+    "pwd_2": "Au moins un caractère miniscule",
+    "pwd_3": "Inclusion d'au moins un caractère spécial, ex., ! @ # ?"
   }
 }

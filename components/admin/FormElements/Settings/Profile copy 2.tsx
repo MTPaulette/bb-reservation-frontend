@@ -63,7 +63,7 @@ export default function Profile () {
     resolver: zodResolver(schema),
   })
 
-  console.log(session? session.accessToken: '')
+  // const [value, setValue] = React.useState("junior2nextui.org");
 
   const validatePassword = (password: string) => password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/);
 

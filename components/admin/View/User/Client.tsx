@@ -26,7 +26,7 @@ import Alert from "@/components/Alert";
 
 export default function ViewClient({id}: {id: string}) {
   const { data: session } = useSession();
-  const authUserId = session?.user?.user.id;
+  const authUserId = session?.user.id;
   const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);

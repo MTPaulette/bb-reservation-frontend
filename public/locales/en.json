@@ -31,6 +31,7 @@
     "firstname": "Firstname",
     "email": "Email",
     "password": "Password",
+    "current_password": "Current password",
     "login": "Log in",
     "phonenumber": "Phonenumber",
     "role": "Role",
@@ -46,6 +47,7 @@
     "firstname_placeholder": "Enter firstname",
     "email_placeholder": "Enter email",
     "password_placeholder": "Enter password",
+    "current_password_placeholder": "Enter current password",
     "address_placeholder": "Enter address",
     "phonenumber_placeholder": "Enter phonenumber",
     "role_placeholder": "Enter role",
@@ -188,6 +190,14 @@
     "edit_photo": "edit your photo",
     "delete": "delete",
     "update": "update",
-    "personal_informations": "Personal Informations"
+    "drap_drop": "Click to upload or drag and drop",
+    "personal_informations": "Personal Informations",
+    "security_informations": "Confidential informations"
+  },
+  "Requirements": {
+    "pwd_label": "Ensure that these requirements are met:",
+    "pwd_1": "At least 8 characters (and up to 100 characters)",
+    "pwd_2": "At least one lowercase character",
+    "pwd_3": "Inclusion of at least one special character, e.g., ! @ # ?"
   }
 }

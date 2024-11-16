@@ -19,7 +19,7 @@ import { updateClient } from "@/lib/action/clients";
 
 export default function Profile () {
   const { data: session } = useSession();
-  const user = session?.user?.user;
+  const user = session?.user;
   const t = useTranslations("Input");
   const t_settings = useTranslations("Settings");
   const t_error = useTranslations("InputError");

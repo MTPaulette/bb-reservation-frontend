@@ -3,7 +3,7 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { useTranslations } from 'next-intl';
-import { UploadIcon, EnvelopIcon, EyeIcon, EyeSlashIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
+import { UploadIcon, EnvelopIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import Title from "@/components/Title";
 import { CommonSkeleton } from "@/components/Skeletons";
 import { Avatar, Button, Input } from "@nextui-org/react";
@@ -13,7 +13,7 @@ import { z, ZodType } from "zod";
 import { useState } from "react";
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
-import { updateProfile, uploadImage, changePassword } from "@/lib/action/profile";
+import { updateProfile, uploadImage } from "@/lib/action/profile";
 import { capitalize } from "@/lib/utils";
 
 
@@ -23,28 +23,6 @@ export default function Profile () {
   const t = useTranslations("Input");
   const t_settings = useTranslations("Settings");
   const t_error = useTranslations("InputError");
-  const t_requirements = useTranslations("Requirements");
-
-  const [isVisible, setIsVisible] = React.useState<boolean>(false);
-  const toggleVisibility = () => setIsVisible(!isVisible);
-
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
-  
-  const [loadingImg, setLoadingImg] = useState<boolean>(false);
-  const [errorImg, setErrorImg] = useState<string>("");
-  const [successImg, setSuccessImg] = useState<string>("");
-  
-  const [loadingPwd, setLoadingPwd] = useState<boolean>(false);
-  const [errorPwd, setErrorPwd] = useState<string>("");
-  const [successPwd, setSuccessPwd] = useState<string>("");
-
-  const [password, setPassword] = useState<string>("");
-  const [current_password, setCurrent_password] = useState<string>("");
-
-  const [src, setSrc] = useState();
-  const [image, setImage] = useState<File|null>(null);
 
   const schema: ZodType<UserFormType> = z
     .object({
@@ -54,6 +32,11 @@ export default function Profile () {
       // email: z.string().email({ message: t_error("email") }),
   });
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+  const [image, setImage] = useState<File|null>(null);
+
   const {
     register,
     handleSubmit,
@@ -62,17 +45,6 @@ export default function Profile () {
   } = useForm<UserFormType>({
     resolver: zodResolver(schema),
   })
-
-  console.log(session? session.accessToken: '')
-
-  const validatePassword = (password: string) => password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/);
-
-  const isInvalid = React.useMemo(() => {
-    if (password === "") return false;
-
-    return validatePassword(password) ? false : true;
-  }, [password]);
-
 
   const handleFormSubmit = async (data: UserFormType) => {
     setError("");
@@ -84,7 +56,7 @@ export default function Profile () {
       if(res?.ok) {
         setTimeout(() => {
           setSuccess(t("update_account_success_msg"));
-          // window.location.reload();
+          window.location.reload();
         }, 500);
       } else {
         const status = res.status;
@@ -113,78 +85,36 @@ export default function Profile () {
     })
   }
 
-  const handleChangePassword = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    setErrorPwd("");
-    setSuccessPwd("");
-    setLoadingPwd(true);
-    changePassword(current_password, password)
-    .then(async (res) => {
-      setLoadingPwd(false);
-      if(res?.ok) {
-        setTimeout(() => {
-          setSuccessPwd(t("update_account_success_msg"));
-        }, 500);
-        setSuccessPwd("");
-      } else {
-        const status = res.status;
-        switch (status) {
-          case 404:
-            setErrorPwd(t_error("user_not_found"));
-            break;
-          case 422:
-            const err = await res.json();
-            setErrorPwd(JSON.stringify(err));
-            break;
-          case 403:
-            setErrorPwd(t_error("acces_denied"));
-            break;
-          case 500:
-            setErrorPwd(t_error("something_wrong"));
-            break;
-          default:
-            break;
-        }
-      }
-    })
-    .catch((error) => {
-      setErrorPwd(t_error("something_wrong"));
-      console.error(error);
-    })
-  }
-
   const handleUpload = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('image', image);
-    setErrorImg("");
-    setLoadingImg(true);
+    setError("");
+    setSuccess("");
+    setLoading(true);
     uploadImage(formData)
     .then(async (res) => {
-      setLoadingImg(false);
+      setLoading(false);
       if(res?.ok) {
-        const response = await res.json();
-        setImage(response.src);
-        setSrc(response.src);
-        setSuccessImg(t("update_account_success_msg"));
         setTimeout(() => {
-          setSuccessImg("");
-        }, 1000);
+          setSuccess(t("update_account_success_msg"));
+          window.location.reload();
+        }, 500);
       } else {
         const status = res.status;
         switch (status) {
           case 404:
-            setErrorImg(t_error("user_not_found"));
+            setError(t_error("user_not_found"));
             break;
           case 422:
             const err = await res.json();
-            setErrorImg(JSON.stringify(err.errors));
+            setError(JSON.stringify(err.errors));
             break;
           case 403:
-            setErrorImg(t_error("acces_denied"));
+            setError(t_error("acces_denied"));
             break;
           case 500:
-            setErrorImg(t_error("something_wrong"));
+            setError(t_error("something_wrong"));
             break;
           default:
             break;
@@ -192,7 +122,7 @@ export default function Profile () {
       }
     })
     .catch((error) => {
-      setErrorImg(t_error("something_wrong"));
+      setError(t_error("something_wrong"));
       console.error(error);
     })
   };
@@ -217,7 +147,7 @@ export default function Profile () {
               <Alert color="success" message={success} />
             ) : null}
             <form
-              action="#" className="space-y-10 my-4 z-2"
+              action="#" className="space-y-10 my-4"
               onSubmit={handleSubmit(handleFormSubmit)}
             >
               <div className="flex flex-col sm:flex-row gap-4">
@@ -296,107 +226,30 @@ export default function Profile () {
         </div>
       </div>
 
-      <div className="col-span-5 xl:col-span-3">
-        <div className="rounded-sm border border-divider bg-background shadow-default">
-          <div className="border-b border-divider px-7 py-4">
-            <Title className="font-medium text-foreground">{t_settings("security_informations")}</Title>
-          </div>
-          <div className="px-7 py-4">
-            {errorPwd != "" ? (
-              <Alert color="danger" message={errorPwd} />
-            ) : null}
-            {successPwd != "" ? (
-              <Alert color="success" message={successPwd} />
-            ) : null}
-            <form
-              action="#" className="space-y-10 mt-10 mb-4"
-              onSubmit={handleChangePassword}
-            >
-              <Input
-                label={t("current_password")}
-                labelPlacement="outside"
-                variant="bordered"
-                placeholder={t("current_password_placeholder")}
-                endContent={
-                  <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-                    {isVisible ? (
-                      <EyeSlashIcon fill="currentColor" size={18} />
-                    ) : (
-                      <EyeIcon fill="currentColor" size={18} />
-                    )}
-                  </button>
-                }
-                type={isVisible ? "text" : "password"}
-                onChange={(e) => setCurrent_password(e.target.value)}
-              />
-              <Input
-                label={t("password")}
-                labelPlacement="outside"
-                variant="bordered"
-                placeholder={t("password_placeholder")}
-                endContent={
-                  <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-                    {isVisible ? (
-                      <EyeSlashIcon fill="currentColor" size={18} />
-                    ) : (
-                      <EyeIcon fill="currentColor" size={18} />
-                    )}
-                  </button>
-                }
-                type={isVisible ? "text" : "password"}
-                // onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                isInvalid={isInvalid}
-                color={isInvalid ? "danger" : "default"}
-                errorMessage="Please enter a valid email"
-                onValueChange={setPassword}
-              />
-
-              <div className="mb-6 text-base" role="alert">
-                <span className="font-medium">{t_requirements("pwd_label")}</span>
-                <ul className="mt-1.5 ml-4 list-disc list-inside text-gray-500 dark:text-gray-400">
-                  <li>{t_requirements("pwd_1")}</li>
-                  <li>{t_requirements("pwd_2")}</li>
-                  <li>{t_requirements("pwd_3")}</li>
-                </ul>
-              </div>
-
-              <div className="w-full -mt-12">
-                <Button 
-                  type="submit"
-                  color="primary"
-                  isLoading={loadingPwd}
-                  className="w-full"
-                >
-                  {t("save")}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
       <div className="col-span-5 xl:col-span-2">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
             <Title className="font-medium text-foreground">{t_settings("photo")}</Title>
           </div>
-          <div className="px-7 py-4">
-            {errorImg != "" ? (
-              <Alert color="danger" message={errorImg} />
-            ) : null}
-            {successImg != "" ? (
-              <Alert color="success" message={successImg} />
-            ) : null}
-            <form action="#" onSubmit={handleUpload} className="my-4">
+      <div className="p-4 bg-green-100">
+        images: {JSON.stringify(image)}
+
+      {image && (
+        <img src={`/images/${image}`} alt="Profile Image" />
+      )}
+      
+      </div>
+          <div className="p-7">
+            <form action="#" onSubmit={handleUpload}>
               <div className="mb-4 flex items-center gap-3">
                 <div className="h-14 w-14 rounded-full">
                   <Avatar
                     as="button"
                     className="transition-transform"
                     color="default"
+                    // name={user? user.lastname : ""}
                     size="lg"
-                    src={src? src: user.image}
+                    src={user? user.image: ""}
                   />
                 </div>
                 <div>
@@ -406,6 +259,9 @@ export default function Profile () {
                   <span className="flex text-sm gap-2.5">
                     <button className="hover:text-danger">
                       {t_settings("delete")}
+                    </button>
+                    <button className="hover:text-success whitespace-nowrap">
+                      {t_settings("update")}
                     </button>
                   </span>
                 </div>
@@ -418,16 +274,17 @@ export default function Profile () {
                 <input
                   type="file"
                   onChange={(e) => setImage(e.target.files[0])}
-                  className="absolute inset-0 z-1 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+                  className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
                 />
                 <div className="flex flex-col items-center justify-center space-y-3">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full border border-divider bg-white dark:bg-boxdark">
                     <UploadIcon fill="#3C50E0" size={16} />
                   </span>
-                  <p className="text-primary">
-                    {t_settings("drap_drop")}
+                  <p>
+                    <span className="text-primary">Click to upload</span> or
+                    drag and drop
                   </p>
-                  <p className="mt-1.5">SVG, PNG, JPG, GIF</p>
+                  <p className="mt-1.5">SVG, PNG, JPG or GIF</p>
                   <p>(max, 800 X 800px)</p>
                 </div>
               </div>
@@ -436,7 +293,7 @@ export default function Profile () {
                 <Button 
                   type="submit"
                   color="primary"
-                  isLoading={loadingImg}
+                  isLoading={loading}
                   className="w-full"
                 >
                   {t("save")}

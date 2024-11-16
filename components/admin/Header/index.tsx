@@ -20,7 +20,7 @@ const Header = (props: {
 }) => {
 
   const { data: session } = useSession();
-  const user = session?.user?.user;
+  const user = session?.user;
   const t = useTranslations("Header");
   const locale = useLocale();
 

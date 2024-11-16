@@ -12,7 +12,7 @@ import Charts from "@/components/dashboard1/Charts";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  console.log(session?.user?.user.name);
+  console.log(session?.user.name);
   const [shown, setShown] = useState<boolean>(false);
   // let loading: boolean = true;
 
@@ -65,7 +65,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 text-white pt-10">
             <div className="text-center">
               <h1 className="text-black text-xl font-bold">
-                Hi {session?.user?.user.name}!
+                Hi {session?.user.name}!
               </h1>
             </div>
             <div>

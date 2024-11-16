@@ -2,7 +2,8 @@ import { getSession, getCsrfToken } from "next-auth/react";
 
 export const getToken = async () => {
   const session = await getSession();
-  return session?.user.token;
+  // return session?.user.token;
+  return session?.accessToken;
 };
 
 export const getCSRFToken = async () => {
