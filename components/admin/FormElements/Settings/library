@@ -1,0 +1,275 @@
+
+import { useSession } from 'next-auth/react';
+
+const Profil = () => {
+  const { data: session, status } = useSession();
+
+  // ...
+
+  const handleSubmit = async (e) => {
+    // ...
+    await updateProfil(data);
+
+    // Mettre à jour les informations de session
+    session.user = {
+      ...session.user,
+      name: nom, // Mettre à jour le nom
+      email: email, // Mettre à jour l'email
+    };
+
+    // Si le mot de passe a été modifié, il est nécessaire de mettre à jour le token d'accès
+    if (password !== session.user.password) {
+      // Appeler l'API pour obtenir un nouveau token d'accès
+      const response = await axios.post('/api/token', {
+        email: email,
+        password: password,
+      });
+
+      // Mettre à jour le token d'accès dans la session
+      session.accessToken = response.data.accessToken;
+      // 21|Q7aFDS5KKaLCACe0M8tQLA14zza585waEbuD6Z4Be63abe1d
+    }
+  };
+};
+
+/*888888888888888888888888888888888888888 */Voici l'exemple de mise en œuvre des permissions pour les routes dans Next.js 14 :
+
+Création des routes
+
+Créez des fichiers dans le répertoire app pour définir vos routes :
+
+bash
+app
+users
+page.js
+middleware.js
+agencies
+page.js
+middleware.js
+...
+...
+
+Définition des permissions
+
+Créez un fichier permissions.js dans le répertoire lib pour définir les permissions :
+
+// lib/permissions.js
+export const permissions = {
+  see_users: ['users'],
+  see_agencies: ['agencies'],
+};
+
+Création des middleware
+
+Créez des fichiers middleware.js dans les répertoires des routes pour définir les middleware :
+
+// app/users/middleware.js
+import { permissions } from '../../lib/permissions';
+
+export default async function middleware(req) {
+  const token = await verify(req.cookies['next-auth.session-token']);
+  const userId = token.sub;
+
+  // Récupérer les permissions de l'utilisateur
+  const userPermissions = await fetchPermissions(userId);
+
+  // Vérifier les permissions pour la route actuelle
+  const allowed = permissions.see_users.includes(req.url);
+
+  if (!allowed) {
+    return {
+      status: 401,
+      body: { error: 'Accès refusé' },
+    };
+  }
+
+  return next();
+}
+
+
+
+// app/agencies/middleware.js
+import { permissions } from '../../lib/permissions';
+
+export default async function middleware(req) {
+  const token = await verify(req.cookies['next-auth.session-token']);
+  const userId = token.sub;
+
+  // Récupérer les permissions de l'utilisateur
+  const userPermissions = await fetchPermissions(userId);
+
+  // Vérifier les permissions pour la route actuelle
+  const allowed = permissions.see_agencies.includes(req.url);
+
+  if (!allowed) {
+    return {
+      status: 401,
+      body: { error: 'Accès refusé' },
+    };
+  }
+
+  return next();
+}
+
+Application des middleware
+
+Les middleware seront automatiquement appliqués aux routes correspondantes.
+
+Voilà ! Vous avez maintenant un système de gestion des permissions pour les routes dans votre application Next.js 14.
+
+/*=======================================*/
+
+Pour gérer l'affichage des liens dans la sidebar en tenant compte des permissions, vous pouvez suivre ces étapes :
+
+1. Définir les permissions pour chaque lien dans votre fichier permissions.js :
+
+// lib/permissions.js
+export const permissions = {
+  see_users: ['users'],
+  see_agencies: ['agencies'],
+  see_dashboard: ['dashboard'],
+};
+
+1. Créer un composant Sidebar qui affiche les liens en fonction des permissions de l'utilisateur :
+
+// components/Sidebar.js
+import { permissions } from '../lib/permissions';
+import { useSession } from 'next-auth/react';
+
+function Sidebar() {
+  const { data: session } = useSession();
+
+  const userPermissions = session.permissions;
+
+  return (
+    <div>
+      {userPermissions.includes('see_dashboard') && (
+        <a href="/dashboard">Tableau de bord</a>
+      )}
+      {userPermissions.includes('see_users') && (
+        <a href="/users">Utilisateurs</a>
+      )}
+      {userPermissions.includes('see_agencies') && (
+        <a href="/agencies">Agences</a>
+      )}
+    </div>
+  );
+}
+
+export default Sidebar;
+
+1. Utiliser le composant Sidebar dans votre page principale :
+
+// pages/_app.js
+import Sidebar from '../components/Sidebar';
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <div>
+      <Sidebar />
+      <Component {...pageProps} />
+    </div>
+  );
+}
+
+export default MyApp;
+
+1. Mettre à jour les permissions de l'utilisateur dans votre fichier pages/api/auth/[...nextauth].js :
+
+// pages/api/auth/[...nextauth].js
+import { NextApiRequest, NextApiResponse } from 'next';
+import { permissions } from '../../lib/permissions';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req;
+
+  switch (method) {
+    case 'GET':
+      const user = await getUser(req);
+      const userPermissions = await getUserPermissions((link unavailable));
+
+      return res.json({ permissions: userPermissions });
+    default:
+      return res.status(405).json({ error: 'Method not allowed' });
+  }
+}
+
+Voilà ! Vous avez maintenant un système de gestion des permissions pour les liens dans la sidebar de votre application Next.js.
+
+[13:38, 16/11/2024] Agrimax: Voici un exemple de code qui permet de stocker l'heure d'ouverture et de fermeture en vérifiant que l'heure d'ouverture est inférieure à l'heure de fermeture :
+
+
+$heureOuverture = $request->input('heure_ouverture');
+$heureFermeture = $request->input('heure_fermeture');
+
+// Vérification que l'heure d'ouverture est inférieure à l'heure de fermeture
+if (strtotime($heureOuverture) >= strtotime($heureFermeture)) {
+    return response()->json(['error' => 'L\'heure d\'ouverture doit être inférieure à l\'heure de fermeture'], 422);
+}
+
+// Stockage des heures dans la base de données
+$entreprise = Entreprise::find($id);
+$entreprise->heure_ouverture = $heureOuverture;
+$entreprise->heure_fermeture = $heureFermeture;
+$entreprise->save();
+
+
+Vous pouvez également utiliser des contraintes de validation dans votre modèle pour vous assurer que les heures sont valides :
+
+
+use Illuminate\Validation\Rules\Before;
+
+class Entreprise extends Model
+{
+    protected $fillable = ['heure_ouverture', 'heure_fermeture'];
+
+    public static function validateHeures($request)
+    {
+        return $request->validate([
+            'heure_ouverture' => 'required|before:heure_fermeture',
+            'heure_fermeture' => 'required|after:heure_ouverture',
+        ]);
+    }
+}
+
+
+Il est important de noter que vous devez utiliser le format d'heure HH:mm pour que la comparaison fonctionne correctement.
+
+Vous pouvez également utiliser des champs de type time dans votre base de données pour stocker les heures.
+
+
+Schema::create('entreprises', function (Blueprint $table) {
+    $table->id();
+    $table->time('heure_ouverture');
+    $table->time('heure_fermeture');
+});
+
+
+Cela vous permettra de stocker les heures sous forme de valeurs temporelles et de les comparer facilement.
+[13:39, 16/11/2024] Agrimax: Pour mettre à jour l'email d'un utilisateur dans Laravel, vous devez utiliser la méthode update sur l'instance de l'utilisateur. Voici un exemple :
+
+
+$user = Auth::user();
+$user->email = $request->email;
+$user->save();
+
+
+Cependant, si vous voulez vous assurer que l'email est unique, vous devez ajouter une validation avant de mettre à jour l'email. Voici un exemple :
+
+
+use Illuminate\Validation\Rule;
+
+$request->validate([
+    'email' => [
+        'required',
+        'email',
+        Rule::unique('users', 'email')->ignore($user->id),
+    ],
+]);
+
+$user = Auth::user();
+$user->email = $request->email;
+$user->save();
+
+
+Dans cet exemple, la validation unique vérifie que l'email est unique dans la table users, mais ignore l'email actuel de l'utilisateur ($user->id).…

@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { useSession } from "next-auth/react";
-import { useTranslations } from 'next-intl';
+import { signOut, useSession } from "next-auth/react";
+import { useLocale, useTranslations } from 'next-intl';
 import { UploadIcon, EnvelopIcon, EyeIcon, EyeSlashIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import Title from "@/components/Title";
 import { CommonSkeleton } from "@/components/Skeletons";
@@ -18,8 +18,9 @@ import { capitalize } from "@/lib/utils";
 
 
 export default function Profile () {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const user = session?.user;
+  const locale = useLocale();
   const t = useTranslations("Input");
   const t_settings = useTranslations("Settings");
   const t_error = useTranslations("InputError");
@@ -51,7 +52,7 @@ export default function Profile () {
       lastname: z.string().min(1, { message: t_error("lastname") }),
       firstname: z.string().min(1, { message: t_error("firstname") }),
       phonenumber: z.string(),
-      // email: z.string().email({ message: t_error("email") }),
+      email: z.string().email({ message: t_error("email") }),
   });
 
   const {
@@ -62,8 +63,6 @@ export default function Profile () {
   } = useForm<UserFormType>({
     resolver: zodResolver(schema),
   })
-
-  console.log(session? session.accessToken: '')
 
   const validatePassword = (password: string) => password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/);
 
@@ -82,6 +81,13 @@ export default function Profile () {
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        const response = await res.json();
+        // session!.user.lastname = response.lastname;
+        // session!.user.firstname = response.firstname;
+        // session!.user.phonenumber = response.phonenumber;
+        // session!.user.email = response.email;
+        // update(session);
+        // update({...session!.user, user: response});
         setTimeout(() => {
           setSuccess(t("update_account_success_msg"));
           // window.location.reload();
@@ -89,6 +95,12 @@ export default function Profile () {
       } else {
         const status = res.status;
         switch (status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            await signOut({
+              callbackUrl: `/${locale}/auth/login`
+            });
+            break;
           case 404:
             setError(t_error("user_not_found"));
             break;
@@ -109,46 +121,6 @@ export default function Profile () {
     })
     .catch((error) => {
       setError(t_error("something_wrong"));
-      console.error(error);
-    })
-  }
-
-  const handleChangePassword = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    setErrorPwd("");
-    setSuccessPwd("");
-    setLoadingPwd(true);
-    changePassword(current_password, password)
-    .then(async (res) => {
-      setLoadingPwd(false);
-      if(res?.ok) {
-        setTimeout(() => {
-          setSuccessPwd(t("update_account_success_msg"));
-        }, 500);
-        setSuccessPwd("");
-      } else {
-        const status = res.status;
-        switch (status) {
-          case 404:
-            setErrorPwd(t_error("user_not_found"));
-            break;
-          case 422:
-            const err = await res.json();
-            setErrorPwd(JSON.stringify(err));
-            break;
-          case 403:
-            setErrorPwd(t_error("acces_denied"));
-            break;
-          case 500:
-            setErrorPwd(t_error("something_wrong"));
-            break;
-          default:
-            break;
-        }
-      }
-    })
-    .catch((error) => {
-      setErrorPwd(t_error("something_wrong"));
       console.error(error);
     })
   }
@@ -197,6 +169,48 @@ export default function Profile () {
     })
   };
 
+  const handleChangePassword = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    setErrorPwd("");
+    setSuccessPwd("");
+    setLoadingPwd(true);
+    changePassword(current_password, password)
+    .then(async (res) => {
+      setLoadingPwd(false);
+      if(res?.ok) {
+        const response = await res.json();
+        session!.accessToken = response.token;
+        update(session);
+        setTimeout(() => {
+          setSuccessPwd(t("update_account_success_msg"));
+        }, 500);
+        setSuccessPwd("");
+      } else {
+        const status = res.status;
+        switch (status) {
+          case 404:
+            setErrorPwd(t_error("user_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setErrorPwd(JSON.stringify(err));
+            break;
+          case 403:
+            setErrorPwd(t_error("acces_denied"));
+            break;
+          case 500:
+            setErrorPwd(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch((error) => {
+      setErrorPwd(t_error("something_wrong"));
+      console.error(error);
+    })
+  }
 
   return (
     <>
@@ -204,7 +218,7 @@ export default function Profile () {
       <CommonSkeleton />
     ) : (
     <div className="grid grid-cols-5 gap-8">
-      <div className="col-span-5 xl:col-span-3">
+      <div className="col-span-5 order-1 xl:order-2 xl:col-span-3">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
             <Title className="font-medium text-foreground">{t_settings("personal_informations")}</Title>
@@ -252,7 +266,6 @@ export default function Profile () {
                 />
               </div>
               <Input
-                isDisabled
                 endContent={
                   <EnvelopIcon fill="currentColor" size={18} />
                 }
@@ -296,7 +309,78 @@ export default function Profile () {
         </div>
       </div>
 
-      <div className="col-span-5 xl:col-span-3">
+      <div className="col-span-5 order-2 xl:oreder-1 xl:col-span-2">
+        <div className="rounded-sm border border-divider bg-background shadow-default">
+          <div className="border-b border-divider px-7 py-4">
+            <Title className="font-medium text-foreground">{t_settings("photo")}</Title>
+          </div>
+          <div className="px-7 py-4">
+            {errorImg != "" ? (
+              <Alert color="danger" message={errorImg} />
+            ) : null}
+            {successImg != "" ? (
+              <Alert color="success" message={successImg} />
+            ) : null}
+            <form action="#" onSubmit={handleUpload} className="my-4">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="h-14 w-14 rounded-full">
+                  <Avatar
+                    as="button"
+                    className="transition-transform"
+                    color="default"
+                    size="lg"
+                    src={src? src: user.image}
+                  />
+                </div>
+                <div>
+                  <span className="mb-1.5 text-foreground">
+                    {capitalize(t_settings("edit_photo"))}
+                  </span>
+                  <span className="flex text-sm gap-2.5">
+                    <button className="hover:text-danger">
+                      {t_settings("delete")}
+                    </button>
+                  </span>
+                </div>
+              </div>
+      
+              <div
+                id="FileUpload"
+                className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-transparent dark:bg-content2 px-4 py-4 sm:py-7.5"
+              >
+                <input
+                  type="file"
+                  onChange={(e) => setImage(e.target.files[0])}
+                  className="absolute inset-0 z-1 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+                />
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-divider bg-white dark:bg-boxdark">
+                    <UploadIcon fill="#3C50E0" size={16} />
+                  </span>
+                  <p className="text-primary">
+                    {t_settings("drap_drop")}
+                  </p>
+                  <p className="mt-1.5">SVG, PNG, JPG, GIF</p>
+                  <p>(max, 800 X 800px)</p>
+                </div>
+              </div>
+
+              <div className="w-full">
+                <Button 
+                  type="submit"
+                  color="primary"
+                  isLoading={loadingImg}
+                  className="w-full"
+                >
+                  {t("save")}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-span-5 order-3">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
             <Title className="font-medium text-foreground">{t_settings("security_informations")}</Title>
@@ -366,77 +450,6 @@ export default function Profile () {
                   type="submit"
                   color="primary"
                   isLoading={loadingPwd}
-                  className="w-full"
-                >
-                  {t("save")}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-
-      <div className="col-span-5 xl:col-span-2">
-        <div className="rounded-sm border border-divider bg-background shadow-default">
-          <div className="border-b border-divider px-7 py-4">
-            <Title className="font-medium text-foreground">{t_settings("photo")}</Title>
-          </div>
-          <div className="px-7 py-4">
-            {errorImg != "" ? (
-              <Alert color="danger" message={errorImg} />
-            ) : null}
-            {successImg != "" ? (
-              <Alert color="success" message={successImg} />
-            ) : null}
-            <form action="#" onSubmit={handleUpload} className="my-4">
-              <div className="mb-4 flex items-center gap-3">
-                <div className="h-14 w-14 rounded-full">
-                  <Avatar
-                    as="button"
-                    className="transition-transform"
-                    color="default"
-                    size="lg"
-                    src={src? src: user.image}
-                  />
-                </div>
-                <div>
-                  <span className="mb-1.5 text-foreground">
-                    {capitalize(t_settings("edit_photo"))}
-                  </span>
-                  <span className="flex text-sm gap-2.5">
-                    <button className="hover:text-danger">
-                      {t_settings("delete")}
-                    </button>
-                  </span>
-                </div>
-              </div>
-      
-              <div
-                id="FileUpload"
-                className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded border border-dashed border-primary bg-transparent dark:bg-content2 px-4 py-4 sm:py-7.5"
-              >
-                <input
-                  type="file"
-                  onChange={(e) => setImage(e.target.files[0])}
-                  className="absolute inset-0 z-1 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
-                />
-                <div className="flex flex-col items-center justify-center space-y-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-divider bg-white dark:bg-boxdark">
-                    <UploadIcon fill="#3C50E0" size={16} />
-                  </span>
-                  <p className="text-primary">
-                    {t_settings("drap_drop")}
-                  </p>
-                  <p className="mt-1.5">SVG, PNG, JPG, GIF</p>
-                  <p>(max, 800 X 800px)</p>
-                </div>
-              </div>
-
-              <div className="w-full">
-                <Button 
-                  type="submit"
-                  color="primary"
-                  isLoading={loadingImg}
                   className="w-full"
                 >
                   {t("save")}
