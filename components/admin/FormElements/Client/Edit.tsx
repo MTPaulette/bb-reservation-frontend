@@ -19,9 +19,9 @@ export default function EditClient({ user }: { user: UserType} ) {
 
   const schema: ZodType<UserFormType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
-      phonenumber: z.string(),
+      lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
+      firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
+      phonenumber: z.string().max(250),
   });
 
   const [loading, setLoading] = useState<boolean>(false);

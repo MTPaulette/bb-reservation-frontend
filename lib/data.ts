@@ -85,6 +85,11 @@ export const columnsRole = [
   {name_en: "PERMISSIONS", name_fr: "PERMISSIONS", uid: "permissions", sortable: true},
 ];
 
+export const columnsCharacteristic = [
+  {name_en: "CHARACTERISTICS", name_fr: "CARACTERISTIQUES", uid: "characteristic", sortable: true},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
 export const statusUser = [
   {name_en: "Active", name_fr: "Actif", uid: "active"},
   {name_en: "Suspended", name_fr: "Suspendu(e)", uid: "suspended"},

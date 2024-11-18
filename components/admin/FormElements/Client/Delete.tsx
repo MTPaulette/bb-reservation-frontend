@@ -19,7 +19,7 @@ export default function DeleteClient({ id }: { id: number} ) {
 
   const schema: ZodType<ConfirmPasswordType> = z
     .object({
-      password: z.string().min(1),
+      password: z.string().min(1).max(250),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);

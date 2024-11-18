@@ -75,7 +75,10 @@
 
     "newStaff": "Nouveau staff",
     "editStaff": "Editer staff",
-    "deleteStaff": "Supprimer staff"
+    "deleteStaff": "Supprimer staff",
+    "characteristic_fr": "caractérisque en francais",
+    "characteristic_en": "caractérisque en anglais",
+    "characteristic_placeholder": "Enter la caractérisques"
   },
   "Footer": {
     "terms": "Termes et Conditions",
@@ -117,7 +120,10 @@
     "utilities": "utilitaires",
     "agencies": "agences",
     "roles": "roles",
-    "logs": "logs"
+    "logs": "logs",
+    "spaces": "espaces",
+    "ressources": "ressources",
+    "characteristics": "caractérisques"
   },
   "Table": {
     "view": "Voir",
@@ -149,7 +155,11 @@
     "newAgency": "Nouvel agence",
     "editAgency": "Editer agence",
     "suspendAgency": "Suspendre agence",
-    "deleteAgency": "Supprimer agence"
+    "deleteAgency": "Supprimer agence",
+
+    "newCharacteristic": "Nouvelle caractérisque",
+    "editCharacteristic": "Editer caractérisque",
+    "deleteCharacteristic": "Supprimer caractérisque"
   },
   "Profile":{
     "edit": "éditer",
@@ -172,7 +182,8 @@
     "role": "role",
     "settings": "paramètre",
     "staff": "staff",
-    "profile": "mon profil"
+    "profile": "mon profil",
+    "characteristics": "caractérisques"
   },
   "Settings": {
     "general": "général",

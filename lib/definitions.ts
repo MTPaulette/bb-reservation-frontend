@@ -122,10 +122,16 @@ export type LogType = {
   lastname: string;
 }
 
+export type CharacteristicType = {
+  id: number;
+  name_en: string;
+  name_fr: string;
+};
 
-
-
-
+export type CharacteristicFormType = {
+  name_en: string;
+  name_fr: string;
+};
 
 
 

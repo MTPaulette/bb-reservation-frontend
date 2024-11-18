@@ -1,10 +1,10 @@
 import { headerOptions, getCSRFToken, getToken } from "../utils";
-import { ConfirmPasswordType, AgencyFormType, SuspensionFormType, HorairesType } from "../definitions";
+import { ConfirmPasswordType, CharacteristicFormType, SuspensionFormType, HorairesType } from "../definitions";
 
 const api_url = process.env.API_URL;
 
-export async function createAgency(data: AgencyFormType) {
-  const response = await fetch(`${api_url}/agency/store`, { 
+export async function newCharacteristic(data: CharacteristicFormType) {
+  const response = await fetch(`${api_url}/characteristic/store`, { 
     method: "POST",
     headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify(data),
@@ -12,24 +12,24 @@ export async function createAgency(data: AgencyFormType) {
   return response;
 }
 
-export async function getAgencies() {
-  const response = await fetch(`${api_url}/agencies`, {
+export async function getCharacteristics() {
+  const response = await fetch(`${api_url}/characteristics`, {
     method: "GET",
     headers: headerOptions(await getCSRFToken(), await getToken())
   })
   return response;//.json();
 }
 
-export async function getAgencyById(id: number) {
-  const response = await fetch(`${api_url}/agency/${id}`, {
+export async function getCharacteristicById(id: number) {
+  const response = await fetch(`${api_url}/characteristic/${id}`, {
     method: "GET",
     headers: headerOptions(await getCSRFToken(), await getToken())
   })
   return response;
 }
 
-export async function updateAgency(data: AgencyFormType, id: number, horaires: HorairesType) {
-  const response = await fetch(`${api_url}/agency/${id}/update`, {
+export async function updateCharacteristic(data: CharacteristicFormType, id: number, horaires: HorairesType) {
+  const response = await fetch(`${api_url}/characteristic/${id}/update`, {
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify({
@@ -43,9 +43,9 @@ export async function updateAgency(data: AgencyFormType, id: number, horaires: H
   return response;
 }
 
-export async function suspendAgency(data: SuspensionFormType, id: number, status: string) {
+export async function suspendCharacteristic(data: SuspensionFormType, id: number, status: string) {
   console.log(data);
-  const response = await fetch(`${api_url}/agency/${id}/suspend`, {
+  const response = await fetch(`${api_url}/characteristic/${id}/suspend`, {
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify({
@@ -59,9 +59,9 @@ export async function suspendAgency(data: SuspensionFormType, id: number, status
 }
 
 
-export async function deleteAgency(data: ConfirmPasswordType, id: number) {
+export async function deleteCharacteristic(data: ConfirmPasswordType, id: number) {
   console.log(id);
-  const response = await fetch(`${api_url}/agency/${id}/delete`, {
+  const response = await fetch(`${api_url}/characteristic/${id}/delete`, {
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify(data),

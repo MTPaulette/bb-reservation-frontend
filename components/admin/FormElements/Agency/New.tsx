@@ -18,12 +18,12 @@ export default function NewAgency() {
 
   const schema: ZodType<AgencyFormType> = z
     .object({
-      name: z.string().min(1, { message: t_error("name") }),
+      name: z.string().min(1, { message: t_error("name") }).max(250),
       email: z.string().email({
         message:  t_error("email"),
-      }),
-      phonenumber: z.string().min(1),
-      address: z.string().min(1),
+      }).max(250),
+      phonenumber: z.string().min(1).max(250),
+      address: z.string().min(1).max(250),
   });
 
   const [loading, setLoading] = useState<boolean>(false);

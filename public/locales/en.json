@@ -75,7 +75,10 @@
 
     "newStaff": "New staff",
     "editStaff": "Edit staff",
-    "deleteStaff": "Delete staff"
+    "deleteStaff": "Delete staff",
+    "characteristic_fr": "characteristic in french",
+    "characteristic_en": "characteristic in english",
+    "characteristic_placeholder": "Enter characteristic"
   },
   "Footer": {
     "terms": "Terms & Conditions",
@@ -123,7 +126,10 @@
     "settings": "settings",
     "agencies": "agencies",
     "roles": "roles",
-    "logs": "logs"
+    "logs": "logs",
+    "spaces": "spaces",
+    "ressources": "ressources",
+    "characteristics": "characteristics"
   },
   "Table": {
     "view": "View",
@@ -155,7 +161,11 @@
     "newAgency": "New agency",
     "editAgency": "Edit agency",
     "suspendAgency": "Suspend agency",
-    "deleteAgency": "Delete agency"
+    "deleteAgency": "Delete agency",
+
+    "newCharacteristic": "New characteristic",
+    "editCharacteristic": "Edit Characteristic",
+    "deleteCharacteristic": "Delete characteristic"
   },
   "Profile":{
     "edit": "edit",
@@ -178,7 +188,8 @@
     "role": "role",
     "settings": "settings",
     "staff": "staff",
-    "profile": "profile"
+    "profile": "profile",
+    "characteristics": "characteristics"
   },
   "Settings": {
     "general": "general",

@@ -3,31 +3,91 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { CameraIcon } from "@/components/Icons"
-import { useTranslations } from 'next-intl';
+import { CameraIcon } from "@/components/Icons";
+import { getAgencyById } from '@/lib/action/agencies';
+import { notFound } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { useState, useEffect } from "react";
+import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize, getUsername } from "@/lib/utils";
 import CardDataStats from "@/components/admin/CardDataStats";
 
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
-import Modal from "@/components/Modal";
-import EditClient from "@/components/admin/FormElements/Client/Edit";
-import DeleteClient from "@/components/admin/FormElements/Client/Delete";
-import SuspendClient from '@/components/admin/FormElements/Client/Suspend';
-import { CommonSkeleton } from "@/components/Skeletons";
+import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem } from "@nextui-org/react";
+import { VerticalDotsIcon } from "@/components/Icons";
 
-export default function ViewProfile() {
+import Modal from "@/components/Modal";
+import EditAgency from "@/components/admin/FormElements/Agency/Edit";
+import DeleteAgency from "@/components/admin/FormElements/Agency/Delete";
+import SuspendAgency from '@/components/admin/FormElements/Agency/Suspend';
+import { signOut } from 'next-auth/react';
+import Alert from "@/components/Alert";
+
+export default function ViewAgency({id}: {id: string}) {
   const { data: session } = useSession();
-  const user = session?.user;
+  const authUserId = session?.user.id;
+  const [user, setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const t = useTranslations("Profile");
+  const locale = useLocale();
+  const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
+
+  useEffect(() => {
+    setError("");
+    getAgencyById(Number(id))
+      .then(async (res) => {
+        if(res?.ok){
+          const response = await res.json();
+          setUser(response[0]);
+          setLoading(false);
+        }else {
+          const status = res.status;
+          switch (status) {
+            case 401:
+              setError(t_error("unauthenticated"));
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+              break;
+            case 403:
+              setError(t_error("acces_denied"));
+              break;
+            case 404:
+              setError(t_error("server_not_found"));
+              break;
+            case 500:
+              setError(t_error("something_wrong"));
+              break;
+            default:
+              break;
+          }
+        }
+      })
+      .catch(error => {
+        setError(t_error("something_wrong"));
+        console.error(error);
+      });
+  }, []);
+
+
+  if (!user) {
+    notFound();
+  }
 
   return (
     <>
-    {!user ? (
+    <div className="w-full">
+      {error != "" ? (
+        <Alert color="danger" message={error} />
+      ) : null}
+    </div>
+    {loading ? (
       <CommonSkeleton />
     ) : (
     <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default">
@@ -44,7 +104,7 @@ export default function ViewProfile() {
             height: "auto",
           }}
         />
-        <div className={`hidden bottom-1 right-1 z-1 xsm:bottom-4 xsm:right-4`}>
+        <div className={`${user.id == authUserId? 'absolute': 'hidden'} bottom-1 right-1 z-1 xsm:bottom-4 xsm:right-4`}>
           <label
             htmlFor="cover"
             className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-2 py-1 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
@@ -67,6 +127,7 @@ export default function ViewProfile() {
         {/* <div className="relative z-3 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full p-1 bg-white/20 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3"> */}
           <div className="relative drop-shadow-2 h-30 w-30 sm:h-40 sm:w-40">
             <Image
+              // src={user.image? user.image: "/images/user/user-06.png"}
               src="/images/brain-orange-400.png"
               width={160}
               height={160}
@@ -76,7 +137,7 @@ export default function ViewProfile() {
 
             <label
               htmlFor="profile"
-              className={`hidden bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2`}
+              className={`${user.id == authUserId? 'absolute': 'hidden'} bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2`}
             >
               <CameraIcon fill="white" size={14} />
               <input
@@ -94,6 +155,34 @@ export default function ViewProfile() {
             <Title className="text-2xl font-semibold text-foreground">
               {getUsername(user.lastname, user.firstname)}
             </Title>
+            <div className={`${user.id == authUserId? 'hidden': 'relative'}`}>
+              <Dropdown className="bg-background border-1 border-default-200">
+                <DropdownTrigger>
+                  <Button isIconOnly radius="full" size="sm" variant="light" className="z-2">
+                    <VerticalDotsIcon fill="none" size={24} />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu>
+                  <DropdownItem
+                    onClick={() => {
+                      setShowEditModal(true);
+                    }}
+                  >{t_table("edit")}</DropdownItem>
+                  <DropdownItem
+                    color="warning"
+                    onClick={() => {
+                      setShowSuspendModal(true);
+                    }}
+                  >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
+                  <DropdownItem
+                    color="danger"
+                    onClick={() => {
+                      setShowDeleteModal(true);
+                    }}
+                  >{t_table("delete")}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
           </div>
 
           <p className="font-medium capitalize"> {user.role} {user.agency? ' | '+ user.agency: ""}</p>
@@ -153,23 +242,23 @@ export default function ViewProfile() {
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+        title={`${t_table("editAgency")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
       >
-        <EditClient user={user} />
+        <EditAgency user={user} />
       </Modal>
     
       <Modal
         open={showSuspendModal} close={() => setShowSuspendModal(false)}
-        title={`${t_table("suspendClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+        title={`${t_table("suspendAgency")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
       >
-        <SuspendClient id={user?.id} status={user?.status} />
+        <SuspendAgency id={user?.id} status={user?.status} />
       </Modal>
       
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+        title={`${t_table("deleteAgency")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
       >
-        <DeleteClient id={user?.id} />
+        <DeleteAgency id={user?.id} />
       </Modal>
 
     </div>

@@ -27,8 +27,8 @@ export default function LoginPage() {
     .object({
       email: z.string().email({
         message: t_error("email"),
-      }),
-      password: z.string().min(1, { message: t_error("passwordLenght") }),
+      }).max(250),
+      password: z.string().min(1, { message: t_error("passwordLenght") }).max(250),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);

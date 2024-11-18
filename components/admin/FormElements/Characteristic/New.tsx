@@ -1,29 +1,27 @@
 "use client"
 
 import React from "react";
-import { Button, Input } from "@nextui-org/react";
-import { EyeIcon, EyeSlashIcon } from "@/components/Icons";
+import { Button, Textarea } from "@nextui-org/react";
+import { PencilSquareIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { ConfirmPasswordType } from "@/lib/definitions";
-import { deleteStaff } from "@/lib/action/staff";
-import Title from "@/components/Title";
+import { CharacteristicFormType } from "@/lib/definitions";
+import { newCharacteristic } from "@/lib/action/characteristics";
 
-export default function DeleteStaff({ id }: { id: number} ) {
+export default function NewCharacteristic() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
-  const schema: ZodType<ConfirmPasswordType> = z
+  const schema: ZodType<CharacteristicFormType> = z
     .object({
-      password: z.string().min(1).max(250),
+      name_en: z.string().min(1, { message: t_error("name") }).max(250),
+      name_fr: z.string().min(1, { message: t_error("name") }).max(250),
   });
 
-  const [isVisible, setIsVisible] = React.useState<boolean>(false);
-  const toggleVisibility = () => setIsVisible(!isVisible);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -33,31 +31,28 @@ export default function DeleteStaff({ id }: { id: number} ) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ConfirmPasswordType>({
+  } = useForm<CharacteristicFormType>({
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: ConfirmPasswordType) => {
+  const handleFormSubmit = async (data: CharacteristicFormType) => {
     setError("");
     setSuccess("");
     setLoading(true);
-    deleteStaff(data, id)
+    newCharacteristic(data)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("delete_account_success_msg"));
+          setSuccess(t("new_account_success_msg"));
           window.location.reload();
         }, 500);
       } else {
         const status = res.status;
         switch (status) {
-          case 404:
-            setError(t_error("user_not_found"));
-            break;
           case 422:
             const err = await res.json();
-            setError(err.password? t_error("wrongPassword"): "")
+            setError(JSON.stringify(err.errors));
             break;
           case 403:
             setError(t_error("acces_denied"));
@@ -76,6 +71,7 @@ export default function DeleteStaff({ id }: { id: number} ) {
     })
   }
 
+
   return (
     <>
     <div className="w-full">
@@ -85,39 +81,42 @@ export default function DeleteStaff({ id }: { id: number} ) {
       {success != "" ? (
         <Alert color="success" message={success} />
       ) : null}
-      <Title className="text-base mt-4">{t_error("suspend_warning")}</Title>
       <form
         action="#" className="space-y-4 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
-        <Input
+        <Textarea
           isRequired
-          label={t("password")}
-          variant="bordered"
-          placeholder={t("password_placeholder")}
           endContent={
-            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-              {isVisible ? (
-                <EyeSlashIcon fill="currentColor" size={18} />
-              ) : (
-                <EyeIcon fill="currentColor" size={18} />
-              )}
-            </button>
+            <PencilSquareIcon fill="currentColor" size={18} />
           }
-          type={isVisible ? "text" : "password"}
-          {...register("password")}
-          isInvalid={errors.password ? true: false}
-          errorMessage={errors.password ? errors.password?.message: null}
+          label={t("characteristic_en")}
+          placeholder={t("characteristic_placeholder")}
+          variant="bordered"
+          {...register("name_en")}
+          isInvalid={errors.name_en ? true: false}
+          errorMessage={errors.name_en ? errors.name_en?.message: null}
         />
-
+        <Textarea
+          isRequired
+          endContent={
+            <PencilSquareIcon fill="currentColor" size={18} />
+          }
+          label={t("characteristic_fr")}
+          placeholder={t("characteristic_placeholder")}
+          variant="bordered"
+          {...register("name_fr")}
+          isInvalid={errors.name_fr ? true: false}
+          errorMessage={errors.name_fr ? errors.name_fr?.message: null}
+        />
         <div className="w-full">
           <Button 
             type="submit"
-            color="danger"
+            color="primary"
             isLoading={loading}
             className="w-full"
           >
-            {t("confirm")}
+            {t("save")}
           </Button>
         </div>
       </form>

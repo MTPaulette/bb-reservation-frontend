@@ -22,17 +22,17 @@ export default function RegisterPage() {
 
   const schema: ZodType<AuthUserType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
+      lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
+      firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
       email: z.string().email({
         message:  t_error("email"),
-      }),
+      }).max(250),
       password: z
       .string()
       .min(8, { message: t_error("passwordLenght")})
       .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
         message: t_error("password")
-      }),
+      }).max(250),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);

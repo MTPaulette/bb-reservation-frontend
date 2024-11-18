@@ -19,18 +19,18 @@ export default function NewStaff() {
 
   const schema: ZodType<UserFormType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
+      lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
+      firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
       email: z.string().email({
         message:  t_error("email"),
-      }),
+      }).max(250),
       password: z
       .string()
       .min(8, { message: t_error("passwordLenght")})
       .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
         message: t_error("password")
-      }),
-      phonenumber: z.string(),
+      }).max(250),
+      phonenumber: z.string().max(250),
       role_id: z.string().length(1),
       agency_id: z.string().length(1),
   });

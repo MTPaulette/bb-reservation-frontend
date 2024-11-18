@@ -49,10 +49,10 @@ export default function Profile () {
 
   const schema: ZodType<UserFormType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
-      phonenumber: z.string(),
-      email: z.string().email({ message: t_error("email") }),
+      lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
+      firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
+      phonenumber: z.string().max(250),
+      email: z.string().email({ message: t_error("email") }).max(250),
   });
 
   const {
@@ -376,9 +376,8 @@ export default function Profile () {
                     className="transition-transform"
                     color="default"
                     size="lg"
-                    src={src? getUrl(src): ''}
+                    src={src? src: ''}
                   />
-                  {src}
                 </div>
                 <div>
                   <span className="mb-1.5 text-foreground">

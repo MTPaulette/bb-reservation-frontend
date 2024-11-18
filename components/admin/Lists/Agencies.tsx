@@ -202,7 +202,7 @@ export default function AgenciesTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/admin/agency/${agency.id}`}>
+                  <Link href={`/${locale}/admin/agencies/${agency.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>

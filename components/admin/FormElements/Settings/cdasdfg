@@ -15,7 +15,6 @@ import { useState } from "react";
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
 import { updateClient } from "@/lib/action/clients";
-import { getURL } from "next/dist/shared/lib/utils";
 
 
 export default function Profile () {
@@ -27,9 +26,9 @@ export default function Profile () {
 
   const schema: ZodType<UserFormType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
-      phonenumber: z.string(),
+      lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
+      firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
+      phonenumber: z.string().max(250),
   });
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -318,7 +317,7 @@ export default function Profile () {
                     color="default"
                     // name={user? user.lastname : ""}
                     size="lg"
-                    src={user? getURL(user.image): ""}
+                    src="/images/brain-orange-400.png"
                   />
                 </div>
                 <div>

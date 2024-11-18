@@ -42,6 +42,18 @@ const menuGroups = [
       },
       {
         icon: (
+          <UiIcon fill="none" size={18} />
+        ),
+        label: t("ressources"),
+        route: "#",
+        children: [
+          { label: t("characteristics"), route: `/${locale}/admin/characteristics` },
+          { label: t("spaces"), route: `/${locale}/admin/spaces` },
+          { label: t("ressources"), route: `/${locale}/admin/ressources` },
+        ],
+      },
+      {
+        icon: (
           <ActivityIcon fill="currentColor" size={18} />
         ),
         label: t("utilities"),

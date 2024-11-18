@@ -4,36 +4,31 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Chip, User, Pagination, Selection, ChipProps, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor
 } from "@nextui-org/react";
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { UserType } from "@/lib/definitions";
-import { capitalize, getUsername } from "@/lib/utils";
-import { columnsClient as columns, statusUser as statusOptions } from "@/lib/data";
+import { CharacteristicType } from "@/lib/definitions";
+import { capitalize } from "@/lib/utils";
+import { columnsCharacteristic as columns } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewClient from "../FormElements/Client/New";
-import EditClient from "../FormElements/Client/Edit";
-import DeleteClient from "../FormElements/Client/Delete";
-import { getClients } from '@/lib/action/clients';
-import SuspendClient from '../FormElements/Client/Suspend';
+import NewCharacteristic from "../FormElements/Characteristic/New";
+import EditCharacteristic from "../FormElements/Characteristic/Edit";
+import DeleteCharacteristic from "../FormElements/Characteristic/Delete";
+import { getCharacteristics } from '@/lib/action/characteristics';
 import { signOut } from 'next-auth/react';
 
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  suspended: "danger"
-};
 
-const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "role", "phonenumber", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["characteristic", "actions"];
 
-export default function UsersTable() {
-  const [users, setUsers] = useState([]);
+export default function CharacteristicsTable() {
+  const [characteristics, setCharacteristics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
@@ -43,11 +38,11 @@ export default function UsersTable() {
 
   useEffect(() => {
     setError("");
-    getClients()
+    getCharacteristics()
       .then(async (res) => {
         setLoading(false);
         if(res?.ok){
-          setUsers(await res.json());
+          setCharacteristics(await res.json());
         }else {
           const status = res.status;
           switch (status) {
@@ -77,29 +72,26 @@ export default function UsersTable() {
       });
   }, []);
 
-
-  type User = typeof users[0];
+  type Characteristic = typeof characteristics[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-  const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "email",
+    column: "characteristic",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(characteristics.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = React.useState<UserType>();
+  const [selectedCharacteristic, setSelectedCharacteristic] = React.useState<CharacteristicType>();
 
-  // const changeSelectedUser
+  // const changeSelectedCharacteristic
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -110,21 +102,17 @@ export default function UsersTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredCharacteristics = [...characteristics];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.lastname.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+      filteredCharacteristics = filteredCharacteristics.filter((characteristic) => 
+        locale === "en" ? characteristic.name_en.toLowerCase().includes(filterValue.toLowerCase()) :
+      characteristic.name_fr.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredCharacteristics;
+  }, [characteristics, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -134,49 +122,24 @@ export default function UsersTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: Characteristic, b: Characteristic) => {
+      const first = a[sortDescriptor.column as keyof Characteristic] as number;
+      const second = b[sortDescriptor.column as keyof Characteristic] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = React.useCallback((characteristic: Characteristic, columnKey: React.Key) => {
+    const cellValue = characteristic[columnKey as keyof Characteristic];
 
     switch (columnKey) {
-      case "lastname":
+      case "characteristic":
         return (
-          <User
-            avatarProps={{radius: "full", size: "sm", src: "/images/brain-orange-400.png"}}
-            classNames={{
-              description: "text-foreground/60 font-medium",
-            }}
-            description={user.firstname}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            {/* <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p> */}
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="dot"
-          >
-            {cellValue}
-          </Chip>
+          <p className="font-semibold">
+            {capitalize(locale === "en" ? characteristic.name_en || characteristic.name_fr : characteristic.name_fr)}
+          </p>
         );
       case "actions":
         return (
@@ -189,28 +152,19 @@ export default function UsersTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/admin/clients/${user.id}`}>
+                  <Link href={`/${locale}/admin/characteristics/${characteristic.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => {
-                    setSelectedUser(user);
+                    setSelectedCharacteristic(characteristic);
                     setShowEditModal(true);
                   }}
-                >{t_table("edit")}</DropdownItem>
-                <DropdownItem
-                  isReadOnly
-                  color="warning"
-                  onClick={() => {
-                    setSelectedUser(user);
-                    setShowSuspendModal(true);
-                  }}
-                >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
-                <DropdownItem
+                >{t_table("edit")}</DropdownItem><DropdownItem
                   color="danger"
                   onClick={() => {
-                    setSelectedUser(user);
+                    setSelectedCharacteristic(characteristic);
                     setShowDeleteModal(true);
                   }}
                 >{t_table("delete")}</DropdownItem>
@@ -270,31 +224,6 @@ export default function UsersTable() {
                       size="sm"
                       variant="flat"
                     >
-                      {t_table("status")}
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu
-                    disallowEmptySelection
-                    aria-label="Table Columns"
-                    closeOnSelect={false}
-                    selectedKeys={statusFilter}
-                    selectionMode="multiple"
-                    onSelectionChange={setStatusFilter}
-                  >
-                    {statusOptions.map((status) => (
-                      <DropdownItem key={status.uid}>
-                        {capitalize(locale === "en" ? status.name_en: status.name_fr)}
-                      </DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                </Dropdown>
-                <Dropdown>
-                  <DropdownTrigger className="flex z-1">
-                    <Button
-                      endContent={<ChevronDownIcon fill="currentColor" size={10} />}
-                      size="sm"
-                      variant="flat"
-                    >
                       {t_table("colunms")}
                     </Button>
                   </DropdownTrigger>
@@ -314,7 +243,6 @@ export default function UsersTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <Button
-                  // className="bg-foregroundd text-backgroundd"
                   endContent={<PlusIcon fill="currentColor" size={14} />}
                   size="sm" variant="solid" color="primary"
                   onClick={() => setShowNewModal(true)}
@@ -324,7 +252,7 @@ export default function UsersTable() {
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {users.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {characteristics.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -345,7 +273,7 @@ export default function UsersTable() {
       </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, ]);
+    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, characteristics.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -440,34 +368,26 @@ export default function UsersTable() {
 
       <Modal
         open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newClient")}
+        title={t_table("newCharacteristic")}
       >
-        <NewClient />
+        <NewCharacteristic />
       </Modal>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
+        title={`${t_table("editCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
       >
-        <EditClient user={selectedUser} />
+        <EditCharacteristic characteristic={selectedCharacteristic} />
       </Modal>
-    
-      <Modal
-        open={showSuspendModal} close={() => setShowSuspendModal(false)}
-        title={`${t_table("suspendClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
-      >
-        <SuspendClient id={selectedUser?.id} status={selectedUser?.status} />
-      </Modal>
-      
+
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
+        title={`${t_table("deleteCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
       >
-        <DeleteClient id={selectedUser?.id} />
+        <DeleteCharacteristic id={selectedCharacteristic?.id} />
       </Modal>
       </div>
       )}
     </>
   );
 }
-

@@ -26,9 +26,9 @@ export default function Profile () {
 
   const schema: ZodType<UserFormType> = z
     .object({
-      lastname: z.string().min(1, { message: t_error("lastname") }),
-      firstname: z.string().min(1, { message: t_error("firstname") }),
-      phonenumber: z.string(),
+      lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
+      firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
+      phonenumber: z.string().max(250),
       // email: z.string().email({ message: t_error("email") }),
   });
 
@@ -247,9 +247,10 @@ export default function Profile () {
                     as="button"
                     className="transition-transform"
                     color="default"
-                    // name={user? user.lastname : ""}
+                    name={user? user.lastname : ""}
                     size="lg"
-                    src={user? user.image: ""}
+                    //src={user? user.image: ""}
+                    src="/images/brain-orange-400.png"
                   />
                 </div>
                 <div>

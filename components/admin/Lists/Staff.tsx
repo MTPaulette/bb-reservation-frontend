@@ -151,7 +151,7 @@ export default function UsersTable() {
       case "lastname":
         return (
           <User
-            avatarProps={{radius: "full", size: "sm", src: user.image}}
+            avatarProps={{radius: "full", size: "sm", src: "/images/brain-orange-400.png"}}
             classNames={{
               description: "text-foreground/60 font-medium",
             }}
