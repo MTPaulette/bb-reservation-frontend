@@ -16,6 +16,7 @@ import NavLinks from "@/components/dashboard1/Navlinks";
 import Logout from "@/components/admin/FormElements/Logout";
 import User from "@/components/User";
 import Title from "@/components/Title";
+import { getUrl } from "@/lib/utils";
 
 export default function NavBarDashboardComponent() {
   const { data: session } = useSession();
@@ -59,7 +60,7 @@ export default function NavBarDashboardComponent() {
               color="warning"
               name={user? user.name: ""}
               size="sm"
-              src={user? user.image: ""}
+              src={user? getUrl(user.image): ""}
               // src="/images/brain-orange-400.png"
             />
           </DropdownTrigger>

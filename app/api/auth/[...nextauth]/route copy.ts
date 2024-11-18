@@ -65,16 +65,33 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, trigger, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.user = user;
         token.accessToken = user.token;
       }
+
+      if(trigger === "update" && session) {
+        token = session;
+      //  token.user = session.user;
+      //  token.accessToken = session.accessToken;
+
+        // console.log( ...token, ...session?.user);
+      }
+      console.log("7222222222222222222222777=====session");
+      console.log(token);
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token, trigger }) {
       session.accessToken = token.user.token;
       session.user = token.user.user;
+
+      if(trigger === "update") {
+        session.accessToken = token.user.token;
+        session.user = token.user.user;
+      }
+      console.log("777777777777777=====session");
+      console.log(session);
       return session
     },
   },

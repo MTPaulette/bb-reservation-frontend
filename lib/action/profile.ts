@@ -60,3 +60,11 @@ export async function changePassword(current_password: string, password: string)
   })
   return response;
 }
+
+export async function deleteProfilePic() {
+  const response = await fetch(`${api_url}/profile/image/delete`, { 
+    method: "PUT",
+    headers: headerOptions(await getCSRFToken(), await getToken()),
+  })
+  return response;
+}

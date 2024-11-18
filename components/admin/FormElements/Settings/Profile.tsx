@@ -13,8 +13,8 @@ import { z, ZodType } from "zod";
 import { useState } from "react";
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
-import { updateProfile, uploadImage, changePassword } from "@/lib/action/profile";
-import { capitalize } from "@/lib/utils";
+import { updateProfile, uploadImage, changePassword, deleteProfilePic } from "@/lib/action/profile";
+import { capitalize, getUrl } from "@/lib/utils";
 
 
 export default function Profile () {
@@ -82,16 +82,20 @@ export default function Profile () {
       setLoading(false);
       if(res?.ok) {
         const response = await res.json();
-        // session!.user.lastname = response.lastname;
-        // session!.user.firstname = response.firstname;
-        // session!.user.phonenumber = response.phonenumber;
-        // session!.user.email = response.email;
-        // update(session);
-        // update({...session!.user, user: response});
+        const newSession = {
+          ...session,
+          user: {
+            ...session?.user,
+            firstname: "pascaline"
+          },
+          accessToken: response.token
+        };
+        await update(newSession);
+        setSuccess(t("update_account_success_msg"));
         setTimeout(() => {
-          setSuccess(t("update_account_success_msg"));
+          setSuccess("");
           // window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch (status) {
@@ -212,6 +216,49 @@ export default function Profile () {
     })
   }
 
+  const handleDeleteProfilePic = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    setErrorImg("");
+    setLoadingImg(true);
+    deleteProfilePic()
+    .then(async (res) => {
+      setLoadingImg(false);
+      if(res?.ok) {
+        const response = await res.json();
+        setImage(response.src);
+        setSrc(response.src);
+        setSuccessImg(t("update_account_success_msg"));
+        setTimeout(() => {
+          setSuccessImg("");
+        }, 1000);
+      } else {
+        const status = res.status;
+        switch (status) {
+          case 404:
+            setErrorImg(t_error("user_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setErrorImg(JSON.stringify(err.errors));
+            break;
+          case 403:
+            setErrorImg(t_error("acces_denied"));
+            break;
+          case 500:
+            setErrorImg(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch((error) => {
+      setErrorImg(t_error("something_wrong"));
+      console.error(error);
+    })
+  };
+
+
   return (
     <>
     {!user ? (
@@ -329,15 +376,16 @@ export default function Profile () {
                     className="transition-transform"
                     color="default"
                     size="lg"
-                    src={src? src: user.image}
+                    src={src? getUrl(src): ''}
                   />
+                  {src}
                 </div>
                 <div>
                   <span className="mb-1.5 text-foreground">
                     {capitalize(t_settings("edit_photo"))}
                   </span>
                   <span className="flex text-sm gap-2.5">
-                    <button className="hover:text-danger">
+                    <button className="hover:text-danger" onClick={handleDeleteProfilePic} disabled={!user?.image}>
                       {t_settings("delete")}
                     </button>
                   </span>

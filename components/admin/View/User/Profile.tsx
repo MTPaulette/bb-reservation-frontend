@@ -6,7 +6,7 @@ import Image from "next/image";
 import { CameraIcon } from "@/components/Icons"
 import { useTranslations } from 'next-intl';
 import Title from "@/components/Title";
-import { capitalize, getUsername } from "@/lib/utils";
+import { capitalize, getUrl, getUsername } from "@/lib/utils";
 import CardDataStats from "@/components/admin/CardDataStats";
 
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
@@ -68,7 +68,7 @@ export default function ViewProfile() {
           <div className="relative drop-shadow-2 h-30 w-30 sm:h-40 sm:w-40">
             <Image
               // src={user.image? user.image: "/images/user/user-06.png"}
-              src={user.image? user.image: "/images/brain-orange-400.png"}
+              src={user.image? getUrl(user.image): "/images/brain-orange-400.png"}
               width={160}
               height={160}
               className="rounded-full h-full w-full"

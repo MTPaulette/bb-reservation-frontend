@@ -35,3 +35,10 @@ export const headerOptions = (csrftoken: string|undefined, token: string|undefin
     "Authorization": `Bearer ${token}`,
   }
 }
+
+
+export const getUrl = (link : string) => {
+  const url = new URL(process.env.API_URL);
+  url.pathname = `/storage/${link}`;
+  return url.href;
+}

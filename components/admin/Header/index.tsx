@@ -11,7 +11,7 @@ import { useSession } from "next-auth/react";
 import { useLocale, useTranslations } from 'next-intl';
 
 import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
-import { getUsername } from "@/lib/utils";
+import { getUrl, getUsername } from "@/lib/utils";
 import Search from "@/components/Search";
 
 const Header = (props: {
@@ -110,7 +110,7 @@ const Header = (props: {
                     color="warning"
                     name={user? getUsername(user.lastname, user.firstname): ""}
                     size="sm"
-                    src={user? user.image: ""}
+                    src={user? getUrl(user.image): ""}
                   />
                 </div>
                 {session?.accessToken}
@@ -118,7 +118,7 @@ const Header = (props: {
                   <User
                     name={user? getUsername(user.lastname, user.firstname): ""}
                     role={user? user.role: ""}
-                    src={user? user.image: ''}
+                    src={user? getUrl(user.image): ''}
                   />
                   <ChevronDownIcon fill="currentColor" size={10} />
                 </div>

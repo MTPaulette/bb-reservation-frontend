@@ -15,6 +15,7 @@ import { useState } from "react";
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
 import { updateClient } from "@/lib/action/clients";
+import { getURL } from "next/dist/shared/lib/utils";
 
 
 export default function Profile () {
@@ -317,7 +318,7 @@ export default function Profile () {
                     color="default"
                     // name={user? user.lastname : ""}
                     size="lg"
-                    src={user? user.image: ""}
+                    src={user? getURL(user.image): ""}
                   />
                 </div>
                 <div>
