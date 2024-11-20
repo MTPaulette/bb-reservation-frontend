@@ -1,18 +1,18 @@
 import { Metadata } from "next";
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import AgenciesTable from "@/components/admin/Lists/Agencies";
+import RessourcesTable from "@/components/admin/Lists/Ressources";
 
 export const metadata: Metadata = {
-  title: "Agencies",
+  title: "Ressources",
   description:
-    "Show all agencies of system",
+    "Show all ressources of system",
 };
 
 const TablesPage = () => {
   return (
     <>
-      <Breadcrumb pageName="agencies" />
-      <AgenciesTable />
+      <Breadcrumb pageName="ressources" />
+      <RessourcesTable />
     </>
   )
 };

@@ -21,6 +21,9 @@
     "role_not_found": "Role non trouvé",
     "server_not_found": "Ressource non trouvé dans le serveur",
     "agency_not_found": "Agence non trouvé",
+    "characteristic_not_found": "caractérisque non trouvée",
+    "space_not_found": "Espace non trouvé",
+    "image_not_found": "Image non trouvée",
     "unauthenticated": "vous n'etes pas connecté"
   },
   "Input": {
@@ -36,6 +39,7 @@
     "role": "Role",
     "agency": "Agence",
     "address": "Adresse",
+    "nb_place": "Nb place",
     "openingdays": "Jours d'ouverture",
     "from": "De",
     "to": "A",
@@ -51,7 +55,8 @@
     "address_placeholder": "Entrer l'adresse",
     "phonenumber_placeholder": "Entrer le  numéro de téléphone",
     "role_placeholder": "Selectionner un role",
-    "agency_placeholder": "Selectionner une agence ",
+    "agency_placeholder": "Selectionner une agence",
+    "nb_place_placeholder": "Entrer le nbr de place",
     "reason_for_suspension_placeholder": "Entrer la raison de la suspension",
     "forgot_password_link": "Mot de passe oublié?",
     "remember_me": "se souvenir de moi",
@@ -62,12 +67,23 @@
     "new_account_success_msg": "Compte créé avec succès.",
     "update_account_success_msg": "Compte mis à jour avec succès.",
     "suspend_account_success_msg": "Compte suspendu avec succès.",
-    "suspend_agency_success_msg": "Agence suspendue avec succès.",
     "cancel_suspension_account_success_msg": "Suspension annulée.",
     "delete_account_success_msg": "Compte supprimé avec succès.",
+
+    "suspend_agency_success_msg": "Agence suspendue avec succès.",
     "delete_agency_success_msg": "Agence supprimé avec succès.",
+
     "update_role_success_msg": "Role mis à jour avec succès.",
     "delete_log_success_msg": "Logs supprimés avec succès.",
+
+    "new_characteristic_success_msg": "caractérisque créée avec succès.",
+    "update_characteristic_success_msg": "caractérisque mis à jour avec succès.",
+    "delete_characteristic_success_msg": "caractérisque supprimée avec succès.",
+
+    "new_space_success_msg": "Space créée avec succès.",
+    "update_space_success_msg": "Espace mis à jour avec succès.",
+    "delete_space_success_msg": "Espace supprimée avec succès.",
+    "delete_image_success_msg": "Image supprimée avec succès.",
 
     "newClient": "Nouveau client",
     "editClient": "Editer client",
@@ -76,9 +92,20 @@
     "newStaff": "Nouveau staff",
     "editStaff": "Editer staff",
     "deleteStaff": "Supprimer staff",
-    "characteristic_fr": "caractérisque en francais",
-    "characteristic_en": "caractérisque en anglais",
-    "characteristic_placeholder": "Enter la caractérisques"
+    "characteristic_fr": "Caractérisque en francais",
+    "characteristic_en": "Caractérisque en anglais",
+    "characteristic_placeholder": "Enter la caractérisques",
+    "characteristics": "Caractérisques",
+
+    "newSpace": "Nouvel espace",
+    "editSpace": "Editer space",
+    "deleteSpace": "Supprimer space",
+    "description_fr": "Description en francais",
+    "description_en": "Description en anglais",
+    "description_placeholder": "Entrer la description",
+    "images": "Images",
+    "drap_drop_space": "Cliquer pour charger ou glisser et deposer les images de l'espace",
+    "delete_image": "Supprimer l'image"
   },
   "Footer": {
     "terms": "Termes et Conditions",
@@ -159,7 +186,17 @@
 
     "newCharacteristic": "Nouvelle caractérisque",
     "editCharacteristic": "Editer caractérisque",
-    "deleteCharacteristic": "Supprimer caractérisque"
+    "deleteCharacteristic": "Supprimer caractérisque",
+    
+    "newSpace": "Nouvel espace",
+    "editSpace": "Editer space",
+    "deleteSpace": "Supprimer space",
+    "some_stats": "quelques statistiques"
+  },
+  "Space": {
+    "sits": "place(s) disponible(s)",
+    "characteristics": "Caractérisques",
+    "images": "Images"
   },
   "Profile":{
     "edit": "éditer",
@@ -183,6 +220,8 @@
     "settings": "paramètre",
     "staff": "staff",
     "profile": "mon profil",
+    "spaces": "espaces",
+    "space": "space",
     "characteristics": "caractérisques"
   },
   "Settings": {
@@ -201,7 +240,7 @@
   },
   "Requirements": {
     "pwd_label": "Assurez-vous que ces exigences soient respectées:",
-    "pwd_1": "Au moins 8 caractères (et jusqu'à 100 caractères)",
+    "pwd_1": "Au moins 8 caractères (et jusqu'à 50 caractères)",
     "pwd_2": "Au moins un caractère miniscule",
     "pwd_3": "Inclusion d'au moins un caractère spécial, ex., ! @ # ?"
   }

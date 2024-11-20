@@ -4,36 +4,31 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Chip, Pagination, Selection, ChipProps, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor
 } from "@nextui-org/react";
 
-import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon, EnvelopIcon, TelephoneIcon } from "@/components/Icons";
-import { CharacteristicType } from "@/lib/definitions";
-import { capitalize } from "@/lib/utils";
-import { columnsCharacteristic as columns, statusUser as statusOptions } from "@/lib/data";
+import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
+import { SpaceType } from "@/lib/definitions";
+import { capitalize, getImageUrl } from "@/lib/utils";
+import { columnsSpace as columns } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewCharacteristic from "../FormElements/Characteristic/New";
-import EditCharacteristic from "../FormElements/Characteristic/Edit";
-import DeleteCharacteristic from "../FormElements/Characteristic/Delete";
-import { getCharacteristics } from '@/lib/action/characteristics';
-import SuspendCharacteristic from '../FormElements/Characteristic/Suspend';
+import NewSpace from "../FormElements/Space/New";
+import EditSpace from "../FormElements/Space/Edit";
+import DeleteSpace from "../FormElements/Space/Delete";
+import { getSpaces } from '@/lib/action/spaces';
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  suspended: "danger"
-};
+const INITIAL_VISIBLE_COLUMNS = ["name", "nb_place", "characteristics", "images", "actions"];
 
-const INITIAL_VISIBLE_COLUMNS = ["characteristic", "actions"];
-
-export default function CharacteristicsTable() {
-  const [characteristics, setCharacteristics] = useState([]);
+export default function SpacesTable() {
+  const [spaces, setSpaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
@@ -43,11 +38,11 @@ export default function CharacteristicsTable() {
 
   useEffect(() => {
     setError("");
-    getCharacteristics()
+    getSpaces()
       .then(async (res) => {
         setLoading(false);
         if(res?.ok){
-          setCharacteristics(await res.json());
+          setSpaces(await res.json());
         }else {
           const status = res.status;
           switch (status) {
@@ -77,28 +72,26 @@ export default function CharacteristicsTable() {
       });
   }, []);
 
-  type Characteristic = typeof characteristics[0];
+  type Space = typeof spaces[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-  const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "characteristic",
+    column: "name",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(characteristics.length / rowsPerPage);
+  const pages = Math.ceil(spaces.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedCharacteristic, setSelectedCharacteristic] = React.useState<CharacteristicType>();
+  const [selectedSpace, setSelectedSpace] = React.useState<SpaceType>();
 
-  // const changeSelectedCharacteristic
+  // const changeSelectedSpace
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -109,21 +102,16 @@ export default function CharacteristicsTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredCharacteristics = [...characteristics];
+    let filteredSpaces = [...spaces];
 
     if (hasSearchFilter) {
-      filteredCharacteristics = filteredCharacteristics.filter((characteristic) =>
-        characteristic.name_en.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredCharacteristics = filteredCharacteristics.filter((characteristic) =>
-        Array.from(statusFilter).includes(characteristic.status),
+      filteredSpaces = filteredSpaces.filter((space) =>
+        space.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
-    return filteredCharacteristics;
-  }, [characteristics, filterValue, statusFilter]);
+    return filteredSpaces;
+  }, [spaces, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -133,25 +121,47 @@ export default function CharacteristicsTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Characteristic, b: Characteristic) => {
-      const first = a[sortDescriptor.column as keyof Characteristic] as number;
-      const second = b[sortDescriptor.column as keyof Characteristic] as number;
+    return [...items].sort((a: Space, b: Space) => {
+      const first = a[sortDescriptor.column as keyof Space] as number;
+      const second = b[sortDescriptor.column as keyof Space] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((characteristic: Characteristic, columnKey: React.Key) => {
-    const cellValue = characteristic[columnKey as keyof Characteristic];
+  const renderCell = React.useCallback((space: Space, columnKey: React.Key) => {
+    const cellValue = space[columnKey as keyof Space];
 
     switch (columnKey) {
-      case "characteristic":
+      case "name":
         return (
-          <p className="font-semibold">
-            {JSON.stringify(characteristic)}
-            {cellValue}
-          </p>
+          <div>
+            <p className="font-semibold">{space.name? capitalize(space.name): ''}</p>
+            <p className="font-light text-small text-foreground/70 h-30 overflow-hidden">
+              {capitalize(locale === "en" ? space.description_en: space.description_fr)}
+            </p>
+          </div>
+        );
+      case "characteristics":
+        return (
+          <ul>
+            {space.characteristics.map((item) => (
+              <li key={item.id}>
+                {capitalize(locale === "en" ? item.name_en: item.name_fr)}
+              </li>
+            ))}
+          </ul>
+        );
+      case "images":
+        return (
+          <div className="flex flex-wrap items-center gap-1 min-w-36">
+            {space.images.map((item) => (
+              <div key={item.id} className="flex-shrink-0">
+                <Image src={getImageUrl(item.src)} alt="space image" width={40} height={40} />
+              </div>
+            ))}
+          </div>
         );
       case "actions":
         return (
@@ -164,19 +174,20 @@ export default function CharacteristicsTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/admin/characteristics/${characteristic.id}`}>
+                  <Link href={`/${locale}/admin/spaces/${space.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => {
-                    setSelectedCharacteristic(characteristic);
+                    setSelectedSpace(space);
                     setShowEditModal(true);
                   }}
-                >{t_table("edit")}</DropdownItem><DropdownItem
+                >{t_table("edit")}</DropdownItem>
+                <DropdownItem
                   color="danger"
                   onClick={() => {
-                    setSelectedCharacteristic(characteristic);
+                    setSelectedSpace(space);
                     setShowDeleteModal(true);
                   }}
                 >{t_table("delete")}</DropdownItem>
@@ -217,7 +228,7 @@ export default function CharacteristicsTable() {
               <Input
                 isClearable
                 classNames={{
-                  base: "w-full sm:max-w-[44%]",
+                  base: "w-full sm:max-w-[44%] z-1",
                   inputWrapper: "border-1",
                 }}
                 placeholder={t_table("search_placeholder")}
@@ -265,7 +276,7 @@ export default function CharacteristicsTable() {
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {characteristics.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {spaces.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -286,7 +297,7 @@ export default function CharacteristicsTable() {
       </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, characteristics.length, hasSearchFilter, ]);
+    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, spaces.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -381,23 +392,23 @@ export default function CharacteristicsTable() {
 
       <Modal
         open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newCharacteristic")}
+        title={t_table("newSpace")}
       >
-        <NewCharacteristic />
+        <NewSpace />
       </Modal>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
+        title={`${t_table("editSpace")} "${selectedSpace? selectedSpace.name: ''}"`}
       >
-        <EditCharacteristic characteristic={selectedCharacteristic} />
+        <EditSpace space={selectedSpace} />
       </Modal>
-
+      
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
+        title={`${t_table("deleteSpace")} "${selectedSpace? selectedSpace.name: ''}"`}
       >
-        <DeleteCharacteristic id={selectedCharacteristic?.id} />
+        <DeleteSpace id={selectedSpace?.id} />
       </Modal>
       </div>
       )}

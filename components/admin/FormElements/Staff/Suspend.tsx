@@ -19,7 +19,7 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
 
   const schema: ZodType<ConfirmPasswordType> = z
     .object({
-      password: z.string().min(1).max(250),
+      password: z.string().min(1),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);

@@ -263,7 +263,7 @@ export default function AgenciesTable() {
               <Input
                 isClearable
                 classNames={{
-                  base: "w-full sm:max-w-[44%]",
+                  base: "w-full sm:max-w-[44%] z-1",
                   inputWrapper: "border-1",
                 }}
                 placeholder={t_table("search_placeholder")}

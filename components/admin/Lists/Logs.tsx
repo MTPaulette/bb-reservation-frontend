@@ -76,7 +76,7 @@ export default function LogsTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "created_at",
-    direction: "ascending",
+    direction: "descending",
   });
 
   const [page, setPage] = React.useState(1);
@@ -136,7 +136,7 @@ export default function LogsTable() {
         );
       case "author":
         return (
-          <p className="font-medium text-small">{log? getUsername(log.lastname, log.firstname): ""}</p>
+          <p className="font-medium text-small">{log.lastname && log.firstname? getUsername(log.lastname, log.firstname): ""}</p>
           // <p className="font-medium text-small">{log.user_id}</p>
         );
       default:
@@ -171,7 +171,7 @@ export default function LogsTable() {
               <Input
                 isClearable
                 classNames={{
-                  base: "w-full sm:max-w-[44%]",
+                  base: "w-full sm:max-w-[44%] z-1",
                   inputWrapper: "border-1",
                 }}
                 placeholder={t_table("search_placeholder")}

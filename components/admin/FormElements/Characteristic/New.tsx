@@ -44,7 +44,7 @@ export default function NewCharacteristic() {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("new_account_success_msg"));
+          setSuccess(t("new_characteristic_success_msg"));
           window.location.reload();
         }, 500);
       } else {

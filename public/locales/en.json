@@ -21,6 +21,9 @@
     "role_not_found": "Role not found",
     "server_not_found": "Ressource not found in server",
     "agency_not_found": "Agency not found",
+    "characteristic_not_found": "Characteristic not found",
+    "space_not_found": "Space not found",
+    "image_not_found": "Image not found",
     "unauthenticated": "unauthenticated"
  },
   "Input": {
@@ -37,6 +40,7 @@
     "role": "Role",
     "agency": "Agency",
     "address": "Address",
+    "nb_place": "Nb place",
     "openingdays": "Opening days",
     "from": "from",
     "to": "to",
@@ -52,6 +56,7 @@
     "phonenumber_placeholder": "Enter phonenumber",
     "role_placeholder": "Enter role",
     "agency_placeholder": "Enter agency",
+    "nb_place_placeholder": "Enter nbr of place",
     "reason_for_suspension_placeholder": "Enter reason for suspension",
     "forgot_password_link": "Forgot password?",
     "remember_me": "remember me",
@@ -62,12 +67,23 @@
     "new_account_success_msg": "Account successfully created.",
     "update_account_success_msg": "Account successfully updated.",
     "suspend_account_success_msg": "Account successfully suspended.",
-    "suspend_agency_success_msg": "Agency successfully suspended.",
     "cancel_suspension_account_success_msg": "Suspension cancelled.",
     "delete_account_success_msg": "Account successfully deleted.",
+
+    "suspend_agency_success_msg": "Agency successfully suspended.",
     "delete_agency_success_msg": "Agency successfully deleted.",
+    
     "update_role_success_msg": "Role successfully updated.",
     "delete_log_success_msg": "Logs successfully deleted.",
+
+    "new_characteristic_success_msg": "Characteristic successfully created.",
+    "update_characteristic_success_msg": "Characteristic successfully updated.",
+    "delete_characteristic_success_msg": "Characteristic successfully deleted.",
+
+    "new_space_success_msg": "Space successfully created.",
+    "update_space_success_msg": "Space successfully updated.",
+    "delete_space_success_msg": "Space successfully deleted.",
+    "delete_image_success_msg": "Image successfully deleted.",
 
     "newClient": "New client",
     "editClient": "Edit client",
@@ -76,9 +92,20 @@
     "newStaff": "New staff",
     "editStaff": "Edit staff",
     "deleteStaff": "Delete staff",
-    "characteristic_fr": "characteristic in french",
-    "characteristic_en": "characteristic in english",
-    "characteristic_placeholder": "Enter characteristic"
+    "characteristic_fr": "Characteristic in french",
+    "characteristic_en": "Characteristic in english",
+    "characteristic_placeholder": "Enter characteristic",
+    "characteristics": "Characteristics",
+
+    "newSpace": "New space",
+    "editSpace": "Edit space",
+    "deleteSpace": "Delete space",
+    "description_fr": "Description in french",
+    "description_en": "Description in english",
+    "description_placeholder": "Enter description",
+    "images": "Images",
+    "drap_drop_space": "Click to upload or drag and drop images of the space",
+    "delete_image": "delete the image"
   },
   "Footer": {
     "terms": "Terms & Conditions",
@@ -165,7 +192,17 @@
 
     "newCharacteristic": "New characteristic",
     "editCharacteristic": "Edit Characteristic",
-    "deleteCharacteristic": "Delete characteristic"
+    "deleteCharacteristic": "Delete characteristic",
+
+    "newSpace": "New space",
+    "editSpace": "Edit space",
+    "deleteSpace": "Delete space",
+    "some_stats": "Some statistics"
+  },
+  "Space": {
+    "sits": "sit(s) available(s)",
+    "characteristics": "Characteristics",
+    "images": "Images"
   },
   "Profile":{
     "edit": "edit",
@@ -189,6 +226,8 @@
     "settings": "settings",
     "staff": "staff",
     "profile": "profile",
+    "spaces": "spaces",
+    "space": "space",
     "characteristics": "characteristics"
   },
   "Settings": {
@@ -207,7 +246,7 @@
   },
   "Requirements": {
     "pwd_label": "Ensure that these requirements are met:",
-    "pwd_1": "At least 8 characters (and up to 100 characters)",
+    "pwd_1": "At least 8 characters (and up to 50 characters)",
     "pwd_2": "At least one lowercase character",
     "pwd_3": "Inclusion of at least one special character, e.g., ! @ # ?"
   }

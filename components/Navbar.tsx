@@ -7,6 +7,7 @@ import {
   Divider
 } from "@nextui-org/react";
 
+import { useLocale, useTranslations } from 'next-intl';
 import { ChevronDownIcon } from "@/components/Icons";
 import { usePathname } from "next/navigation";
 
@@ -15,6 +16,8 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 export default function NavBarComponent() {
   const pathname = usePathname();
+  const t = useTranslations("Header");
+  const locale = useLocale();
 
   const communityItems = [
     { name: "Articles", href: "/products"},
@@ -168,7 +171,7 @@ export default function NavBarComponent() {
         </NavbarItem>
   
         <NavbarItem>
-          <Button as={Link} href="/auth/login" className="bg-gradient-to-tr from-success to-[#262262] text-white hover:no-underline shadow-lg">
+          <Button as={Link} href={`/${locale}/auth/login`} className="bg-gradient-to-tr from-success to-[#262262] text-white hover:no-underline shadow-lg">
           {/* <Button as={Link} href="/login" color="success" className="hover:no-underline text-white"> */}
             Log in
           </Button>
@@ -202,6 +205,7 @@ export default function NavBarComponent() {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
+
         <NavbarItem></NavbarItem>
       </NavbarContent>
 

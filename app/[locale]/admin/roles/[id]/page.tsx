@@ -9,15 +9,6 @@ import Title from '@/components/Title';
 import { Button, Checkbox } from '@nextui-org/react';
 import { CommonSkeleton } from '@/components/Skeletons';
 import Alert from '@/components/Alert';
-/*
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "User Profile",
-  description:
-    "See more about user",
-};
-*/
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -27,19 +18,18 @@ export default function Page({ params }: { params: { id: string } }) {
   const [role, setRole] = useState([]);
   const locale = useLocale();
   const [permissions, setPermissions] = useState([]);
-  const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [save, setSave] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
 
-
-  let perms = [];
+  let perms: number[]= [];
   useEffect(() => {
     getRoleById(Number(id))
       .then(response => {
         setRole(response[0]);
-        response[0].permissions.forEach(permission => {
+        response[0].permissions.forEach((permission: { id: number; }) => {
           perms.push(permission.id);
         });
         setSelectedPermissions(perms);
@@ -65,7 +55,7 @@ export default function Page({ params }: { params: { id: string } }) {
   }
  
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e: { target: { value: string; checked: any; }; }) => {
     const permissionId = parseInt(e.target.value);
     const isChecked = e.target.checked;
 

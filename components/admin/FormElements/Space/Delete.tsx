@@ -1,27 +1,29 @@
 "use client"
 
 import React from "react";
-import { Button, Textarea } from "@nextui-org/react";
-import { PencilSquareIcon } from "@/components/Icons";
+import { Button, Input } from "@nextui-org/react";
+import { EyeIcon, EyeSlashIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { CharacteristicType, CharacteristicFormType } from "@/lib/definitions";
-import { updateCharacteristic } from "@/lib/action/characteristics";
+import { ConfirmPasswordType } from "@/lib/definitions";
+import { deleteSpace } from "@/lib/action/spaces";
+import Title from "@/components/Title";
 
-export default function EditCharacteristic({ characteristic }: { characteristic: CharacteristicType} ) {
+export default function DeleteSpace({ id }: { id: number} ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
-  const schema: ZodType<CharacteristicFormType> = z
+  const schema: ZodType<ConfirmPasswordType> = z
     .object({
-      name_en: z.string().min(1, { message: t_error("name") }).max(250),
-      name_fr: z.string().min(1, { message: t_error("name") }).max(250),
+      password: z.string().min(1),
   });
 
+  const [isVisible, setIsVisible] = React.useState<boolean>(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -31,28 +33,31 @@ export default function EditCharacteristic({ characteristic }: { characteristic:
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CharacteristicFormType>({
+  } = useForm<ConfirmPasswordType>({
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: CharacteristicFormType) => {
+  const handleFormSubmit = async (data: ConfirmPasswordType) => {
     setError("");
     setSuccess("");
     setLoading(true);
-    updateCharacteristic(data, characteristic.id)
+    deleteSpace(data, id)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("update_characteristic_success_msg"));
+          setSuccess(t("delete_space_success_msg"));
           window.location.reload();
         }, 500);
       } else {
         const status = res.status;
         switch (status) {
+          case 404:
+            setError(t_error("space_not_found"));
+            break;
           case 422:
             const err = await res.json();
-            setError(JSON.stringify(err.errors));
+            setError(err.password? t_error("wrongPassword"): "")
             break;
           case 403:
             setError(t_error("acces_denied"));
@@ -71,7 +76,6 @@ export default function EditCharacteristic({ characteristic }: { characteristic:
     })
   }
 
-
   return (
     <>
     <div className="w-full">
@@ -81,44 +85,39 @@ export default function EditCharacteristic({ characteristic }: { characteristic:
       {success != "" ? (
         <Alert color="success" message={success} />
       ) : null}
+      <Title className="text-base mt-4">{t_error("suspend_warning")}</Title>
       <form
         action="#" className="space-y-4 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
-        <Textarea
+        <Input
           isRequired
-          endContent={
-            <PencilSquareIcon fill="currentColor" size={18} />
-          }
-          label={t("characteristic_en")}
-          placeholder={t("characteristic_placeholder")}
+          label={t("password")}
           variant="bordered"
-          {...register("name_en")}
-          isInvalid={errors.name_en ? true: false}
-          errorMessage={errors.name_en ? errors.name_en?.message: null}
-          defaultValue={characteristic ? characteristic.name_en: ""}
-        />
-        <Textarea
-          isRequired
+          placeholder={t("password_placeholder")}
           endContent={
-            <PencilSquareIcon fill="currentColor" size={18} />
+            <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+              {isVisible ? (
+                <EyeSlashIcon fill="currentColor" size={18} />
+              ) : (
+                <EyeIcon fill="currentColor" size={18} />
+              )}
+            </button>
           }
-          label={t("characteristic_fr")}
-          placeholder={t("characteristic_placeholder")}
-          variant="bordered"
-          {...register("name_fr")}
-          isInvalid={errors.name_fr ? true: false}
-          errorMessage={errors.name_fr ? errors.name_fr?.message: null}
-          defaultValue={characteristic ? characteristic.name_fr: ""}
+          type={isVisible ? "text" : "password"}
+          {...register("password")}
+          isInvalid={errors.password ? true: false}
+          errorMessage={errors.password ? errors.password?.message: null}
         />
+
         <div className="w-full">
           <Button 
             type="submit"
-            color="primary"
+            color="danger"
             isLoading={loading}
             className="w-full"
           >
-            {t("save")}
+            {t("confirm")}
           </Button>
         </div>
       </form>

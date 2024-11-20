@@ -19,7 +19,7 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
 
   const schema: ZodType<SuspensionFormType> = z
     .object({
-      password: z.string().min(1).max(250),
+      password: z.string().min(1),
       reason_for_suspension_en: z.string(),
       reason_for_suspension_fr: z.string(),
   });

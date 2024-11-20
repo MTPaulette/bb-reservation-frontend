@@ -9,7 +9,7 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { UserType } from "@/lib/definitions";
-import { capitalize, getUsername } from "@/lib/utils";
+import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
 import { columnsStaff as columns, statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -151,7 +151,9 @@ export default function UsersTable() {
       case "lastname":
         return (
           <User
-            avatarProps={{radius: "full", size: "sm", src: "/images/brain-orange-400.png"}}
+            avatarProps={
+              {radius: "full", size: "sm", src: getImageUrl(user.image) }
+            }
             classNames={{
               description: "text-foreground/60 font-medium",
             }}
@@ -251,7 +253,7 @@ export default function UsersTable() {
               <Input
                 isClearable
                 classNames={{
-                  base: "w-full sm:max-w-[44%]",
+                  base: "w-full sm:max-w-[44%] z-1",
                   inputWrapper: "border-1",
                 }}
                 placeholder={t_table("search_placeholder")}

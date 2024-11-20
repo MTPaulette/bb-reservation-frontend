@@ -8,25 +8,27 @@ import {
 } from "@nextui-org/react";
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { CharacteristicType } from "@/lib/definitions";
-import { capitalize } from "@/lib/utils";
-import { columnsCharacteristic as columns } from "@/lib/data";
+import { RessourceType } from "@/lib/definitions";
+import { capitalize, getImageUrl } from "@/lib/utils";
+import { columnsRessource as columns } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
+import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import EditCharacteristic from "../FormElements/Characteristic/Edit";
-import DeleteCharacteristic from "../FormElements/Characteristic/Delete";
-import { getCharacteristics } from '@/lib/action/characteristics';
+import NewRessource from "../FormElements/Ressource/New";
+import EditRessource from "../FormElements/Ressource/Edit";
+import DeleteRessource from "../FormElements/Ressource/Delete";
+import { getRessources } from '@/lib/action/ressources';
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 
+const INITIAL_VISIBLE_COLUMNS = ["name", "nb_place", "characteristics", "images", "actions"];
 
-const INITIAL_VISIBLE_COLUMNS = ["characteristic", "actions"];
-
-export default function CharacteristicsTable() {
-  const [characteristics, setCharacteristics] = useState([]);
+export default function RessourcesTable() {
+  const [ressources, setRessources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
@@ -36,11 +38,11 @@ export default function CharacteristicsTable() {
 
   useEffect(() => {
     setError("");
-    getCharacteristics()
+    getRessources()
       .then(async (res) => {
         setLoading(false);
         if(res?.ok){
-          setCharacteristics(await res.json());
+          setRessources(await res.json());
         }else {
           const status = res.status;
           switch (status) {
@@ -70,26 +72,26 @@ export default function CharacteristicsTable() {
       });
   }, []);
 
-  type Characteristic = typeof characteristics[0];
+  type Ressource = typeof ressources[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "characteristic",
+    column: "name",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(characteristics.length / rowsPerPage);
+  const pages = Math.ceil(ressources.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedCharacteristic, setSelectedCharacteristic] = React.useState<CharacteristicType>();
+  const [selectedRessource, setSelectedRessource] = React.useState<RessourceType>();
 
-  // const changeSelectedCharacteristic
+  // const changeSelectedRessource
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -100,17 +102,16 @@ export default function CharacteristicsTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredCharacteristics = [...characteristics];
+    let filteredRessources = [...ressources];
 
     if (hasSearchFilter) {
-      filteredCharacteristics = filteredCharacteristics.filter((characteristic) => 
-        locale === "en" ? characteristic.name_en.toLowerCase().includes(filterValue.toLowerCase()) :
-      characteristic.name_fr.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredRessources = filteredRessources.filter((ressource) =>
+        ressource.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
-    return filteredCharacteristics;
-  }, [characteristics, filterValue]);
+    return filteredRessources;
+  }, [ressources, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -120,24 +121,47 @@ export default function CharacteristicsTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Characteristic, b: Characteristic) => {
-      const first = a[sortDescriptor.column as keyof Characteristic] as number;
-      const second = b[sortDescriptor.column as keyof Characteristic] as number;
+    return [...items].sort((a: Ressource, b: Ressource) => {
+      const first = a[sortDescriptor.column as keyof Ressource] as number;
+      const second = b[sortDescriptor.column as keyof Ressource] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((characteristic: Characteristic, columnKey: React.Key) => {
-    const cellValue = characteristic[columnKey as keyof Characteristic];
+  const renderCell = React.useCallback((ressource: Ressource, columnKey: React.Key) => {
+    const cellValue = ressource[columnKey as keyof Ressource];
 
     switch (columnKey) {
-      case "characteristic":
+      case "name":
         return (
-          <p className="font-semibold">
-            {capitalize(locale === "en" ? characteristic.name_en || characteristic.name_fr : characteristic.name_fr)}
-          </p>
+          <div>
+            <p className="font-semibold">{ressource.name? capitalize(ressource.name): ''}</p>
+            <p className="font-light text-small text-foreground/70 h-30 overflow-hidden">
+              {capitalize(locale === "en" ? ressource.description_en: ressource.description_fr)}
+            </p>
+          </div>
+        );
+      case "characteristics":
+        return (
+          <ul>
+            {ressource.characteristics.map((item) => (
+              <li key={item.id}>
+                {capitalize(locale === "en" ? item.name_en: item.name_fr)}
+              </li>
+            ))}
+          </ul>
+        );
+      case "images":
+        return (
+          <div className="flex flex-wrap items-center gap-1 min-w-36">
+            {ressource.images.map((item) => (
+              <div key={item.id} className="flex-shrink-0">
+                <Image src={getImageUrl(item.src)} alt="ressource image" width={40} height={40} />
+              </div>
+            ))}
+          </div>
         );
       case "actions":
         return (
@@ -149,16 +173,21 @@ export default function CharacteristicsTable() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
+                <DropdownItem>
+                  <Link href={`/${locale}/admin/ressources/${ressource.id}`}>
+                    {t_table("view")}
+                  </Link>
+                </DropdownItem>
                 <DropdownItem
                   onClick={() => {
-                    setSelectedCharacteristic(characteristic);
+                    setSelectedRessource(ressource);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
                   color="danger"
                   onClick={() => {
-                    setSelectedCharacteristic(characteristic);
+                    setSelectedRessource(ressource);
                     setShowDeleteModal(true);
                   }}
                 >{t_table("delete")}</DropdownItem>
@@ -237,6 +266,7 @@ export default function CharacteristicsTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <Button
+                  // className="bg-foregroundd text-backgroundd"
                   endContent={<PlusIcon fill="currentColor" size={14} />}
                   size="sm" variant="solid" color="primary"
                   onClick={() => setShowNewModal(true)}
@@ -246,7 +276,7 @@ export default function CharacteristicsTable() {
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {characteristics.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {ressources.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -267,7 +297,7 @@ export default function CharacteristicsTable() {
       </>
     );
   }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, characteristics.length, hasSearchFilter, ]);
+    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, ressources.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -361,20 +391,28 @@ export default function CharacteristicsTable() {
       </Table>
 
       <Modal
-        open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
+        open={showNewModal} close={() => setShowNewModal(false)}
+        title={t_table("newRessource")}
       >
-        <EditCharacteristic characteristic={selectedCharacteristic} />
+        <NewRessource />
       </Modal>
 
       <Modal
-        open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
+        open={showEditModal} close={() => setShowEditModal(false)}
+        title={`${t_table("editRessource")} "${selectedRessource? selectedRessource.name: ''}"`}
       >
-        <DeleteCharacteristic id={selectedCharacteristic?.id} />
+        <EditRessource ressource={selectedRessource} />
+      </Modal>
+      
+      <Modal
+        open={showDeleteModal} close={() => setShowDeleteModal(false)}
+        title={`${t_table("deleteRessource")} "${selectedRessource? selectedRessource.name: ''}"`}
+      >
+        <DeleteRessource id={selectedRessource?.id} />
       </Modal>
       </div>
       )}
     </>
   );
 }
+

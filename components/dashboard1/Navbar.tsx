@@ -16,6 +16,7 @@ import NavLinks from "@/components/dashboard1/Navlinks";
 import Logout from "@/components/admin/FormElements/Logout";
 import User from "@/components/User";
 import Title from "@/components/Title";
+import { getImageUrl } from "@/lib/utils";
 
 export default function NavBarDashboardComponent() {
   const { data: session } = useSession();
@@ -59,12 +60,12 @@ export default function NavBarDashboardComponent() {
               color="warning"
               name={user? user.name: ""}
               size="sm"
-              src="/images/brain-orange-400.png"
+              src={user? getImageUrl(user.image): ""}
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem>
-              <User name={user? user.name: ""} role="admin" src="/images/brain-orange-400.png" />
+              <User name={user? user.name: ""} role="admin" src={user? getImageUrl(user.image): ""} />
             </DropdownItem>
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>

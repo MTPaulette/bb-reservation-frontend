@@ -107,8 +107,15 @@ export const roles = [
   {id: 3, name: "superadmin"},
 ]
 
-
 export const agencies = [
   {id: 1, name: "Elig Essono"},
   {id: 2, name: "Etoa-Meki"},
 ]
+
+export const columnsSpace = [
+  {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
+  {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place", sortable: true},
+  {name_en: "IMAGES", name_fr: "IMAGES", uid: "images"},
+  {name_en: "CHARACTERISTICS", name_fr: "CARACTERISTIQUES", uid: "characteristics"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];

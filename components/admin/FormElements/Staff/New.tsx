@@ -29,7 +29,7 @@ export default function NewStaff() {
       .min(8, { message: t_error("passwordLenght")})
       .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
         message: t_error("password")
-      }).max(250),
+      }).max(50),
       phonenumber: z.string().max(250),
       role_id: z.string().length(1),
       agency_id: z.string().length(1),

@@ -273,3 +273,110 @@ $user->save();
 
 
 Dans cet exemple, la validation unique vérifie que l'email est unique dans la table users, mais ignore l'email actuel de l'utilisateur ($user->id).…
+
+/**************************************************************8 */
+Voici un exemple de comment uploader plusieurs images avec Next.js et Laravel API :
+
+Next.js (Frontend)
+
+Créez un formulaire pour uploader les images :
+
+jsx
+import axios from 'axios';
+
+const UploadImages = () => {
+  const [images, setImages] = useState([]);
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = (e) => {
+    setImages(e.target.files);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+
+    const formData = new FormData();
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images[]', images[i]);
+    }
+
+    try {
+      const response = await axios.post('/api/upload-images', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log(response.data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input type="file" multiple onChange={handleFileChange} />
+        <button type="submit">Uploader les images</button>
+        {uploading && <p>Upload en cours...</p>}
+      </form>
+    </div>
+  );
+};
+
+export default UploadImages;
+
+Laravel API (Backend)
+
+Créez une route pour uploader les images :
+
+// routes/api.php
+
+Route::post('/upload-images', [ImageController::class, 'uploadImages']);
+
+Créez un contrôleur pour uploader les images :
+
+// app/Http/Controllers/ImageController.php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class ImageController extends Controller
+{
+    public function uploadImages(Request $request)
+    {
+        $request->validate([
+            'images' => [
+                'required',
+                'array',
+                'min:1',
+                'max:5',
+                'mimes:jpeg,png,jpg,gif',
+                'max:2048',
+            ],
+            'images.*' => [
+                'image',
+                'mimes:jpeg,png,jpg,gif',
+                'max:2048',
+            ],
+        ]);
+
+        $images = $request->file('images');
+
+        foreach ($images as $image) {
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/images', $imageName);
+        }
+
+        return response()->json(['message' => 'Les images ont été uploadées avec succès.']);
+    }
+}
+
+Dans cet exemple, nous utilisons la bibliothèque axios pour envoyer une requête POST à l'API Laravel avec les images uploadées. Nous utilisons également la méthode validate pour valider les images uploadées.
+
+Assurez-vous de configurer correctement les CORS dans votre API Laravel pour autoriser les requêtes provenant de votre application Next.js.

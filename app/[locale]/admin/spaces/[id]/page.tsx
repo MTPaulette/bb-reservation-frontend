@@ -1,11 +1,11 @@
 import Breadcrumb from "@/components/admin/Breadcrumb";
 import { Metadata } from "next";
-import ViewAgency from "@/components/admin/View/Agency";
+import ViewSpace from "@/components/admin/View/Space";
 
 export const metadata: Metadata = {
-  title: "Agency",
+  title: "Space",
   description:
-    "See more about the agency",
+    "See more about the space",
 };
 
 
@@ -14,8 +14,8 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <>
       <div className="mx-auto max-w-242.5">
-        <Breadcrumb pageName="agency" />
-        <ViewAgency id={id} />
+        <Breadcrumb pageName="space" />
+        <ViewSpace id={id} />
       </div>
     </>
   );

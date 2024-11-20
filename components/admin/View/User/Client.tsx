@@ -10,7 +10,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
-import { capitalize, getUsername } from "@/lib/utils";
+import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
 import CardDataStats from "@/components/admin/CardDataStats";
 
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
@@ -127,8 +127,7 @@ export default function ViewClient({id}: {id: string}) {
         {/* <div className="relative z-3 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full p-1 bg-white/20 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3"> */}
           <div className="relative drop-shadow-2 h-30 w-30 sm:h-40 sm:w-40">
             <Image
-              // src={user.image? user.image: "/images/user/user-06.png"}
-              src="/images/brain-orange-400.png"
+              src={user && user.image? getImageUrl(user.image): "/images/brain-orange-400.png"}
               width={160}
               height={160}
               className="rounded-full h-full w-full"
@@ -208,7 +207,7 @@ export default function ViewClient({id}: {id: string}) {
             </div>
           </div>
 
-          <div className="mx-auto max-ww-180 max-w-203">
+          <div className="mx-auto max-w-203">
             <Title className="font-semibold text-foreground">
               {t("about")+' '+getUsername(user.lastname, user.firstname)}
             </Title>

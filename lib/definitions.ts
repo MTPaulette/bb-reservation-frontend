@@ -133,6 +133,30 @@ export type CharacteristicFormType = {
   name_fr: string;
 };
 
+export type ImageType = {
+  id: number;
+  src: string;
+}
+
+export type SpaceType = {
+  id: number;
+  name: string;
+  description_en: null;
+  description_fr: null;
+  nb_place: number;
+  characteristics: CharacteristicType[];
+  images: ImageType[];
+}
+
+export type SpaceFormType = {
+  name: string;
+  description_en: null;
+  description_fr: null;
+  nb_place: number;
+  characteristics: CharacteristicType[];
+  images: ImageType[];
+};
+
 
 
 

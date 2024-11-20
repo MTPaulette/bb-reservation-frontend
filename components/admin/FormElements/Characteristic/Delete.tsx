@@ -10,16 +10,16 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { deleteAgency } from "@/lib/action/agencies";
+import { deleteCharacteristic } from "@/lib/action/characteristics";
 import Title from "@/components/Title";
 
-export default function DeleteAgency({ id }: { id: number} ) {
+export default function DeleteCharacteristic({ id }: { id: number} ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
   const schema: ZodType<ConfirmPasswordType> = z
     .object({
-      password: z.string().min(1).max(250),
+      password: z.string().min(1),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -41,19 +41,19 @@ export default function DeleteAgency({ id }: { id: number} ) {
     setError("");
     setSuccess("");
     setLoading(true);
-    deleteAgency(data, id)
+    deleteCharacteristic(data, id)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("delete_agency_success_msg"));
+          setSuccess(t("delete_characteristic_success_msg"));
           window.location.reload();
         }, 500);
       } else {
         const status = res.status;
         switch (status) {
           case 404:
-            setError(t_error("agency_not_found"));
+            setError(t_error("characteristic_not_found"));
             break;
           case 422:
             const err = await res.json();
