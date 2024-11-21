@@ -50,7 +50,7 @@ export default function AgenciesTable() {
           setAgencies(await res.json());
         }else {
           const status = res.status;
-          switch (status) {
+          switch(status) {
             case 401:
               setError(t_error("unauthenticated"));
               await signOut({

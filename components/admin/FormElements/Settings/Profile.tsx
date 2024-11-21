@@ -98,7 +98,7 @@ export default function Profile () {
         }, 1000);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
             await signOut({
@@ -148,7 +148,7 @@ export default function Profile () {
         }, 1000);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setErrorImg(t_error("user_not_found"));
             break;
@@ -191,7 +191,7 @@ export default function Profile () {
         setSuccessPwd("");
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setErrorPwd(t_error("user_not_found"));
             break;
@@ -233,7 +233,7 @@ export default function Profile () {
         }, 1000);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setErrorImg(t_error("user_not_found"));
             break;

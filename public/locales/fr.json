@@ -1,6 +1,6 @@
 {
   "Alert": {
-    "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur rendu du calendrier",
+    "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
     "note": "Note",
     "attention": "Attention!",
     "error": "Erreur"
@@ -24,6 +24,7 @@
     "characteristic_not_found": "caractérisque non trouvée",
     "space_not_found": "Espace non trouvé",
     "image_not_found": "Image non trouvée",
+    "ressource_not_found": "Ressource non trouvée",
     "unauthenticated": "vous n'etes pas connecté"
   },
   "Input": {
@@ -80,10 +81,14 @@
     "update_characteristic_success_msg": "caractérisque mis à jour avec succès.",
     "delete_characteristic_success_msg": "caractérisque supprimée avec succès.",
 
-    "new_space_success_msg": "Space créée avec succès.",
+    "new_space_success_msg": "Espace créée avec succès.",
     "update_space_success_msg": "Espace mis à jour avec succès.",
     "delete_space_success_msg": "Espace supprimée avec succès.",
     "delete_image_success_msg": "Image supprimée avec succès.",
+
+    "new_ressource_success_msg": "Ressource créée avec succès.",
+    "update_ressource_success_msg": "Ressource mis à jour avec succès.",
+    "delete_ressource_success_msg": "Ressource supprimée avec succès.",
 
     "newClient": "Nouveau client",
     "editClient": "Editer client",
@@ -105,7 +110,18 @@
     "description_placeholder": "Entrer la description",
     "images": "Images",
     "drap_drop_space": "Cliquer pour charger ou glisser et deposer les images de l'espace",
-    "delete_image": "Supprimer l'image"
+    "delete_image": "Supprimer l'image",
+
+    "space": "Espace",
+    "space_placeholder": "Sélectionner un espace",
+    "quantity_placeholder": "Entrer la quantité",
+    "quantity": "Quantité",
+    "prices": "Prix",
+    "price_hour": "prix par heure",
+    "price_midday": "prix par demi-journée",
+    "price_day": "price par jour",
+    "price_week": "prix par semaine",
+    "price_month": "price par mois"
   },
   "Footer": {
     "terms": "Termes et Conditions",
@@ -150,7 +166,8 @@
     "logs": "logs",
     "spaces": "espaces",
     "ressources": "ressources",
-    "characteristics": "caractérisques"
+    "characteristics": "caractérisques",
+    "reservations": "reservations"
   },
   "Table": {
     "view": "Voir",
@@ -191,12 +208,17 @@
     "newSpace": "Nouvel espace",
     "editSpace": "Editer space",
     "deleteSpace": "Supprimer space",
-    "some_stats": "quelques statistiques"
+    "some_stats": "quelques statistiques",
+
+    "newRessource": "Nouvelle ressource",
+    "editRessource": "Editer ressource",
+    "deleteRessource": "Supprimer ressource"
   },
   "Space": {
     "sits": "place(s) disponible(s)",
     "characteristics": "Caractérisques",
-    "images": "Images"
+    "images": "Images",
+    "no_image": "Aucune image pour cet espace."
   },
   "Profile":{
     "edit": "éditer",
@@ -221,8 +243,9 @@
     "staff": "staff",
     "profile": "mon profil",
     "spaces": "espaces",
-    "space": "space",
-    "characteristics": "caractérisques"
+    "space": "espace",
+    "characteristics": "caractérisques",
+    "ressources": "ressources"
   },
   "Settings": {
     "general": "général",

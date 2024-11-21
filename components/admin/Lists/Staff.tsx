@@ -51,7 +51,7 @@ export default function UsersTable() {
           setUsers(await res.json());
         }else {
           const status = res.status;
-          switch (status) {
+          switch(status) {
             case 401:
               setError(t_error("unauthenticated"));
               await signOut({
@@ -155,7 +155,7 @@ export default function UsersTable() {
               {radius: "full", size: "sm", src: getImageUrl(user.image) }
             }
             classNames={{
-              description: "text-foreground/60 font-medium",
+              name: "font-semibold",
             }}
             description={user.firstname}
             name={cellValue}
@@ -169,6 +169,12 @@ export default function UsersTable() {
             <p className="text-bold text-small capitalize">{cellValue}</p>
             {/* <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p> */}
           </div>
+        );
+      case "agency":
+        return (
+          <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
+            {capitalize(user.agency)}
+          </Link>
         );
       case "status":
         return (

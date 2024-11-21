@@ -1,6 +1,6 @@
 {
   "Alert": {
-    "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur rendu du calendrier",
+    "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
     "note": "Note",
     "attention": "Attention!",
     "error": "Error"
@@ -24,6 +24,7 @@
     "characteristic_not_found": "Characteristic not found",
     "space_not_found": "Space not found",
     "image_not_found": "Image not found",
+    "ressource_not_found": "Ressource not found",
     "unauthenticated": "unauthenticated"
  },
   "Input": {
@@ -85,6 +86,10 @@
     "delete_space_success_msg": "Space successfully deleted.",
     "delete_image_success_msg": "Image successfully deleted.",
 
+    "new_ressource_success_msg": "Ressource successfully created.",
+    "update_ressource_success_msg": "Ressource successfully updated.",
+    "delete_ressource_success_msg": "Ressource successfully deleted.",
+
     "newClient": "New client",
     "editClient": "Edit client",
     "deleteClient": "Delete client",
@@ -105,7 +110,18 @@
     "description_placeholder": "Enter description",
     "images": "Images",
     "drap_drop_space": "Click to upload or drag and drop images of the space",
-    "delete_image": "delete the image"
+    "delete_image": "delete the image",
+
+    "space": "Space",
+    "space_placeholder": "Select space",
+    "quantity_placeholder": "Enter quantity",
+    "quantity": "Quantity",
+    "prices": "Prices",
+    "price_hour": "price per hour",
+    "price_midday": "price per midday",
+    "price_day": "price per day",
+    "price_week": "price per week",
+    "price_month": "price per month"
   },
   "Footer": {
     "terms": "Terms & Conditions",
@@ -118,8 +134,6 @@
     "settings": "Account settings",
     "search_placeholder": "Type to search..."
   },
-
-
 
   "HomePage": {
     "hello": "Hello home page",
@@ -156,7 +170,8 @@
     "logs": "logs",
     "spaces": "spaces",
     "ressources": "ressources",
-    "characteristics": "characteristics"
+    "characteristics": "characteristics",
+    "reservations": "reservations"
   },
   "Table": {
     "view": "View",
@@ -197,12 +212,17 @@
     "newSpace": "New space",
     "editSpace": "Edit space",
     "deleteSpace": "Delete space",
-    "some_stats": "Some statistics"
+    "some_stats": "Some statistics",
+
+    "newRessource": "New ressource",
+    "editRessource": "Edit ressource",
+    "deleteRessource": "Delete ressource"
   },
   "Space": {
     "sits": "sit(s) available(s)",
     "characteristics": "Characteristics",
-    "images": "Images"
+    "images": "Images",
+    "no_image": "No image for this space."
   },
   "Profile":{
     "edit": "edit",
@@ -228,7 +248,8 @@
     "profile": "profile",
     "spaces": "spaces",
     "space": "space",
-    "characteristics": "characteristics"
+    "characteristics": "characteristics",
+    "ressources": "ressources"
   },
   "Settings": {
     "general": "general",

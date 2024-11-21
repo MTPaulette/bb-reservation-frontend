@@ -82,7 +82,7 @@ export default function Page({ params }: { params: { id: string } }) {
         // window.location.reload();
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setError(t_error("role_not_found"));
             break;

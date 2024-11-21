@@ -31,8 +31,8 @@ export default function NewStaff() {
         message: t_error("password")
       }).max(50),
       phonenumber: z.string().max(250),
-      role_id: z.string().length(1),
-      agency_id: z.string().length(1),
+      role_id: z.string(),
+      agency_id: z.string(),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -64,7 +64,7 @@ export default function NewStaff() {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 422:
             const err = await res.json();
             setError(JSON.stringify(err.errors));

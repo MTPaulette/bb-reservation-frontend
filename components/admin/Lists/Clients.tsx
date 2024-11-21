@@ -50,7 +50,7 @@ export default function UsersTable() {
           setUsers(await res.json());
         }else {
           const status = res.status;
-          switch (status) {
+          switch(status) {
             case 401:
               setError(t_error("unauthenticated"));
               await signOut({
@@ -154,7 +154,7 @@ export default function UsersTable() {
               {radius: "full", size: "sm", src: getImageUrl(user.image) }
             }
             classNames={{
-              description: "text-foreground/60 font-medium",
+              name: "font-semibold",
             }}
             description={user.firstname}
             name={cellValue}

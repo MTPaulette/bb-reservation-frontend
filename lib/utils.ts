@@ -15,7 +15,7 @@ export const capitalize = (str: string) => {
 }
 
 export const formatCurrency = (amount: number) => {
-  return (amount / 100).toLocaleString('fr-FR', {
+  return (amount).toLocaleString('fr-FR', {
     style: 'currency',
     currency: 'XAF',
   });

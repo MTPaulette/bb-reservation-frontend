@@ -42,6 +42,13 @@ const menuGroups = [
       },
       {
         icon: (
+          <CalendarIcon fill="none" size={18} />
+        ),
+        label: t("reservations"),
+        route: `/${locale}/admin/reservations`,
+      },
+      {
+        icon: (
           <UiIcon fill="none" size={18} />
         ),
         label: t("ressources"),

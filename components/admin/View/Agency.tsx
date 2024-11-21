@@ -49,7 +49,7 @@ export default function ViewStaff({id}: {id: string}) {
           setLoading(false);
         }else {
           const status = res.status;
-          switch (status) {
+          switch(status) {
             case 401:
               setError(t_error("unauthenticated"));
               await signOut({

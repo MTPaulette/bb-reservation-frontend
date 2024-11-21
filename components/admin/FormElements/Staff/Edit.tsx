@@ -23,8 +23,8 @@ export default function EditStaff({ user }: { user: UserType} ) {
       lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
       firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
       phonenumber: z.string().max(250),
-      role_id: z.string().length(1),
-      agency_id: z.string().length(1),
+      role_id: z.string(),
+      agency_id: z.string(),
   });
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,7 +54,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setError(t_error("user_not_found"));
             break;

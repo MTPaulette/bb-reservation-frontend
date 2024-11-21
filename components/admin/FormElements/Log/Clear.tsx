@@ -51,7 +51,7 @@ export default function ClearLog() {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 422:
             const err = await res.json();
             setError(err.password? t_error("wrongPassword"): "")

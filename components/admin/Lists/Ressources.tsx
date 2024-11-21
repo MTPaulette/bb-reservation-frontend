@@ -9,8 +9,8 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { RessourceType } from "@/lib/definitions";
-import { capitalize, getImageUrl } from "@/lib/utils";
-import { columnsRessource as columns } from "@/lib/data";
+import { capitalize, formatCurrency, getUsername } from "@/lib/utils";
+import { columnsRessource as columns, validitiesName as validities } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
@@ -22,10 +22,9 @@ import EditRessource from "../FormElements/Ressource/Edit";
 import DeleteRessource from "../FormElements/Ressource/Delete";
 import { getRessources } from '@/lib/action/ressources';
 import { signOut } from 'next-auth/react';
-import Image from 'next/image';
 
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "nb_place", "characteristics", "images", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "agency", "created_by", "actions"];
 
 export default function RessourcesTable() {
   const [ressources, setRessources] = useState([]);
@@ -45,7 +44,7 @@ export default function RessourcesTable() {
           setRessources(await res.json());
         }else {
           const status = res.status;
-          switch (status) {
+          switch(status) {
             case 401:
               setError(t_error("unauthenticated"));
               await signOut({
@@ -79,7 +78,7 @@ export default function RessourcesTable() {
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "name",
+    column: "space",
     direction: "ascending",
   });
 
@@ -106,7 +105,7 @@ export default function RessourcesTable() {
 
     if (hasSearchFilter) {
       filteredRessources = filteredRessources.filter((ressource) =>
-        ressource.name.toLowerCase().includes(filterValue.toLowerCase()),
+        ressource.space.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
@@ -134,34 +133,48 @@ export default function RessourcesTable() {
     const cellValue = ressource[columnKey as keyof Ressource];
 
     switch (columnKey) {
-      case "name":
+      case "space":
         return (
-          <div>
-            <p className="font-semibold">{ressource.name? capitalize(ressource.name): ''}</p>
-            <p className="font-light text-small text-foreground/70 h-30 overflow-hidden">
-              {capitalize(locale === "en" ? ressource.description_en: ressource.description_fr)}
+          <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
+            {capitalize(ressource.space)}
+          </Link>
+        );
+      case "price":
+        return (
+          <div className="flex flex-col gap-1">
+            <p>
+              {locale === "en" ? validities[0].name_en: validities[0].name_fr}:
+              <span className="font-bold pl-2 text-xs">{ressource.price_hour? formatCurrency(ressource.price_hour) : ""}</span>
+            </p>
+            <p className="whitespace-nowrap">
+              {locale === "en" ? validities[1].name_en: validities[1].name_fr}:
+              <span className="font-bold pl-2 text-xs">{ressource.price_midday? formatCurrency(ressource.price_midday) : ""}</span>
+            </p>
+            <p>
+              {locale === "en" ? validities[2].name_en: validities[2].name_fr}:
+              <span className="font-bold pl-2 text-xs">{ressource.price_day? formatCurrency(ressource.price_day) : ""}</span>
+            </p>
+            <p>
+              {locale === "en" ? validities[3].name_en: validities[3].name_fr}:
+              <span className="font-bold pl-2 text-xs">{ressource.price_week? formatCurrency(ressource.price_week) : ""}</span>
+            </p>
+            <p>
+              {locale === "en" ? validities[4].name_en: validities[4].name_fr}:
+              <span className="font-bold pl-2 text-xs">{ressource.price_month? formatCurrency(ressource.price_month) : ""}</span>
             </p>
           </div>
         );
-      case "characteristics":
+      case "agency":
         return (
-          <ul>
-            {ressource.characteristics.map((item) => (
-              <li key={item.id}>
-                {capitalize(locale === "en" ? item.name_en: item.name_fr)}
-              </li>
-            ))}
-          </ul>
+          <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
+            {capitalize(ressource.agency)}
+          </Link>
         );
-      case "images":
+      case "created_by":
         return (
-          <div className="flex flex-wrap items-center gap-1 min-w-36">
-            {ressource.images.map((item) => (
-              <div key={item.id} className="flex-shrink-0">
-                <Image src={getImageUrl(item.src)} alt="ressource image" width={40} height={40} />
-              </div>
-            ))}
-          </div>
+          <Link href={`/${locale}/admin/staff/${ressource.created_by}`} className="font-medium">
+            {ressource.parent_firstname && ressource.parent_lastname? getUsername(ressource.parent_lastname, ressource.parent_firstname): ""}
+          </Link>
         );
       case "actions":
         return (
@@ -325,7 +338,7 @@ export default function RessourcesTable() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["max-h-[382px]", "max-w-3xl"],
+      wrapper: ["max-h-[382px]", "max-w-3xl","border", "border-red-400", "bg-yellow-300"],
       // table: ["rounded-sm border border-divider bg-background px-5 pb-2.5 pt-6 shadow-default sm:px-7.5 xl:pb-1"], lg:h-[calc(100vh_-_5.625rem)]
       // table: ["bg-green-300"],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
@@ -339,6 +352,7 @@ export default function RessourcesTable() {
         // last
         "group-data-[last=true]:first:before:rounded-none",
         "group-data-[last=true]:last:before:rounded-none",
+        "border-b", "border-divider"
       ],
     }),
     [],
@@ -399,14 +413,14 @@ export default function RessourcesTable() {
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editRessource")} "${selectedRessource? selectedRessource.name: ''}"`}
+        title={`${t_table("editRessource")} "${selectedRessource? selectedRessource.space: ''}"`}
       >
         <EditRessource ressource={selectedRessource} />
       </Modal>
       
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteRessource")} "${selectedRessource? selectedRessource.name: ''}"`}
+        title={`${t_table("deleteRessource")} "${selectedRessource? selectedRessource.space: ''}"`}
       >
         <DeleteRessource id={selectedRessource?.id} />
       </Modal>

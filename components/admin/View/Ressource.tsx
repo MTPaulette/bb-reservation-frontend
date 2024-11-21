@@ -2,7 +2,7 @@
 
 import React from "react";
 // import Image from "next/image";
-import { getSpaceById } from '@/lib/action/spaces';
+import { getRessourceById } from '@/lib/action/ressources';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
@@ -16,14 +16,14 @@ import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Image } 
 import { VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
-import EditSpace from "@/components/admin/FormElements/Space/Edit";
-import DeleteSpace from "@/components/admin/FormElements/Space/Delete";
+import EditRessource from "@/components/admin/FormElements/Ressource/Edit";
+import DeleteRessource from "@/components/admin/FormElements/Ressource/Delete";
 import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
-import { SpaceType } from "@/lib/definitions";
+import { RessourceType } from "@/lib/definitions";
 
-export default function ViewSpace({id}: {id: string}) {
-  const [space, setSpace] = useState<SpaceType>([]);
+export default function ViewRessource({id}: {id: string}) {
+  const [ressource, setRessource] = useState<RessourceType>([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -31,15 +31,15 @@ export default function ViewSpace({id}: {id: string}) {
   const locale = useLocale();
   const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
-  const t_space = useTranslations("Space");
+  const t_ressource = useTranslations("Ressource");
 
   useEffect(() => {
     setError("");
-    getSpaceById(Number(id))
+    getRessourceById(Number(id))
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setSpace(response);
+          setRessource(response);
           setLoading(false);
         }else {
           const status = res.status;
@@ -71,7 +71,7 @@ export default function ViewSpace({id}: {id: string}) {
   }, []);
 
 
-  if (!space) {
+  if (!ressource) {
     notFound();
   }
 
@@ -89,7 +89,7 @@ export default function ViewSpace({id}: {id: string}) {
       <div className="px-6 lg:px-8 py-8 text-centerr lg:py-10 xl:py-13.5">
           <div className="relative flex justify-center items-center gap-1">
             <Title className="text-2xl md:text-3xl font-semibold">
-              {capitalize(space.name)}
+              {capitalize(ressource.name)}
             </Title>
             <div className="relative">
               <Dropdown className="bg-background border-1 border-default-200">
@@ -114,49 +114,48 @@ export default function ViewSpace({id}: {id: string}) {
               </Dropdown>
             </div>
           </div>
-
+      
           <div className="mx-auto max-w-203">
             <div className="flex gap-2 justify-center items-center">
               <span className="font-semibold">
-                {space.nb_place}
+                {ressource.nb_place}
               </span>
-              <span className="text-sm sm:whitespace-nowrap">{capitalize(t_space("sits"))}</span>
+              <span className="text-sm sm:whiteressource-nowrap">{capitalize(t_ressource("sits"))}</span>
             </div>
             <p className="font-light text-justify my-8">
-              {locale === "en" ? space.description_en: space.description_fr}
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Pellentesque posuere fermentum urna, eu condimentum mauris
               tempus ut. Donec fermentum blandit aliquet. Etiam dictum
               dapibus ultricies. Sed vel aliquet libero. Nunc a augue
               fermentum, pharetra ligula sed, aliquam lacus.
             </p>
-
+      
             {/* characteristics */}
             <div>
               <Title
                 className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"
-              >{capitalize(t_space("characteristics"))}</Title>
+              >{capitalize(t_ressource("characteristics"))}</Title>
               <ul className="flex flex-wrap">
-                  {space.characteristics.map((item) => (
+                  {ressource.characteristics.map((item) => (
                   <li key={item.id} className="border-r border-divider px-4">
                     {capitalize(locale === "en" ? item.name_en: item.name_fr)}
                   </li>
                 ))}
               </ul>
             </div>
-
+      
             {/* images */}
             <div className="my-10 bg-redd-50">
               <Title
                 className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"
-              >{capitalize(t_space("images"))}</Title>
-              {space.images.length > 0 ? (
+              >{capitalize(t_ressource("images"))}</Title>
+              {ressource.images.length > 0 ? (
               <div className="flex flex-wrap items-center gap-2 lg:gap-4 xl:gap-6 w-full">
-                {space.images.map((item) => (
+                {ressource.images.map((item) => (
                   <Image
                     key={item.id}
                     width="100%"
-                    alt="space image"
+                    alt="ressource image"
                     className="w-full object-cover h-[80px] lg:h-[140px] z-1"
                     src={getImageUrl(item.src)}
                   />
@@ -164,11 +163,11 @@ export default function ViewSpace({id}: {id: string}) {
               </div>
               ) : (
                 <div className="flex w-full bg-opacity-[15%] px-5 py-3 shadow-sm dark:bg-black dark:bg-opacity-20 md:p-9 text-sm">
-                  {t_space("no_image")}
+                  {t_ressource("no_image")}
                 </div>
               )}
             </div>
-
+      
             {/* stats */}
             <div>
               <Title
@@ -184,29 +183,27 @@ export default function ViewSpace({id}: {id: string}) {
               <CardDataStats title="Total Product" total="2.450" rate="2.59%" levelUp>
                 <ShoppingBagIcon fill="currentColor" size={22} />
               </CardDataStats>
-              <CardDataStats title="Total Spaces" total="3.456" rate="0.95%" levelDown>
+              <CardDataStats title="Total Ressources" total="3.456" rate="0.95%" levelDown>
                 <PeopleIcon fill="currentColor" size={22} />
               </CardDataStats>
             </div>
             </div>
           </div>
-        </div>
-
+      </div>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editSpace")} "${space? space.name: ""}"`}
+        title={`${t_table("editRessource")} "${ressource? ressource.name: ""}"`}
       >
-        <EditSpace space={space} />
+        <EditRessource ressource={ressource} />
       </Modal>
-
+      
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteSpace")} "${space? space.name: ""}"`}
+        title={`${t_table("deleteRessource")} "${ressource? ressource.name: ""}"`}
       >
-        <DeleteSpace id={space?.id} />
+        <DeleteRessource id={ressource?.id} />
       </Modal>
-
     </div>
     )}
     </>

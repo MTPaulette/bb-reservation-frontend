@@ -95,7 +95,7 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setError(t_error("space_not_found"));
             break;
@@ -128,14 +128,17 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
     .then(async (res) => {
       setSave(false);
       if(res?.ok) {
-        handleUploadImages();
-        // setTimeout(() => {
-        //   setSuccess(t("update_account_success_msg"));
-        //   window.location.reload();
-        // }, 500);
+        if(images){
+          handleUploadImages();
+        }else {
+            setTimeout(() => {
+            setSuccess(t("update_account_success_msg"));
+            window.location.reload();
+          }, 500);
+        }
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setError(t_error("space_not_found"));
             break;
@@ -174,7 +177,7 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setError(t_error("image_not_found"));
             break;
@@ -232,7 +235,7 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
           <Input
             isRequired
             label={t("nb_place")}
-            // type="number"
+            type="number"
             placeholder={t("nb_place_placeholder")}
             variant="bordered"
             className="w-full sm:w-1/4"

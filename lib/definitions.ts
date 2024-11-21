@@ -157,6 +157,53 @@ export type SpaceFormType = {
   images: ImageType[];
 };
 
+export type RessourceType = {
+  id: number;
+  price_hour: number;
+  price_midday: number | null;
+  price_day: number | null;
+  price_week: number | null;
+  price_month: number | null;
+  quantity: number;
+  agency_id: number;
+  space_id: number;
+  created_by: number;
+  created_at: Date;
+  updated_at: Date;
+  agency: string;
+  space: string;
+  nb_place: number;
+  parent_firstname: string;
+  parent_lastname:  string;
+}
+
+export type RessourceFormType = {
+  price_hour: string;
+  price_midday: string;
+  price_day: string;
+  price_week: string;
+  price_month: string;
+  quantity: string;
+  agency_id: string;
+  space_id: string;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

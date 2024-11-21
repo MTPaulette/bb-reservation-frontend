@@ -1,57 +1,81 @@
 "use client"
 
-import React from "react";
-import { Button, Input, Textarea } from "@nextui-org/react";
-import { PencilSquareIcon } from "@/components/Icons";
+import React, { useEffect } from "react";
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { SpaceFormType } from "@/lib/definitions";
-import { createSpace } from "@/lib/action/spaces";
+import { AgencyType, RessourceFormType, SpaceType } from "@/lib/definitions";
+import { createRessource } from "@/lib/action/ressources";
+import { getAgencies } from "@/lib/action/agencies";
+import { getSpaces } from "@/lib/action/spaces";
+import Title from "@/components/Title";
+import Loader from "../../Common/Loader";
 
-export default function NewSpace() {
+export default function NewRessource() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
-
-  const schema: ZodType<SpaceFormType> = z
-    .object({
-      name: z.string().min(1, { message: t_error("name") }).max(250),
-      nb_place: z.string().min(1),
-      description_en: z.string().min(1),
-      description_fr: z.string().min(1),
-  });
-
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+  const [agencies, setAgencies] = useState<AgencyType>();
+  const [spaces, setSpaces] = useState<SpaceType>();
+
+  const schema: ZodType<RessourceFormType> = z
+    .object({
+      space_id: z.string(),
+      agency_id: z.string(),
+      quantity: z.string().min(1),
+      price_hour: z.string().min(1),
+      price_midday: z.string().min(1),
+      price_day: z.string().min(1),
+      price_week: z.string().min(1),
+      price_month: z.string().min(1),
+  });
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm<SpaceFormType>({
+  } = useForm<RessourceFormType>({
     resolver: zodResolver(schema),
   })
+  
+  useEffect(() => {
+    getAgencies()
+      .then(async (res) => {
+        setLoading(false);
+        if(res?.ok){
+          setAgencies(await res.json());
+        }
+    });
+    getSpaces()
+      .then(async (res) => {
+        setLoading(false);
+        if(res?.ok){
+          setSpaces(await res.json());
+        }
+    });
+  }, []);
 
-  const handleFormSubmit = async (data: SpaceFormType) => {
+  const handleFormSubmit = async (data: RessourceFormType) => {
     setError("");
     setSuccess("");
     setLoading(true);
-    createSpace(data)
+    createRessource(data)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("new_space_success_msg"));
+          setSuccess(t("new_ressource_success_msg"));
           window.location.reload();
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 422:
             const err = await res.json();
             setError(JSON.stringify(err.errors));
@@ -83,60 +107,112 @@ export default function NewSpace() {
       {success != "" ? (
         <Alert color="success" message={success} />
       ) : null}
+      {spaces && agencies ? (
       <form
         action="#" className="space-y-4 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
-        <div className="flex flex-col sm:flex-row gap-4 w-full">
+        <Select
+          isRequired
+          label={t("space")}
+          variant="bordered"
+          placeholder={t("space_placeholder")}
+          isInvalid={errors.space_id ? true: false}
+          errorMessage={errors.space_id ? errors.space_id?.message: null}
+          className="w-full bg-background rounded-small"
+          {...register("space_id")}
+        >
+          {spaces.map((space) => (
+            <SelectItem key={space.id}>
+              {space.name}
+            </SelectItem>
+          ))}
+        </Select>
+        <Select
+          isRequired
+          label={t("agency")}
+          variant="bordered"
+          placeholder={t("agency_placeholder")}
+          isInvalid={errors.agency_id ? true: false}
+          errorMessage={errors.agency_id ? errors.agency_id?.message: null}
+          className="w-full bg-background rounded-small"
+          {...register("agency_id")}
+        >
+          {agencies.map((agency) => (
+            <SelectItem key={agency.id}>
+              {agency.name}
+            </SelectItem>
+          ))}
+        </Select>
+        <Input
+          isRequired
+          label={t("quantity")}
+          type="number"
+          placeholder={t("quantity_placeholder")}
+          variant="bordered"
+          {...register("quantity")}
+          isInvalid={errors.quantity ? true: false}
+          errorMessage={errors.quantity ? errors.quantity?.message: null}
+        />
+        <Title className="my-4 text-lg">{t("prices")} (XAF)</Title>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full px-3 sm:px-6">
           <Input
             isRequired
-            autoFocus
-            label={t("name")}
-            type="text"
-            placeholder={t("name_placeholder")}
+            label={t("price_hour")}
+            type="number"
             variant="bordered"
-            className="w-full sm:w-3/4"
-            {...register("name")}
-            isInvalid={errors.name ? true: false}
-            errorMessage={errors.name ? errors.name?.message: null}
+            size="sm"
+            className="w-full col-span-1"
+            {...register("price_hour")}
+            isInvalid={errors.price_hour ? true: false}
+            errorMessage={errors.price_hour ? errors.price_hour?.message: null}
           />
           <Input
             isRequired
-            label={t("nb_place")}
-            // type="number"
-            placeholder={t("nb_place_placeholder")}
+            label={t("price_midday")}
+            type="number"
             variant="bordered"
-            className="w-full sm:w-1/4"
-            {...register("nb_place")}
-            isInvalid={errors.nb_place ? true: false}
-            errorMessage={errors.nb_place ? errors.nb_place?.message: null}
+            size="sm"
+            className="w-full col-span-1 whitespace-nowrap"
+            {...register("price_midday")}
+            isInvalid={errors.price_midday ? true: false}
+            errorMessage={errors.price_midday ? errors.price_midday?.message: null}
+          />
+          <Input
+            isRequired
+            label={t("price_day")}
+            type="number"
+            variant="bordered"
+            size="sm"
+            className="w-full col-span-1"
+            {...register("price_day")}
+            isInvalid={errors.price_day ? true: false}
+            errorMessage={errors.price_day ? errors.price_day?.message: null}
+          />
+          <Input
+            isRequired
+            label={t("price_week")}
+            type="number"
+            variant="bordered"
+            size="sm"
+            className="w-full col-span-1"
+            {...register("price_week")}
+            isInvalid={errors.price_week ? true: false}
+            errorMessage={errors.price_week ? errors.price_week?.message: null}
+          />
+          <Input
+            isRequired
+            label={t("price_month")}
+            type="number"
+            variant="bordered"
+            size="sm"
+            className="w-full col-span-1"
+            {...register("price_month")}
+            isInvalid={errors.price_month ? true: false}
+            errorMessage={errors.price_month ? errors.price_month?.message: null}
           />
         </div>
-        <Textarea
-          isRequired
-          endContent={
-            <PencilSquareIcon fill="currentColor" size={18} />
-          }
-          label={t("description_en")}
-          placeholder={t("description_placeholder")}
-          variant="bordered"
-          {...register("description_en")}
-          isInvalid={errors.description_en ? true: false}
-          errorMessage={errors.description_en ? errors.description_en?.message: null}
-        />
-        <Textarea
-          isRequired
-          endContent={
-            <PencilSquareIcon fill="currentColor" size={18} />
-          }
-          label={t("description_fr")}
-          placeholder={t("description_placeholder")}
-          variant="bordered"
-          {...register("description_fr")}
-          isInvalid={errors.description_fr ? true: false}
-          errorMessage={errors.description_fr ? errors.description_fr?.message: null}
-        />
-        <div className="w-full">
+        <div className="w-full mt-4">
           <Button 
             type="submit"
             color="primary"
@@ -147,8 +223,10 @@ export default function NewSpace() {
           </Button>
         </div>
       </form>
+      ) : (
+        <Loader />
+      )}
     </div>
     </>
   )
 }
-

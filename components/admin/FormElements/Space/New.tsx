@@ -51,7 +51,7 @@ export default function NewSpace() {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 422:
             const err = await res.json();
             setError(JSON.stringify(err.errors));

@@ -10,10 +10,10 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { deleteSpace } from "@/lib/action/spaces";
+import { deleteRessource } from "@/lib/action/ressources";
 import Title from "@/components/Title";
 
-export default function DeleteSpace({ id }: { id: number} ) {
+export default function DeleteRessource({ id }: { id: number} ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
@@ -31,7 +31,6 @@ export default function DeleteSpace({ id }: { id: number} ) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ConfirmPasswordType>({
     resolver: zodResolver(schema),
@@ -41,19 +40,19 @@ export default function DeleteSpace({ id }: { id: number} ) {
     setError("");
     setSuccess("");
     setLoading(true);
-    deleteSpace(data, id)
+    deleteRessource(data, id)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("delete_space_success_msg"));
+          setSuccess(t("delete_ressource_success_msg"));
           window.location.reload();
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
-            setError(t_error("space_not_found"));
+            setError(t_error("ressource_not_found"));
             break;
           case 422:
             const err = await res.json();

@@ -40,7 +40,7 @@ export default function LogsTable() {
           setLogs(await res.json());
         }else {
           const status = res.status;
-          switch (status) {
+          switch(status) {
             case 401:
               setError(t_error("unauthenticated"));
               await signOut({
@@ -137,7 +137,6 @@ export default function LogsTable() {
       case "author":
         return (
           <p className="font-medium text-small">{log.lastname && log.firstname? getUsername(log.lastname, log.firstname): ""}</p>
-          // <p className="font-medium text-small">{log.user_id}</p>
         );
       default:
         return cellValue;

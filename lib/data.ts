@@ -119,3 +119,22 @@ export const columnsSpace = [
   {name_en: "CHARACTERISTICS", name_fr: "CARACTERISTIQUES", uid: "characteristics"},
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
+
+export const columnsRessource = [
+  {name_en: "SPACE", name_fr: "ESPACE", uid: "space", sortable: true},
+  {name_en: "PRICE", name_fr: "PRIX", uid: "price"},
+  {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place", sortable: true},
+  {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity", sortable: true},
+  {name_en: "AGENCY", name_fr: "AGENCE", uid: "agency", sortable: true},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+export const validitiesName = [
+  {name_en: "Hour", name_fr: "Heure"},
+  {name_en: "Midday", name_fr: "Demi-journée"},
+  {name_en: "Day", name_fr: "Journée"},
+  {name_en: "Week", name_fr: "Semaine"},
+  {name_en: "Month", name_fr: "Mois"},
+]

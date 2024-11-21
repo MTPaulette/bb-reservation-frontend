@@ -51,7 +51,7 @@ export default function DeleteAgency({ id }: { id: number} ) {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setError(t_error("agency_not_found"));
             break;

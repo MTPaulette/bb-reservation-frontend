@@ -51,7 +51,7 @@ export default function DeleteCharacteristic({ id }: { id: number} ) {
         }, 500);
       } else {
         const status = res.status;
-        switch (status) {
+        switch(status) {
           case 404:
             setError(t_error("characteristic_not_found"));
             break;
