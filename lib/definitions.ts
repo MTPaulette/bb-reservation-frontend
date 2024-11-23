@@ -133,10 +133,16 @@ export type CharacteristicFormType = {
   name_fr: string;
 };
 
-export type ImageType = {
+export type ImageType = ({
   id: number;
   src: string;
-}
+} | {
+  id: number;
+  src: string;
+  space_id: number;
+  created_at: Date;
+  updated_at: Date;
+})
 
 export type SpaceType = {
   id: number;

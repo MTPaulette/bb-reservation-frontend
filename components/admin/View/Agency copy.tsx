@@ -1,24 +1,25 @@
 "use client"
 
 import React from "react";
-import { getRessourceById } from '@/lib/action/ressources';
+import { getAgencyById } from '@/lib/action/agencies';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
-import { capitalize, getImageUrl } from "@/lib/utils";
+import { capitalize } from "@/lib/utils";
+
 import { PencilSquareIcon } from "@/components/Icons";
-import { Button, Image } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 
 import Modal from "@/components/Modal";
-import EditRessource from "@/components/admin/FormElements/Ressource/Edit";
+import EditAgency from "@/components/admin/FormElements/Agency/Edit";
 import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
 import CardWrapper from "@/components/admin/DataStats/Card2";
 
-export default function ViewRessource({id}: {id: string}) {
-  const [ressource, setRessource] = useState([]);
+export default function ViewAgency({id}: {id: string}) {
+  const [agency, setAgency] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -29,11 +30,11 @@ export default function ViewRessource({id}: {id: string}) {
 
   useEffect(() => {
     setError("");
-    getRessourceById(Number(id))
+    getAgencyById(Number(id))
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setRessource(response);
+          setAgency(response);
           setLoading(false);
         }else {
           const status = res.status;
@@ -65,7 +66,7 @@ export default function ViewRessource({id}: {id: string}) {
   }, []);
 
 
-  if (!ressource) {
+  if (!agency) {
     notFound();
   }
 
@@ -86,7 +87,7 @@ export default function ViewRessource({id}: {id: string}) {
             {/* title */}
             <div className="w-full flex justify-between items-center">
               <Title className="text-2xl font-semibold sm:text-3xl">
-                {capitalize(ressource.space.name)}
+                {capitalize(agency.name)}
               </Title>
               <Button
                 isIconOnly
@@ -96,85 +97,74 @@ export default function ViewRessource({id}: {id: string}) {
               />
             </div>
             <p className="text-foreground/60 text-justify my-4">
-              {locale === "en" ? ressource.space.description_en: ressource.space.description_fr}
+              {/* {locale === "en" ? agency.space.description_en: agency.space.description_fr} */}
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Pellentesque posuere fermentum urna, eu condimentum mauris
               tempus ut. Donec fermentum blandit aliquet. Etiam dictum
               dapibus ultricies. Sed vel aliquet libero. Nunc a augue
               fermentum, pharetra ligula sed, aliquam lacus.
             </p>
+            {/*
             <ul className="flex flex-wrap -ml-4 gap-y-2">
-              {ressource.space.characteristics.map((item) => (
+              {agency.space.characteristics.map((item) => (
                 <li key={item.id} className="border-r border-divider px-4">
                   {capitalize(locale === "en" ? item.name_en: item.name_fr)}
                 </li>
               ))}
-            </ul>
-          </div>
-
-          {/* stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-3 gap-x-6 gap-y-10 border-b border-t border-divider py-4 md:py-8 xl:gap-16">
-            <CardWrapper />
-          </div>
-
-          {/* images */}
-          <div className="border-b border-divider py-4 md:py-8">
-            {ressource.space.images.length > 0 ? (
-              <div className="flex flex-wrap items-center gap-2 lg:gap-4 xl:gap-6 w-full">
-                {ressource.space.images.map((item) => (
-                  <Image
-                    key={item.id}
-                    width="100%"
-                    alt="ressource image"
-                    className="w-auto object-cover h-[100px] lg:h-[140px] z-1 "
-                    src={getImageUrl(item.src)}
-                  />
-                ))}
-              </div>
-            ) : null}
+            </ul> */}
           </div>
 
           {/* agency */}
           <div className="py-4 md:py-8">
             <div className="mb-4 grid gap-4 sm:grid-cols-2 sm:gap-8 lg:gap-16">
               <div className="space-y-4">
+                  {/* <div> */}
                 <div className="flex space-x-4">
-                  <img className="h-16 w-16 rounded-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/helene-engels.png" alt="Helene avatar" />
-                  <div>
-                    <span className="mb-2 inline-block rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300"> PRO Account </span>
-                    <h2 className="flex items-center text-xl font-bold leading-none text-foreground sm:text-2xl">Helene Engels</h2>
+                  <span>Status: </span>
+                    <span
+                      className={`mb-2 inline-block rounded px-2.5 py-0.5 uppercase font-bold
+                      ${agency.status == "active"? "bg-success text-white" :
+                      "text-danger-800 dark:bg-danger-900 dark:text-danger-300"}`}
+                    >{agency.status}</span>
                   </div>
-                </div>
-                <dl className="">
+                    { agency.status == "active" ? (
+                      <p className="text-foreground/60 text-justify my-4">
+                        {locale === "en" ? agency.reason_for_suspension_en: agency.reason_for_suspension_fr}
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Pellentesque posuere fermentum urna, eu condimentum mauris
+                        tempus ut. Donec fermentum blandit aliquet. Etiam dictum
+                        dapibus ultricies. Sed vel aliquet libero. Nunc a augue
+                        fermentum, pharetra ligula sed, aliquam lacus.
+                      </p>
+                    ): null}
+                {/* </div> */}
+                <dl>
+                  <dt className="font-semibold text-foreground">Phone Number</dt>
+                  <dd className="text-foreground/60">{agency.phonenumber ? agency.phonenumber: "-"}</dd>
+                </dl>
+                <dl>
                   <dt className="font-semibold text-foreground">Email Address</dt>
-                  <dd className="text-foreground/60">helene@example.com</dd>
+                  <dd className="text-foreground/60">{agency.email ? agency.email: "-"}</dd>
                 </dl>
                 <dl>
                   <dt className="font-semibold text-foreground">Home Address</dt>
-                  <dd className="flex items-center gap-1 text-foreground/60">
-                    <svg className="hidden h-5 w-5 shrink-0 text-gray-400 dark:text-gray-500 lg:inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />
-                    </svg>
-                    2 Miles Drive, NJ 071, New York, United States of America
-                  </dd>
-                </dl>
-                <dl>
-                  <dt className="font-semibold text-foreground">Delivery Address</dt>
-                  <dd className="flex items-center gap-1 text-foreground/60">
-                    <svg className="hidden h-5 w-5 shrink-0 text-gray-400 dark:text-gray-500 lg:inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-                    </svg>
-                    9th St. PATH Station, New York, United States of America
-                  </dd>
+                  <dd className="text-foreground/60">{agency.address ? agency.address: "-"}</dd>
                 </dl>
               </div>
               <div className="space-y-4">
                 <dl>
-                  <dt className="font-semibold text-foreground">Phone Number</dt>
-                  <dd className="text-foreground/60">+1234 567 890 / +12 345 678</dd>
-                </dl>
-                <dl>
                   <dt className="font-semibold text-foreground">Favorite pick-up point</dt>
+          
+                  {agency.openingdays.length > 0 ? (
+                  <div className="text-sm">
+                    {agency.openingdays.map((item) => (
+                      <div key={item.id}>
+                        <span className="font-semibold mr-1.5">{capitalize(locale === "en" ? item.name_en: item.name_fr)}</span>
+                        <span className="font-light text-xs">{`(${item.from} - ${item.to})`}</span>
+                      </div>
+                    ))}
+                  </div>
+                    ) : null}
                   <dd className="flex items-center gap-1 text-foreground/60">
                     <svg className="hidden h-5 w-5 shrink-0 text-gray-400 dark:text-gray-500 lg:inline" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                       <path
@@ -215,6 +205,28 @@ export default function ViewRessource({id}: {id: string}) {
               onClick={() => setShowEditModal(true)}
             > {t_table("edit")}</Button>
           </div>
+
+          {/* stats */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-3 gap-x-6 gap-y-10 border-b border-t border-divider py-4 md:py-8 xl:gap-16">
+            <CardWrapper />
+          </div>
+
+          {/* images
+          <div className="border-b border-divider py-4 md:py-8">
+            {agency.space.images.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-2 lg:gap-4 xl:gap-6 w-full">
+                {agency.space.images.map((item) => (
+                  <Image
+                    key={item.id}
+                    width="100%"
+                    alt="agency image"
+                    className="w-auto object-cover h-[100px] lg:h-[140px] z-1 "
+                    src={getImageUrl(item.src)}
+                  />
+                ))}
+              </div>
+            ) : null}
+          </div> */}
           <div className="rounded-lg border border-divider bg-content1 p-4 md:p-8">
             <h3 className="mb-4 text-xl font-semibold text-foreground">Latest orders</h3>
             <div className="flex flex-wrap items-center gap-y-4 border-b border-gray-200 pb-4 dark:border-gray-700 md:pb-5">
@@ -483,9 +495,9 @@ export default function ViewRessource({id}: {id: string}) {
       <div>
         <Modal
           open={showEditModal} close={() => setShowEditModal(false)}
-          title={`${t_table("editRessource")} "${ressource? ressource.space.name: ""}"`}
+          title={`${t_table("editAgency")} "${agency? agency.name: ""}"`}
         >
-          <EditRessource ressource={ressource} />
+          <EditAgency agency={agency} />
         </Modal>
       </div>
     </div>

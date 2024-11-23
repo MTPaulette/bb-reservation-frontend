@@ -40,55 +40,6 @@ export const Hours = [
   { id: 18, hour: '22:00' },
 ];
 
-export const columnsClient = [
-  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
-  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
-  {name_en: "ROLE", name_fr: "ROLE", uid: "role"},
-  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
-  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
-  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
-];
-
-export const columnsStaff = [
-  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
-  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
-  {name_en: "ROLE", name_fr: "ROLE", uid: "role", sortable: true},
-  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
-  {name_en: "WORK AT", name_fr: "TRAVAILLE A", uid: "agency", sortable: true},
-  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
-  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
-];
-
-export const columnsAgency = [
-  {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
-  {name_en: "ADDRESS", name_fr: "ADRESSE", uid: "address"},
-  {name_en: "CONTACT", name_fr: "CONTACT", uid: "contact"},
-  // {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
-  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
-  {name_en: "OPENING DAYS", name_fr: "JOURS D'OUVERTURE", uid: "openingdays"},
-  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
-];
-
-export const columnsLog = [
-  {name_en: "DESCRIPTION", name_fr: "DESCRIPTION", uid: "description", sortable: true},
-  {name_en: "URL", name_fr: "URL", uid: "url"},
-  {name_en: "METHOD", name_fr: "METHODE", uid: "method"},
-  {name_en: "IP", name_fr: "IP", uid: "ip"},
-  {name_en: "AGENT", name_fr: "AGENT", uid: "agent"},
-  {name_en: "AUTHOR", name_fr: "AUTEUR", uid: "author"},
-  {name_en: "DATE", name_fr: "DATE", uid: "created_at"},
-];
-
-
-export const columnsRole = [
-  {name_en: "ROLE", name_fr: "ROLE", uid: "role", sortable: true},
-  {name_en: "PERMISSIONS", name_fr: "PERMISSIONS", uid: "permissions", sortable: true},
-];
-
-export const columnsCharacteristic = [
-  {name_en: "CHARACTERISTICS", name_fr: "CARACTERISTIQUES", uid: "characteristic", sortable: true},
-  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
-];
 
 export const statusUser = [
   {name_en: "Active", name_fr: "Actif", uid: "active"},
@@ -112,11 +63,65 @@ export const agencies = [
   {id: 2, name: "Etoa-Meki"},
 ]
 
+export const columnsClient = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
+  {name_en: "ROLE", name_fr: "ROLE", uid: "role"},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+export const columnsStaff = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
+  {name_en: "ROLE", name_fr: "ROLE", uid: "role", sortable: true},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "WORK AT", name_fr: "TRAVAILLE A", uid: "agency", sortable: true},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+export const columnsAgency = [
+  {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
+  {name_en: "ADDRESS", name_fr: "ADRESSE", uid: "address"},
+  {name_en: "CONTACT", name_fr: "CONTACT", uid: "contact"},
+  // {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "OPENING DAYS", name_fr: "JOURS D'OUVERTURE", uid: "openingdays"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+export const columnsLog = [
+  {name_en: "DESCRIPTION", name_fr: "DESCRIPTION", uid: "description", sortable: true},
+  {name_en: "URL", name_fr: "URL", uid: "url"},
+  {name_en: "METHOD", name_fr: "METHODE", uid: "method"},
+  {name_en: "IP", name_fr: "IP", uid: "ip"},
+  {name_en: "AGENT", name_fr: "AGENT", uid: "agent"},
+  {name_en: "AUTHOR", name_fr: "AUTEUR", uid: "author"},
+  {name_en: "DATE", name_fr: "DATE", uid: "created_at"},
+];
+
+export const columnsRole = [
+  {name_en: "ROLE", name_fr: "ROLE", uid: "role", sortable: true},
+  {name_en: "PERMISSIONS", name_fr: "PERMISSIONS", uid: "permissions", sortable: true},
+];
+
+export const columnsCharacteristic = [
+  {name_en: "CHARACTERISTICS", name_fr: "CARACTERISTIQUES", uid: "characteristic", sortable: true},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
 export const columnsSpace = [
   {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
   {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place", sortable: true},
   {name_en: "IMAGES", name_fr: "IMAGES", uid: "images"},
   {name_en: "CHARACTERISTICS", name_fr: "CARACTERISTIQUES", uid: "characteristics"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 

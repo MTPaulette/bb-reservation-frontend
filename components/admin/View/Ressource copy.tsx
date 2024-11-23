@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize, getImageUrl } from "@/lib/utils";
-import CardDataStats from "@/components/admin/CardDataStats";
+import CardDataStats from "@/components/admin/DataStats/Card1";
 
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Image } from "@nextui-org/react";
@@ -20,10 +20,9 @@ import EditRessource from "@/components/admin/FormElements/Ressource/Edit";
 import DeleteRessource from "@/components/admin/FormElements/Ressource/Delete";
 import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
-import { RessourceType } from "@/lib/definitions";
 
 export default function ViewRessource({id}: {id: string}) {
-  const [ressource, setRessource] = useState<RessourceType>([]);
+  const [ressource, setRessource] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -31,7 +30,7 @@ export default function ViewRessource({id}: {id: string}) {
   const locale = useLocale();
   const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
-  const t_ressource = useTranslations("Ressource");
+  const t_space = useTranslations("Space");
 
   useEffect(() => {
     setError("");
@@ -89,7 +88,7 @@ export default function ViewRessource({id}: {id: string}) {
       <div className="px-6 lg:px-8 py-8 text-centerr lg:py-10 xl:py-13.5">
           <div className="relative flex justify-center items-center gap-1">
             <Title className="text-2xl md:text-3xl font-semibold">
-              {capitalize(ressource.name)}
+              {capitalize(ressource.space.name)}
             </Title>
             <div className="relative">
               <Dropdown className="bg-background border-1 border-default-200">
@@ -114,13 +113,13 @@ export default function ViewRessource({id}: {id: string}) {
               </Dropdown>
             </div>
           </div>
-
+      
           <div className="mx-auto max-w-203">
             <div className="flex gap-2 justify-center items-center">
               <span className="font-semibold">
-                {ressource.nb_place}
+                {ressource.space.nb_place}
               </span>
-              <span className="text-sm sm:whiteressource-nowrap">{capitalize(t_ressource("sits"))}</span>
+              <span className="text-sm sm:whiteressource-nowrap">{capitalize(t_space("sits"))}</span>
             </div>
             <p className="font-light text-justify my-8">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -129,29 +128,29 @@ export default function ViewRessource({id}: {id: string}) {
               dapibus ultricies. Sed vel aliquet libero. Nunc a augue
               fermentum, pharetra ligula sed, aliquam lacus.
             </p>
-
+      
             {/* characteristics */}
             <div>
               <Title
                 className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"
-              >{capitalize(t_ressource("characteristics"))}</Title>
+              >{capitalize(t_space("characteristics"))}</Title>
               <ul className="flex flex-wrap">
-                  {ressource.characteristics.map((item) => (
+                  {ressource.space.characteristics.map((item) => (
                   <li key={item.id} className="border-r border-divider px-4">
                     {capitalize(locale === "en" ? item.name_en: item.name_fr)}
                   </li>
                 ))}
               </ul>
             </div>
-
+      
             {/* images */}
             <div className="my-10 bg-redd-50">
               <Title
                 className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"
-              >{capitalize(t_ressource("images"))}</Title>
-              {ressource.images.length > 0 ? (
+              >{capitalize(t_space("images"))}</Title>
+              {ressource.space.images.length > 0 ? (
               <div className="flex flex-wrap items-center gap-2 lg:gap-4 xl:gap-6 w-full">
-                {ressource.images.map((item) => (
+                {ressource.space.images.map((item) => (
                   <Image
                     key={item.id}
                     width="100%"
@@ -163,11 +162,11 @@ export default function ViewRessource({id}: {id: string}) {
               </div>
               ) : (
                 <div className="flex w-full bg-opacity-[15%] px-5 py-3 shadow-sm dark:bg-black dark:bg-opacity-20 md:p-9 text-sm">
-                  {t_ressource("no_image")}
+                  {t_space("no_image")}
                 </div>
               )}
             </div>
-
+      
             {/* stats */}
             <div>
               <Title
@@ -189,8 +188,7 @@ export default function ViewRessource({id}: {id: string}) {
             </div>
             </div>
           </div>
-        </div>
-
+      </div>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
@@ -198,14 +196,13 @@ export default function ViewRessource({id}: {id: string}) {
       >
         <EditRessource ressource={ressource} />
       </Modal>
-
+      
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
         title={`${t_table("deleteRessource")} "${ressource? ressource.name: ""}"`}
       >
         <DeleteRessource id={ressource?.id} />
       </Modal>
-
     </div>
     )}
     </>

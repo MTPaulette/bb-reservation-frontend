@@ -9,7 +9,7 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon, EnvelopIcon, TelephoneIcon } from "@/components/Icons";
 import { AgencyType } from "@/lib/definitions";
-import { capitalize } from "@/lib/utils";
+import { capitalize, getUsername } from "@/lib/utils";
 import { columnsAgency as columns, statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -30,7 +30,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   suspended: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "email", "address", "contact", "openingdays", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "email", "address", "contact", "openingdays", "created_by", "actions"];
 
 export default function AgenciesTable() {
   const [agencies, setAgencies] = useState([]);
@@ -178,7 +178,7 @@ export default function AgenciesTable() {
                 <span className="font-light text-xs">{`(${item.from} - ${item.to})`}</span>
               </div>
             ))}
-            </div>
+          </div>
           );
       case "status":
         return (
@@ -190,6 +190,17 @@ export default function AgenciesTable() {
           >
             {cellValue}
           </Chip>
+        );
+        
+      case "created_by":
+        return (
+          <div>
+          { agency.created_by ? (
+            <Link href={`/${locale}/admin/staff/${agency.created_by.id}`}>
+              {getUsername(agency.created_by.lastname, agency.created_by.firstname)}
+            </Link>
+          ): null}
+          </div>
         );
       case "actions":
         return (

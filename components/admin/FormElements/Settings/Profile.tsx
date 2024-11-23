@@ -485,7 +485,7 @@ export default function Profile () {
 
               <div className="mb-6 text-base" role="alert">
                 <span className="font-medium">{t_requirements("pwd_label")}</span>
-                <ul className="mt-1.5 ml-4 list-disc list-inside text-gray-500 dark:text-gray-400">
+                <ul className="mt-1.5 ml-4 list-disc list-inside text-foreground/60">
                   <li>{t_requirements("pwd_1")}</li>
                   <li>{t_requirements("pwd_2")}</li>
                   <li>{t_requirements("pwd_3")}</li>

@@ -7,7 +7,7 @@ import { CameraIcon } from "@/components/Icons"
 import { useTranslations } from 'next-intl';
 import Title from "@/components/Title";
 import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
-import CardDataStats from "@/components/admin/CardDataStats";
+import CardDataStats from "@/components/admin/DataStats/Card1";
 
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
 import Modal from "@/components/Modal";

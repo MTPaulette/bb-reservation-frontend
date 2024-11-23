@@ -59,7 +59,7 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
             break;
           case 422:
             const err = await res.json();
-            setError(err.password? t_error("wrongPassword"): "")
+            setError(err.password? t_error("wrongPassword"): JSON.stringify(err))
             break;
           case 403:
             setError(t_error("acces_denied"));

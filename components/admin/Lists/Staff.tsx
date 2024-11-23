@@ -23,7 +23,6 @@ import DeleteStaff from "../FormElements/Staff/Delete";
 import { getStaff } from '@/lib/action/staff';
 import SuspendStaff from '../FormElements/Staff/Suspend';
 import { signOut } from 'next-auth/react';
-import { notFound } from 'next/navigation';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -167,7 +166,6 @@ export default function UsersTable() {
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">{cellValue}</p>
-            {/* <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p> */}
           </div>
         );
       case "agency":
@@ -176,6 +174,12 @@ export default function UsersTable() {
             {capitalize(user.agency)}
           </Link>
         );
+      // case "created_by":
+      //   return (
+      //     <Link href={`/${locale}/admin/staff/${user.created_by}`}>
+      //       {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+      //     </Link>
+      //   );
       case "status":
         return (
           <Chip

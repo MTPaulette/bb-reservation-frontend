@@ -25,7 +25,7 @@ import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "nb_place", "characteristics", "images", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "nb_place", "characteristics", "images", "created_at", "actions"];
 
 export default function SpacesTable() {
   const [spaces, setSpaces] = useState([]);

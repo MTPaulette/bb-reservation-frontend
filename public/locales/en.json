@@ -222,7 +222,8 @@
     "sits": "sit(s) available(s)",
     "characteristics": "Characteristics",
     "images": "Images",
-    "no_image": "No image for this space."
+    "no_image": "No image for this space.",
+    "openingdays": "Opening days"
   },
   "Profile":{
     "edit": "edit",
@@ -249,7 +250,8 @@
     "spaces": "spaces",
     "space": "space",
     "characteristics": "characteristics",
-    "ressources": "ressources"
+    "ressources": "ressources",
+    "ressource": "ressource"
   },
   "Settings": {
     "general": "general",

@@ -4,7 +4,7 @@ import React, { useState, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import DashboardSkeleton, { CardsSkeleton, LatestInvoicesSkeleton, RevenueChartSkeleton } from "@/components/Skeletons";
 import Breadcrumbs from "@/components/dashboard1/Breadcrumbs";
-import CardWrapper from "@/components/dashboard1/Cards";
+import CardWrapper from "@/components/admin/DataStats/Card2";
 import Search from "@/components/Search";
 import LatestInvoices from "@/components/dashboard1/LatestInvoices";
 import Charts from "@/components/dashboard1/Charts";

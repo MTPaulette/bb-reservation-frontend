@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
-import CardDataStats from "@/components/admin/CardDataStats";
+import CardDataStats from "@/components/admin/DataStats/Card1";
 
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem } from "@nextui-org/react";

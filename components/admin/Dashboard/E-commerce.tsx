@@ -5,7 +5,7 @@ import ChartOne from "../Charts/ChartOne";
 import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
-import CardDataStats from "../CardDataStats";
+import CardDataStats from "../DataStats/Card1";
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
 
 const MapOne = dynamic(() => import("@/components/admin/Maps/MapOne"), {

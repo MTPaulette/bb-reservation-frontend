@@ -29,7 +29,7 @@ export default function NewClient() {
       .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
         message: t_error("password")
       }).max(50),
-      phonenumber: z.string().max(250),
+      phonenumber: z.string().min(1).max(250),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -160,6 +160,7 @@ export default function NewClient() {
           errorMessage={errors.password ? errors.password?.message: null}
         />
         <Input
+          isRequired
           endContent={
             <TelephoneIcon fill="currentColor" size={18} />
           }
