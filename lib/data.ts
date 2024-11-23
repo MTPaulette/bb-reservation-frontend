@@ -69,6 +69,7 @@ export const columnsClient = [
   {name_en: "ROLE", name_fr: "ROLE", uid: "role"},
   {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
   {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
@@ -80,6 +81,7 @@ export const columnsStaff = [
   {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
   {name_en: "WORK AT", name_fr: "TRAVAILLE A", uid: "agency", sortable: true},
   {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];

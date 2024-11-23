@@ -212,7 +212,8 @@
 
     "newRessource": "Nouvelle ressource",
     "editRessource": "Editer ressource",
-    "deleteRessource": "Supprimer ressource"
+    "deleteRessource": "Supprimer ressource",
+    "created_by": "Créé par"
   },
   "Space": {
     "sits": "place(s) disponible(s)",

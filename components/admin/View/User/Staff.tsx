@@ -83,10 +83,10 @@ export default function ViewStaff({id}: {id: string}) {
   return (
     <>
     <div className="w-full">
-      {error != "" ? (
-        <Alert color="danger" message={error} />
-      ) : null}
-    </div>
+    {error != "" ? (
+      <Alert color="danger" message={error} />
+    ) :
+    <>
     {loading ? (
       <CommonSkeleton />
     ) : (
@@ -211,6 +211,13 @@ export default function ViewStaff({id}: {id: string}) {
             <Title className="font-semibold text-foreground">
               {t("about")+' '+getUsername(user.lastname, user.firstname)}
             </Title>
+            {user.created_by ? (
+              <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
+                  <Link href={`/${locale}/admin/staff/${user.created_by}`} className="font-medium ms-2">
+                    {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+                  </Link>
+              </p>
+            ): null }
             <p className="mt-4.5">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Pellentesque posuere fermentum urna, eu condimentum mauris
@@ -262,6 +269,9 @@ export default function ViewStaff({id}: {id: string}) {
 
     </div>
     )}
+    </>
+    }
+    </div>
     </>
   )
 }

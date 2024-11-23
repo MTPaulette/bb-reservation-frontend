@@ -174,12 +174,16 @@ export default function UsersTable() {
             {capitalize(user.agency)}
           </Link>
         );
-      // case "created_by":
-      //   return (
-      //     <Link href={`/${locale}/admin/staff/${user.created_by}`}>
-      //       {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
-      //     </Link>
-      //   );
+      case "created_by":
+        return (
+          <>
+          {user.created_by ? (
+            <Link href={`/${locale}/admin/staff/${user.created_by}`}>
+              {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+            </Link>
+          ): null
+          }</>
+        );
       case "status":
         return (
           <Chip

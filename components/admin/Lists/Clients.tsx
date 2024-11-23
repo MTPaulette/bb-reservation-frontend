@@ -180,6 +180,16 @@ export default function UsersTable() {
             {cellValue}
           </Chip>
         );
+      case "created_by":
+        return (
+          <>
+          {user.created_by ? (
+            <Link href={`/${locale}/admin/staff/${user.created_by}`}>
+              {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+            </Link>
+          ): null
+          }</>
+        );
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2">

@@ -9,7 +9,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize } from "@/lib/utils";
 
-import { ClockIcon, EnvelopIcon, LocalisationIcon, PencilSquareIcon, TelephoneIcon } from "@/components/Icons";
+import { EnvelopIcon, LocalisationIcon, PencilSquareIcon, TelephoneIcon } from "@/components/Icons";
 import { Button } from "@nextui-org/react";
 
 import Modal from "@/components/Modal";
@@ -73,10 +73,10 @@ export default function ViewAgency({id}: {id: string}) {
   return (
     <>
     <div className="w-full">
-      {error != "" ? (
-        <Alert color="danger" message={error} />
-      ) : null}
-    </div>
+    {error != "" ? (
+      <Alert color="danger" message={error} />
+    ) :
+    <>
     {loading ? (
       <CommonSkeleton />
     ) : (
@@ -155,7 +155,8 @@ export default function ViewAgency({id}: {id: string}) {
             <div className="flex flex-wrap gap-4 w-full justify-between items-center">
               {agency.openingdays.map((item) => (
                 <dl key={item.id} className="">
-                  <dt className="font-semibold">{capitalize(locale === "en" ? item.name_en: item.name_fr)}</dt>
+                  {JSON.stringify(item)}
+                  <dt className="font-semibold">{capitalize(locale === "en" ? item.pivot.name_en: item.pivot.name_fr)}</dt>
                   <dd className="text-opacity-60">
                     {`(${item.pivot.from} - ${item.pivot.to})`}</dd>
                 </dl>
@@ -460,6 +461,9 @@ export default function ViewAgency({id}: {id: string}) {
       </div>
     </div>
     )}
+    </>
+    }
+    </div>
     </>
   )
 }

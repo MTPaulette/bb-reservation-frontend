@@ -20,6 +20,7 @@ import EditCharacteristic from "../FormElements/Characteristic/Edit";
 import DeleteCharacteristic from "../FormElements/Characteristic/Delete";
 import { getCharacteristics } from '@/lib/action/characteristics';
 import { signOut } from 'next-auth/react';
+import NewCharacteristic from '../FormElements/Characteristic/New';
 
 
 
@@ -359,6 +360,14 @@ export default function CharacteristicsTable() {
           )}
         </TableBody>
       </Table>
+
+
+      <Modal
+        open={showNewModal} close={() => setShowNewModal(false)}
+        title={t_table("newCharacteristic")}
+      >
+        <NewCharacteristic />
+      </Modal>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}

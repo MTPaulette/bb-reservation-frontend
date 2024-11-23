@@ -6,24 +6,52 @@ import { columnsRole as columns } from "@/lib/data";
 import { PencilSquareIcon } from "@/components/Icons";
 import { getRoles } from '@/lib/action/roles';
 import { CommonSkeleton } from '@/components/Skeletons';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import Alert from "@/components/Alert";
 
 
 export default function RolesTable() {
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>("");
   const locale = useLocale();
+  const t_error = useTranslations("InputError");
 
   useEffect(() => {
     getRoles()
-      .then(response => {
-        setRoles(response);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    .then(async (res) => {
+      setLoading(false);
+      if(res?.ok){
+        setRoles(await res.json());
+      }else {
+        const status = res.status;
+        switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            await signOut({
+              callbackUrl: `/${locale}/auth/login`
+            });
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 404:
+            setError(t_error("server_not_found"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch(error => {
+      setError(t_error("something_wrong"));
+      console.error(error);
+    });
   }, []);
 
   type Role = typeof roles[0];
@@ -89,9 +117,14 @@ export default function RolesTable() {
 
   return (
     <>
-      {loading ? (
-        <CommonSkeleton />
-      ) : (
+    <div className="w-full">
+    {error != "" ? (
+      <Alert color="danger" message={error} />
+    ) : 
+    <>
+    {loading ? (
+      <CommonSkeleton />
+    ) : (
       <div>
       <Table 
         isCompact
@@ -117,6 +150,9 @@ export default function RolesTable() {
       </Table>
       </div>
       )}
+    </>
+    }
+    </div>
     </>
   );
 }

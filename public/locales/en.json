@@ -216,7 +216,8 @@
 
     "newRessource": "New ressource",
     "editRessource": "Edit ressource",
-    "deleteRessource": "Delete ressource"
+    "deleteRessource": "Delete ressource",
+    "created_by": "Created by"
   },
   "Space": {
     "sits": "sit(s) available(s)",

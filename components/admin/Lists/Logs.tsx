@@ -208,7 +208,6 @@ export default function LogsTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <Button
-                  // className="bg-foregroundd text-backgroundd"
                   endContent={<TrashIcon fill="currentColor" size={14} />}
                   size="sm" variant="solid" color="danger"
                   onClick={() => setShowClearModal(true)}

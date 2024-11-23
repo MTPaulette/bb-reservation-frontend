@@ -80,8 +80,8 @@ export default function ViewSpace({id}: {id: string}) {
     <div className="w-full">
       {error != "" ? (
         <Alert color="danger" message={error} />
-      ) : null}
-    </div>
+      ) :
+      <>
     {loading ? (
       <CommonSkeleton />
     ) : (
@@ -209,6 +209,9 @@ export default function ViewSpace({id}: {id: string}) {
 
     </div>
     )}
+    </>
+    }
+    </div>
     </>
   )
 }

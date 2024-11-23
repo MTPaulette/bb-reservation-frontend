@@ -6,7 +6,7 @@ export async function getRoles() {
     method: "GET",
     headers: headerOptions(await getCSRFToken(), await getToken()),
   })
-  return response.json();
+  return response;
 }
 
 export async function getAllPermissions() {
