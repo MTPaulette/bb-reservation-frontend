@@ -44,7 +44,6 @@ export async function updateAgency(data: AgencyFormType, id: number, horaires: H
 }
 
 export async function suspendAgency(data: SuspensionFormType, id: number, status: string) {
-  console.log(data);
   const response = await fetch(`${api_url}/agency/${id}/suspend`, {
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),

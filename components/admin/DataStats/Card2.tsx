@@ -1,10 +1,11 @@
+import Title from "@/components/Title";
 import { ArrowUpIcon, ArrowDownIcon, CloseIcon, CharetIcon, CheckCircleIcon, CurrencyIcon, ExclamationCircleIcon } from "../../Icons";
 
 const iconMap = {
-  "sollicit": CharetIcon,
-  "partially payed": CheckCircleIcon,
+  "pending": CharetIcon,
+  "partially paid": CheckCircleIcon,
   "confirmed": CheckCircleIcon,
-  "totally payed": CurrencyIcon,
+  "totally paid": CurrencyIcon,
   "cancelled": CloseIcon,
 };
 
@@ -16,10 +17,10 @@ export default function CardWrapper2() {
 
   return (
     <>
-      <Card title="Collected" total={totalPaidInvoices} type="sollicit" rate="0.43%" levelUp />
-      <Card title="Pending" total={totalPendingInvoices} type="partially payed" rate="5.9%" levelUp />
+      <Card title="Collected" total={totalPaidInvoices} type="pending" rate="0.43%" levelUp />
+      <Card title="Pending" total={totalPendingInvoices} type="partially paid" rate="5.9%" levelUp />
       <Card title="Total Customers customers" total={numberOfCustomers} type="confirmed" rate="53.8%" levelDown />
-      <Card title="Total Invoices" total={numberOfInvoices} type="totally payed" rate="0.43%" levelUp />
+      <Card title="Total Invoices" total={numberOfInvoices} type="totally paid" rate="0.43%" levelUp />
       <Card title="Total Ressources" total={totalPendingInvoices} type="cancelled" rate="9.73%" levelDown />
     </>
   );
@@ -35,7 +36,7 @@ export function Card({
 }: {
   title: string;
   total: string;
-  type: "sollicit" | "partially payed" | "confirmed" | "totally payed" | "cancelled";
+  type: "pending" | "partially paid" | "confirmed" | "totally paid" | "cancelled";
   rate: string;
   levelUp?: boolean;
   levelDown?: boolean;
@@ -43,43 +44,39 @@ export function Card({
   const Icon = iconMap[type];
 
   return (
-    <>
-  <div
-    className={`
-      ${type === "sollicit"? "text-meta-6" : " "}
-      ${type === "partially payed"? "text-meta-4" : " "}
-      ${type === "confirmed"? "text-meta-5" : " "}
-      ${type === "totally payed"? "text-meta-3" : " "}
-      ${type === "cancelled"? "text-meta-1" : " "}
-  `}>
-    <div className="text-foreground">
-      {Icon ? 
-        <span>
-          <Icon fill="currentColor" size={24} />
-        </span> : null}
-      <h3 className="my-2 truncate">Total {type}</h3>
+    <div className="rounded-sm border border-divider bg-background px-3.5 py-2 sm:px-5.5 sm:py-4 shadow-sm shadow-default">
+      <div className=" flex items-end justify-between">
+        <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
+          {/* {children} */}
+          {Icon ? 
+            <span>
+              <Icon fill="currentColor" size={24} />
+            </span> : null}
+        </div>
+        <span
+        className={`flex items-center gap-1 text-sm font-medium ${
+          levelUp && "text-meta-3"
+        } ${levelDown && "text-meta-5"} `}
+        >
+          {rate}
+
+          {levelUp && (
+            <span className="fill-meta-3">
+              <ArrowUpIcon fill="currentColor" size={16} />
+            </span>
+          )}
+          {levelDown && (
+            <span className="fill-meta-5">
+              <ArrowDownIcon fill="currentColor" size={16} />
+            </span>
+          )}
+        </span>
+      </div>
+
+      <div className="mt-4 flex flex-col w-full items-start justify-start">
+        <Title className="text-lg sm:text-2xl font-bold">{total}</Title>
+        <p className="text-sm font-medium">{title}</p>
+      </div>
     </div>
-    <span className="flex gap-2 items-center text-xl font-bold truncate">
-      {total}
-      <span
-        className={`text-xs font-medium flex gap-0.5 items-center rounded px-2 py-0.5
-          ${levelUp && "text-meta-3 bgg-green-100 dark:bgg-green-900"}
-          ${levelDown && "text-meta-1 bgg-red-100 dark:bgg-red-900"} `}
-      >
-        {levelUp && (
-          <ArrowUpIcon fill="currentColor" size={16} />
-        )}
-        {levelDown && (
-          <ArrowDownIcon fill="currentColor" size={16} />
-        )}
-        {rate}
-      </span>
-    </span>
-    <p className="mt-2 flex gap-1 items-center text-xs sm:text-sm truncate text-foreground/60">
-      <ExclamationCircleIcon fill="currentColor" size={16} />
-      vs 1 last 3 months
-    </p>
-  </div>
-  </>
   )
 }

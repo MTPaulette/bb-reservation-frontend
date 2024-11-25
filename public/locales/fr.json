@@ -1,9 +1,22 @@
 {
+  "Agency": {
+    "openingdays": "Jours d'ouverture",
+    "contact": "contact",
+    "created_by": "Créée par",
+    "suspended_by": "Suspendue par",
+    "at": "le",
+    "administrators": "Administrateurs",
+    "ressources": "Ressources",
+    "reservations": "Réservations"
+  },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
     "note": "Note",
     "attention": "Attention!",
-    "error": "Erreur"
+    "error": "Erreur",
+    "no_administrator": "Aucun administrator",
+    "no_ressource": "Aucune ressource",
+    "no_reservation": "Aucune reservation"
   },
   "InputError": {
     "name": "Le nom est obligatoire",
@@ -185,6 +198,10 @@
     "clear_log": "Effacer les logs",
     "selected": "selectionné(s)",
     "noItems": "Aucun élément trouvé",
+    "created_by": "Créé(e) par",
+    "suspended_by": "Suspendu(e) par",
+    "work_at": "Travaille à",
+    "at": "le",
     
     "newClient": "Nouveau client",
     "editClient": "Editer client",
@@ -212,8 +229,7 @@
 
     "newRessource": "Nouvelle ressource",
     "editRessource": "Editer ressource",
-    "deleteRessource": "Supprimer ressource",
-    "created_by": "Créé par"
+    "deleteRessource": "Supprimer ressource"
   },
   "Space": {
     "sits": "place(s) disponible(s)",

@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import {
   Navbar, NavbarContent, NavbarItem, Link, Button,
   DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar,
-  NavbarMenuToggle, NavbarMenu,
+  NavbarMenuToggle, NavbarMenu, User
 } from "@nextui-org/react";
 
 import { usePathname } from "next/navigation";
@@ -14,9 +14,8 @@ import { usePathname } from "next/navigation";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import NavLinks from "@/components/dashboard1/Navlinks";
 import Logout from "@/components/admin/FormElements/Logout";
-import User from "@/components/User";
 import Title from "@/components/Title";
-import { getImageUrl } from "@/lib/utils";
+import { getImageUrl, getUsername } from "@/lib/utils";
 
 export default function NavBarDashboardComponent() {
   const { data: session } = useSession();
@@ -65,7 +64,14 @@ export default function NavBarDashboardComponent() {
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem>
-              <User name={user? user.name: ""} role="admin" src={user? getImageUrl(user.image): ""} />
+              <User
+                isFocusable
+                name={user? getUsername(user.lastname, user.firstname): ""}
+                description="admin"
+                avatarProps={
+                  {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+                }
+              />
             </DropdownItem>
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>

@@ -194,6 +194,12 @@ export type RessourceFormType = {
   space_id: string;
 }
 
+export type columnsTabsType = {
+  name_en: string;
+  name_fr: string;
+  uid: string;
+  sortable: boolean;
+}
 
 
 

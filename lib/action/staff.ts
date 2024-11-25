@@ -1,5 +1,5 @@
 import { headerOptions, getCSRFToken, getToken } from "../utils";
-import { ConfirmPasswordType, UserFormType } from "../definitions";
+import { ConfirmPasswordType, SuspensionFormType, UserFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
 
@@ -37,13 +37,15 @@ export async function updateStaff(data: UserFormType, id: number) {
   return response;
 }
 
-export async function suspendStaff(data: ConfirmPasswordType, id: number, status: string) {
+export async function suspendStaff(data: SuspensionFormType, id: number, status: string) {
   const response = await fetch(`${api_url}/staff/${id}/suspend`, {
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify({
       "password": data.password,
-      "cancel_suspension": status == 'active'? false : true
+      "cancel_suspension": status == 'active'? false : true,
+      "reason_for_suspension_en": data.reason_for_suspension_en,
+      "reason_for_suspension_fr": data.reason_for_suspension_fr
     }),
   })
   return response;

@@ -1,9 +1,22 @@
 {
+  "Agency": {
+    "openingdays": "Opening days",
+    "contact": "contact",
+    "created_by": "Created by",
+    "suspended_by": "Suspended by",
+    "at": "at",
+    "administrators": "Administrators",
+    "ressources": "Ressources",
+    "reservations": "Reservations"
+  },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
     "note": "Note",
     "attention": "Attention!",
-    "error": "Error"
+    "error": "Error",
+    "no_administrator": "No administrator",
+    "no_ressource": "No ressource",
+    "no_reservation": "No reservation"
   },
   "InputError": {
     "name": "the name is required",
@@ -189,6 +202,10 @@
     "clear_log": "Clear logs",
     "selected": "selected",
     "noItems": "No item found",
+    "created_by": "Created by",
+    "suspended_by": "Suspended by",
+    "work_at": "Work at",
+    "at": "at",
 
     "newClient": "New client",
     "editClient": "Edit client",
@@ -216,8 +233,7 @@
 
     "newRessource": "New ressource",
     "editRessource": "Edit ressource",
-    "deleteRessource": "Delete ressource",
-    "created_by": "Created by"
+    "deleteRessource": "Delete ressource"
   },
   "Space": {
     "sits": "sit(s) available(s)",
@@ -256,7 +272,7 @@
   },
   "Settings": {
     "general": "general",
-    "profile": "my profile",
+    "profile": "My profile",
     "email": "email",
     "finance": "finace",
     "pdf": "pdf",

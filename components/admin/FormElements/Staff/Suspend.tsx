@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Textarea } from "@nextui-org/react";
 import { EyeIcon, EyeSlashIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +20,8 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
   const schema: ZodType<ConfirmPasswordType> = z
     .object({
       password: z.string().min(1),
+      reason_for_suspension_en: z.string(),
+      reason_for_suspension_fr: z.string(),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -57,7 +59,7 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
             break;
           case 422:
             const err = await res.json();
-            setError(err.password? t_error("wrongPassword"): "")
+            setError(err.password? t_error("wrongPassword"): JSON.stringify(err))
             break;
           case 403:
             setError(t_error("acces_denied"));
@@ -109,6 +111,47 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
           isInvalid={errors.password ? true: false}
           errorMessage={errors.password ? errors.password?.message: null}
         />
+
+        {status == 'active' ? (
+          <div className="flex flex-col gap-4">
+            <Textarea
+              isRequired
+              label={t("reason_for_suspension_en")}
+              placeholder={t("reason_for_suspension_placeholder")}
+              variant="bordered"
+              {...register("reason_for_suspension_en")}
+              isInvalid={errors.reason_for_suspension_en ? true: false}
+              errorMessage={errors.reason_for_suspension_en ? errors.reason_for_suspension_en?.message: null}
+            />
+            <Textarea
+              isRequired
+              label={t("reason_for_suspension_fr")}
+              placeholder={t("reason_for_suspension_placeholder")}
+              variant="bordered"
+              {...register("reason_for_suspension_fr")}
+              isInvalid={errors.reason_for_suspension_fr ? true: false}
+              errorMessage={errors.reason_for_suspension_fr ? errors.reason_for_suspension_fr?.message: null}
+            />
+          </div>
+        ) : 
+        <div className={`${status == 'active'? 'block': 'hidden'}`}>
+          <Textarea
+            isRequired
+            label={t("reason_for_suspension_en")}
+            placeholder={t("reason_for_suspension_placeholder")}
+            variant="bordered"
+            defaultValue=""
+            {...register("reason_for_suspension_en")}
+          />
+          <Textarea
+            isRequired
+            label={t("reason_for_suspension_fr")}
+            placeholder={t("reason_for_suspension_placeholder")}
+            variant="bordered"
+            defaultValue=""
+            {...register("reason_for_suspension_fr")}
+          />
+        </div>}
 
         <div className="w-full">
           <Button 

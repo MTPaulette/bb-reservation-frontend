@@ -22,6 +22,7 @@ import EditStaff from "@/components/admin/FormElements/Staff/Edit";
 import DeleteStaff from "@/components/admin/FormElements/Staff/Delete";
 import SuspendStaff from '@/components/admin/FormElements/Staff/Suspend';
 import { signOut } from 'next-auth/react';
+import Link from "next/link";
 import Alert from "@/components/Alert";
 
 export default function ViewStaff({id}: {id: string}) {
@@ -44,7 +45,7 @@ export default function ViewStaff({id}: {id: string}) {
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setUser(response[0]);
+          setUser(response.user);
           setLoading(false);
         }else {
           const status = res.status;
@@ -207,24 +208,61 @@ export default function ViewStaff({id}: {id: string}) {
             </div>
           </div>
 
-          <div className="mx-auto max-w-203">
+          <div className="mx-auto max-w-203 flex flex-col items-center">
             <Title className="font-semibold text-foreground">
               {t("about")+' '+getUsername(user.lastname, user.firstname)}
             </Title>
-            {user.created_by ? (
-              <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
-                  <Link href={`/${locale}/admin/staff/${user.created_by}`} className="font-medium ms-2">
-                    {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+            {user.work_at ? (
+              <p className="mt-1 font-light text-tiny"> {t_table("work_at")}:
+                  <Link href={`/${locale}/admin/staff/${user.work_at.id}`} className="font-medium ms-2">
+                    {user.work_at.name?
+                        capitalize(user.work_at.name)
+                      : ""}
                   </Link>
               </p>
             ): null }
-            <p className="mt-4.5">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque posuere fermentum urna, eu condimentum mauris
-              tempus ut. Donec fermentum blandit aliquet. Etiam dictum
-              dapibus ultricies. Sed vel aliquet libero. Nunc a augue
-              fermentum, pharetra ligula sed, aliquam lacus.
-            </p>
+            {user.created_by ? (
+              <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
+                  <Link href={`/${locale}/admin/staff/${user.created_by.id}`} className="font-medium ms-2">
+                    {user.created_by.firstname && user.created_by.lastname ?
+                        getUsername(user.created_by.lastname, user.created_by.firstname)
+                      : ""}
+                  </Link>
+              </p>
+            ): null }
+            {user.created_at? (
+              <p className="mt-1 font-light text-tiny">{t_table("at")}: {user.created_at}</p>
+            ): ""}
+
+            <div
+              className={`my-3 inline-block rounded px-1.5 py-0.5 uppercase font-bold text-sm text-white
+              ${user.status == "active"? "bg-success" :"bg-danger"}`}
+            >{user.status}</div>
+            <div>
+              {user.status == 'suspended' && user.suspended_by ? (
+                <p className="font-light text-tiny"> {t_table("suspended_by")}:
+                  <Link href={`/${locale}/admin/staff/${user.suspended_by.id}`} className="font-medium ms-2">
+                    {user.suspended_by.firstname && user.suspended_by.lastname ?
+                      getUsername(user.suspended_by.lastname, user.suspended_by.firstname)
+                    : ""}
+                  </Link>
+                </p>
+              ): null }
+            </div>
+
+            <div>
+              {user.status != "active" ? (
+                <p className="mt-4.5">
+                  {locale === "en" ? user.reason_for_suspension_en: user.reason_for_suspension_fr}
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Pellentesque posuere fermentum urna, eu condimentum mauris
+                  tempus ut. Donec fermentum blandit aliquet. Etiam dictum
+                  dapibus ultricies. Sed vel aliquet libero. Nunc a augue
+                  fermentum, pharetra ligula sed, aliquam lacus.
+                </p>
+              ): null}
+            </div>
+
 
             {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5"> */}
             <div className="mt-4.5 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">

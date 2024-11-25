@@ -145,3 +145,27 @@ export const validitiesName = [
   {name_en: "Week", name_fr: "Semaine"},
   {name_en: "Month", name_fr: "Mois"},
 ]
+
+export const columns = [
+  {name: "NAME", uid: "name"},
+  {name: "ROLE", uid: "role"},
+  {name: "STATUS", uid: "status"},
+  {name: "ACTIONS", uid: "actions"},
+];
+
+export const columnsTabsStaff = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname"},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email"},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
+
+export const columnsStaffRessource = [
+  {name_en: "SPACE", name_fr: "ESPACE", uid: "space"},
+  {name_en: "PRICE", name_fr: "PRIX", uid: "price"},
+  {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place"},
+  {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity"},
+  // {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];

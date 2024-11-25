@@ -151,16 +151,14 @@ export default function UsersTable() {
         return (
           <User
             avatarProps={
-              {radius: "full", size: "sm", src: getImageUrl(user.image) }
+              {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
             }
             classNames={{
               name: "font-semibold",
             }}
             description={user.firstname}
             name={cellValue}
-          >
-            {user.email}
-          </User>
+          />
         );
       case "role":
         return (
@@ -389,25 +387,20 @@ export default function UsersTable() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["max-h-[382px]", "max-w-3xl"],
-      // table: ["rounded-sm border border-divider bg-background px-5 pb-2.5 pt-6 shadow-default sm:px-7.5 xl:pb-1"], lg:h-[calc(100vh_-_5.625rem)]
-      // table: ["bg-green-300"],
+      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-full", "!rounded-none","relative",
+        "overflow-hidden", "over-x", "over-y", "!bg-transparent",
+        "!shadow-none", "!border-none", "!p-0", "!m-0"],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
       td: [
-        // changing the rows border radius
-        // first
         "group-data-[first=true]:first:before:rounded-none",
         "group-data-[first=true]:last:before:rounded-none",
-        // middle
         "group-data-[middle=true]:before:rounded-none",
-        // last
         "group-data-[last=true]:first:before:rounded-none",
         "group-data-[last=true]:last:before:rounded-none",
       ],
     }),
     [],
   );
-
   return (
     <>
       {loading ? (
@@ -416,7 +409,6 @@ export default function UsersTable() {
       <div>
       <Table
         isCompact
-        removeWrapper
         aria-label="bb-reservation table"
         bottomContent={bottomContent}
         bottomContentPlacement="outside"

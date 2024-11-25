@@ -16,7 +16,7 @@ import { Hours } from "@/lib/data";
 import { updateAgency } from "@/lib/action/agencies";
 
 
-export default function EditAgency({ agency }: { agency: AgencyType} ) {
+export default function EditAgency({ agency }: { agency: AgencyType}) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
   const locale = useLocale();

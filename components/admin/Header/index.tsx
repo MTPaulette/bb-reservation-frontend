@@ -3,14 +3,14 @@
 import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import DropdownNotification from "./DropdownNotification";
-import User from "@/components/User";
+// import User from "@/components/User";
 import Image from "next/image";
 import { ChevronDownIcon, SettingIcon, UserIcon } from "@/components/Icons";
 import Logout from "@/components/admin/FormElements/Logout";
 import { useSession } from "next-auth/react";
 import { useLocale, useTranslations } from 'next-intl';
 
-import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
+import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, User } from "@nextui-org/react";
 import { getImageUrl, getUsername } from "@/lib/utils";
 import Search from "@/components/Search";
 
@@ -108,16 +108,19 @@ const Header = (props: {
                     as="button"
                     className="transition-transform"
                     color="warning"
-                    name={user? getUsername(user.lastname, user.firstname): ""}
+                    // name={user? getUsername(user.lastname, user.firstname): ""}
                     size="sm"
-                    src={user? getImageUrl(user.image) : ''}
+                    src={user.image? getImageUrl(user.image) : ''}
                   />
                 </div>
                 <div className="hidden md:flex items-center gap-3">
                   <User
+                    isFocusable
                     name={user? getUsername(user.lastname, user.firstname): ""}
-                    role={user? user.role: ""}
-                    src={user? getImageUrl(user.image) : ''}
+                    description="admin"
+                    avatarProps={
+                      {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+                    }
                   />
                   <ChevronDownIcon fill="currentColor" size={10} />
                 </div>
@@ -126,9 +129,12 @@ const Header = (props: {
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem className="block md:hidden">
                 <User
+                  isFocusable
                   name={user? getUsername(user.lastname, user.firstname): ""}
-                  role="admin"
-                  src={user? getImageUrl(user.image) : ''}
+                  description="admin"
+                  avatarProps={
+                    {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+                  }
                 />
               </DropdownItem>
               <DropdownItem key="profile" className="h-14 gap-2">

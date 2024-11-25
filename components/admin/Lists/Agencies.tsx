@@ -267,9 +267,9 @@ export default function AgenciesTable() {
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
       </div>
-      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 bg-background shadow-default sm:px-7.5 xl:pb-2">
+      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 sm:px-7.5 xl:pb-2 bg-background shadow-default">
         <div className="max-w-full overflow-x-auto">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-3/4">
             <div className="flex flex-wrap justify-between gap-3 items-end">
               <Input
                 isClearable
@@ -396,18 +396,14 @@ export default function AgenciesTable() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["max-h-[382px]", "max-w-3xl"],
-      // table: ["rounded-sm border border-divider bg-background px-5 pb-2.5 pt-6 shadow-default sm:px-7.5 xl:pb-1"], lg:h-[calc(100vh_-_5.625rem)]
-      // table: ["bg-green-300"],
+      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-full", "!rounded-none","relative",
+        "overflow-hidden", "over-x", "over-y", "!bg-transparent",
+        "!shadow-none", "!border-none", "!p-0", "!m-0"],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
       td: [
-        // changing the rows border radius
-        // first
         "group-data-[first=true]:first:before:rounded-none",
         "group-data-[first=true]:last:before:rounded-none",
-        // middle
         "group-data-[middle=true]:before:rounded-none",
-        // last
         "group-data-[last=true]:first:before:rounded-none",
         "group-data-[last=true]:last:before:rounded-none",
       ],
@@ -423,7 +419,6 @@ export default function AgenciesTable() {
       <div>
       <Table
         isCompact
-        removeWrapper
         aria-label="bb-reservation table"
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
