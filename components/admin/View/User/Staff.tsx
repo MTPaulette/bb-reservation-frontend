@@ -214,20 +214,20 @@ export default function ViewStaff({id}: {id: string}) {
             </Title>
             {user.work_at ? (
               <p className="mt-1 font-light text-tiny"> {t_table("work_at")}:
-                  <Link href={`/${locale}/admin/staff/${user.work_at.id}`} className="font-medium ms-2">
-                    {user.work_at.name?
-                        capitalize(user.work_at.name)
-                      : ""}
-                  </Link>
+                <Link href={`/${locale}/admin/agencies/${user.work_at.id}`} className="font-medium ms-2">
+                  {user.work_at.name?
+                    capitalize(user.work_at.name)
+                  : ""}
+                </Link>
               </p>
             ): null }
             {user.created_by ? (
               <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
-                  <Link href={`/${locale}/admin/staff/${user.created_by.id}`} className="font-medium ms-2">
-                    {user.created_by.firstname && user.created_by.lastname ?
-                        getUsername(user.created_by.lastname, user.created_by.firstname)
-                      : ""}
-                  </Link>
+                <Link href={`/${locale}/admin/staff/${user.created_by.id}`} className="font-medium ms-2">
+                  {user.created_by.firstname && user.created_by.lastname ?
+                    getUsername(user.created_by.lastname, user.created_by.firstname)
+                  : ""}
+                </Link>
               </p>
             ): null }
             {user.created_at? (

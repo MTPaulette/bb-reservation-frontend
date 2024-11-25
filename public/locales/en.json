@@ -5,6 +5,9 @@
     "created_by": "Created by",
     "suspended_by": "Suspended by",
     "at": "at",
+    "phonenumber": "Phone Number",
+    "email": "Email Address",
+    "address": "Address",
     "administrators": "Administrators",
     "ressources": "Ressources",
     "reservations": "Reservations"
@@ -184,7 +187,10 @@
     "spaces": "spaces",
     "ressources": "ressources",
     "characteristics": "characteristics",
-    "reservations": "reservations"
+    "reservations": "reservations",
+    "finances": "finance",
+    "coupons": "coupons",
+    "payments": "payments"
   },
   "Table": {
     "view": "View",
@@ -289,5 +295,16 @@
     "pwd_1": "At least 8 characters (and up to 50 characters)",
     "pwd_2": "At least one lowercase character",
     "pwd_3": "Inclusion of at least one special character, e.g., ! @ # ?"
+  },
+  "Ressource": {
+    "characteristics": "Characteristics",
+    "price": "Price",
+    "created_by": "Created by",
+    "images": "Images",
+    "at": "at",
+    "from": "From",
+    "administrators": "Administrators",
+    "ressources": "Ressources",
+    "reservations": "Reservations"
   }
 }

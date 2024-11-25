@@ -6,7 +6,7 @@ import SidebarItem from "@/components/admin/Sidebar/SidebarItem";
 import ClickOutside from "@/components/admin/ClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { BbLogo } from "@/components/BbLogo";
-import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon, ActivityIcon } from "@/components/Icons";
+import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon, ActivityIcon, CurrencyIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from "next-intl";
 import Logout from "@/components/admin/FormElements/Logout";
 
@@ -18,7 +18,7 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
-  const t = useTranslations("Sidebar");
+  const t_sidebar = useTranslations("Sidebar");
   const locale = useLocale();
 
 const menuGroups = [
@@ -29,7 +29,7 @@ const menuGroups = [
         icon: (
           <DashboardIcon fill="none" size={18} />
         ),
-        label: t("dashboard"),
+        label: t_sidebar("dashboard"),
         route: "#",
         children: [{ label: "eCommerce", route: `/${locale}/admin` }],
       },
@@ -37,56 +37,67 @@ const menuGroups = [
         icon: (
           <UserIcon fill="none" size={18} />
         ),
-        label: t("profile"),
+        label: t_sidebar("profile"),
         route: `/${locale}/admin/profile`,
       },
       {
         icon: (
           <CalendarIcon fill="none" size={18} />
         ),
-        label: t("reservations"),
+        label: t_sidebar("reservations"),
         route: `/${locale}/admin/reservations`,
+      },
+      {
+        icon: (
+          <CurrencyIcon fill="currentColor" size={18} />
+        ),
+        label: t_sidebar("finances"),
+        route: "#",
+        children: [
+          { label: t_sidebar("coupons"), route: `/${locale}/admin/coupons` },
+          { label: t_sidebar("payments"), route: `/${locale}/admin/coupons` },
+        ],
       },
       {
         icon: (
           <UiIcon fill="none" size={18} />
         ),
-        label: t("ressources"),
+        label: t_sidebar("ressources"),
         route: "#",
         children: [
-          { label: t("characteristics"), route: `/${locale}/admin/characteristics` },
-          { label: t("spaces"), route: `/${locale}/admin/spaces` },
-          { label: t("ressources"), route: `/${locale}/admin/ressources` },
+          { label: t_sidebar("characteristics"), route: `/${locale}/admin/characteristics` },
+          { label: t_sidebar("spaces"), route: `/${locale}/admin/spaces` },
+          { label: t_sidebar("ressources"), route: `/${locale}/admin/ressources` },
         ],
       },
       {
         icon: (
           <ActivityIcon fill="currentColor" size={18} />
         ),
-        label: t("utilities"),
+        label: t_sidebar("utilities"),
         route: "#",
         children: [
-          { label: t("agencies"), route: `/${locale}/admin/agencies` },
-          { label: t("roles"), route: `/${locale}/admin/roles` },
-          { label: t("logs"), route: `/${locale}/admin/logs` },
+          { label: t_sidebar("agencies"), route: `/${locale}/admin/agencies` },
+          { label: t_sidebar("roles"), route: `/${locale}/admin/roles` },
+          { label: t_sidebar("logs"), route: `/${locale}/admin/logs` },
         ],
       },
       {
         icon: (
           <PeopleIcon fill="currentColor" size={18} />
         ),
-        label: t("users"),
+        label: t_sidebar("users"),
         route: "#",
         children: [
-          { label: t("clients"), route: `/${locale}/admin/clients` },
-          { label: t("staff"), route: `/${locale}/admin/staff` },
+          { label: t_sidebar("clients"), route: `/${locale}/admin/clients` },
+          { label: t_sidebar("staff"), route: `/${locale}/admin/staff` },
         ],
       },
       {
         icon: (
           <CalendarIcon fill="none" size={18} />
         ),
-        label: t("calendar"),
+        label: t_sidebar("calendar"),
         route: `/${locale}/admin/calendar`,
       },
       {
@@ -111,7 +122,7 @@ const menuGroups = [
         icon: (
           <SettingIcon fill="none" size={18} />
         ),
-        label: t("settings"),
+        label: t_sidebar("settings"),
         route: `/${locale}/admin/settings?group=general`,
       },
     ],

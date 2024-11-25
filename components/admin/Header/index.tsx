@@ -110,7 +110,7 @@ const Header = (props: {
                     color="warning"
                     // name={user? getUsername(user.lastname, user.firstname): ""}
                     size="sm"
-                    src={user.image? getImageUrl(user.image) : ''}
+                    src={user && user.image? getImageUrl(user.image) : ''}
                   />
                 </div>
                 <div className="hidden md:flex items-center gap-3">
@@ -119,7 +119,7 @@ const Header = (props: {
                     name={user? getUsername(user.lastname, user.firstname): ""}
                     description="admin"
                     avatarProps={
-                      {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+                      {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                     }
                   />
                   <ChevronDownIcon fill="currentColor" size={10} />
@@ -133,7 +133,7 @@ const Header = (props: {
                   name={user? getUsername(user.lastname, user.firstname): ""}
                   description="admin"
                   avatarProps={
-                    {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+                    {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                   }
                 />
               </DropdownItem>

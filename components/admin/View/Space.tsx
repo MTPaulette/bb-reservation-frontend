@@ -146,7 +146,7 @@ export default function ViewSpace({id}: {id: string}) {
             </div>
 
             {/* images */}
-            <div className="my-10 bg-redd-50">
+            <div className="my-10">
               <Title
                 className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"
               >{capitalize(t_space("images"))}</Title>

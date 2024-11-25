@@ -5,6 +5,9 @@
     "created_by": "Créée par",
     "suspended_by": "Suspendue par",
     "at": "le",
+    "phonenumber": "Numéro de téléphone",
+    "email": "Adresse Email",
+    "address": "Localisation",
     "administrators": "Administrateurs",
     "ressources": "Ressources",
     "reservations": "Réservations"
@@ -180,7 +183,10 @@
     "spaces": "espaces",
     "ressources": "ressources",
     "characteristics": "caractérisques",
-    "reservations": "reservations"
+    "reservations": "reservations",
+    "finances": "finance",
+    "coupons": "coupons de réduction",
+    "payments": "paiements"
   },
   "Table": {
     "view": "Voir",
@@ -285,5 +291,16 @@
     "pwd_1": "Au moins 8 caractères (et jusqu'à 50 caractères)",
     "pwd_2": "Au moins un caractère miniscule",
     "pwd_3": "Inclusion d'au moins un caractère spécial, ex., ! @ # ?"
+  },
+  "Ressource": {
+    "characteristics": "Caractérisques",
+    "price": "Prix",
+    "created_by": "Créée par",
+    "images": "Images",
+    "at": "le",
+    "from": "De",
+    "administrators": "Administrateurs",
+    "ressources": "Ressources",
+    "reservations": "Réservations"
   }
 }

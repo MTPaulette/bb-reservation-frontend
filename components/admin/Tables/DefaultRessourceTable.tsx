@@ -79,7 +79,7 @@ export default function DefaultRessourceTable({ columns, ressources }: { columns
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["h-full", "over-x", "!shadow-none", "!border-none", "!p-0", "!m-0"],
+      wrapper: ["h-full", "over-x", "!shadow-none", "!border-none", "!p-0", "!m-0", "!bg-transparent"],
       th: ["bg-transparent", "border-b", "border-divider"],
       td: [
         "font-light", "text-sm",

@@ -20,8 +20,8 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import NewAgency from "../FormElements/Agency/New";
 import EditAgency from "../FormElements/Agency/Edit";
 import DeleteAgency from "../FormElements/Agency/Delete";
-import { getAgencies } from '@/lib/action/agencies';
 import SuspendAgency from '../FormElements/Agency/Suspend';
+import { getAgencies } from '@/lib/action/agencies';
 import { signOut } from 'next-auth/react';
 
 
@@ -396,7 +396,8 @@ export default function AgenciesTable() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-full", "!rounded-none","relative",
+      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
+
         "overflow-hidden", "over-x", "over-y", "!bg-transparent",
         "!shadow-none", "!border-none", "!p-0", "!m-0"],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],

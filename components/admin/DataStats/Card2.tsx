@@ -1,5 +1,5 @@
 import Title from "@/components/Title";
-import { ArrowUpIcon, ArrowDownIcon, CloseIcon, CharetIcon, CheckCircleIcon, CurrencyIcon, ExclamationCircleIcon } from "../../Icons";
+import { ArrowUpIcon, ArrowDownIcon, CloseIcon, CharetIcon, CheckCircleIcon, CurrencyIcon, PeopleIcon, ExclamationCircleIcon } from "../../Icons";
 
 const iconMap = {
   "pending": CharetIcon,
@@ -7,6 +7,7 @@ const iconMap = {
   "confirmed": CheckCircleIcon,
   "totally paid": CurrencyIcon,
   "cancelled": CloseIcon,
+  "users": PeopleIcon,
 };
 
 export default function CardWrapper2() {
@@ -22,6 +23,7 @@ export default function CardWrapper2() {
       <Card title="Total Customers customers" total={numberOfCustomers} type="confirmed" rate="53.8%" levelDown />
       <Card title="Total Invoices" total={numberOfInvoices} type="totally paid" rate="0.43%" levelUp />
       <Card title="Total Ressources" total={totalPendingInvoices} type="cancelled" rate="9.73%" levelDown />
+      <Card title="Total administrators" total={totalPendingInvoices} type="users" rate="9.73%" levelDown />
     </>
   );
 }
@@ -36,7 +38,7 @@ export function Card({
 }: {
   title: string;
   total: string;
-  type: "pending" | "partially paid" | "confirmed" | "totally paid" | "cancelled";
+  type: "pending" | "partially paid" | "confirmed" | "totally paid" | "cancelled" | "users";
   rate: string;
   levelUp?: boolean;
   levelDown?: boolean;
