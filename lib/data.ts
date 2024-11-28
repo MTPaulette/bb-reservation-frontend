@@ -46,6 +46,11 @@ export const statusUser = [
   {name_en: "Suspended", name_fr: "Suspendu(e)", uid: "suspended"},
 ];
 
+export const statusCoupon = [
+  {name_en: "Active", name_fr: "Actif", uid: "active"},
+  {name_en: "Expired", name_fr: "Expiré", uid: "expired"},
+];
+
 export const statusOptions = [
   {name: "Active", uid: "active"},
   {name: "Paused", uid: "paused"},
@@ -168,4 +173,15 @@ export const columnsStaffRessource = [
   {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity"},
   // {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
+
+export const columnsCoupon = [
+  {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
+  {name_en: "TOTAL USAGE", name_fr: "USAGE TOTAL", uid: "total_usage", sortable: true},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "VALUE", name_fr: "VALEUR", uid: "value"},
+  {name_en: "EXPIRE ON", name_fr: "EXPIRE LE", uid: "expired_on", sortable: true},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];

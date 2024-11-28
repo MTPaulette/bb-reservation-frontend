@@ -4,30 +4,35 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Pagination, Selection, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor, Chip, ChipProps
 } from "@nextui-org/react";
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { RessourceType } from "@/lib/definitions";
+import { CouponType } from "@/lib/definitions";
 import { capitalize, formatCurrency, getUsername } from "@/lib/utils";
-import { columnsRessource as columns, validitiesName as validities } from "@/lib/data";
+import { columnsCoupon as columns, statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewRessource from "../FormElements/Ressource/New";
-import EditRessource from "../FormElements/Ressource/Edit";
-import DeleteRessource from "../FormElements/Ressource/Delete";
-import { getRessources } from '@/lib/action/ressources';
+import NewCoupon from "../FormElements/Coupon/New";
+import EditCoupon from "../FormElements/Coupon/Edit";
+import DeleteCoupon from "../FormElements/Coupon/Delete";
+import { getCoupons } from '@/lib/action/coupons';
 import { signOut } from 'next-auth/react';
 
 
-const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "agency", "created_by", "actions"];
+const statusColorMap: Record<string, ChipProps["color"]> = {
+  active: "success",
+  expired: "danger"
+};
 
-export default function RessourcesTable() {
-  const [ressources, setRessources] = useState([]);
+const INITIAL_VISIBLE_COLUMNS = ["name", "total_usage", "value", "status", "expired_on", "created_by", "actions"];
+
+export default function CouponsTable() {
+  const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
@@ -37,11 +42,11 @@ export default function RessourcesTable() {
 
   useEffect(() => {
     setError("");
-    getRessources()
+    getCoupons()
       .then(async (res) => {
         setLoading(false);
         if(res?.ok){
-          setRessources(await res.json());
+          setCoupons(await res.json());
         }else {
           const status = res.status;
           switch(status) {
@@ -71,26 +76,25 @@ export default function RessourcesTable() {
       });
   }, []);
 
-  type Ressource = typeof ressources[0];
+  type Coupon = typeof coupons[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "space",
+    column: "name",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(ressources.length / rowsPerPage);
+  const pages = Math.ceil(coupons.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedRessource, setSelectedRessource] = React.useState<RessourceType>();
-
-  // const changeSelectedRessource
+  const [selectedCoupon, setSelectedCoupon] = React.useState<CouponType>();
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -101,16 +105,21 @@ export default function RessourcesTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredRessources = [...ressources];
+    let filteredCoupons = [...coupons];
 
     if (hasSearchFilter) {
-      filteredRessources = filteredRessources.filter((ressource) =>
-        ressource.space.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredCoupons = filteredCoupons.filter((coupon) =>
+        coupon.name.toLowerCase().includes(filterValue.toLowerCase()),
+      );
+    }
+    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
+      filteredCoupons = filteredCoupons.filter((coupon) =>
+        Array.from(statusFilter).includes(coupon.status),
       );
     }
 
-    return filteredRessources;
-  }, [ressources, filterValue]);
+    return filteredCoupons;
+  }, [coupons, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -120,61 +129,62 @@ export default function RessourcesTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Ressource, b: Ressource) => {
-      const first = a[sortDescriptor.column as keyof Ressource] as number;
-      const second = b[sortDescriptor.column as keyof Ressource] as number;
+    return [...items].sort((a: Coupon, b: Coupon) => {
+      const first = a[sortDescriptor.column as keyof Coupon] as number;
+      const second = b[sortDescriptor.column as keyof Coupon] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((ressource: Ressource, columnKey: React.Key) => {
-    const cellValue = ressource[columnKey as keyof Ressource];
+  const renderCell = React.useCallback((coupon: Coupon, columnKey: React.Key) => {
+    const cellValue = coupon[columnKey as keyof Coupon];
 
     switch (columnKey) {
-      case "space":
+      case "code":
         return (
-          <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
-            {capitalize(ressource.space)}
-          </Link>
+          <p className="font-semibold"></p>
         );
-      case "price":
+      case "name":
         return (
-          <div className="flex flex-col gap-1">
-            <p>
-              {locale === "en" ? validities[0].name_en: validities[0].name_fr}:
-              <span className="font-bold pl-2 text-xs">{ressource.price_hour? formatCurrency(ressource.price_hour) : ""}</span>
-            </p>
-            <p className="whitespace-nowrap">
-              {locale === "en" ? validities[1].name_en: validities[1].name_fr}:
-              <span className="font-bold pl-2 text-xs">{ressource.price_midday? formatCurrency(ressource.price_midday) : ""}</span>
-            </p>
-            <p>
-              {locale === "en" ? validities[2].name_en: validities[2].name_fr}:
-              <span className="font-bold pl-2 text-xs">{ressource.price_day? formatCurrency(ressource.price_day) : ""}</span>
-            </p>
-            <p>
-              {locale === "en" ? validities[3].name_en: validities[3].name_fr}:
-              <span className="font-bold pl-2 text-xs">{ressource.price_week? formatCurrency(ressource.price_week) : ""}</span>
-            </p>
-            <p>
-              {locale === "en" ? validities[4].name_en: validities[4].name_fr}:
-              <span className="font-bold pl-2 text-xs">{ressource.price_month? formatCurrency(ressource.price_month) : ""}</span>
+          <div className="min-w-[80px]">
+            <Link
+              href={`/${locale}/admin/coupons/${coupon.id}`}
+              className="font-semibold whitespace-nowrap"
+            >{coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}</Link>
+            <p className="font-light text-small text-foreground/70">
+              {capitalize(locale === "en" ? coupon.note_en: coupon.note_fr)}
             </p>
           </div>
         );
-      case "agency":
+      case "value":
         return (
-          <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
-            {capitalize(ressource.agency)}
-          </Link>
+          <div>
+            <p className="font-semibold">{coupon.percent? coupon.percent+' %': ''}</p>
+            <p className="font-semibold">{coupon.amount? formatCurrency(coupon.amount): ''}</p>
+          </div>
+        );
+      case "status":
+        return (
+          <Chip
+            className="capitalize border-none gap-1 text-default-600"
+            color={statusColorMap[coupon.status]}
+            size="sm"
+            variant="dot"
+          >
+            {cellValue}
+          </Chip>
         );
       case "created_by":
         return (
-          <Link href={`/${locale}/admin/staff/${ressource.created_by}`} className="font-medium">
-            {ressource.parent_firstname && ressource.parent_lastname? getUsername(ressource.parent_lastname, ressource.parent_firstname): ""}
-          </Link>
+          <div>
+          { coupon.created_by ? (
+            <Link href={`/${locale}/admin/staff/${coupon.created_by.id}`}>
+              {getUsername(coupon.created_by.lastname, coupon.created_by.firstname)}
+            </Link>
+          ): null}
+          </div>
         );
       case "actions":
         return (
@@ -187,20 +197,20 @@ export default function RessourcesTable() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem>
-                  <Link href={`/${locale}/admin/ressources/${ressource.id}`}>
+                  <Link href={`/${locale}/admin/coupons/${coupon.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => {
-                    setSelectedRessource(ressource);
+                    setSelectedCoupon(coupon);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
                   color="danger"
                   onClick={() => {
-                    setSelectedRessource(ressource);
+                    setSelectedCoupon(coupon);
                     setShowDeleteModal(true);
                   }}
                 >{t_table("delete")}</DropdownItem>
@@ -213,6 +223,7 @@ export default function RessourcesTable() {
     }
   }, []);
   
+
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
@@ -227,6 +238,7 @@ export default function RessourcesTable() {
       setFilterValue("");
     }
   }, []);
+
 
   const topContent = React.useMemo(() => {
     return (
@@ -253,6 +265,31 @@ export default function RessourcesTable() {
                 onValueChange={onSearchChange}
               />
               <div className="flex gap-3">
+                <Dropdown>
+                  <DropdownTrigger className="flex z-1">
+                    <Button
+                      endContent={<ChevronDownIcon fill="currentColor" size={10} />}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {t_table("status")}
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    disallowEmptySelection
+                    aria-label="Table Columns"
+                    closeOnSelect={false}
+                    selectedKeys={statusFilter}
+                    selectionMode="multiple"
+                    onSelectionChange={setStatusFilter}
+                  >
+                    {statusOptions.map((status) => (
+                      <DropdownItem key={status.uid}>
+                        {capitalize(locale === "en" ? status.name_en: status.name_fr)}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
                 <Dropdown>
                   <DropdownTrigger className="flex z-1">
                     <Button
@@ -289,7 +326,7 @@ export default function RessourcesTable() {
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {ressources.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {coupons.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -310,7 +347,7 @@ export default function RessourcesTable() {
       </>
     );
   }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, ressources.length, hasSearchFilter, ]);
+    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -338,8 +375,7 @@ export default function RessourcesTable() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
-
+      wrapper: ["!w-[calc(100vw_-_30px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
         "overflow-hidden", "over-x", "over-y", "!bg-transparent",
         "!shadow-none", "!border-none", "!p-0", "!m-0"],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
@@ -365,14 +401,8 @@ export default function RessourcesTable() {
         aria-label="bb-reservation table"
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        checkboxesProps={{
-          classNames: {
-            wrapper: "after:bg-foreground after:text-background text-background",
-          },
-        }}
         classNames={classNames}
         selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
@@ -401,23 +431,23 @@ export default function RessourcesTable() {
 
       <Modal
         open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newRessource")}
+        title={t_table("newCoupon")}
       >
-        <NewRessource />
+        <NewCoupon />
       </Modal>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editRessource")} "${selectedRessource? selectedRessource.space: ''}"`}
+        title={`${t_table("editCoupon")} "${selectedCoupon? selectedCoupon.name: ''}"`}
       >
-        <EditRessource ressource={selectedRessource} />
+        <EditCoupon id={selectedCoupon?.id} />
       </Modal>
       
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteRessource")} "${selectedRessource? selectedRessource.space: ''}"`}
+        title={`${t_table("deleteCoupon")} "${selectedCoupon? selectedCoupon.name: ''}"`}
       >
-        <DeleteRessource id={selectedRessource?.id} />
+        <DeleteCoupon id={selectedCoupon?.id} />
       </Modal>
       </div>
       )}

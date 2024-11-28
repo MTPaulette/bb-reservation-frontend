@@ -200,7 +200,7 @@ export default function CharacteristicsTable() {
               <Input
                 isClearable
                 classNames={{
-                  base: "w-full sm:max-w-[44%] z-1",
+                  base: "w-full sm:max-w-[50%] z-1",
                   inputWrapper: "border-1",
                 }}
                 placeholder={t_table("search_placeholder")}

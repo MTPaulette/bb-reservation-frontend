@@ -201,7 +201,37 @@ export type columnsTabsType = {
   sortable: boolean;
 }
 
+export type CouponType = {
+  id: number;
+  name: string;
+  code: string;
+  total_usage: number;
+  status: string;
+  expired_on: Date;
+  percent: number | null;
+  amount: number | null;
+  note_en: string;
+  note_fr: string;
+  created_by: CreatedByType;
+  created_at: Date;
+  updated_at: Date;
+}
 
+export type CreatedByType = {
+  id: number;
+  lastname: string;
+  firstname: string;
+}
+
+export type CouponFormType = {
+  name: string;
+  total_usage: number | string;
+  percent: number | string | null;
+  amount: number | string | null;
+  expired_on: Date | string;
+  note_en: string;
+  note_fr: string;
+}
 
 
 

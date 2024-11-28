@@ -68,7 +68,7 @@
     }
 
     .over-x::-webkit-scrollbar{
-      height: 2px;
+      height: 4px;
     }
 
     .over-y::-webkit-scrollbar{

@@ -14,7 +14,7 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex bg-content2 text-foreground">
+    <div className="flex bg-content2 text-foreground max-w-full overflow-x-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div className="relative flex flex-1 flex-col lg:ml-67">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

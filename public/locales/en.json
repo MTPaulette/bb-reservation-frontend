@@ -106,6 +106,10 @@
     "update_ressource_success_msg": "Ressource successfully updated.",
     "delete_ressource_success_msg": "Ressource successfully deleted.",
 
+    "new_coupon_success_msg": "Coupon successfully created.",
+    "update_coupon_success_msg": "Coupon successfully updated.",
+    "delete_coupon_success_msg": "Coupon successfully deleted.",
+
     "newClient": "New client",
     "editClient": "Edit client",
     "deleteClient": "Delete client",
@@ -137,7 +141,23 @@
     "price_midday": "price per midday",
     "price_day": "price per day",
     "price_week": "price per week",
-    "price_month": "price per month"
+    "price_month": "price per month",
+
+    "coupon": "Name",
+    "coupon_placeholder": "Enter coupon name",
+    "total_usage": "Total usage",
+    "total_usage_placeholder": "Enter maximun usage limit",
+    "amount": "Amount",
+    "amount_placeholder": "Enter coupon amount",
+    "percent": "Percent",
+    "or": "or",
+    "percent_placeholder": "Enter coupon percent",
+    "expired_on": "Expire on",
+    "note_en": "Note in french",
+    "note_fr": "Note in english",
+    "note_placeholder": "Enter coupon note",
+    "sended_to_clients": "Sended to clients",
+    "select_all": "Check all"
   },
   "Footer": {
     "terms": "Terms & Conditions",
@@ -239,7 +259,11 @@
 
     "newRessource": "New ressource",
     "editRessource": "Edit ressource",
-    "deleteRessource": "Delete ressource"
+    "deleteRessource": "Delete ressource",
+
+    "newCoupon": "New coupon",
+    "editCoupon": "Edit coupon",
+    "deleteCoupon": "Delete coupon"
   },
   "Space": {
     "sits": "sit(s) available(s)",
@@ -274,7 +298,9 @@
     "space": "space",
     "characteristics": "characteristics",
     "ressources": "ressources",
-    "ressource": "ressource"
+    "ressource": "ressource",
+    "coupons": "coupons",
+    "coupon": "coupon"
   },
   "Settings": {
     "general": "general",

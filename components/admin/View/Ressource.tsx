@@ -214,7 +214,7 @@ export default function ViewRessource({id}: {id: string}) {
   
       {ressource.space && ressource.space.images.length > 0 ? (
       <div className="col-span-12 mt-6 md:mt-8 pt-6 md:pt-8 border-t border-divider z-1">
-        <p className="mb-8 py-1 bg-primary text-white rounded-lg text-center text-sm">{capitalize(t_ressource("images"))}</p>
+        <p className="mb-8 py-1.5 bg-primary text-white rounded-lg text-center text-sm">{capitalize(t_ressource("images"))}</p>
         <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default px-4 sm:px-6 py-8 antialiased">
           <div className="w-full flex flex-wrap items-center gap-2 sm:gap-x-8">
             {ressource.space.images.map((item) => (
