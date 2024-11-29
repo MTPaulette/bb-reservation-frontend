@@ -117,7 +117,7 @@ const Header = (props: {
                   <User
                     isFocusable
                     name={user? getUsername(user.lastname, user.firstname): ""}
-                    description="admin"
+                    description={user? user.role: ""}
                     avatarProps={
                       {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                     }
@@ -131,7 +131,7 @@ const Header = (props: {
                 <User
                   isFocusable
                   name={user? getUsername(user.lastname, user.firstname): ""}
-                  description="admin"
+                  description={user? user.role: ""}
                   avatarProps={
                     {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                   }

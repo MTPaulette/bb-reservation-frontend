@@ -45,7 +45,7 @@ export default function Footer() {
       <div className="grid grid-cols-3 md:grid-cols-6 gap-10 justify-between flex-wrap">
         <div className="col-span-3 md:col-span-3">
           <div className="mb-4 -mt-4 shrink-0">
-            <BbLogo width={130} />
+            <BbLogo width={70} />
           </div>
           <p className="text-justify">
             ipsum dolor sit amet consectetur adipisicing elit. Iure nulla inventore fugiat. Recusandae nisi eum, asper

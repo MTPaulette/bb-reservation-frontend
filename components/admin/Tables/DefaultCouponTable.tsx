@@ -1,81 +1,28 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Pagination, Selection, SortDescriptor, Chip, ChipProps
+  DropdownItem, Chip, Pagination, Selection, ChipProps, SortDescriptor
 } from "@nextui-org/react";
 
-import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { CouponType } from "@/lib/definitions";
+import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
 import { capitalize, formatCurrency, getUsername } from "@/lib/utils";
-import { columnsCoupon as columns, statusCoupon as statusOptions } from "@/lib/data";
+import { statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
-import Modal from "@/components/Modal";
-import Alert from "@/components/Alert";
-import { CommonSkeleton } from '@/components/Skeletons';
-import NewCoupon from "../FormElements/Coupon/New";
-import EditCoupon from "../FormElements/Coupon/Edit";
-import DeleteCoupon from "../FormElements/Coupon/Delete";
-import { getCoupons } from '@/lib/action/coupons';
-import { signOut } from 'next-auth/react';
-
-
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
-  expired: "danger"
+  suspended: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "total_usage", "value", "status", "expired_on", "sending_to", "created_by", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "total_usage", "value", "status", "expired_on"];
 
-export default function CouponsTable() {
-  const [coupons, setCoupons] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>("");
+export default function DefaultCouponTable({ columns, coupons }: { columns: any[], coupons: any[] }) {
   const locale = useLocale();
-  const t_error = useTranslations("InputError");
-  const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
-
-  useEffect(() => {
-    setError("");
-    getCoupons()
-      .then(async (res) => {
-        setLoading(false);
-        if(res?.ok){
-          setCoupons(await res.json());
-        }else {
-          const status = res.status;
-          switch(status) {
-            case 401:
-              setError(t_error("unauthenticated"));
-              await signOut({
-                callbackUrl: `/${locale}/auth/login`
-              });
-              break;
-            case 403:
-              setError(t_error("acces_denied"));
-              break;
-            case 404:
-              setError(t_error("server_not_found"));
-              break;
-            case 500:
-              setError(t_error("something_wrong"));
-              break;
-            default:
-              break;
-          }
-        }
-      })
-      .catch(error => {
-        setError(t_error("something_wrong"));
-        console.error(error);
-      });
-  }, []);
-
   type Coupon = typeof coupons[0];
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -84,17 +31,15 @@ export default function CouponsTable() {
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "name",
+    column: "lastname",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(coupons.length / rowsPerPage);
-  const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedCoupon, setSelectedCoupon] = React.useState<CouponType>();
+
+  // const changeSelectedCoupon
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -109,7 +54,7 @@ export default function CouponsTable() {
 
     if (hasSearchFilter) {
       filteredCoupons = filteredCoupons.filter((coupon) =>
-        coupon.name.toLowerCase().includes(filterValue.toLowerCase()),
+        coupon.lastname.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
@@ -186,44 +131,11 @@ export default function CouponsTable() {
           ): null}
           </div>
         );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon fill="none" size={24} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>
-                  <Link href={`/${locale}/admin/coupons/${coupon.id}`}>
-                    {t_table("view")}
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => {
-                    setSelectedCoupon(coupon);
-                    setShowEditModal(true);
-                  }}
-                >{t_table("edit")}</DropdownItem>
-                <DropdownItem
-                  color="danger"
-                  onClick={() => {
-                    setSelectedCoupon(coupon);
-                    setShowDeleteModal(true);
-                  }}
-                >{t_table("delete")}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
       default:
         return cellValue;
     }
   }, []);
   
-
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
@@ -239,14 +151,10 @@ export default function CouponsTable() {
     }
   }, []);
 
-
   const topContent = React.useMemo(() => {
     return (
       <>
-      <div className="block md:hidden mb-4 max-w-screen">
-        <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
-      </div>
-      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 bg-background shadow-default sm:px-7.5 xl:pb-2">
+      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 bg-content2 shadow-defaultt sm:px-7.5 xl:pb-2">
         <div className="max-w-full overflow-x-auto">
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap justify-between gap-3 items-end">
@@ -271,6 +179,7 @@ export default function CouponsTable() {
                       endContent={<ChevronDownIcon fill="currentColor" size={10} />}
                       size="sm"
                       variant="flat"
+                      className="bg-foreground text-background"
                     >
                       {t_table("status")}
                     </Button>
@@ -296,6 +205,7 @@ export default function CouponsTable() {
                       endContent={<ChevronDownIcon fill="currentColor" size={10} />}
                       size="sm"
                       variant="flat"
+                      className="bg-foreground text-background"
                     >
                       {t_table("colunms")}
                     </Button>
@@ -315,14 +225,6 @@ export default function CouponsTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
-                >
-                  {t_table("new")}
-                </Button>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -347,7 +249,7 @@ export default function CouponsTable() {
       </>
     );
   }, [
-    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, ]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -375,9 +277,9 @@ export default function CouponsTable() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["!w-[calc(100vw_-_30px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
+      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
         "overflow-hidden", "over-x", "over-y", "!bg-transparent",
-        "!shadow-none", "!border-none", "!p-0", "!m-0"],
+        "!shadow-none", "!border-none", "!py-0", "!px-0", "!m-0"],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
       td: [
         "group-data-[first=true]:first:before:rounded-none",
@@ -389,13 +291,8 @@ export default function CouponsTable() {
     }),
     [],
   );
-
   return (
     <>
-      {loading ? (
-        <CommonSkeleton />
-      ) : (
-      <div>
       <Table
         isCompact
         aria-label="bb-reservation table"
@@ -420,7 +317,7 @@ export default function CouponsTable() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={error? <Alert color="danger" message={error} />: t_table("noItems")} items={sortedItems}>
+        <TableBody emptyContent={t_table("noItems")} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
@@ -428,29 +325,6 @@ export default function CouponsTable() {
           )}
         </TableBody>
       </Table>
-
-      <Modal
-        open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newCoupon")}
-      >
-        <NewCoupon />
-      </Modal>
-
-      <Modal
-        open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editCoupon")} "${selectedCoupon? selectedCoupon.name: ''}"`}
-      >
-        <EditCoupon id={selectedCoupon?.id} />
-      </Modal>
-      
-      <Modal
-        open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteCoupon")} "${selectedCoupon? selectedCoupon.name: ''}"`}
-      >
-        <DeleteCoupon id={selectedCoupon?.id} />
-      </Modal>
-      </div>
-      )}
     </>
   );
 }

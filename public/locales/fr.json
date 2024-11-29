@@ -1,5 +1,5 @@
 {
-  "Agency": {
+  "Tabs": {
     "openingdays": "Jours d'ouverture",
     "contact": "contact",
     "created_by": "Créée par",
@@ -10,7 +10,9 @@
     "address": "Localisation",
     "administrators": "Administrateurs",
     "ressources": "Ressources",
-    "reservations": "Réservations"
+    "reservations": "Réservations",
+    "coupons": "Coupons",
+    "clients": "Clients"
   },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
@@ -18,6 +20,9 @@
     "attention": "Attention!",
     "error": "Erreur",
     "no_administrator": "Aucun administrator",
+    "no_client": "Aucun client",
+    "no_coupon": "Aucun coupon",
+    "no_payment": "Aucun payment",
     "no_ressource": "Aucune ressource",
     "no_reservation": "Aucune reservation"
   },
@@ -294,6 +299,7 @@
     "space": "espace",
     "characteristics": "caractérisques",
     "ressources": "ressources",
+    "ressource": "ressource",
     "coupons": "coupons de réduction",
     "coupon": "coupon"
   },

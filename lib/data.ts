@@ -158,24 +158,28 @@ export const columns = [
   {name: "ACTIONS", uid: "actions"},
 ];
 
-export const columnsTabsStaff = [
-  {name_en: "NAME", name_fr: "NOM", uid: "lastname"},
-  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email"},
-  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
-  {name_en: "STATUS", name_fr: "STATUS", uid: "status"},
-  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
-];
-
-export const columnsStaffRessource = [
-  {name_en: "SPACE", name_fr: "ESPACE", uid: "space"},
-  {name_en: "PRICE", name_fr: "PRIX", uid: "price"},
-  {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place"},
-  {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity"},
-  // {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
-  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
-];
-
 export const columnsCoupon = [
+  {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
+  {name_en: "TOTAL USAGE", name_fr: "USAGE TOTAL", uid: "total_usage", sortable: true},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "VALUE", name_fr: "VALEUR", uid: "value"},
+  {name_en: "EXPIRE ON", name_fr: "EXPIRE LE", uid: "expired_on", sortable: true},
+  {name_en: "SENDING TO", name_fr: "ENVOYE A", uid: "sending_to"},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+export const columnsTabsStaffCoupon = [
+  {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
+  {name_en: "TOTAL USAGE", name_fr: "USAGE TOTAL", uid: "total_usage", sortable: true},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "VALUE", name_fr: "VALEUR", uid: "value"},
+  {name_en: "EXPIRE ON", name_fr: "EXPIRE LE", uid: "expired_on", sortable: true},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
+
+export const columnsTabsClientCoupon = [
   {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
   {name_en: "TOTAL USAGE", name_fr: "USAGE TOTAL", uid: "total_usage", sortable: true},
   {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
@@ -183,5 +187,50 @@ export const columnsCoupon = [
   {name_en: "EXPIRE ON", name_fr: "EXPIRE LE", uid: "expired_on", sortable: true},
   {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
-  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+/*
+  * ======================== tabs columns
+*/
+export const columnsTabsStaffAgency = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
+
+export const columnsTabsStaffStaff = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "WORK AT", name_fr: "TRAVAILLE A", uid: "agency", sortable: true},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
+
+export const columnsTabsClientStaff = [
+  {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
+  {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
+  {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
+
+export const columnsTabsRessourceAgency = [
+  {name_en: "SPACE", name_fr: "ESPACE", uid: "space", sortable: true},
+  {name_en: "PRICE", name_fr: "PRIX", uid: "price"},
+  {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place", sortable: true},
+  {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity", sortable: true},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
+
+export const columnsTabsRessourceStaff = [
+  {name_en: "SPACE", name_fr: "ESPACE", uid: "space", sortable: true},
+  {name_en: "PRICE", name_fr: "PRIX", uid: "price"},
+  {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place", sortable: true},
+  {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity", sortable: true},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
 ];
