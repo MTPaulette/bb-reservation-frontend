@@ -9,7 +9,7 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon, EnvelopIcon, TelephoneIcon } from "@/components/Icons";
 import { AgencyType } from "@/lib/definitions";
-import { capitalize, getUsername } from "@/lib/utils";
+import { capitalize, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsAgency as columns, statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -191,7 +191,10 @@ export default function AgenciesTable() {
             {cellValue}
           </Chip>
         );
-        
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(agency.created_at, locale)}</p>
+        );
       case "created_by":
         return (
           <div>

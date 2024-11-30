@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
-import { capitalize,formatCurrency, getImageUrl, getUsername } from "@/lib/utils";
+import { capitalize,formatCurrency, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
 import { validitiesName as validities } from "@/lib/data";
 
 import { VerticalDotsIcon } from "@/components/Icons";
@@ -197,7 +197,7 @@ export default function ViewRessource({id}: {id: string}) {
                 </p>
               ): null }
               {ressource.created_at? (
-                <p className="mt-1 font-light text-tiny">{t_ressource("at")}: {ressource.created_at}</p>
+                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_ressource("at")}: {formatDateTime(ressource.created_at)}</p>
               ): ""}
             </div>
             <p className="text-foreground/60 text-justify pt-4">

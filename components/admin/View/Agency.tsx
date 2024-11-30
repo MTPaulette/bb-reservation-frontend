@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
-import { capitalize, getUsername } from "@/lib/utils";
+import { capitalize, formatDateTime, getUsername } from "@/lib/utils";
 
 import { EnvelopIcon, LocalisationIcon, VerticalDotsIcon, TelephoneIcon } from "@/components/Icons";
 import { 
@@ -200,7 +200,7 @@ export default function ViewAgency({id}: {id: string}) {
                   </p>
                 ): null }
                 {agency.created_at? (
-                  <p className="mt-1 font-light text-tiny">{t_tabs("at")}: {agency.created_at}</p>
+                  <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_tabs("since")}: {formatDateTime(agency.created_at)}</p>
                 ): ""}
                 <div className="flex items-center gap-2">
                   <div

@@ -5,6 +5,7 @@
     "created_by": "Créée par",
     "suspended_by": "Suspendue par",
     "at": "le",
+    "since": "Depuis",
     "phonenumber": "Numéro de téléphone",
     "email": "Adresse Email",
     "address": "Localisation",
@@ -233,6 +234,7 @@
     "suspended_by": "Suspendu(e) par",
     "work_at": "Travaille à",
     "at": "le",
+    "since": "Depuis",
     
     "newClient": "Nouveau client",
     "editClient": "Editer client",
@@ -329,6 +331,7 @@
     "created_by": "Créée par",
     "images": "Images",
     "at": "le",
+    "since": "Depuis",
     "from": "De",
     "administrators": "Administrateurs",
     "ressources": "Ressources",

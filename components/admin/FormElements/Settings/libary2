@@ -1,0 +1,200 @@
+Voici l'exemple de code avec TypeScript :
+
+import React, { useState } from 'react';
+
+interface Holiday {
+  date: string;
+}
+
+const HolidayInput = () => {
+  const [holidays, setHolidays] = useState<Holiday[]>([]);
+  const [newHoliday, setNewHoliday] = useState<string>('');
+
+  const handleAddHoliday = () => {
+    setHolidays([...holidays, { date: newHoliday }]);
+    setNewHoliday('');
+  };
+
+  const handleRemoveHoliday = (index: number) => {
+    setHolidays(holidays.filter((holiday, i) => i !== index));
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Envoyer les données à l'API Laravel
+    fetch('/api/holidays', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ holidays }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Ajouter un jour férié :
+        <input
+          type="date"
+          value={newHoliday}
+          onChange={(event) => setNewHoliday(event.target.value)}
+        />
+      </label>
+      <button type="button" onClick={handleAddHoliday}>
+        Ajouter
+      </button>
+      <ul>
+        {holidays.map((holiday, index) => (
+          <li key={index}>
+            {holiday.date}
+            <button type="button" onClick={() => handleRemoveHoliday(index)}>
+              Supprimer
+            </button>
+          </li>
+        ))}
+      </ul>
+      <button type="submit">Envoyer</button>
+    </form>
+  );
+};
+
+export default HolidayInput;
+
+
+
+===============================================
+
+Pour stocker le tableau de jours fériés dans la valeur de l'objet holiday dans Laravel, vous pouvez utiliser la fonction json_encode pour convertir le tableau en une chaîne de caractères JSON, puis stocker cette chaîne dans la base de données.
+
+Voici un exemple de code qui montre comment stocker le tableau de jours fériés dans la valeur de l'objet holiday :
+
+use App\Models\Holiday;
+
+$holidays = [
+    '2024-01-01',
+    '2024-04-01',
+    '2024-05-01',
+    // ...
+];
+
+$holiday = new Holiday();
+$holiday->value = json_encode($holidays);
+$holiday->save();
+
+Pour récupérer la valeur de l'objet holiday et comparer avec une date afin de vérifier que cette date n'est pas une date férié, vous pouvez utiliser la fonction json_decode pour convertir la chaîne de caractères JSON en un tableau, puis utiliser la fonction in_array pour vérifier si la date est présente dans le tableau.
+
+Voici un exemple de code qui montre comment récupérer la valeur de l'objet holiday et comparer avec une date :
+
+use App\Models\Holiday;
+
+$holiday = Holiday::first();
+$holidays = json_decode($holiday->value, true);
+
+$date = '2024-04-01';
+
+if (in_array($date, $holidays)) {
+    echo 'La date est une date férié';
+} else {
+    echo 'La date n\'est pas une date férié';
+}
+
+Notez que dans cet exemple, nous utilisons la fonction json_decode avec le deuxième argument true pour convertir la chaîne de caractères JSON en un tableau associatif.
+
+
+==================================================
+
+Pour valider le format de date pour qu'il soit identique à celui de Laravel 9, vous pouvez utiliser la bibliothèque Zod pour définir un schéma de validation de date.
+
+Voici un exemple de code qui valide le format de date pour qu'il soit identique à celui de Laravel 9 :
+
+import { z } from 'zod';
+
+const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+
+const validateDate = (date: string) => {
+  try {
+    const parsedDate = dateSchema.parse(date);
+    return parsedDate;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return { error: error.issues[0].message };
+    } else {
+      throw error;
+    }
+  }
+};
+
+// Exemple d'utilisation
+const date = '2024-02-30';
+const result = validateDate(date);
+
+if (result.error) {
+  console.error(result.error);
+} else {
+  console.log(result);
+}
+
+Dans cet exemple, nous définissons un schéma de validation de date avec Zod, qui vérifie que la date est sous la forme YYYY-MM-DD. La fonction validateDate prend une chaîne de caractères représentant la date en entrée, et essaie de la parser avec le schéma de validation de date. Si la date est valide, la fonction renvoie la date parsée. Sinon, la fonction renvoie un objet avec une propriété error contenant le message d'erreur.
+
+Notez que la regex ^\d{4}-\d{2}-\d{2}$ vérifie que la date est sous la forme YYYY-MM-DD, où YYYY représente l'année, MM représente le mois et DD représente le jour.
+
+====================================================
+
+[06:41, 30/11/2024] Paulette: Je comprends mieux maintenant. Vous voulez stocker les heures en base de données en GMT avec Laravel, et les afficher correctement avec Next.js en tenant compte du fuseau horaire de l'utilisateur.
+
+Pour atteindre cet objectif, vous pouvez suivre ces étapes :
+
+1. Stockez les heures en base de données en GMT avec Laravel :
+
+use Carbon\Carbon;
+
+// ...
+
+$heure = Carbon::now()->toDateTimeString();
+
+1. Dans votre application Next.js, utilisez une bibliothèque de gestion des fuseaux horaires, telle que moment-timezone ou date-fns-tz.
+2. Lorsque l'utilisateur se connecte, récupérez son fuseau horaire en fonction de sa localisation (par exemple, en utilisant l'API de géolocalisation).
+3. Utilisez la bibliothèque de gestion des fuseaux horaires pour convertir les heures stockées en GMT en heures locales pour l'utilisateur.
+
+Par exemple, avec moment-timezone :
+
+import moment from 'moment-timezone';
+
+// Récupérer le fuseau horaire de l'utilisateur
+const userTimezone = 'Africa/Abidjan'; // GMT+2 pour la Côte d'Ivoire
+
+// Convertir les heures stockées en GMT en heures locales pour l'utilisateur
+const heureLocale = moment.utc(heureEnregistree).tz(userTimezone).format('YYYY-MM-DD HH:mm:ss');
+
+De cette façon, vous pouvez afficher les heures correctement pour les utilisateurs de différents fuseaux horaires.
+[06:50, 30/11/2024] Paulette: Je comprends mieux maintenant. Voici la fonction mise à jour qui affiche la date de création sous forme de "créé le [date] à [heure]" si le temps dépasse 1 semaine, et "créé il y a [temps]" si le temps ne dépasse pas 1 semaine :
+
+import moment from 'moment';
+
+const formatDateTime = (dateTime, lang = 'fr') => {
+  moment.locale(lang);
+  const now = moment();
+  const diff = now.diff(dateTime, 'days');
+  if (diff > 7) {
+    return `Créé le ${moment(dateTime).format('DD/MM/YYYY')} à ${moment(dateTime).format('HH:mm')}`;
+  } else {
+    return `Créé il y a ${moment(dateTime).fromNow()}`;
+  }
+};
+
+export default formatDateTime;
+
+Cette fonction utilise la bibliothèque moment pour calculer la différence entre la date actuelle et la date de création. Si la différence est supérieure à 7 jours, la fonction affiche la date de création sous forme de "créé le [date] à [heure]". Sinon, la fonction affiche la date de création sous forme de "créé il y a [temps]".
+
+Vous pouvez utiliser cette fonction dans votre code comme suit :
+
+import formatDateTime from './formatDateTime';
+
+const dateTime = new Date();
+const formattedDateTime = formatDateTime(dateTime, 'fr');
+
+console.log(formattedDateTime);
+
+=======================================================

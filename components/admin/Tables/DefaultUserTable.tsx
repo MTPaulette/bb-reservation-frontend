@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 
 import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
-import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
+import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
 import { statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -117,6 +117,10 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
             </Link>
           ): null}
           </div>
+        );
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(user.created_at, locale)}</p>
         );
       case "created_by":
         return (

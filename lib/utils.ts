@@ -1,4 +1,6 @@
 import { getSession, getCsrfToken } from "next-auth/react";
+import moment from 'moment';
+
 
 export const getToken = async () => {
   const session = await getSession();
@@ -41,3 +43,16 @@ export const getImageUrl = (link : string) => {
   url.pathname = `/storage/${link}`;
   return url.href;
 }
+
+
+export const formatDateTime = (dateTime: moment.MomentInput, lang = 'fr') => {
+  moment.locale(lang);
+  const now = moment();
+  const diff = now.diff(dateTime, 'days');
+  if (diff > 7) {
+    // return `${moment(dateTime).format('DD/MM/YYYY')} à ${moment(dateTime).format('HH:mm')}`;
+    return `${moment(dateTime).format('D MMM YYYY')}  ${moment(dateTime).format('HH:mm')}`;
+  } else {
+    return `${moment(dateTime).fromNow()}`;
+  }
+};

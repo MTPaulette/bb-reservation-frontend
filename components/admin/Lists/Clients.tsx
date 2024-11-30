@@ -9,7 +9,7 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { UserType } from "@/lib/definitions";
-import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
+import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
 import { columnsClient as columns, statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -177,6 +177,10 @@ export default function UsersTable() {
           >
             {cellValue}
           </Chip>
+        );
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(user.created_at, locale)}</p>
         );
       case "created_by":
         return (

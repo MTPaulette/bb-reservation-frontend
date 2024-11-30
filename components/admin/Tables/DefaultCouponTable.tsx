@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 
 import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
-import { capitalize, formatCurrency, getUsername } from "@/lib/utils";
+import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
 import { statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -120,6 +120,10 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
           >
             {cellValue}
           </Chip>
+        );
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(coupon.created_at, locale)}</p>
         );
       case "created_by":
         return (

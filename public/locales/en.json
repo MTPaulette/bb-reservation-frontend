@@ -5,6 +5,7 @@
     "created_by": "Created by",
     "suspended_by": "Suspended by",
     "at": "at",
+    "since": "Since",
     "phonenumber": "Phone Number",
     "email": "Email Address",
     "address": "Address",
@@ -237,6 +238,7 @@
     "suspended_by": "Suspended by",
     "work_at": "Work at",
     "at": "at",
+    "since": "Since",
 
     "newClient": "New client",
     "editClient": "Edit client",
@@ -333,6 +335,7 @@
     "created_by": "Created by",
     "images": "Images",
     "at": "at",
+    "since": "Since",
     "from": "From",
     "administrators": "Administrators",
     "ressources": "Ressources",

@@ -9,7 +9,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
-import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
+import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Tabs, Tab } from "@nextui-org/react";
 import { VerticalDotsIcon } from "@/components/Icons";
 
@@ -214,7 +214,7 @@ export default function ViewStaff({id}: {id: string}) {
                 </p>
               ): null }
               {user.created_at? (
-                <p className="mt-1 font-light text-tiny">{t_table("at")}: {user.created_at}</p>
+                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_table("since")}: {formatDateTime(user.created_at)}</p>
               ): ""}
 
               <div

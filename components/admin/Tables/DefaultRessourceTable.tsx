@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/react";
 
 import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
-import { capitalize, getUsername, formatCurrency } from "@/lib/utils";
+import { capitalize, getUsername, formatCurrency, formatDateTime } from "@/lib/utils";
 import { useLocale, useTranslations } from 'next-intl';
 import { validitiesName as validities } from "@/lib/data";
 import Link from "next/link";
@@ -111,6 +111,10 @@ export default function DefaultRessourceTable({ columns, ressources }: { columns
           <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
             {capitalize(ressource.agency)}
           </Link>
+        );
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(ressource.created_at, locale)}</p>
         );
       case "created_by":
         return (

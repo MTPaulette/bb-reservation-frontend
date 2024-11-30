@@ -9,7 +9,7 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { CouponType } from "@/lib/definitions";
-import { capitalize, formatCurrency, getUsername } from "@/lib/utils";
+import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsCoupon as columns, statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -175,6 +175,10 @@ export default function CouponsTable() {
           >
             {cellValue}
           </Chip>
+        );
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(coupon.created_at, locale)}</p>
         );
       case "created_by":
         return (

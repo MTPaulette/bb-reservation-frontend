@@ -9,7 +9,7 @@ import {
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { RessourceType } from "@/lib/definitions";
-import { capitalize, formatCurrency, getUsername } from "@/lib/utils";
+import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsRessource as columns, validitiesName as validities } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
@@ -169,6 +169,10 @@ export default function RessourcesTable() {
           <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
             {capitalize(ressource.agency)}
           </Link>
+        );
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(ressource.created_at, locale)}</p>
         );
       case "created_by":
         return (
