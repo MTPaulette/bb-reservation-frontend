@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { CouponType, CouponFormType } from "@/lib/definitions";
+import { CouponFormType } from "@/lib/definitions";
 import { getClients } from "@/lib/action/clients";
 import Title from "@/components/Title";
 import { getCouponById, updateCoupon } from "@/lib/action/coupons";

@@ -3,13 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import { signOut } from "next-auth/react";
 import { useLocale, useTranslations } from 'next-intl';
-import { TrashIcon } from "@/components/Icons";
+import { TrashIcon, UploadIcon } from "@/components/Icons";
 import Title from "@/components/Title";
 import { CommonSkeleton } from "@/components/Skeletons";
-import { Button, Input } from "@nextui-org/react";
+import { Avatar, Button, Input } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z, ZodType } from "zod";
 import Alert from "@/components/Alert";
 import { HolidayType, OptionType } from "@/lib/definitions";
-import { getOptions, saveHolidays, saveOptions } from '@/lib/action/options';
+import { uploadImage, deleteProfilePic } from "@/lib/action/profile";
+import { capitalize } from "@/lib/utils";
+import { getOptions, saveHolidays, saveOptions, updateOptions } from '@/lib/action/options';
+import { useDebouncedCallback } from 'use-debounce';
+
 
 export default function General () {
   const locale = useLocale();
@@ -21,11 +28,31 @@ export default function General () {
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   
-  const [loadingHolidays, setHoadingHolidays] = useState<boolean>(false);
-  const [errorHolidays, setErrorHolidays] = useState<string>("");
-  const [successHolidays, setSuccessHolidays] = useState<string>("");
+  const [loadingImg, setLoadingImg] = useState<boolean>(false);
+  const [errorImg, setErrorImg] = useState<string>("");
+  const [successImg, setSuccessImg] = useState<string>("");
 
+  const [src, setSrc] = useState();
+  const [image, setImage] = useState<File|null>(null);
   const [options, setOptions] = useState([]);
+  const [optionsUpdated, setOptionsUpdated] = useState([]);
+
+  const schema: ZodType<OptionType> = z
+    .object({
+      lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
+      firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
+      phonenumber: z.string().max(250),
+      email: z.string().email({ message: t_error("email") }).max(250),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<OptionType>({
+    resolver: zodResolver(schema),
+  })
+
 
   const [holidays, setHolidays] = useState<HolidayType[]>([]);
 
@@ -43,6 +70,7 @@ export default function General () {
       setLoading(false);
       const data = await res.json();
       setOptions(data);
+      setOptionsUpdated(data);
       const holidaysOption = data.find((option: any) => option.name === 'holidays');
       const holidaysValues = holidaysOption.value.split(",");
       setHolidays(holidaysValues);
@@ -52,37 +80,169 @@ export default function General () {
     });
   }, []);
 
-  const handleHolidaySubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setHoadingHolidays(true);
-    saveHolidays(holidays)
+  const handleFormSubmit = async (data: OptionType) => {
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    saveOptions(data)
     .then(async (res) => {
-      setHoadingHolidays(false);
+      setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccessHolidays(t("update_holidays_success_msg"));
-        }, 100);
+          setSuccess(t("update_account_success_msg"));
+          // window.location.reload();
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {
           case 401:
-            setErrorHolidays(t_error("unauthenticated"));
+            setError(t_error("unauthenticated"));
             await signOut({
               callbackUrl: `/${locale}/auth/login`
             });
             break;
           case 404:
-            setErrorHolidays(t_error("options_not_found"));
+            setError(t_error("options_not_found"));
             break;
           case 422:
             const err = await res.json();
-            setErrorHolidays(JSON.stringify(err.errors));
+            setError(JSON.stringify(err.errors));
             break;
           case 403:
-            setErrorHolidays(t_error("acces_denied"));
+            setError(t_error("acces_denied"));
             break;
           case 500:
-            setErrorHolidays(t_error("something_wrong"));
+            setError(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch((error) => {
+      setError(t_error("something_wrong"));
+      console.error(error);
+    })
+  }
+
+  const handleUpload = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('image', image);
+    setErrorImg("");
+    setLoadingImg(true);
+    uploadImage(formData)
+    .then(async (res) => {
+      setLoadingImg(false);
+      if(res?.ok) {
+        const response = await res.json();
+        setImage(response.src);
+        setSrc(response.src);
+        setSuccessImg(t("update_account_success_msg"));
+        setTimeout(() => {
+          setSuccessImg("");
+        }, 1000);
+      } else {
+        const status = res.status;
+        switch(status) {
+          case 404:
+            setErrorImg(t_error("options_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setErrorImg(JSON.stringify(err.errors));
+            break;
+          case 403:
+            setErrorImg(t_error("acces_denied"));
+            break;
+          case 500:
+            setErrorImg(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch((error) => {
+      setErrorImg(t_error("something_wrong"));
+      console.error(error);
+    })
+  };
+
+  const handleDeleteProfilePic = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    setErrorImg("");
+    setLoadingImg(true);
+    deleteProfilePic()
+    .then(async (res) => {
+      setLoadingImg(false);
+      if(res?.ok) {
+        const response = await res.json();
+        setImage(response.src);
+        setSrc(response.src);
+        setSuccessImg(t("update_account_success_msg"));
+        setTimeout(() => {
+          setSuccessImg("");
+        }, 1000);
+      } else {
+        const status = res.status;
+        switch(status) {
+          case 404:
+            setErrorImg(t_error("options_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setErrorImg(JSON.stringify(err.errors));
+            break;
+          case 403:
+            setErrorImg(t_error("acces_denied"));
+            break;
+          case 500:
+            setErrorImg(t_error("something_wrong"));
+            break;
+          default:
+            break;
+        }
+      }
+    })
+    .catch((error) => {
+      setErrorImg(t_error("something_wrong"));
+      console.error(error);
+    })
+  };
+
+
+  const handleHolidaySubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    saveHolidays(holidays)
+    .then(async (res) => {
+      setLoading(false);
+      if(res?.ok) {
+        setTimeout(() => {
+          setSuccess(t("update_account_success_msg"));
+          // window.location.reload();
+        }, 1000);
+      } else {
+        const status = res.status;
+        switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            await signOut({
+              callbackUrl: `/${locale}/auth/login`
+            });
+            break;
+          case 404:
+            setError(t_error("options_not_found"));
+            break;
+          case 422:
+            const err = await res.json();
+            setError(JSON.stringify(err.errors));
+            break;
+          case 403:
+            setError(t_error("acces_denied"));
+            break;
+          case 500:
+            setError(t_error("something_wrong"));
             break;
           default:
             break;
@@ -100,13 +260,16 @@ export default function General () {
     setError("");
     setSuccess("");
     setLoading(true);
-    saveOptions(options)
+    saveOptions(optionsUpdated)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
         setTimeout(() => {
-          setSuccess(t("update_options_success_msg"));
+          setSuccess(t("update_account_success_msg"));
+          // window.location.reload();
         }, 1000);
+        const data = await res.json();
+        // setOptions(options.map((opt) => opt.id === option.id ? data : opt));
       } else {
         const status = res.status;
         switch(status) {
@@ -145,7 +308,7 @@ export default function General () {
       id: option.id,
       value: option.value,
     }
-    setOptions(options.map((opt) => opt.id === option.id ? data : opt));
+    setOptionsUpdated(optionsUpdated.map((opt) => opt.id === option.id ? data : opt));
   }
 
   return (
@@ -154,6 +317,24 @@ export default function General () {
       <CommonSkeleton />
     ) : (
     <div className="grid grid-cols-5 gap-8">
+      
+  {/* <div>
+    <h1>Options</h1>
+    <form>
+      <div>
+        <label>Company Name</label>
+        <input
+          type="text"
+          value={options.find((opt) => opt.name === 'companyname')?.value}
+          onChange={(event) => {
+            const updatedOption = { ...options.find((opt) => opt.name === 'companyname'), id: options.find((opt) => opt.name === 'companyname')?.id, value: event.target.value };
+            handleUpdateOption(updatedOption);
+          }}
+        />
+      </div>
+    </form>
+  </div> */}
+
       <div className="col-span-5 order-1 xl:order-2 xl:col-span-3">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
@@ -302,18 +483,18 @@ export default function General () {
             <Title className="font-medium text-foreground">{t_settings("holidays")}</Title>
           </div>
           <div className="px-7 py-4">
-            {errorHolidays != "" ? (
-              <Alert color="danger" message={errorHolidays} />
+            {errorImg != "" ? (
+              <Alert color="danger" message={errorImg} />
             ) : null}
-            {successHolidays != "" ? (
-              <Alert color="success" message={successHolidays} />
+            {successImg != "" ? (
+              <Alert color="success" message={successImg} />
             ) : null}
             <form 
               action="#" className="space-y-4 my-4 z-2"
               onSubmit={handleHolidaySubmit}
             >
               <label>
-                {t("add_holiday")} :
+                Ajouter un jour férié :
               </label>
               <Input
                 isRequired
@@ -343,7 +524,7 @@ export default function General () {
                 <Button 
                   type="submit"
                   color="primary"
-                  isLoading={loadingHolidays}
+                  isLoading={loading}
                   className="w-full"
                 >
                   {t("save")}
@@ -354,18 +535,18 @@ export default function General () {
         </div>
       </div>
 
-      {/* logo 
+      {/* logo */}
       <div className="col-span-5 order-2 xl:oreder-1 xl:col-span-2">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
             <Title className="font-medium text-foreground">{t_settings("photo")}</Title>
           </div>
           <div className="px-7 py-4">
-            {errorHolidays != "" ? (
-              <Alert color="danger" message={errorHolidays} />
+            {errorImg != "" ? (
+              <Alert color="danger" message={errorImg} />
             ) : null}
-            {successHolidays != "" ? (
-              <Alert color="success" message={successHolidays} />
+            {successImg != "" ? (
+              <Alert color="success" message={successImg} />
             ) : null}
             <form action="#" onSubmit={handleUpload} className="my-4">
               <div className="mb-4 flex items-center gap-3">
@@ -424,7 +605,7 @@ export default function General () {
             </form>
           </div>
         </div>
-      </div>*/}
+      </div>
     </div>
     )}
     </>

@@ -167,34 +167,3 @@ const userTimezone = 'Africa/Abidjan'; // GMT+2 pour la Côte d'Ivoire
 
 // Convertir les heures stockées en GMT en heures locales pour l'utilisateur
 const heureLocale = moment.utc(heureEnregistree).tz(userTimezone).format('YYYY-MM-DD HH:mm:ss');
-
-De cette façon, vous pouvez afficher les heures correctement pour les utilisateurs de différents fuseaux horaires.
-[06:50, 30/11/2024] Paulette: Je comprends mieux maintenant. Voici la fonction mise à jour qui affiche la date de création sous forme de "créé le [date] à [heure]" si le temps dépasse 1 semaine, et "créé il y a [temps]" si le temps ne dépasse pas 1 semaine :
-
-import moment from 'moment';
-
-const formatDateTime = (dateTime, lang = 'fr') => {
-  moment.locale(lang);
-  const now = moment();
-  const diff = now.diff(dateTime, 'days');
-  if (diff > 7) {
-    return `Créé le ${moment(dateTime).format('DD/MM/YYYY')} à ${moment(dateTime).format('HH:mm')}`;
-  } else {
-    return `Créé il y a ${moment(dateTime).fromNow()}`;
-  }
-};
-
-export default formatDateTime;
-
-Cette fonction utilise la bibliothèque moment pour calculer la différence entre la date actuelle et la date de création. Si la différence est supérieure à 7 jours, la fonction affiche la date de création sous forme de "créé le [date] à [heure]". Sinon, la fonction affiche la date de création sous forme de "créé il y a [temps]".
-
-Vous pouvez utiliser cette fonction dans votre code comme suit :
-
-import formatDateTime from './formatDateTime';
-
-const dateTime = new Date();
-const formattedDateTime = formatDateTime(dateTime, 'fr');
-
-console.log(formattedDateTime);
-
-=======================================================

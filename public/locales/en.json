@@ -84,11 +84,14 @@
     "forgot_password_link": "Forgot password?",
     "remember_me": "remember me",
     "logout": "Log Out",
-    "save": "Save",
+    "save": "Enregistrer",
+    "add": "Add",
     "confirm": "Confirm",
 
     "new_account_success_msg": "Account successfully created.",
     "update_account_success_msg": "Account successfully updated.",
+    "update_options_success_msg": "Option values successfully updated.",
+    "update_holidays_success_msg": "Holidays successfully updated.",
     "suspend_account_success_msg": "Account successfully suspended.",
     "cancel_suspension_account_success_msg": "Suspension cancelled.",
     "delete_account_success_msg": "Account successfully deleted.",
@@ -163,7 +166,16 @@
     "note_fr": "Note in english",
     "note_placeholder": "Enter coupon note",
     "sended_to_clients": "Sended to clients",
-    "select_all": "Check all"
+    "select_all": "Check all",
+    "companyname": "Company",
+    "city": "City",
+    "URL": "Web site URL",
+    "whatsapp": "Whatsapp",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "linkedln": "Linkedln",
+    "twitter": "Twitter",
+    "add_holiday": "Add holiday"
   },
   "Footer": {
     "terms": "Terms & Conditions",
@@ -321,7 +333,9 @@
     "update": "update",
     "drap_drop": "Click to upload or drag and drop",
     "personal_informations": "Personal Informations",
-    "security_informations": "Confidential informations"
+    "company_informations": "Company Informations",
+    "security_informations": "Confidential informations",
+    "holidays": "Holidays"
   },
   "Requirements": {
     "pwd_label": "Ensure that these requirements are met:",

@@ -14,7 +14,7 @@ import { useState } from "react";
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
 import { updateProfile, uploadImage, changePassword, deleteProfilePic } from "@/lib/action/profile";
-import { capitalize, getUrl } from "@/lib/utils";
+import { capitalize } from "@/lib/utils";
 
 
 export default function Profile () {

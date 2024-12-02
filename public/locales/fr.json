@@ -85,10 +85,13 @@
     "remember_me": "se souvenir de moi",
     "logout": "Se déconnecter",
     "save": "Enregistrer",
+    "add": "Ajouter",
     "confirm": "Confirmer",
 
     "new_account_success_msg": "Compte créé avec succès.",
     "update_account_success_msg": "Compte mis à jour avec succès.",
+    "update_options_success_msg": "Options mis à jour avec succès.",
+    "update_holidays_success_msg": "Jours fériés mis à jour avec succès.",
     "suspend_account_success_msg": "Compte suspendu avec succès.",
     "cancel_suspension_account_success_msg": "Suspension annulée.",
     "delete_account_success_msg": "Compte supprimé avec succès.",
@@ -163,7 +166,16 @@
     "note_fr": "Note en anglais",
     "note_placeholder": "Enter une note pour le coupon",
     "sended_to_clients": "Coupon envoyé aux clients",
-    "select_all": "Tout cocher"
+    "select_all": "Tout cocher",
+    "companyname": "Nom de l'entreprise",
+    "city": "Ville siège",
+    "URL": "Site web URL",
+    "whatsapp": "Whatsapp",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "linkedln": "Linkedln",
+    "twitter": "Twitter",
+    "add_holiday": "Ajouter un jour férié"
   },
   "Footer": {
     "terms": "Termes et Conditions",
@@ -309,7 +321,7 @@
     "general": "général",
     "profile": "mon profil",
     "email": "email",
-    "finance": "finace",
+    "finance": "finance",
     "pdf": "pdf",
     "photo": "votre photo",
     "edit_photo": "Editer sa photo",
@@ -317,7 +329,9 @@
     "update": "mettre à jour",
     "drap_drop": "Cliquer pour charger ou glisser et deposer",
     "personal_informations": "Informations personnelles",
-    "security_informations": "Informations de sécurité"
+    "company_informations": "Informations sur l'entreprise",
+    "security_informations": "Informations de sécurité",
+    "holidays": "Jours fériés"
   },
   "Requirements": {
     "pwd_label": "Assurez-vous que ces exigences soient respectées:",

@@ -233,8 +233,15 @@ export type CouponFormType = {
   note_fr: string;
 }
 
+export type OptionType = {
+  id:    number;
+  name:  string;
+  value: string;
+}
 
-
+export type HolidayType = {
+  date: string;
+}
 
 
 

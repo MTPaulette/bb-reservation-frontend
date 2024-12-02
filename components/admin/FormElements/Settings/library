@@ -1,526 +1,323 @@
+Voici un exemple de code qui utilise fetch et TypeScript pour r
+écupérer les dates déjà choisies depuis la base de données Laravel
+ et pour enregistrer le tableau de dates choisies :
 
-import { useSession } from 'next-auth/react';
+// Next.js 14 avec TypeScript
+import { useState, useEffect } from 'react';
 
-const Profil = () => {
-  const { data: session, status } = useSession();
+interface Holiday {
+  date: string;
+}
 
-  // ...
+const [holidays, setHolidays] = useState<Holiday[]>([]);
 
-  const handleSubmit = async (e) => {
-    // ...
-    await updateProfil(data);
-
-    // Mettre à jour les informations de session
-    session.user = {
-      ...session.user,
-      name: nom, // Mettre à jour le nom
-      email: email, // Mettre à jour l'email
-    };
-
-    // Si le mot de passe a été modifié, il est nécessaire de mettre à jour le token d'accès
-    if (password !== session.user.password) {
-      // Appeler l'API pour obtenir un nouveau token d'accès
-      const response = await axios.post('/api/token', {
-        email: email,
-        password: password,
-      });
-
-      // Mettre à jour le token d'accès dans la session
-      session.accessToken = response.data.accessToken;
-      // 21|Q7aFDS5KKaLCACe0M8tQLA14zza585waEbuD6Z4Be63abe1d
-    }
-  };
+const fetchHolidays = async () => {
+  const response = await fetch('/api/options');
+  const data = await response.json();
+  const holidaysOption = data.find((option: any) => option.name === 'holidays');
+  const holidaysValue = holidaysOption.value;
+  const holidaysArray = JSON.parse(holidaysValue);
+  setHolidays(holidaysArray);
 };
 
-/*888888888888888888888888888888888888888 */Voici l'exemple de mise en œuvre des permissions pour les routes dans Next.js 14 :
-
-Création des routes
-
-Créez des fichiers dans le répertoire app pour définir vos routes :
-
-bash
-app
-users
-page.js
-middleware.js
-agencies
-page.js
-middleware.js
-...
-...
-
-Définition des permissions
-
-Créez un fichier permissions.js dans le répertoire lib pour définir les permissions :
-
-// lib/permissions.js
-export const permissions = {
-  see_users: ['users'],
-  see_agencies: ['agencies'],
+const handleAddHoliday = (date: string) => {
+  setHolidays([...holidays, { date }]);
 };
 
-Création des middleware
-
-Créez des fichiers middleware.js dans les répertoires des routes pour définir les middleware :
-
-// app/users/middleware.js
-import { permissions } from '../../lib/permissions';
-
-export default async function middleware(req) {
-  const token = await verify(req.cookies['next-auth.session-token']);
-  const userId = token.sub;
-
-  // Récupérer les permissions de l'utilisateur
-  const userPermissions = await fetchPermissions(userId);
-
-  // Vérifier les permissions pour la route actuelle
-  const allowed = permissions.see_users.includes(req.url);
-
-  if (!allowed) {
-    return {
-      status: 401,
-      body: { error: 'Accès refusé' },
-    };
-  }
-
-  return next();
-}
-
-
-
-// app/agencies/middleware.js
-import { permissions } from '../../lib/permissions';
-
-export default async function middleware(req) {
-  const token = await verify(req.cookies['next-auth.session-token']);
-  const userId = token.sub;
-
-  // Récupérer les permissions de l'utilisateur
-  const userPermissions = await fetchPermissions(userId);
-
-  // Vérifier les permissions pour la route actuelle
-  const allowed = permissions.see_agencies.includes(req.url);
-
-  if (!allowed) {
-    return {
-      status: 401,
-      body: { error: 'Accès refusé' },
-    };
-  }
-
-  return next();
-}
-
-Application des middleware
-
-Les middleware seront automatiquement appliqués aux routes correspondantes.
-
-Voilà ! Vous avez maintenant un système de gestion des permissions pour les routes dans votre application Next.js 14.
-
-/*=======================================*/
-
-Pour gérer l'affichage des liens dans la sidebar en tenant compte des permissions, vous pouvez suivre ces étapes :
-
-1. Définir les permissions pour chaque lien dans votre fichier permissions.js :
-
-// lib/permissions.js
-export const permissions = {
-  see_users: ['users'],
-  see_agencies: ['agencies'],
-  see_dashboard: ['dashboard'],
+const handleRemoveHoliday = (index: number) => {
+  setHolidays(holidays.filter((holiday, i) => i !== index));
 };
 
-1. Créer un composant Sidebar qui affiche les liens en fonction des permissions de l'utilisateur :
+const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+  const response = await fetch('/api/options', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'holidays', value: JSON.stringify(holidays) }),
+  });
+  const data = await response.json();
+  console.log(data);
+};
 
-// components/Sidebar.js
-import { permissions } from '../lib/permissions';
-import { useSession } from 'next-auth/react';
+useEffect(() => {
+  fetchHolidays();
+}, []);
 
-function Sidebar() {
-  const { data: session } = useSession();
-
-  const userPermissions = session.permissions;
-
-  return (
-    <div>
-      {userPermissions.includes('see_dashboard') && (
-        <a href="/dashboard">Tableau de bord</a>
-      )}
-      {userPermissions.includes('see_users') && (
-        <a href="/users">Utilisateurs</a>
-      )}
-      {userPermissions.includes('see_agencies') && (
-        <a href="/agencies">Agences</a>
-      )}
-    </div>
-  );
-}
-
-export default Sidebar;
-
-1. Utiliser le composant Sidebar dans votre page principale :
-
-// pages/_app.js
-import Sidebar from '../components/Sidebar';
-
-function MyApp({ Component, pageProps }) {
-  return (
-    <div>
-      <Sidebar />
-      <Component {...pageProps} />
-    </div>
-  );
-}
-
-export default MyApp;
-
-1. Mettre à jour les permissions de l'utilisateur dans votre fichier pages/api/auth/[...nextauth].js :
-
-// pages/api/auth/[...nextauth].js
-import { NextApiRequest, NextApiResponse } from 'next';
-import { permissions } from '../../lib/permissions';
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req;
-
-  switch (method) {
-    case 'GET':
-      const user = await getUser(req);
-      const userPermissions = await getUserPermissions((link unavailable));
-
-      return res.json({ permissions: userPermissions });
-    default:
-      return res.status(405).json({ error: 'Method not allowed' });
-  }
-}
-
-Voilà ! Vous avez maintenant un système de gestion des permissions pour les liens dans la sidebar de votre application Next.js.
-
-[13:38, 16/11/2024] Agrimax: Voici un exemple de code qui permet de stocker l'heure d'ouverture et de fermeture en vérifiant que l'heure d'ouverture est inférieure à l'heure de fermeture :
+return (
+  <div>
+    <h1>Holidays</h1>
+    <ul>
+      {holidays.map((holiday, index) => (
+        <li key={index}>
+          {holiday.date}
+          <button onClick={() => handleRemoveHoliday(index)}>Supprimer</button>
+        </li>
+      ))}
+    </ul>
+    <form onSubmit={handleSubmit}>
+      <input type="date" onChange={(event) => handleAddHoliday(event.target.value)} />
+      <button type="submit">Enregistrer</button>
+    </form>
+  </div>
+);
 
 
-$heureOuverture = $request->input('heure_ouverture');
-$heureFermeture = $request->input('heure_fermeture');
 
-// Vérification que l'heure d'ouverture est inférieure à l'heure de fermeture
-if (strtotime($heureOuverture) >= strtotime($heureFermeture)) {
-    return response()->json(['error' => 'L\'heure d\'ouverture doit être inférieure à l\'heure de fermeture'], 422);
-}
+// Laravel API
+use Illuminate\Http\Request;
+use App\Models\Option;
 
-// Stockage des heures dans la base de données
-$entreprise = Entreprise::find($id);
-$entreprise->heure_ouverture = $heureOuverture;
-$entreprise->heure_fermeture = $heureFermeture;
-$entreprise->save();
-
-
-Vous pouvez également utiliser des contraintes de validation dans votre modèle pour vous assurer que les heures sont valides :
-
-
-use Illuminate\Validation\Rules\Before;
-
-class Entreprise extends Model
-{
-    protected $fillable = ['heure_ouverture', 'heure_fermeture'];
-
-    public static function validateHeures($request)
-    {
-        return $request->validate([
-            'heure_ouverture' => 'required|before:heure_fermeture',
-            'heure_fermeture' => 'required|after:heure_ouverture',
-        ]);
-    }
-}
-
-
-Il est important de noter que vous devez utiliser le format d'heure HH:mm pour que la comparaison fonctionne correctement.
-
-Vous pouvez également utiliser des champs de type time dans votre base de données pour stocker les heures.
-
-
-Schema::create('entreprises', function (Blueprint $table) {
-    $table->id();
-    $table->time('heure_ouverture');
-    $table->time('heure_fermeture');
+Route::get('/api/options', function (Request $request) {
+    $options = Option::all();
+    return response()->json($options);
 });
 
-
-Cela vous permettra de stocker les heures sous forme de valeurs temporelles et de les comparer facilement.
-[13:39, 16/11/2024] Agrimax: Pour mettre à jour l'email d'un utilisateur dans Laravel, vous devez utiliser la méthode update sur l'instance de l'utilisateur. Voici un exemple :
-
-
-$user = Auth::user();
-$user->email = $request->email;
-$user->save();
-
-
-Cependant, si vous voulez vous assurer que l'email est unique, vous devez ajouter une validation avant de mettre à jour l'email. Voici un exemple :
-
-
-use Illuminate\Validation\Rule;
-
-$request->validate([
-    'email' => [
-        'required',
-        'email',
-        Rule::unique('users', 'email')->ignore($user->id),
-    ],
-]);
-
-$user = Auth::user();
-$user->email = $request->email;
-$user->save();
-
-
-Dans cet exemple, la validation unique vérifie que l'email est unique dans la table users, mais ignore l'email actuel de l'utilisateur ($user->id).…
-
-/**************************************************************8 */
-Voici un exemple de comment uploader plusieurs images avec Next.js et Laravel API :
-
-Next.js (Frontend)
-
-Créez un formulaire pour uploader les images :
-
-jsx
-import axios from 'axios';
-
-const UploadImages = () => {
-  const [images, setImages] = useState([]);
-  const [uploading, setUploading] = useState(false);
-
-  const handleFileChange = (e) => {
-    setImages(e.target.files);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setUploading(true);
-
-    const formData = new FormData();
-    for (let i = 0; i < images.length; i++) {
-      formData.append('images[]', images[i]);
+Route::post('/api/options', function (Request $request) {
+    $option = Option::where('name', 'holidays')->first();
+    if (!$option) {
+        $option = new Option();
+        $option->name = 'holidays';
     }
+    $option->value = $request->input('value');
+    $option->save();
+    return response()->json($option);
+});
 
-    try {
-      const response = await axios.post('/api/upload-images', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+Dans cet exemple, nous utilisons la fonction fetch pour récupérer les dates
+ déjà choisies depuis la base de données Laravel et pour enregistre
+ r le tableau de dates choisies. Nous utilisons également la fonction 
+ JSON.parse pour convertir la valeur de l'option holidays en un tableau
+  de dates. Nous utilisons également la fonction JSON.stringify pour 
+  convertir le tableau de dates en une chaîne de caractères qui peut 
+  être enregistrée dans la base de données.
 
-      console.log(response.data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-    }
-  };
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input type="file" multiple onChange={handleFileChange} />
-        <button type="submit">Uploader les images</button>
-        {uploading && <p>Upload en cours...</p>}
-      </form>
-    </div>
-  );
+=====================================================
+Voici un exemple de code qui utilise Laravel, Next.js 14 et TypeScript 
+pour créer des inputs pour modifier les valeurs des options dans la base de 
+données Laravel :
+
+// Next.js 14 avec TypeScript
+import { useState, useEffect } from 'react';
+
+interface Option {
+  id: number;
+  name: string;
+  value: string;
+}
+
+const [options, setOptions] = useState<Option[]>([]);
+
+const fetchOptions = async () => {
+  const response = await fetch('/api/options');
+  const data = await response.json();
+  setOptions(data);
 };
 
-export default UploadImages;
+const handleUpdateOption = async (option: Option) => {
+  const response = await fetch(`/api/options/${(link unavailable)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(option),
+  });
+  const data = await response.json();
+  setOptions(options.map((opt) => (link unavailable) === (link unavailable) ? data : opt));
+};
 
-Laravel API (Backend)
+useEffect(() => {
+  fetchOptions();
+}, []);
 
-Créez une route pour uploader les images :
+return (
+  <div>
+    <h1>Options</h1>
+    <form>
+      <div>
+        <label>Company Name</label>
+        <input
+          type="text"
+          value={options.find((opt) => opt.name === 'companyname')?.value}
+          onChange={(event) => {
+            const updatedOption = { ...options.find((opt) => opt.name === 'companyname'), value: event.target.value };
+            handleUpdateOption(updatedOption);
+          }}
+        />
+      </div>
+      <div>
+        <label>Email</label>
+        <input
+          type="email"
+          value={options.find((opt) => opt.name === 'email')?.value}
+          onChange={(event) => {
+            const updatedOption = { ...options.find((opt) => opt.name === 'email'), value: event.target.value };
+            handleUpdateOption(updatedOption);
+          }}
+        />
+      </div>
+      <div>
+        <label>Contact</label>
+        <input
+          type="text"
+          value={options.find((opt) => opt.name === 'contact')?.value}
+          onChange={(event) => {
+            const updatedOption = { ...options.find((opt) => opt.name === 'contact'), value: event.target.value };
+            handleUpdateOption(updatedOption);
+          }}
+        />
+      </div>
+      <div>
+        <label>Facebook</label>
+        <input
+          type="text"
+          value={options.find((opt) => opt.name === 'facebook')?.value}
+          onChange={(event) => {
+            const updatedOption = { ...options.find((opt) => opt.name === 'facebook'), value: event.target.value };
+            handleUpdateOption(updatedOption);
+          }}
+        />
+      </div>
+      <div>
+        <label>Twitter</label>
+        <input
+          type="text"
+          value={options.find((opt) => opt.name === 'twitter')?.value}
+          onChange={(event) => {
+            const updatedOption = { ...options.find((opt) => opt.name === 'twitter'), value: event.target.value };
+            handleUpdateOption(updatedOption);
+          }}
+        />
+      </div>
+    </form>
+  </div>
+);
 
-// routes/api.php
 
-Route::post('/upload-images', [ImageController::class, 'uploadImages']);
 
-Créez un contrôleur pour uploader les images :
-
-// app/Http/Controllers/ImageController.php
-
-namespace App\Http\Controllers;
-
+// Laravel API
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Option;
 
-class ImageController extends Controller
-{
-    public function uploadImages(Request $request)
-    {
-        $request->validate([
-            'images' => [
-                'required',
-                'array',
-                'min:1',
-                'max:5',
-                'mimes:jpeg,png,jpg,gif',
-                'max:2048',
-            ],
-            'images.*' => [
-                'image',
-                'mimes:jpeg,png,jpg,gif',
-                'max:2048',
-            ],
-        ]);
+Route::get('/api/options', function (Request $request) {
+    $options = Option::all();
+    return response()->json($options);
+});
 
-        $images = $request->file('images');
+Route::put('/api/options/{id}', function (Request $request, $id) {
+    $option = Option::find($id);
+    $option->value = $request->input('value');
+    $option->save();
+    return response()->json($option);
+});
 
-        foreach ($images as $image) {
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images', $imageName);
-        }
+=======================================================================
+Pour modifier les options logo_white et logo_dark, vous pouvez ajouter des
+ inputs de type "file" pour permettre à l'utilisateur de télécharger de 
+ nouvelles images de logo.
 
-        return response()->json(['message' => 'Les images ont été uploadées avec succès.']);
-    }
+Voici un exemple de code qui montre comment modifier les options logo_white
+ et logo_dark :
+
+// Next.js 14 avec TypeScript
+import { useState, useEffect } from 'react';
+
+interface Option {
+  id: number;
+  name: string;
+  value: string;
 }
 
-Dans cet exemple, nous utilisons la bibliothèque axios pour envoyer une requête POST à l'API Laravel avec les images uploadées. Nous utilisons également la méthode validate pour valider les images uploadées.
+const [options, setOptions] = useState<Option[]>([]);
+const [logoWhite, setLogoWhite] = useState<File | null>(null);
+const [logoDark, setLogoDark] = useState<File | null>(null);
 
-Assurez-vous de configurer correctement les CORS dans votre API Laravel pour autoriser les requêtes provenant de votre application Next.js.
-
-
-
-import React from "react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, ChipProps, getKeyValue} from "@nextui-org/react";
-import {EditIcon} from "./EditIcon";
-import {DeleteIcon} from "./DeleteIcon";
-import {EyeIcon} from "./EyeIcon";
-import {columns, users} from "./data";
-
-const statusColorMap: Record<string, ChipProps["color"]>  = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
+const fetchOptions = async () => {
+  const response = await fetch('/api/options');
+  const data = await response.json();
+  setOptions(data);
 };
 
-type User = typeof users[0];
+const handleUpdateOption = async (option: Option) => {
+  const response = await fetch(`/api/options/${(link unavailable)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(option),
+  });
+  const data = await response.json();
+  setOptions(options.map((opt) => (link unavailable) === (link unavailable) ? data : opt));
+};
 
-export default function App() {
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+const handleUpdateLogo = async (logo: File, optionName: string) => {
+  const formData = new FormData();
+  formData.append('logo', logo);
+  const response = await fetch(`/api/options/${optionName}`, {
+    method: 'PUT',
+    body: formData,
+  });
+  const data = await response.json();
+  setOptions(options.map((opt) => opt.name === optionName ? data : opt));
+};
 
-    switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{radius: "lg", src: user.avatar}}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-sm capitalize">{cellValue}</p>
-            <p className="text-bold text-sm capitalize text-default-400">{user.team}</p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip>
-          </div>
-        );
-      default:
-        return cellValue;
+useEffect(() => {
+  fetchOptions();
+}, []);
+
+return (
+  <div>
+    <h1>Options</h1>
+    <form>
+      {/* ... */}
+      <div>
+        <label>Logo White</label>
+        <input
+          type="file"
+          onChange={(event) => {
+            setLogoWhite(event.target.files[0]);
+            handleUpdateLogo(event.target.files[0], 'logo_white');
+          }}
+        />
+        {logoWhite && <img src={URL.createObjectURL(logoWhite)} alt="Logo White" />}
+      </div>
+      <div>
+        <label>Logo Dark</label>
+        <input
+          type="file"
+          onChange={(event) => {
+            setLogoDark(event.target.files[0]);
+            handleUpdateLogo(event.target.files[0], 'logo_dark');
+          }}
+        />
+        {logoDark && <img src={URL.createObjectURL(logoDark)} alt="Logo Dark" />}
+      </div>
+    </form>
+  </div>
+);
+
+
+
+// Laravel API
+use Illuminate\Http\Request;
+use App\Models\Option;
+
+Route::get('/api/options', function (Request $request) {
+    $options = Option::all();
+    return response()->json($options);
+});
+
+Route::put('/api/options/{name}', function (Request $request, $name) {
+    $option = Option::where('name', $name)->first();
+    if ($request->hasFile('logo')) {
+        $logo = $request->file('logo');
+        $option->value = $logo->store('logos', 'public');
     }
-  }, []);
+    $option->save();
+    return response()->json($option);
+});
 
-  return (
-  <Table aria-label="Example table with custom cells">
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={users}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  );
-}
+Dans cet exemple, nous utilisons la fonction handleUpdateLogo pour mettre à
+ jour les logos lorsque l'utilisateur télécharge de nouvelles images. Nous 
+ utilisons également la fonction URL.createObjectURL pour afficher les images
+  téléchargées.
 
 
-==========================================================================================
-import React from "react";
-import {Card, CardHeader, CardBody, CardFooter, Avatar, Button} from "@nextui-org/react";
+====================================================
 
-export default function App() {
-  const [isFollowed, setIsFollowed] = React.useState(false);
-
-  return (
-    <Card className="max-w-[340px]">
-      <CardHeader className="justify-between">
-        <div className="flex gap-5">
-          <Avatar isBordered radius="full" size="md" src="https://nextui.org/avatars/avatar-1.png" />
-          <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="text-small font-semibold leading-none text-default-600">Zoey Lang</h4>
-            <h5 className="text-small tracking-tight text-default-400">@zoeylang</h5>
-          </div>
-        </div>
-        <Button
-          className={isFollowed ? "bg-transparent text-foreground border-default-200" : ""}
-          color="primary"
-          radius="full"
-          size="sm"
-          variant={isFollowed ? "bordered" : "solid"}
-          onPress={() => setIsFollowed(!isFollowed)}
-        >
-          {isFollowed ? "Unfollow" : "Follow"}
-        </Button>
-      </CardHeader>
-      <CardBody className="px-3 py-0 text-small text-default-400">
-        <p>
-          Frontend developer and UI/UX enthusiast. Join me on this coding adventure!
-        </p>
-        <span className="pt-2">
-          #FrontendWithZoey 
-          <span className="py-2" aria-label="computer" role="img">
-            💻
-          </span>
-        </span>
-      </CardBody>
-      <CardFooter className="gap-3">
-        <div className="flex gap-1">
-          <p className="font-semibold text-default-400 text-small">4</p>
-          <p className=" text-default-400 text-small">Following</p>
-        </div>
-        <div className="flex gap-1">
-          <p className="font-semibold text-default-400 text-small">97.1K</p>
-          <p className="text-default-400 text-small">Followers</p>
-        </div>
-      </CardFooter>
-    </Card>
-  );
-}
