@@ -9,19 +9,18 @@ import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { SuspensionFormType } from "@/lib/definitions";
-import { suspendAgency } from "@/lib/action/agencies";
+import { CancellationFormType } from "@/lib/definitions";
+import { cancelReservation } from "@/lib/action/reservations";
 import Title from "@/components/Title";
 
-export default function SuspendAgency({ id, status }: { id: number, status: string } ) {
+export default function CancelReservation({ id, state }: { id: number, state: string } ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
-  const schema: ZodType<SuspensionFormType> = z
+  const schema: ZodType<CancellationFormType> = z
     .object({
       password: z.string().min(1),
-      reason_for_suspension_en: z.string(),
-      reason_for_suspension_fr: z.string(),
+      reason_for_cancellation: z.string(),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -33,29 +32,28 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm<SuspensionFormType>({
+  } = useForm<CancellationFormType>({
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: SuspensionFormType) => {
+  const handleFormSubmit = async (data: CancellationFormType) => {
     setError("");
     setSuccess("");
     setLoading(true);
-    suspendAgency(data, id, status)
+    cancelReservation(data, id, state)
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        setSuccess(state != 'cancelled' ? t("cancel_reservation_success_msg"): t("undo_cancellation_account_success_msg"));
         setTimeout(() => {
-          setSuccess(status == 'active' ? t("suspend_agency_success_msg"): t("cancel_suspension_account_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {
           case 404:
-            setError(t_error("agency_not_found"));
+            setError(t_error("reservation_not_found"));
             break;
           case 422:
             const err = await res.json();
@@ -87,7 +85,7 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
       {success != "" ? (
         <Alert color="success" message={success} />
       ) : null}
-      <Title className="text-base mt-4">{t_error("suspend_warning")}</Title>
+      <Title className="text-base mt-4">{t_error("confirm_warning")}</Title>
       <form
         action="#" className="space-y-4 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
@@ -112,44 +110,27 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
           errorMessage={errors.password ? errors.password?.message: null}
         />
 
-        {status == 'active' ? (
+        {state != 'cancelled' ? (
           <div className="flex flex-col gap-4">
             <Textarea
               isRequired
-              label={t("reason_for_suspension_en")}
-              placeholder={t("reason_for_suspension_placeholder")}
+              label={t("reason_for_cancellation")}
+              placeholder={t("reason_for_cancellation_placeholder")}
               variant="bordered"
-              {...register("reason_for_suspension_en")}
-              isInvalid={errors.reason_for_suspension_en ? true: false}
-              errorMessage={errors.reason_for_suspension_en ? errors.reason_for_suspension_en?.message: null}
-            />
-            <Textarea
-              isRequired
-              label={t("reason_for_suspension_fr")}
-              placeholder={t("reason_for_suspension_placeholder")}
-              variant="bordered"
-              {...register("reason_for_suspension_fr")}
-              isInvalid={errors.reason_for_suspension_fr ? true: false}
-              errorMessage={errors.reason_for_suspension_fr ? errors.reason_for_suspension_fr?.message: null}
+              {...register("reason_for_cancellation")}
+              isInvalid={errors.reason_for_cancellation ? true: false}
+              errorMessage={errors.reason_for_cancellation ? errors.reason_for_cancellation?.message: null}
             />
           </div>
         ) : 
-        <div className={`${status == 'active'? 'block': 'hidden'}`}>
+        <div className={`${state != 'cancelled' ? 'block': 'hidden'}`}>
           <Textarea
             isRequired
-            label={t("reason_for_suspension_en")}
-            placeholder={t("reason_for_suspension_placeholder")}
+            label={t("reason_for_cancellation")}
+            placeholder={t("reason_for_cancellation_placeholder")}
             variant="bordered"
             defaultValue=""
-            {...register("reason_for_suspension_en")}
-          />
-          <Textarea
-            isRequired
-            label={t("reason_for_suspension_fr")}
-            placeholder={t("reason_for_suspension_placeholder")}
-            variant="bordered"
-            defaultValue=""
-            {...register("reason_for_suspension_fr")}
+            {...register("reason_for_cancellation")}
           />
         </div>}
 

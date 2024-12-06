@@ -69,10 +69,10 @@ export default function NewRessource() {
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        setSuccess(t("new_ressource_success_msg"));
         setTimeout(() => {
-          setSuccess(t("new_ressource_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {

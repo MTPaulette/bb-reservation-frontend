@@ -1,5 +1,5 @@
 import { headerOptions, getCSRFToken, getToken } from "../utils";
-import { ConfirmPasswordType, ReservationFormType } from "../definitions";
+import { ConfirmPasswordType, ReservationFormType, CancellationFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
 
@@ -12,24 +12,24 @@ export async function createReservation(data: ReservationFormType) {
   return response;
 }
 
-export async function getRessources() {
-  const response = await fetch(`${api_url}/ressources`, {
+export async function getReservations() {
+  const response = await fetch(`${api_url}/reservations`, {
     method: "GET",
     headers: headerOptions(await getCSRFToken(), await getToken())
   })
   return response;
 }
 
-export async function getRessourceById(id: number) {
-  const response = await fetch(`${api_url}/ressource/${id}`, {
+export async function getReservationById(id: number) {
+  const response = await fetch(`${api_url}/reservation/${id}`, {
     method: "GET",
     headers: headerOptions(await getCSRFToken(), await getToken())
   })
   return response;
 }
 
-export async function updateRessource(data: ReservationFormType, id: number) {
-  const response = await fetch(`${api_url}/ressource/${id}/update`, {
+export async function updateReservation(data: ReservationFormType, id: number) {
+  const response = await fetch(`${api_url}/reservation/${id}/update`, {
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),
     body: JSON.stringify(data)
@@ -37,12 +37,15 @@ export async function updateRessource(data: ReservationFormType, id: number) {
   return response;
 }
 
-export async function deleteRessource(data: ConfirmPasswordType, id: number) {
-  console.log(id);
-  const response = await fetch(`${api_url}/ressource/${id}/delete`, {
+export async function cancelReservation(data: CancellationFormType, id: number, state: string) {
+  const response = await fetch(`${api_url}/reservation/${id}/cancel`, {
     method: "PUT",
     headers: headerOptions(await getCSRFToken(), await getToken()),
-    body: JSON.stringify(data),
+    body: JSON.stringify({
+      "password": data.password,
+      "undo_cancellation": state != 'cancelled'? false : true,
+      "reason_for_cancellation": data.reason_for_cancellation,
+    }),
   })
   return response;
 }

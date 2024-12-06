@@ -48,10 +48,10 @@ export default function EditStaff({ user }: { user: UserType} ) {
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        setSuccess(t("update_account_success_msg"));
         setTimeout(() => {
-          setSuccess(t("update_account_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {

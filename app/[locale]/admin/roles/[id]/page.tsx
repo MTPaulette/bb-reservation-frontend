@@ -76,10 +76,10 @@ export default function Page({ params }: { params: { id: string } }) {
     .then(async (res) => {
       setSave(false);
       if(res?.ok) {
-        setTimeout(() => {
-          setSuccess(t("update_role_success_msg"));
-        }, 1000);
-        // window.location.reload();
+        setSuccess(t("update_role_success_msg"));
+        // setTimeout(() => {
+        // // window.location.reload();
+        // }, 1000);
       } else {
         const status = res.status;
         switch(status) {

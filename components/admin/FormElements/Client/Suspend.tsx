@@ -45,10 +45,10 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        setSuccess(status == 'active' ? t("suspend_account_success_msg"): t("cancel_suspension_account_success_msg"));
         setTimeout(() => {
-          setSuccess(status == 'active' ? t("suspend_account_success_msg"): t("cancel_suspension_account_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {
@@ -85,7 +85,7 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
       {success != "" ? (
         <Alert color="success" message={success} />
       ) : null}
-      <Title className="text-base mt-4">{t_error("suspend_warning")}</Title>
+      <Title className="text-base mt-4">{t_error("confirm_warning")}</Title>
       <form
         action="#" className="space-y-4 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}

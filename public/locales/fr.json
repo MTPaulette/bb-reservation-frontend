@@ -39,7 +39,7 @@
     "password": "Le mot de passe doit contenir au moins un nombre et un charactere special",
     "invalid_credentials": "Données invalides.",
     "something_wrong": "quelque chose s'est mal passé.",
-    "suspend_warning": "Etes-vous sur(e) de vouloir continuer cette action ? Veuillez, confirmer en saisissant votre mot de passe.",
+    "confirm_warning": "Etes-vous sur(e) de vouloir continuer cette action ? Veuillez, confirmer en saisissant votre mot de passe.",
     "wrongPassword": "Mauvais mot de passe",
     "acces_denied": "accès interdit",
     "user_not_found": "Utilisateur non trouvé",
@@ -73,6 +73,7 @@
     "ressource": "Ressource",
     "reason_for_suspension_fr": "Raison de la suspension (en francais)",
     "reason_for_suspension_en": "Raison de la suspension (en anglais)",
+    "reason_for_cancellation": "Raison de l'annulation",
     "phonenumber": "Téléphone",
     "name_placeholder": "Entrer le nom",
     "lastname_placeholder": "Entrer le nom",
@@ -86,6 +87,7 @@
     "agency_placeholder": "Sélectionner une agence",
     "nb_place_placeholder": "Entrer le nbr de place",
     "reason_for_suspension_placeholder": "Entrer la raison de la suspension",
+    "reason_for_cancellation_placeholder": "Entrer la raison de l'annulation",
     "client_placeholder": "Sélectionner un client",
     "ressource_placeholder": "Sélectionner une ressource",
     "forgot_password_link": "Mot de passe oublié?",
@@ -125,6 +127,9 @@
     "new_coupon_success_msg": "Coupon créé avec succès.",
     "update_coupon_success_msg": "Coupon mis à jour avec succès.",
     "delete_coupon_success_msg": "Coupon supprimé avec succès.",
+
+    "cancel_reservation_success_msg": "Reservation annulée avec succès.",
+    "undo_cancellation_account_success_msg": "Desactivation de l'annulation de la réservation.",
 
     "newClient": "Nouveau client",
     "editClient": "Editer client",
@@ -257,6 +262,8 @@
     "edit": "Editer",
     "suspend": "Suspendre",
     "cancel_suspend": "Annuler suspension",
+    "cancel": "Annuler",
+    "undo_cancellation": "Désactiver annulation",
     "delete": "Supprimer",
     "search_placeholder": "Rechercher par nom...",
     "status": "Status",
@@ -265,6 +272,8 @@
     "total": "Total",
     "row_per_page": "Ligne par page:",
     "of": "de",
+    "from": "De",
+    "to": "A",
     "clear_log": "Effacer les logs",
     "selected": "selectionné(s)",
     "noItems": "Aucun élément trouvé",
@@ -306,7 +315,9 @@
     "editCoupon": "Editer coupon",
     "deleteCoupon": "Supprimer coupon",
 
-    "newReservation": "Nouvelle reservation"
+    "newReservation": "Nouvelle réservation",
+    "editReservation": "Editer réservation",
+    "cancelReservation": "Annuler réservation"
 
   },
   "Space": {
@@ -344,7 +355,9 @@
     "ressources": "ressources",
     "ressource": "ressource",
     "coupons": "coupons de réduction",
-    "coupon": "coupon"
+    "coupon": "coupon",
+    "reservations": "réservations",
+    "reservation": "réservation"
   },
   "Settings": {
     "general": "général",

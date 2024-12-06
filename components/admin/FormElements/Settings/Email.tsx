@@ -43,9 +43,7 @@ export default function EmailSettings () {
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
-        setTimeout(() => {
-          setSuccess(t("update_options_success_msg"));
-        }, 1000);
+        setSuccess(t("update_options_success_msg"));
       } else {
         const status = res.status;
         switch(status) {

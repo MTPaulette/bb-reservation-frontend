@@ -88,11 +88,10 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
       setLoading(false);
       if(res?.ok) {
         const response = await res.json();
-        console.log(response);
+        setSuccess(t("update_space_success_msg"));
         setTimeout(() => {
-          setSuccess(t("update_space_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {
@@ -131,10 +130,10 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
         if(images){
           handleUploadImages();
         }else {
-            setTimeout(() => {
-            setSuccess(t("update_account_success_msg"));
+          setSuccess(t("update_account_success_msg"));
+          setTimeout(() => {
             window.location.reload();
-          }, 500);
+          }, 1000);
         }
       } else {
         const status = res.status;
@@ -171,10 +170,10 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
     .then(async (res) => {
       setSave(false);
       if(res?.ok) {
+        setSuccess(t("delete_image_success_msg"));
         setTimeout(() => {
-          setSuccess(t("delete_image_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {

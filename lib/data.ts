@@ -51,11 +51,20 @@ export const statusCoupon = [
   {name_en: "Expired", name_fr: "Expiré", uid: "expired"},
 ];
 
-export const statusOptions = [
-  {name: "Active", uid: "active"},
-  {name: "Paused", uid: "paused"},
-  {name: "Vacation", uid: "vacation"},
+export const statusReservation = [
+  {name_en: "Pending", name_fr: "Sollicitée", uid: "pending"},
+  {name_en: "Partially paid", name_fr: "Partiellement payée", uid: "partially_paid"},
+  {name_en: "Confirmed", name_fr: "Confirmée", uid: "confirmed"},
+  {name_en: "Totally Paid", name_fr: "Totalement payée", uid: "totally_paid"},
+  {name_en: "Cancelled", name_fr: "Annulée", uid: "cancelled"},
 ];
+
+
+// export const statusOptions = [
+//   {name: "Active", uid: "active"},
+//   {name: "Paused", uid: "paused"},
+//   {name: "Vacation", uid: "vacation"},
+// ];
 
 export const roles = [
   {id: 1, name: "admin"},
@@ -175,6 +184,25 @@ export const columnsCoupon = [
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 
+
+export const columnsReservation = [
+  {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},
+  {name_en: "CLIENT", name_fr: "CLIENT", uid: "client", sortable: true},
+  {name_en: "DATE", name_fr: "DATE", uid: "date"},
+  {name_en: "INITIAL AMOUNT", name_fr: "MONTANT INITIAL", uid: "initial_amount", sortable: true},
+  {name_en: "AMOUNT DUE", name_fr: "MONTANT RESTANT", uid: "amount_due", sortable: true},
+  {name_en: "STATE", name_fr: "ETAT", uid: "state", sortable: true},
+  {name_en: "COUPON", name_fr: "COUPON", uid: "coupon", sortable: true},
+  {name_en: "AGENCY", name_fr: "AGENCE", uid: "agency", sortable: true},
+  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+
+/*
+  * ======================== tabs columns
+*/
 export const columnsTabsStaffCoupon = [
   {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
   {name_en: "TOTAL USAGE", name_fr: "USAGE TOTAL", uid: "total_usage", sortable: true},
@@ -193,10 +221,6 @@ export const columnsTabsClientCoupon = [
   {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
 ];
-
-/*
-  * ======================== tabs columns
-*/
 export const columnsTabsStaffAgency = [
   {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
   {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
@@ -239,3 +263,8 @@ export const columnsTabsRessourceStaff = [
   {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity", sortable: true},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
 ];
+
+
+/*
+  * ======================== end tabs columns
+*/

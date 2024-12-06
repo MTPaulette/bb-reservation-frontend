@@ -69,10 +69,10 @@ export default function EditRessource({ ressource }: { ressource: RessourceType}
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        setSuccess(t("update_ressource_success_msg"));
         setTimeout(() => {
-          setSuccess(t("update_ressource_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {

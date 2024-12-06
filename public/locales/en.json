@@ -39,7 +39,7 @@
     "password": "Password must contain at least one number and one special character",
     "invalid_credentials": "Invalid credentials.",
     "something_wrong": "Something went wrong.",
-    "suspend_warning": "Are you sure that you want to continue this action ? Please, confirm with your password.",
+    "confirm_warning": "Are you sure that you want to continue this action ? Please, confirm with your password.",
     "wrongPassword": "Wrong password",
     "acces_denied": "acces denied",
     "user_not_found": "User not found",
@@ -74,6 +74,7 @@
     "ressource": "Ressource",
     "reason_for_suspension_fr": "Reason for suspension (in french)",
     "reason_for_suspension_en": "Reason for suspension (in english)",
+    "reason_for_cancellation": "Reason for cancellation",
     "name_placeholder": "Enter name",
     "lastname_placeholder": "Enter lastname",
     "firstname_placeholder": "Enter firstname",
@@ -86,6 +87,7 @@
     "agency_placeholder": "Enter agency",
     "nb_place_placeholder": "Enter nbr of place",
     "reason_for_suspension_placeholder": "Enter reason for suspension",
+    "reason_for_cancellation_placeholder": "Enter reason for cancellation",
     "client_placeholder": "Select a client",
     "ressource_placeholder": "Select a ressource",
     "forgot_password_link": "Forgot password?",
@@ -125,6 +127,9 @@
     "new_coupon_success_msg": "Coupon successfully created.",
     "update_coupon_success_msg": "Coupon successfully updated.",
     "delete_coupon_success_msg": "Coupon successfully deleted.",
+
+    "cancel_reservation_success_msg": "Reservation successfully cancelled.",
+    "undo_cancellation_account_success_msg": "Reservation's cancellation undo.",
 
     "newClient": "New client",
     "editClient": "Edit client",
@@ -268,6 +273,8 @@
     "total": "Total",
     "row_per_page": "Row per page:",
     "of": "of",
+    "from": "from",
+    "to": "to",
     "clear_log": "Clear logs",
     "selected": "selected",
     "noItems": "No item found",
@@ -309,7 +316,9 @@
     "editCoupon": "Edit coupon",
     "deleteCoupon": "Delete coupon",
 
-    "newReservation": "New reservation"
+    "newReservation": "New reservation",
+    "editReservation": "Edit reservation",
+    "cancelReservation": "Cancel reservation"
   },
   "Space": {
     "sits": "sit(s) available(s)",
@@ -346,7 +355,9 @@
     "ressources": "ressources",
     "ressource": "ressource",
     "coupons": "coupons",
-    "coupon": "coupon"
+    "coupon": "coupon",
+    "reservations": "reservations",
+    "reservation": "reservation"
   },
   "Settings": {
     "general": "general",

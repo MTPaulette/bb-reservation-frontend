@@ -59,9 +59,7 @@ export default function General () {
     .then(async (res) => {
       setHoadingHolidays(false);
       if(res?.ok) {
-        setTimeout(() => {
-          setSuccessHolidays(t("update_holidays_success_msg"));
-        }, 100);
+        setSuccessHolidays(t("update_holidays_success_msg"));
       } else {
         const status = res.status;
         switch(status) {
@@ -104,9 +102,7 @@ export default function General () {
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
-        setTimeout(() => {
-          setSuccess(t("update_options_success_msg"));
-        }, 1000);
+        setSuccess(t("update_options_success_msg"));
       } else {
         const status = res.status;
         switch(status) {

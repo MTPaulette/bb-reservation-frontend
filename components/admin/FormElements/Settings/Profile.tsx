@@ -185,10 +185,10 @@ export default function Profile () {
         const response = await res.json();
         session!.accessToken = response.token;
         update(session);
+        setSuccessPwd(t("update_account_success_msg"));
         setTimeout(() => {
-          setSuccessPwd(t("update_account_success_msg"));
-        }, 500);
-        setSuccessPwd("");
+          setSuccessPwd("");
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {

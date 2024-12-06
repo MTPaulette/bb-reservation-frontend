@@ -140,10 +140,10 @@ export default function NewReservation() {
     .then(async (res) => {
       setSave(false);
       if(res?.ok) {
+        setSuccess(t_input("new_ressource_success_msg"));
         setTimeout(() => {
-          setSuccess(t_input("new_ressource_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {

@@ -29,6 +29,11 @@ export type SuspensionFormType = {
   reason_for_suspension_fr: string;
 }
 
+export type CancellationFormType = {
+  password: string;
+  reason_for_cancellation: string;
+}
+
 export type UserType = {
   id: number;
   lastname: string;
@@ -255,7 +260,58 @@ export type ReservationFormType = {
   coupon: string | undefined;
 }
 
+export type ReservationType = {
+  id:           number;
+  ressource_id: number;
+  client_id:    number;
+  start_date:   Date;
+  end_date:     Date;
+  start_time:   string;
+  end_time:     string;
+  state:        string;
+  initial_amount:   number;
+  amount_due:   number;
+  note:      string | null;
+  reason_for_cancellation:      string | null;
+  coupon_id:    number | null;
+  created_by:   CreatedByType;
+  cancelled_by: string | null;
+  cancelled_at: string | null;
+  created_at:   Date;
+  updated_at:   Date;
+  ressource:    RessourceType_2;
+  client:       CreatedByType;
+  coupon:       SampleCouponType | null;
+  payments:     unknown[];
+}
 
+export type RessourceType_2 = {
+  id:           number;
+  price_hour:   number;
+  price_midday: number | null;
+  price_day:    number;
+  price_week:   null;
+  price_month:  number | null;
+  quantity:     number;
+  agency_id:    number;
+  space_id:     number;
+  created_by:   number;
+  created_at:   Date;
+  updated_at:   Date;
+  space:        SampleAgencyType;
+  agency:       SampleAgencyType;
+}
+
+export type SampleCouponType = {
+  id:   number;
+  name: string;
+  code: string;
+}
+
+export type SampleAgencyType = {
+  id:   number;
+  name: string;
+}
 
 
 

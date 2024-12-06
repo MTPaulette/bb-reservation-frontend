@@ -390,7 +390,7 @@ const config: Config = {
             content2: "#f3f4f6",
             content3: "#eee", // "#e4e4e7",
             content4: "#d4d4d8",
-            default: "#d4d4d8", //gris pour les hover des dropdown
+            default: "#d4d4d8", // gris pour les hover des dropdown
             primary: {
               DEFAULT: "#262262",// bleu rgb(38, 34, 98)
               foreground: "#fff",

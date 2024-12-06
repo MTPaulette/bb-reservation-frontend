@@ -107,10 +107,10 @@ export default function NewPayment({ reservation_id }: { reservation_id: number}
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        setSuccess(t_input("update_account_success_msg"));
         setTimeout(() => {
-          setSuccess(t_input("update_account_success_msg"));
-          // window.location.reload();
-        }, 500);
+          window.location.reload();
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {

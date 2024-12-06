@@ -107,10 +107,10 @@ export default function EditCoupon({ id }: { id: number} ) {
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
+        setSuccess(t_input("update_account_success_msg"));
         setTimeout(() => {
-          setSuccess(t_input("update_account_success_msg"));
           window.location.reload();
-        }, 500);
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {
