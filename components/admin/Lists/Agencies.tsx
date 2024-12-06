@@ -272,7 +272,7 @@ export default function AgenciesTable() {
       </div>
       <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 sm:px-7.5 xl:pb-2 bg-background shadow-default">
         <div className="max-w-full overflow-x-auto">
-          <div className="flex flex-col gap-4 w-3/4">
+          <div className="flex flex-col gap-4">
             <div className="flex flex-wrap justify-between gap-3 items-end">
               <Input
                 isClearable

@@ -26,7 +26,6 @@ export default function Settings () {
     if(group != currentGroup){
       params.set('group', String(group));
       setCurrentGroup(group);
-      console.log(group)
       replace(`${pathname}?${params.toString()}`);
     }
   }

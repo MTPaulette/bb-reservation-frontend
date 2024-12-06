@@ -12,8 +12,11 @@
     "administrators": "Administrateurs",
     "ressources": "Ressources",
     "reservations": "Réservations",
+    "payment": "Paiement",
     "coupons": "Coupons",
-    "clients": "Clients"
+    "clients": "Clients",
+    "newReservation": "New reservation",
+    "define_time_slot": "Définir une plage horaire"
   },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
@@ -66,6 +69,8 @@
     "openingdays": "Jours d'ouverture",
     "from": "De",
     "to": "A",
+    "client": "Client",
+    "ressource": "Ressource",
     "reason_for_suspension_fr": "Raison de la suspension (en francais)",
     "reason_for_suspension_en": "Raison de la suspension (en anglais)",
     "phonenumber": "Téléphone",
@@ -77,10 +82,12 @@
     "current_password_placeholder": "Entrer le mot de passe actuel",
     "address_placeholder": "Entrer l'adresse",
     "phonenumber_placeholder": "Entrer le  numéro de téléphone",
-    "role_placeholder": "Selectionner un role",
-    "agency_placeholder": "Selectionner une agence",
+    "role_placeholder": "Sélectionner un role",
+    "agency_placeholder": "Sélectionner une agence",
     "nb_place_placeholder": "Entrer le nbr de place",
     "reason_for_suspension_placeholder": "Entrer la raison de la suspension",
+    "client_placeholder": "Sélectionner un client",
+    "ressource_placeholder": "Sélectionner une ressource",
     "forgot_password_link": "Mot de passe oublié?",
     "remember_me": "se souvenir de moi",
     "logout": "Se déconnecter",
@@ -152,6 +159,7 @@
     "price_week": "prix par semaine",
     "price_month": "price par mois",
 
+
     "coupon": "Nom",
     "coupon_placeholder": "Entrer le nom du coupon",
     "total_usage": "Usage total",
@@ -175,7 +183,25 @@
     "instagram": "Instagram",
     "linkedln": "Linkedln",
     "twitter": "Twitter",
-    "add_holiday": "Ajouter un jour férié"
+    "add_holiday": "Ajouter un jour férié",
+    "smtp_email": "SMTP Email",
+    "smtp_password": "SMTP Mot de passe",
+    "smtp_port": "SMTP Port",
+    "smtp_host": "SMTP Host",
+    "email_protocol": "Email protocol",
+
+    "coupon_discount": "Coupon de réduction",
+    "apply": "appliquer",
+    "coupon_apply_placeholder": "Entrer votre coupon",
+
+    "validity": "Validité",
+    "validity_placeholder": "Sélectionner une validité",
+    "start_date": "Date de début",
+    "start_hour": "Heure de début",
+    "start_hour_placeholder": "Sélectionner l'heure de début",
+    "midday_period_placeholder": "Sélectionner la période",
+    "midday_period": "Période de la demi-journée",
+    "reserve": "Réserver maintenant"
   },
   "Footer": {
     "terms": "Termes et Conditions",
@@ -221,7 +247,7 @@
     "spaces": "espaces",
     "ressources": "ressources",
     "characteristics": "caractérisques",
-    "reservations": "reservations",
+    "reservations": "réservations",
     "finances": "finance",
     "coupons": "coupons de réduction",
     "payments": "paiements"
@@ -278,7 +304,10 @@
 
     "newCoupon": "Nouveau coupon",
     "editCoupon": "Editer coupon",
-    "deleteCoupon": "Supprimer coupon"
+    "deleteCoupon": "Supprimer coupon",
+
+    "newReservation": "Nouvelle reservation"
+
   },
   "Space": {
     "sits": "place(s) disponible(s)",
@@ -331,7 +360,8 @@
     "personal_informations": "Informations personnelles",
     "company_informations": "Informations sur l'entreprise",
     "security_informations": "Informations de sécurité",
-    "holidays": "Jours fériés"
+    "holidays": "Jours fériés",
+    "smtp_configurations": "Configurations SMTP"
   },
   "Requirements": {
     "pwd_label": "Assurez-vous que ces exigences soient respectées:",

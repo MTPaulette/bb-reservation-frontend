@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Pagination, Selection, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor, Image
 } from "@nextui-org/react";
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
@@ -22,7 +22,7 @@ import EditSpace from "../FormElements/Space/Edit";
 import DeleteSpace from "../FormElements/Space/Delete";
 import { getSpaces } from '@/lib/action/spaces';
 import { signOut } from 'next-auth/react';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "nb_place", "characteristics", "images", "created_at", "actions"];
@@ -158,7 +158,13 @@ export default function SpacesTable() {
           <div className="flex flex-wrap items-center gap-1 min-w-36">
             {space.images.map((item) => (
               <div key={item.id} className="flex-shrink-0">
-                <Image src={getImageUrl(item.src)} alt="space image" width={40} height={40} />
+                <Image 
+                  src={getImageUrl(item.src)}
+                  alt="space image"
+                  radius="none"
+                  width={40}
+                  height={40}
+                />
               </div>
             ))}
           </div>

@@ -12,8 +12,11 @@
     "administrators": "Administrators",
     "ressources": "Ressources",
     "reservations": "Reservations",
+    "payment": "Payment",
     "coupons": "Coupons",
-    "clients": "Clients"
+    "clients": "Clients",
+    "newReservation": "New reservation",
+    "define_time_slot": "Define a time slot"
   },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
@@ -67,6 +70,8 @@
     "openingdays": "Opening days",
     "from": "from",
     "to": "to",
+    "client": "Client",
+    "ressource": "Ressource",
     "reason_for_suspension_fr": "Reason for suspension (in french)",
     "reason_for_suspension_en": "Reason for suspension (in english)",
     "name_placeholder": "Enter name",
@@ -81,6 +86,8 @@
     "agency_placeholder": "Enter agency",
     "nb_place_placeholder": "Enter nbr of place",
     "reason_for_suspension_placeholder": "Enter reason for suspension",
+    "client_placeholder": "Select a client",
+    "ressource_placeholder": "Select a ressource",
     "forgot_password_link": "Forgot password?",
     "remember_me": "remember me",
     "logout": "Log Out",
@@ -152,7 +159,7 @@
     "price_week": "price per week",
     "price_month": "price per month",
 
-    "coupon": "Name",
+    "coupon": "Nom",
     "coupon_placeholder": "Enter coupon name",
     "total_usage": "Total usage",
     "total_usage_placeholder": "Enter maximun usage limit",
@@ -175,7 +182,25 @@
     "instagram": "Instagram",
     "linkedln": "Linkedln",
     "twitter": "Twitter",
-    "add_holiday": "Add holiday"
+    "add_holiday": "Add holiday",
+    "smtp_email": "SMTP Email",
+    "smtp_password": "SMTP Password",
+    "smtp_port": "SMTP Port",
+    "smtp_host": "SMTP Host",
+    "email_protocol": "Email protocol",
+  
+    "coupon_discount": "Discount coupon",
+    "apply": "apply",
+    "coupon_apply_placeholder": "Enter your discount coupon",
+
+    "validity": "Validity",
+    "validity_placeholder": "Select a validity",
+    "start_date": "Start date",
+    "start_hour": "Start hour",
+    "start_hour_placeholder": "Select start hour",
+    "midday_period_placeholder": "Select a period",
+    "midday_period": "Midday period",
+    "reserve": "reserve now"
   },
   "Footer": {
     "terms": "Terms & Conditions",
@@ -282,7 +307,9 @@
 
     "newCoupon": "New coupon",
     "editCoupon": "Edit coupon",
-    "deleteCoupon": "Delete coupon"
+    "deleteCoupon": "Delete coupon",
+
+    "newReservation": "New reservation"
   },
   "Space": {
     "sits": "sit(s) available(s)",
@@ -335,7 +362,8 @@
     "personal_informations": "Personal Informations",
     "company_informations": "Company Informations",
     "security_informations": "Confidential informations",
-    "holidays": "Holidays"
+    "holidays": "Holidays",
+    "smtp_configurations": "SMTP Configurations"
   },
   "Requirements": {
     "pwd_label": "Ensure that these requirements are met:",

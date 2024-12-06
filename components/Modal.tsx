@@ -13,9 +13,10 @@ const classNames = {
 }
 
 export default function MyModal({
-  open, close, children, title
+  open, close, children, title, size="2xl"
 }: {
-  open: Boolean, close: any, children: React.ReactNode, title: string
+  open: boolean, close: any, children: React.ReactNode, title: string, 
+  size: string
 }) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const t = useTranslations("Modal");
@@ -28,7 +29,8 @@ export default function MyModal({
         }}*/}
       <Modal 
         backdrop="blur"
-        size="2xl"
+        // size="2xl"
+        size={size}
         isOpen={open}
         scrollBehavior="outside"
         onOpenChange={onOpenChange}

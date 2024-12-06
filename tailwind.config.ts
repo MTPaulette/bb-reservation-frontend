@@ -433,7 +433,9 @@ const config: Config = {
           colors: {
             background: "#000000",
             foreground: "#ECEDEE",
-            divider: "rgba(255,255,255,0.15)",
+            //divider: "rgba(17,17,17,0.15)",
+            // divider: "rgba(255,255,255,0.15)",
+            divider: "#55575a",
             focus: "#006FEE",
             content1: "#18181b",
             content2: "#27272a",

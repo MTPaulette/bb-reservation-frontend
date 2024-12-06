@@ -207,7 +207,6 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
               <select
                 value={horaires[day.name_en.toLowerCase()].from}
                 onChange={(e) => handleSelectionChange(day.name_en.toLowerCase(), 'from', e.target.value)}
-                className="!border-none"
               >
                 {Hours.map((hour) => (
                   <option key={hour.id} value={hour.hour}>
@@ -221,7 +220,6 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
               <select
                 value={horaires[day.name_en.toLowerCase()].to}
                 onChange={(e) => handleSelectionChange(day.name_en.toLowerCase(), 'to', e.target.value)}
-                className="!border-none"
               >
                 {Hours.map((hour) => (
                   <option key={hour.id} value={hour.hour}>

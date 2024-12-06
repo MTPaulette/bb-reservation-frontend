@@ -153,13 +153,15 @@ export default function ViewSpace({id}: {id: string}) {
               {space.images.length > 0 ? (
               <div className="flex flex-wrap items-center gap-2 lg:gap-4 xl:gap-6 w-full">
                 {space.images.map((item) => (
-                  <Image
-                    key={item.id}
-                    width="100%"
-                    alt="space image"
-                    className="w-full object-cover h-[80px] lg:h-[140px] z-1"
-                    src={getImageUrl(item.src)}
-                  />
+                  <div key={item.id} className="flex-shrink-0">
+                    <Image 
+                      src={getImageUrl(item.src)}
+                      alt="space image"
+                      radius="none"
+                      width={140}
+                      height={140}
+                    />
+                  </div>
                 ))}
               </div>
               ) : (

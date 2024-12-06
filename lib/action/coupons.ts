@@ -55,3 +55,15 @@ export async function deleteCoupon(data: ConfirmPasswordType, id: number) {
   })
   return response;
 }
+
+export async function applyCoupon(coupon_code: string, client_id: number) {
+  const response = await fetch(`${api_url}/coupon/apply`, {
+    method: "POST",
+    headers: headerOptions(await getCSRFToken(), await getToken()),
+    body: JSON.stringify({
+      "coupon_code": coupon_code,
+      "client_id": client_id
+    }),
+  })
+  return response;
+}

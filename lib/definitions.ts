@@ -243,8 +243,17 @@ export type HolidayType = {
   date: string;
 }
 
-
-
+export type ReservationFormType = {
+  client_id: number | string;
+  ressource_id: number | string;
+  validity: string;
+  start_date: string;
+  // end_date: string;
+  start_hour: string;
+  // end_hour: string;
+  quantity: number | string;
+  coupon: string | undefined;
+}
 
 
 

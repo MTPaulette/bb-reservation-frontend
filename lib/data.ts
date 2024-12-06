@@ -144,11 +144,16 @@ export const columnsRessource = [
 ];
 
 export const validitiesName = [
-  {name_en: "Hour", name_fr: "Heure"},
-  {name_en: "Midday", name_fr: "Demi-journée"},
-  {name_en: "Day", name_fr: "Journée"},
-  {name_en: "Week", name_fr: "Semaine"},
-  {name_en: "Month", name_fr: "Mois"},
+  {name_en: "Hour", name_fr: "Heure", uid: "hour"},
+  {name_en: "Midday", name_fr: "Demi-journée", uid: "midday"},
+  {name_en: "Day", name_fr: "Journée", uid: "day"},
+  {name_en: "Week", name_fr: "Semaine", uid: "week"},
+  {name_en: "Month", name_fr: "Mois", uid: "month"},
+]
+
+export const middayPeriods = [
+  {name_en: "Morning (08h-14h)", name_fr: "En matinée (08h-14h)", uid: "morning"},
+  {name_en: "Afternoon (14h-19h)", name_fr: "En soirée (14h-19h)", uid: "afternoon"},
 ]
 
 export const columns = [

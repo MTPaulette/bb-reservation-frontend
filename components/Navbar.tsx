@@ -171,7 +171,10 @@ export default function NavBarComponent() {
         </NavbarItem>
   
         <NavbarItem>
-          <Button as={Link} href={`/${locale}/auth/login`} className="bg-gradient-to-tr from-success to-[#262262] text-white hover:no-underline shadow-lg">
+          <Button 
+            as={Link} href={`/${locale}/auth/login`} 
+            className="bg-gradient-to-tr from-success to-[#262262] text-white hover:no-underline shadow-lg"
+          >
           {/* <Button as={Link} href="/login" color="success" className="hover:no-underline text-white"> */}
             Log in
           </Button>

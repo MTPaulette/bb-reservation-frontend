@@ -13,7 +13,7 @@ import { validitiesName as validities } from "@/lib/data";
 import { VerticalDotsIcon } from "@/components/Icons";
 import { 
   Button, Tabs, Tab, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem
+  DropdownItem, Image
 } from "@nextui-org/react";
 
 import Modal from "@/components/Modal";
@@ -23,14 +23,10 @@ import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
 import CardWrapper from "@/components/admin/DataStats/Card2";
 import Link from "next/link";
-import { columnsTabsStaff, columnsStaffRessource } from "@/lib/data";
-import DefaultUserTable from "../Tables/DefaultUserTable";
-import DefaultRessourceTable from "../Tables/DefaultRessourceTable";
-import Image from "next/image";
+// import Image from "next/image";
 
 export default function ViewRessource({id}: {id: string}) {
   const [ressource, setRessource] = useState([]);
-  const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -39,7 +35,6 @@ export default function ViewRessource({id}: {id: string}) {
   const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
   const t_ressource = useTranslations("Ressource");
-  const t_alert = useTranslations("Alert");
   const [selected, setSelected] = React.useState<string>("ressources");
 
   useEffect(() => {
@@ -219,7 +214,13 @@ export default function ViewRessource({id}: {id: string}) {
           <div className="w-full flex flex-wrap items-center gap-2 sm:gap-x-8">
             {ressource.space.images.map((item) => (
               <div key={item.id} className="flex-shrink-0">
-                <Image src={getImageUrl(item.src)} alt="space image" width={140} height={140} />
+                <Image 
+                  src={getImageUrl(item.src)}
+                  alt="space image"
+                  radius="none"
+                  width={140}
+                  height={140}
+                />
               </div>
             ))}
           </div>

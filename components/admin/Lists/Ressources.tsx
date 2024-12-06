@@ -246,7 +246,7 @@ export default function RessourcesTable() {
                 isClearable
                 classNames={{
                   base: "w-full sm:max-w-[50%] z-1",
-                  inputWrapper: "border-1",
+                  inputWrapper: "border-1 border-divider",
                 }}
                 placeholder={t_table("search_placeholder")}
                 size="sm"
