@@ -60,6 +60,9 @@ export default function General () {
       setHoadingHolidays(false);
       if(res?.ok) {
         setSuccessHolidays(t("update_holidays_success_msg"));
+        setTimeout(() => {
+          setSuccessHolidays("");
+        }, 5000);
       } else {
         const status = res.status;
         switch(status) {
@@ -103,6 +106,9 @@ export default function General () {
       setLoading(false);
       if(res?.ok) {
         setSuccess(t("update_options_success_msg"));
+        setTimeout(() => {
+          setSuccess("");
+        }, 5000);
       } else {
         const status = res.status;
         switch(status) {
@@ -150,7 +156,7 @@ export default function General () {
       <CommonSkeleton />
     ) : (
     <div className="grid grid-cols-5 gap-8">
-      <div className="col-span-5 order-1 xl:order-2 xl:col-span-3">
+      <div className="col-span-5 order-1 xl:order-2 xl:col-span-5">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
             <Title className="font-medium text-foreground">{t_settings("company_informations")}</Title>

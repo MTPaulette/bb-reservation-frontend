@@ -1,5 +1,5 @@
 import { headerOptions, getCSRFToken, getToken } from "../utils";
-import { ConfirmPasswordType, ReservationFormType, CancellationFormType } from "../definitions";
+import { ReservationFormType, CancellationFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
 
@@ -45,6 +45,18 @@ export async function cancelReservation(data: CancellationFormType, id: number, 
       "password": data.password,
       "undo_cancellation": state != 'cancelled'? false : true,
       "reason_for_cancellation": data.reason_for_cancellation,
+    }),
+  })
+  return response;
+}
+
+export async function confirmReservation(client_id: number, ressource_id: number) {
+  const response = await fetch(`${api_url}/reservation/store/confirm`, { 
+    method: "POST",
+    headers: headerOptions(await getCSRFToken(), await getToken()),
+    body: JSON.stringify({
+      "client_id": client_id,
+      "ressource_id": ressource_id
     }),
   })
   return response;

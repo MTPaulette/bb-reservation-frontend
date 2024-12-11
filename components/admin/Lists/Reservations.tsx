@@ -170,7 +170,7 @@ export default function ReservationsTable() {
             {/* <p className="font-semibold text-sm">{`${t_table("from")}: ${formatDateTime(reservation.start_date, locale)} - ${t_table("to")}: ${formatDateTime(reservation.end_date, locale)}`}</p> */}
             <p className="font-semibold text-sm">{`${formatDateTime(reservation.start_date, locale)} - ${formatDateTime(reservation.end_date, locale)}`}</p>
             {/* <p className="font-semibold text-sm">{`(${reservation.start_date} - ${reservation.end_date})`}</p> */}
-            <p className="dark:text-foreground/60">{`(${reservation.start_time} - ${reservation.end_time})`}</p>
+            <p className="dark:text-foreground/60">{`(${reservation.start_hour} - ${reservation.end_hour})`}</p>
           </div>
         );
       case "initial_amount":
@@ -296,6 +296,7 @@ export default function ReservationsTable() {
                   base: "w-full sm:max-w-[50%] z-1",
                   inputWrapper: "border-1",
                 }}
+                aria-label="search"
                 placeholder={t_table("search_placeholder")}
                 size="sm"
                 startContent={<SearchIcon fill="currentColor" size={18} />}
@@ -478,7 +479,8 @@ export default function ReservationsTable() {
 
       <Modal
         open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newReservation")}
+        title=""
+        // title={t_table("newReservation")}
       >
         <NewReservation />
       </Modal>

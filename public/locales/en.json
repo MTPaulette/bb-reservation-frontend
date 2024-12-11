@@ -15,6 +15,7 @@
     "payment": "Payment",
     "coupons": "Coupons",
     "clients": "Clients",
+    "summary": "Reservation summary",
     "newReservation": "New reservation",
     "define_time_slot": "Define a time slot"
   },
@@ -201,8 +202,11 @@
     "validity": "Validity",
     "validity_placeholder": "Select a validity",
     "start_date": "Start date",
+    "end_date": "End date",
     "start_hour": "Start hour",
+    "end_hour": "End hour",
     "start_hour_placeholder": "Select start hour",
+    "end_hour_placeholder": "Select end hour",
     "midday_period_placeholder": "Select a period",
     "midday_period": "Midday period",
     "reserve": "reserve now"
@@ -392,6 +396,11 @@
     "from": "From",
     "administrators": "Administrators",
     "ressources": "Ressources",
-    "reservations": "Reservations"
+    "reservations": "Reservations",
+    "confirm_reservation_btn": "Confirm reservation",
+    "client_informations": "Client's informations",
+    "ressource_informations": "Ressource's informations",
+    "transaction_informations": "Transaction's informations",
+    "confirm_reservation": "Veuillez, cliquer sur le bounton en dessous pour confirmer la réservation."
   }
 }

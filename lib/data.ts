@@ -161,8 +161,8 @@ export const validitiesName = [
 ]
 
 export const middayPeriods = [
-  {name_en: "Morning (08h-14h)", name_fr: "En matinée (08h-14h)", uid: "morning"},
-  {name_en: "Afternoon (14h-19h)", name_fr: "En soirée (14h-19h)", uid: "afternoon"},
+  {name_en: "Morning (08h-13h)", name_fr: "En matinée (08h-13h)", uid: "morning"},
+  {name_en: "Afternoon (13h-18h)", name_fr: "En soirée (13h-18h)", uid: "afternoon"},
 ]
 
 export const columns = [

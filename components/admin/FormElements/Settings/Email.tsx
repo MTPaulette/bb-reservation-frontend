@@ -91,7 +91,7 @@ export default function EmailSettings () {
       <CommonSkeleton />
     ) : (
     <div className="grid grid-cols-5 gap-8">
-      <div className="col-span-5 order-1 xl:order-2 xl:col-span-3">
+      <div className="col-span-5 order-1 xl:order-2 xl:col-span-5">
         <div className="rounded-sm border border-divider bg-background shadow-default">
           <div className="border-b border-divider px-7 py-4">
             <Title className="font-medium text-foreground">{t_settings("smtp_configurations")}</Title>

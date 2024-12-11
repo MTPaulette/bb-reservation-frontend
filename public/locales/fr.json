@@ -15,7 +15,8 @@
     "payment": "Paiement",
     "coupons": "Coupons",
     "clients": "Clients",
-    "newReservation": "New reservation",
+    "summary": "Récapitulatif de réservation",
+    "newReservation": "Nouvelle réservation",
     "define_time_slot": "Définir une plage horaire"
   },
   "Alert": {
@@ -202,8 +203,11 @@
     "validity": "Validité",
     "validity_placeholder": "Sélectionner une validité",
     "start_date": "Date de début",
+    "end_date": "Date de fin",
     "start_hour": "Heure de début",
+    "end_hour": "Heure de fin",
     "start_hour_placeholder": "Sélectionner l'heure de début",
+    "end_hour_placeholder": "Sélectionner l'heure de fin",
     "midday_period_placeholder": "Sélectionner la période",
     "midday_period": "Période de la demi-journée",
     "reserve": "Réserver maintenant"
@@ -392,6 +396,11 @@
     "from": "De",
     "administrators": "Administrateurs",
     "ressources": "Ressources",
-    "reservations": "Réservations"
+    "reservations": "Réservations",
+    "confirm_reservation_btn": "Confirmer réservation",
+    "client_informations": "Informations du client",
+    "ressource_informations": "Informations sur la ressource",
+    "transaction_informations": "Informations sur la transaction",
+    "confirm_reservation": "Veuillez, cliquer sur le bounton en dessous pour valider la réservation. Sinon elle sera annulée dans les prochaines minutes."
   }
 }

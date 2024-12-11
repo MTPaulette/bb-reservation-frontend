@@ -8,7 +8,7 @@ import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { UserType, ReservationFormType, RessourceType, Reservation_draftType, CouponType } from "@/lib/definitions";
+import { UserType, ReservationFormType, RessourceType, Reservation_draftType } from "@/lib/definitions";
 import { getRessourceById } from "@/lib/action/ressources";
 import { getClients } from "@/lib/action/clients";
 import { getRessources } from "@/lib/action/ressources";
@@ -39,15 +39,12 @@ export default function NewReservation() {
   const [reservation_draft, setReservation_draft] = useState<Reservation_draftType>();
   const [selectedRessource, setSelectedRessource] = useState<RessourceType>();
   const [selectedClient_id, setSelectedClient_id] = useState<string|number>("");
-  const [selectedClient, setSelectedClient] = useState<UserType>();
   const [coupon, setCoupon] = useState<string>("");
-  const [applied_coupon, setApplied_coupon] = useState<CouponType>();
   const [selectedValidity, setSelectedValidity] = useState<string>("");
   const [errorCoupon, setErrorCoupon] = useState<string>("");
   const [clientNotFound, setClientNotFound] = useState<string>("");
   const [loadingCoupon, setLoadingCoupon] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = React.useState<string>("reservations");
-  const [disable_payment, setDisable_payment] = useState<boolean>(true);
 
   const schema: ZodType<ReservationFormType> = z
     .object({
@@ -141,8 +138,7 @@ export default function NewReservation() {
       });
   }, []);
 
-  const handleFormSubmit = async (data: ReservationFormType, e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+  const handleFormSubmit = async (data: ReservationFormType) => {
     setError("");
     setSuccess("");
     setSave(true);
@@ -151,14 +147,12 @@ export default function NewReservation() {
       setSave(false);
       const response = await res.json();
       if(res?.ok) {
-        setReservation_draft(response.reservation_draft);
-        setApplied_coupon(response.coupon);
+        setReservation_draft(response.reservation_draft)
         setSuccess(t_input("new_ressource_success_msg"));
-        setTimeout(() => {
-          setSelectedTab("summary");
-          setSuccess("");
-          //window.location.reload();
-        }, 3000);
+        setSelectedTab("summary");
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 1000);
       } else {
         const status = res.status;
         switch(status) {
@@ -268,11 +262,6 @@ export default function NewReservation() {
     }
   }
 
-  const handleConfirmReservation = () => {
-    setDisable_payment(false);
-    setSelectedTab("payment");
-  }
-
   const classNames = React.useMemo(
     () => ({
       inputWrapper: [
@@ -367,10 +356,7 @@ export default function NewReservation() {
                       }}
                     >
                       {(client) => (
-                        <SelectItem key={client.id} textValue={client.lastname} 
-                        onClick={() => {
-                          setSelectedClient(client);
-                        }}>
+                        <SelectItem key={client.id} textValue={client.lastname}>
                           <User
                             avatarProps={
                               {radius: "full", size: "sm", src: client.image? getImageUrl(client.image) : "" }
@@ -635,7 +621,7 @@ export default function NewReservation() {
                         placeholder={t_input("coupon_apply_placeholder")}
                         labelPlacement="outside"
                         size="sm"
-                        {...register("coupon")}
+                        // {...register("coupon")}
                         isInvalid={errorCoupon || clientNotFound ? true: false}
                         errorMessage={errorCoupon ? errorCoupon || clientNotFound: null}
                         classNames={classNames}
@@ -681,14 +667,15 @@ export default function NewReservation() {
               </div>
             }
           >
-            <SummaryReservation
-              client={selectedClient} ressource={selectedRessource}
-              reservation_draft={reservation_draft} coupon={applied_coupon}
-              click_to_confirm={handleConfirmReservation}
-            />
+            <SummaryReservation client={selectedClient_id} ressource={selectedRessource} reservation_draft={reservation_draft} />
+            {/* {JSON.stringify(reservation_draft)} */}
+            <br/>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa eligendi expedita, 
+            quod maiores quos maxime iste animi. Facere, reiciendis nam? Possimus asperiore
+            s harum nesciunt sint ut? Blanditiis accusamus ex ut?
           </Tab>
           <Tab
-            isDisabled={disable_payment}
+            isDisabled={reservation_draft? false : true}
             key="payment"
             title={
               <div className="flex items-center space-x-2">

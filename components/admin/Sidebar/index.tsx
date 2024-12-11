@@ -100,6 +100,7 @@ const menuGroups = [
         label: t_sidebar("calendar"),
         route: `/${locale}/admin/calendar`,
       },
+      /*
       {
         icon: (
           <FormIcon fill="none" size={18} />
@@ -117,7 +118,7 @@ const menuGroups = [
         ),
         label: "Tables",
         route: `/${locale}/admin/tables`,
-      },
+      }, */
       {
         icon: (
           <SettingIcon fill="none" size={18} />
@@ -130,6 +131,7 @@ const menuGroups = [
   {
     name: "OTHERS",
     menuItems: [
+      /*
       {
         icon: (
           <ChartIcon fill="none" size={18} />
@@ -158,7 +160,7 @@ const menuGroups = [
           { label: "Sign In", route: `/${locale}/admin/auth/signin` },
           { label: "Sign Up", route: `/${locale}/admin/auth/signup` },
         ],
-      },
+      },*/
     ],
   },
 ];

@@ -252,11 +252,11 @@ export type ReservationFormType = {
   client_id: number | string;
   ressource_id: number | string;
   validity: string;
+  midday_period: string | undefined;
   start_date: string;
-  // end_date: string;
+  end_date: string | undefined;
   start_hour: string;
-  // end_hour: string;
-  quantity: number | string;
+  end_hour: string;
   coupon: string | undefined;
 }
 
@@ -266,8 +266,8 @@ export type ReservationType = {
   client_id:    number;
   start_date:   Date;
   end_date:     Date;
-  start_time:   string;
-  end_time:     string;
+  start_hour:   string;
+  end_hour:     string;
   state:        string;
   initial_amount:   number;
   amount_due:   number;
@@ -311,6 +311,19 @@ export type SampleCouponType = {
 export type SampleAgencyType = {
   id:   number;
   name: string;
+}
+
+export type Reservation_draftType = {
+  ressource_id:   number;
+  client_id:      number;
+  start_date:     string;
+  end_date:       string;
+  start_hour:     string;
+  end_hour:       string;
+  initial_amount: number;
+  amount_due:     number;
+  coupon_id:      number;
+  created_by:     number;
 }
 
 
