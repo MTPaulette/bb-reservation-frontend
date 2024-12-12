@@ -152,8 +152,8 @@ export type ImageType = ({
 export type SpaceType = {
   id: number;
   name: string;
-  description_en: null;
-  description_fr: null;
+  description_en: undefined;
+  description_fr: undefined;
   nb_place: number;
   characteristics: CharacteristicType[];
   images: ImageType[];
@@ -161,8 +161,8 @@ export type SpaceType = {
 
 export type SpaceFormType = {
   name: string;
-  description_en: null;
-  description_fr: null;
+  description_en: undefined;
+  description_fr: undefined;
   nb_place: number;
   characteristics: CharacteristicType[];
   images: ImageType[];
@@ -171,10 +171,10 @@ export type SpaceFormType = {
 export type RessourceType = {
   id: number;
   price_hour: number;
-  price_midday: number | null;
-  price_day: number | null;
-  price_week: number | null;
-  price_month: number | null;
+  price_midday: number | undefined;
+  price_day: number | undefined;
+  price_week: number | undefined;
+  price_month: number | undefined;
   quantity: number;
   agency_id: number;
   space_id: number;
@@ -213,8 +213,8 @@ export type CouponType = {
   total_usage: number;
   status: string;
   expired_on: Date;
-  percent: number | null;
-  amount: number | null;
+  percent: number | undefined;
+  amount: number | undefined;
   note_en: string;
   note_fr: string;
   created_by: CreatedByType;
@@ -231,8 +231,8 @@ export type CreatedByType = {
 export type CouponFormType = {
   name: string;
   total_usage: number | string;
-  percent: number | string | null;
-  amount: number | string | null;
+  percent: number | string | undefined;
+  amount: number | string | undefined;
   expired_on: Date | string;
   note_en: string;
   note_fr: string;
@@ -271,27 +271,27 @@ export type ReservationType = {
   state:        string;
   initial_amount:   number;
   amount_due:   number;
-  note:      string | null;
-  reason_for_cancellation:      string | null;
-  coupon_id:    number | null;
+  note:      string | undefined;
+  reason_for_cancellation:      string | undefined;
+  coupon_id:    number | undefined;
   created_by:   CreatedByType;
-  cancelled_by: string | null;
-  cancelled_at: string | null;
+  cancelled_by: string | undefined;
+  cancelled_at: string | undefined;
   created_at:   Date;
   updated_at:   Date;
   ressource:    RessourceType_2;
   client:       CreatedByType;
-  coupon:       SampleCouponType | null;
+  coupon:       SampleCouponType | undefined;
   payments:     unknown[];
 }
 
 export type RessourceType_2 = {
   id:           number;
   price_hour:   number;
-  price_midday: number | null;
+  price_midday: number | undefined;
   price_day:    number;
-  price_week:   null;
-  price_month:  number | null;
+  price_week:   undefined;
+  price_month:  number | undefined;
   quantity:     number;
   agency_id:    number;
   space_id:     number;
@@ -326,9 +326,27 @@ export type Reservation_draftType = {
   created_by:     number;
 }
 
+export type PaymentType = {
+  id:             number;
+  amount:         number;
+  payment_method: string;
+  payment_status: string | undefined;
+  transaction_id: string | undefined;
+  bill_number:    string | undefined;
+  reservation_id: number;
+  processed_by:   CreatedByType;
+  created_at:     Date;
+  updated_at:     Date;
+}
 
-
-
+export type PaymentFormType = {
+  amount:         number | string;
+  payment_method: string;
+  // payment_status: string | undefined;
+  transaction_id: string | undefined;
+  bill_number:    string | undefined;
+  note:           string | undefined;
+}
 
 
 
@@ -468,7 +486,7 @@ export type FAQ = {
 // import { FAQ } from "./faq";
 
 export type FaqItem = {
-  active: number | null;
+  active: number | undefined;
   handleToggle: (index: number) => void;
   faq: FAQ;
 };

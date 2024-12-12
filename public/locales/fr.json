@@ -129,7 +129,9 @@
     "update_coupon_success_msg": "Coupon mis à jour avec succès.",
     "delete_coupon_success_msg": "Coupon supprimé avec succès.",
 
-    "cancel_reservation_success_msg": "Reservation annulée avec succès.",
+    "new_reservation_draft_success_msg": "Réservation créée avec succès.",
+    "new_reservation_success_msg": "Réservation confirmée.",
+    "cancel_reservation_success_msg": "Réservation annulée avec succès.",
     "undo_cancellation_account_success_msg": "Desactivation de l'annulation de la réservation.",
 
     "newClient": "Nouveau client",
@@ -210,7 +212,18 @@
     "end_hour_placeholder": "Sélectionner l'heure de fin",
     "midday_period_placeholder": "Sélectionner la période",
     "midday_period": "Période de la demi-journée",
-    "reserve": "Réserver maintenant"
+    "reserve": "Réserver maintenant",
+
+    "amount_payment": "Montant",
+    "amount_payment_placeholder": "Entrer le montant du paiement",
+    "payment_method": "Méthode de paiement",
+    "payment_method_placeholder": "Sélectionner la méthode de paiement",
+    "transaction_id": "Transaction id",
+    "transaction_id_placeholder": "Entrer l'id de la transaction",
+    "bill_number": "Numéro de la facture",
+    "bill_number_placeholder": "Entrer le numéro de la facture",
+    "note_reservation": "Note pour la réservation",
+    "note_reservation_placeholder": "Entrer une note pour la réservation"
   },
   "Footer": {
     "terms": "Termes et Conditions",

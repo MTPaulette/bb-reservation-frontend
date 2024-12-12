@@ -36,7 +36,7 @@ export default function SummaryReservation(
       setLoading(false);
       const response = await res.json();
       if(res?.ok) {
-        setSuccess(t_input("new_ressource_success_msg"));
+        setSuccess(t_input("new_reservation_success_msg"));
         setTimeout(() => {
           click_to_confirm();
           setSuccess("");

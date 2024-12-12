@@ -1,109 +1,48 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Input, Textarea } from "@nextui-org/react";
+import { useState } from "react";
+import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { PencilSquareIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { CouponFormType } from "@/lib/definitions";
-import { getClients } from "@/lib/action/clients";
-import Title from "@/components/Title";
-import { getCouponById, updateCoupon } from "@/lib/action/coupons";
-import { getUsername } from "@/lib/utils";
-import Loader from "../../Common/Loader";
+import { PaymentFormType } from "@/lib/definitions";
+import { paymentMethods } from "@/lib/data";
+import { createdPayment } from "@/lib/action/payments";
 
-
-export default function NewPayment({ reservation_id }: { reservation_id: number} ) {
+export default function NewPayment({ reservation_id }: { reservation_id: number|string} ) {
   const t_input = useTranslations("Input");
   const t_error = useTranslations("InputError");
   const locale = useLocale();
 
-
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
-  const [selectedClients, setSelectedClients] = useState<number[]>([]);
-  const [clients, setClients] = useState([]);
-  const [coupon, setCoupon] = useState(null);
 
-  const schema: ZodType<CouponFormType> = z
+  const schema: ZodType<PaymentFormType> = z
     .object({
-      name: z.string().min(1, { message: t_error("name") }).max(250),
-      total_usage: z.string().min(1),
-      percent: z.string(),
-      amount: z.string(),
-      // expired_on: z.date().min(new Date()),
-      expired_on: z.string(),
-      note_en: z.string(),
-      note_fr: z.string(),
+      amount: z.string().min(1),
+      payment_method: z.string().min(1),
+      transaction_id: z.string().optional(),
+      bill_number: z.string().optional(),
+      note: z.string().max(1000).optional(),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CouponFormType>({
+  } = useForm<PaymentFormType>({
     resolver: zodResolver(schema),
   })
 
-  let default_clients: number[] = [];
-  useEffect(() => {
-    getCouponById(reservation_id)
-      .then(async (res) => {
-        if(res?.ok){
-          const coupon = await res.json();
-          setCoupon(coupon);
-          coupon.users.forEach(client => {
-            default_clients.push(client.user_id);
-          });
-          setSelectedClients(default_clients);
-          default_clients = [];
-        }
-    });
-    getClients()
-      .then(async (res) => {
-        if(res?.ok){
-          setClients(await res.json());
-        }
-    });
-  }, []);
-
-  const handleCheckboxChange = (e: { target: { value: string; checked: any; }; }) => {
-    const clientId = parseInt(e.target.value);
-    const isChecked = e.target.checked;
-
-    if (isChecked) {
-      setSelectedClients((prevClients) => [...prevClients, clientId]);
-    } else {
-      setSelectedClients((prevClients) =>
-        prevClients.filter((client) => client !== clientId)
-      );
-    }
-  };
-
-  const checkAll = (e: { target: { checked: any; }; }) => {
-    const isChecked = e.target.checked;
-    if (isChecked) {
-      clients.forEach(client => {
-        setSelectedClients((prevClients) => [...prevClients, client.id]);
-      });
-    } else {
-      clients.forEach(item => {
-        setSelectedClients((prevClients) =>
-          prevClients.filter((client) => client !== item.id)
-        );
-      });
-    }
-  }
-
-  const handleFormSubmit = async (data: CouponFormType) => {
+  const handleFormSubmit = async (data: PaymentFormType) => {
     setError("");
     setSuccess("");
     setLoading(true);
-    updateCoupon(data, coupon?.id, selectedClients)
+    createdPayment(data, Number(reservation_id))
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
@@ -138,143 +77,88 @@ export default function NewPayment({ reservation_id }: { reservation_id: number}
     });
   }
 
-  type ClientType = typeof clients[0];
-
   return (
     <>
-    <div className="w-full">
-      {error != "" ? (
+    {error != "" ? (
+      <div className="mb-8 md:mt-10">
         <Alert color="danger" message={error} />
-      ) : null}
-      {success != "" ? (
+      </div>
+    ) : null}
+    {success != "" ? (
+      <div className="mb-8 md:mt-10">
         <Alert color="success" message={success} />
-      ) : null}
-      {coupon ? (
+      </div>
+    ) : null}
+    <div className="w-full">
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-8 md:mt-10"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
           isRequired
-          autoFocus
-          label={t_input("coupon")}
-          type="text"
-          placeholder={t_input("coupon_placeholder")}
-          variant="bordered"
-          className="w-full"
-          {...register("name")}
-          isInvalid={errors.name ? true: false}
-          errorMessage={errors.name ? errors.name?.message: null}
-          defaultValue={coupon ? coupon.name: ""}
-        />
-        <Input
-          isRequired
-          label={t_input("total_usage")}
+          label={t_input("amount_payment")}
+          labelPlacement="outside"
           type="number"
-          placeholder={t_input("total_usage_placeholder")}
-          variant="bordered"
-          className="w-full"
-          {...register("total_usage")}
-          isInvalid={errors.total_usage ? true: false}
-          errorMessage={errors.total_usage ? errors.total_usage?.message: null}
-          defaultValue={coupon ? coupon.total_usage: undefined}
+          placeholder={t_input("amount_payment_placeholder")}
+          className="w-full bg-input rounded-small"
+          {...register("amount")}
+          isInvalid={errors.amount ? true: false}
+          errorMessage={errors.amount ? errors.amount?.message: null}
         />
-        <div className="flex flex-row justify-center items-center gap-4 w-full">
-          <Input
-            isRequired
-            label={t_input("amount")}
-            type="number"
-            placeholder={t_input("amount_placeholder")}
-            variant="bordered"
-            className="w-1/2"
-            {...register("amount")}
-            isInvalid={errors.amount ? true: false}
-            errorMessage={errors.amount ? errors.amount?.message: null}
-            defaultValue={coupon ? coupon.amount: null}
-          />
-          <p className="text-foreground/60 font-bold uppercase text-sm">{t_input("or")}</p>
-          <Input
-            isRequired
-            label={t_input("percent")}
-            type="number"
-            placeholder={t_input("percent_placeholder")}
-            variant="bordered"
-            className="w-1/2"
-            {...register("percent")}
-            isInvalid={errors.percent ? true: false}
-            errorMessage={errors.percent ? errors.percent?.message: null}
-            defaultValue={coupon ? coupon.percent: null}
-          />
-        </div>
-        <Input
+        {/* payment_method */}
+        <Select
           isRequired
-          label={t_input("expired_on")}
+          aria-label={t_input("payment_method")}
+          label={t_input("payment_method")}
+          labelPlacement="outside"
+          variant="flat"
+          placeholder={t_input("payment_method_placeholder")}
+          isInvalid={errors.payment_method ? true: false}
+          errorMessage={errors.payment_method ? errors.payment_method?.message: null}
+          className="w-full bg-input rounded-small"
+          {...register("payment_method")}
+        >
+          {paymentMethods.map((item) => (
+            <SelectItem key={item.uid}>
+              {locale === "en" ? item.name_en: item.name_fr}
+            </SelectItem>
+          ))}
+        </Select>
+        <div className="flex flex-row justify-center items-center gap-4 w-full">
+        <Input
+          label={t_input("transaction_id")}
+          labelPlacement="outside"
+          type="number"
+          placeholder={t_input("transaction_id_placeholder")}
+          className="w-full bg-input rounded-small"
+          {...register("transaction_id")}
+          isInvalid={errors.transaction_id ? true: false}
+          errorMessage={errors.transaction_id ? errors.transaction_id?.message: null}
+        />
+        <p className="text-foreground/60 font-bold uppercase text-sm">{t_input("or")}</p>
+        <Input
+          label={t_input("bill_number")}
+          labelPlacement="outside"
           type="text"
-          placeholder={t_input("percent_placeholder")}
-          variant="bordered"
-          className="w-full"
-          {...register("expired_on")}
-          isInvalid={errors.expired_on ? true: false}
-          errorMessage={errors.expired_on ? errors.expired_on?.message: null}
-          defaultValue={coupon ? coupon.expired_on: undefined}
+          placeholder={t_input("bill_number_placeholder")}
+          className="w-full bg-input rounded-small"
+          {...register("bill_number")}
+          isInvalid={errors.bill_number ? true: false}
+          errorMessage={errors.bill_number ? errors.bill_number?.message: null}
         />
+        </div>
         <Textarea
           endContent={
             <PencilSquareIcon fill="currentColor" size={18} />
           }
-          label={t_input("note_en")}
-          placeholder={t_input("note_placeholder")}
-          variant="bordered"
-            className="w-full"
-          {...register("note_en")}
-          isInvalid={errors.note_en ? true: false}
-          errorMessage={errors.note_en ? errors.note_en?.message: null}
-          defaultValue={coupon ? coupon.note_en: ""}
+          label={t_input("note_reservation")}
+          labelPlacement="outside"
+          placeholder={t_input("note_reservation_placeholder")}
+          classNames={{inputWrapper: "w-full bg-input rounded-small"}}
+          {...register("note")}
+          isInvalid={errors.note ? true: false}
+          errorMessage={errors.note ? errors.note?.message: null}
         />
-        <Textarea
-          endContent={
-            <PencilSquareIcon fill="currentColor" size={18} />
-          }
-          label={t_input("note_fr")}
-          placeholder={t_input("note_placeholder")}
-          variant="bordered"
-          {...register("note_fr")}
-          isInvalid={errors.note_fr ? true: false}
-          errorMessage={errors.note_fr ? errors.note_fr?.message: null}
-          defaultValue={coupon ? coupon.note_fr: ""}
-        />
-
-        {/* clients */}
-        {clients ? (
-          <>
-          <Title className="text-xl mt-2">{t_input("sended_to_clients")}</Title>
-          <div className="w-full flex items-center justify-end gap-2">
-            <Checkbox
-              onChange={checkAll}
-              className="z-1"
-            />
-            <p className="font-light text-sm">{t_input("select_all")}</p>
-          </div>
-          <div className="pb-4 px-2 sm:px-6 grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-0.5 p-1">
-            {clients.map((client: ClientType) => (
-              <ul key={client.id} className="flex items-center gap-4 p-1">
-                <Checkbox
-                  value={client.id}
-                  onChange={handleCheckboxChange}
-                  isSelected={selectedClients.includes(client.id)}
-                  className="z-1"
-                />
-                <li className="font-light text-sm text-foreground">
-                  {getUsername(client.lastname, client.firstname)}
-                </li>
-              </ul>
-            ))}
-          </div>
-          </>
-        ) : (
-          <Loader />
-        )}
-
         <div className="w-full">
           <Button 
             type="submit"
@@ -286,9 +170,6 @@ export default function NewPayment({ reservation_id }: { reservation_id: number}
           </Button>
         </div>
       </form>
-      ) : (
-        <Loader />
-      )}
     </div>
     </>
   )

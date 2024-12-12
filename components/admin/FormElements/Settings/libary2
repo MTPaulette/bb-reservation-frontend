@@ -1,247 +1,350 @@
-Voici l'exemple de code avec TypeScript :
+Voici un exemple de fonction getState qui prend en paramètres l'initial amount et l'amount due pour déterminer l'état d'une réservation :
 
-import React, { useState } from 'react';
+// app/Helpers/ReservationHelper.php
+namespace App\Helpers;
 
-interface Holiday {
-  date: string;
+class ReservationHelper
+{
+    public static function getState($initialAmount, $amountDue)
+    {
+        if ($amountDue == 0) {
+            return 'payé';
+        } elseif ($amountDue > 0 && $amountDue < $initialAmount) {
+            return 'partiellement payé';
+        } elseif ($amountDue == $initialAmount) {
+            return 'en attente de paiement';
+        } else {
+            return 'annulé';
+        }
+    }
 }
 
-const HolidayInput = () => {
-  const [holidays, setHolidays] = useState<Holiday[]>([]);
-  const [newHoliday, setNewHoliday] = useState<string>('');
+Vous pouvez ensuite appeler cette fonction dans les contrôleurs ReservationController et PaymentController pour affecter la valeur du champ state de la réservation à la création et après un paiement :
 
-  const handleAddHoliday = () => {
-    setHolidays([...holidays, { date: newHoliday }]);
-    setNewHoliday('');
-  };
+// app/Http/Controllers/ReservationController.php
+namespace App\Http\Controllers;
 
-  const handleRemoveHoliday = (index: number) => {
-    setHolidays(holidays.filter((holiday, i) => i !== index));
-  };
+use App\Helpers\ReservationHelper;
+use App\Models\Reservation;
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Envoyer les données à l'API Laravel
-    fetch('/api/holidays', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ holidays }),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
-  };
+class ReservationController extends Controller
+{
+    public function store(Request $request)
+    {
+        $reservation = new Reservation();
+        $reservation->initial_amount = $request->input('initial_amount');
+        $reservation->amount_due = $request->input('amount_due');
+        $reservation->state = ReservationHelper::getState($reservation->initial_amount, $reservation->amount_due);
+        $reservation->save();
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Ajouter un jour férié :
-        <input
-          type="date"
-          value={newHoliday}
-          onChange={(event) => setNewHoliday(event.target.value)}
-        />
-      </label>
-      <button type="button" onClick={handleAddHoliday}>
-        Ajouter
-      </button>
-      <ul>
-        {holidays.map((holiday, index) => (
-          <li key={index}>
-            {holiday.date}
-            <button type="button" onClick={() => handleRemoveHoliday(index)}>
-              Supprimer
-            </button>
-          </li>
-        ))}
-      </ul>
-      <button type="submit">Envoyer</button>
-    </form>
-  );
-};
-
-export default HolidayInput;
-
-
-
-===============================================
-
-Pour stocker le tableau de jours fériés dans la valeur de l'objet holiday dans Laravel, vous pouvez utiliser la fonction json_encode pour convertir le tableau en une chaîne de caractères JSON, puis stocker cette chaîne dans la base de données.
-
-Voici un exemple de code qui montre comment stocker le tableau de jours fériés dans la valeur de l'objet holiday :
-
-use App\Models\Holiday;
-
-$holidays = [
-    '2024-01-01',
-    '2024-04-01',
-    '2024-05-01',
-    // ...
-];
-
-$holiday = new Holiday();
-$holiday->value = json_encode($holidays);
-$holiday->save();
-
-Pour récupérer la valeur de l'objet holiday et comparer avec une date afin de vérifier que cette date n'est pas une date férié, vous pouvez utiliser la fonction json_decode pour convertir la chaîne de caractères JSON en un tableau, puis utiliser la fonction in_array pour vérifier si la date est présente dans le tableau.
-
-Voici un exemple de code qui montre comment récupérer la valeur de l'objet holiday et comparer avec une date :
-
-use App\Models\Holiday;
-
-$holiday = Holiday::first();
-$holidays = json_decode($holiday->value, true);
-
-$date = '2024-04-01';
-
-if (in_array($date, $holidays)) {
-    echo 'La date est une date férié';
-} else {
-    echo 'La date n\'est pas une date férié';
+        return response()->json(['message' => 'Réservation créée avec succès']);
+    }
 }
 
-Notez que dans cet exemple, nous utilisons la fonction json_decode avec le deuxième argument true pour convertir la chaîne de caractères JSON en un tableau associatif.
+// app/Http/Controllers/PaymentController.php
+namespace App\Http\Controllers;
 
+use App\Helpers\ReservationHelper;
+use App\Models\Reservation;
+
+class PaymentController extends Controller
+{
+    public function store(Request $request)
+    {
+        $reservation = Reservation::find($request->input('reservation_id'));
+        $reservation->amount_due = $reservation->amount_due - $request->input('payment_amount');
+        $reservation->state = ReservationHelper::getState($reservation->initial_amount, $reservation->amount_due);
+        $reservation->save();
+
+        return response()->json(['message' => 'Paiement effectué avec succès']);
+    }
+}
+
+Notez que vous devez importer la classe ReservationHelper dans les contrôleurs pour pouvoir appeler la fonction getState.
 
 ==================================================
 
-Pour valider le format de date pour qu'il soit identique à celui de Laravel 9, vous pouvez utiliser la bibliothèque Zod pour définir un schéma de validation de date.
+paiement
+Voici les exemples de mail adaptés :
 
-Voici un exemple de code qui valide le format de date pour qu'il soit identique à celui de Laravel 9 :
+Pour les clients :
 
-import { z } from 'zod';
+Objet : Confirmation de paiement pour votre réservation
 
-const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+Bonjour [Nom du client],
 
-const validateDate = (date: string) => {
-  try {
-    const parsedDate = dateSchema.parse(date);
-    return parsedDate;
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { error: error.issues[0].message };
-    } else {
-      throw error;
-    }
-  }
-};
+Nous sommes ravis de vous confirmer que votre paiement pour la réservation [Numéro de réservation] a été effectué avec succès.
 
-// Exemple d'utilisation
-const date = '2024-02-30';
-const result = validateDate(date);
+Cependant, nous vous rappelons que pour confirmer votre réservation, il est nécessaire de payer au moins 50% du montant total. Si vous n'avez pas encore effectué ce paiement, nous vous invitons à le compléter dès que possible pour éviter que la ressource sollicitée ne soit attribuée à quelqu'un d'autre.
 
-if (result.error) {
-  console.error(result.error);
-} else {
-  console.log(result);
-}
+Voici les détails de votre réservation :
 
-Dans cet exemple, nous définissons un schéma de validation de date avec Zod, qui vérifie que la date est sous la forme YYYY-MM-DD. La fonction validateDate prend une chaîne de caractères représentant la date en entrée, et essaie de la parser avec le schéma de validation de date. Si la date est valide, la fonction renvoie la date parsée. Sinon, la fonction renvoie un objet avec une propriété error contenant le message d'erreur.
+- Numéro de réservation : [Numéro de réservation]
+- Date d'arrivée : [Date d'arrivée]
+- Date de départ : [Date de départ]
+- Type de chambre : [Type de chambre]
+- Nombre de personnes : [Nombre de personnes]
+- Tarif total : [Tarif total]
+- Montant payé : [Montant payé]
+- Montant restant à payer : [Montant restant à payer]
 
-Notez que la regex ^\d{4}-\d{2}-\d{2}$ vérifie que la date est sous la forme YYYY-MM-DD, où YYYY représente l'année, MM représente le mois et DD représente le jour.
+Pour compléter le paiement, vous pouvez utiliser le lien suivant : [Lien de paiement]
 
-====================================================
+Nous vous remercions de votre attention et nous nous réjouissons de vous accueillir dans notre établissement.
 
-[06:41, 30/11/2024] Paulette: Je comprends mieux maintenant. Vous voulez stocker les heures en base de données en GMT avec Laravel, et les afficher correctement avec Next.js en tenant compte du fuseau horaire de l'utilisateur.
+Cordialement,
 
-Pour atteindre cet objectif, vous pouvez suivre ces étapes :
+[Votre nom]
+[Votre établissement]
 
-1. Stockez les heures en base de données en GMT avec Laravel :
+Pour les admins :
 
-use Carbon\Carbon;
+Objet : Notification de paiement pour la réservation [Numéro de réservation]
 
-// ...
+Bonjour [Nom de l'admin],
 
-$heure = Carbon::now()->toDateTimeString();
+Nous vous informons que le paiement pour la réservation [Numéro de réservation] a été effectué avec succès.
 
-1. Dans votre application Next.js, utilisez une bibliothèque de gestion des fuseaux horaires, telle que moment-timezone ou date-fns-tz.
-2. Lorsque l'utilisateur se connecte, récupérez son fuseau horaire en fonction de sa localisation (par exemple, en utilisant l'API de géolocalisation).
-3. Utilisez la bibliothèque de gestion des fuseaux horaires pour convertir les heures stockées en GMT en heures locales pour l'utilisateur.
+Cependant, nous vous rappelons que pour confirmer la réservation, il est nécessaire de payer au moins 50% du montant total. Si le client n'a pas encore effectué ce paiement, nous vous invitons à le contacter pour le rappeler.
 
-Par exemple, avec moment-timezone :
+Voici les détails de la réservation :
 
-import moment from 'moment-timezone';
+- Numéro de réservation : [Numéro de réservation]
+- Date d'arrivée : [Date d'arrivée]
+- Date de départ : [Date de départ]
+- Type de chambre : [Type de chambre]
+- Nombre de personnes : [Nombre de personnes]
+- Tarif total : [Tarif total]
+- Montant payé : [Montant payé]
+- Montant restant à payer : [Montant restant à payer]
+- Ressource réservée : [Nom de la ressource]
+- Admin ayant effectué le paiement : [Nom de l'admin]
 
-// Récupérer le fuseau horaire de l'utilisateur
-const userTimezone = 'Africa/Abidjan'; // GMT+2 pour la Côte d'Ivoire
+Nous vous remercions de votre attention et nous vous invitons à vérifier les détails de la réservation.
 
-// Convertir les heures stockées en GMT en heures locales pour l'utilisateur
-const heureLocale = moment.utc(heureEnregistree).tz(userTimezone).format('YYYY-MM-DD HH:mm:ss');
+Cordialement,
 
+[Votre nom]
+[Votre établissement]
+======================================================
+new Reservation
+🛑🛑🛑 nouvelle réservation 
 
-=====================================
-import {Select, SelectItem, Avatar, SelectedItems} from "@nextui-org/react";
-import {users} from "./data";
+Voici les exemples de mail adaptés :
 
-type User = {
-  id: number;
-  name: string;
-  role: string;
-  team: string;
-  status: string;
-  age: string;
-  avatar: string;
-  email: string;
-};
+Pour les clients :
 
-export default function App() {
-  return (
-    <Select
-      items={users}
-      label="Assigned to"
-      placeholder="Select a user"
-      labelPlacement="outside"
-      classNames={{
-        base: "max-w-xs",
-        trigger: "h-12",
-      }}
-      renderValue={(items: SelectedItems<User>) => {
-        return items.map((item) => (
-          <div key={item.key} className="flex items-center gap-2">
-            <Avatar
-              alt={item.data.name}
-              className="flex-shrink-0"
-              size="sm"
-              src={item.data.avatar}
-            />
-            <div className="flex flex-col">
-              <span>{item.data.name}</span>
-              <span className="text-default-500 text-tiny">({item.data.email})</span>
-            </div>
-          </div>
-        ));
-      }}
-    >
-      {(user) => (
-        <SelectItem key={user.id} textValue={user.name}>
-          <div className="flex gap-2 items-center">
-            <Avatar alt={user.name} className="flex-shrink-0" size="sm" src={user.avatar} />
-            <div className="flex flex-col">
-              <span className="text-small">{user.name}</span>
-              <span className="text-tiny text-default-400">{user.email}</span>
-            </div>
-          </div>
-        </SelectItem>
-      )}
-    </Select>
-  );
-}
+Objet : Confirmation de votre réservation
 
-==========================
-{
-  "reservation_draft": {
-      "ressource_id": 2,
-      "client_id": 31,
-      "start_date": "2024-12-27",
-      "end_date": "2024-12-27",
-      "start_hour": "08:00",
-      "end_hour": "13:00",
-      "amount": 5000,
-      "coupon_id": null,
-      "created_by": 1,
-      "updated_at": "2024-12-11T12:02:41.000000Z",
-      "created_at": "2024-12-11T12:02:41.000000Z",
-      "id": 5
-  },
-  "message": "The reservation draft 5 successfully created"
-}
+Bonjour [Nom du client],
+
+Nous sommes ravis de vous confirmer que votre réservation pour [Nom de la ressource] a été effectuée avec succès. Voici les détails de votre réservation :
+
+- Numéro de réservation : [Numéro de réservation]
+- Date d'arrivée : [Date d'arrivée]
+- Date de départ : [Date de départ]
+- Type de ressource : [Type de ressource]
+- Tarif total : [Tarif total]
+
+Cependant, nous vous informons que malgré la réservation, rien ne garantit que la ressource vous soit attribuée. Pour y remédier, il est nécessaire de payer au moins 50% du montant total de la réservation. Le reste des 50% devra être payé avant l'heure de début de la réservation.
+
+Nous vous invitons à effectuer le paiement dès que possible pour garantir la disponibilité de la ressource. Vous pouvez utiliser le lien suivant pour effectuer le paiement : [Lien de paiement]
+
+Nous vous remercions de votre attention et nous nous réjouissons de vous accueillir dans notre établissement.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]
+
+Pour les admins :
+
+Objet : Notification de réservation pour [Nom de la ressource]
+
+Bonjour [Nom de l'admin],
+
+Nous vous informons que la réservation pour [Nom de la ressource] a été effectuée avec succès. Voici les détails de la réservation :
+
+- Numéro de réservation : [Numéro de réservation]
+- Date d'arrivée : [Date d'arrivée]
+- Date de départ : [Date de départ]
+- Type de ressource : [Type de ressource]
+- Tarif total : [Tarif total]
+- Client : [Nom du client]
+- État de la réservation : En attente de paiement
+
+Nous vous rappelons que le client doit payer au moins 50% du montant total de la réservation pour garantir la disponibilité de la ressource. Le reste des 50% devra être payé avant l'heure de début de la réservation.
+
+Nous vous invitons à suivre l'état de la réservation et à contacter le client si nécessaire.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]
+==================================================================
+new coupon
+
+coupon de réduction 
+
+Voici un exemple de contenu d'un email à envoyer à un utilisateur après qu'il vient de recevoir un nouveau coupon de réduction :
+
+Objet : Nouveau coupon de réduction !
+
+Bonjour [Nom de l'utilisateur],
+
+Nous sommes ravis de vous annoncer que vous venez de recevoir un nouveau coupon de réduction ! Voici les détails de votre coupon :
+
+- Code de coupon : [Code de coupon]
+- Pourcentage de réduction : [Pourcentage de réduction]%
+- Montant maximum de réduction : [Montant maximum de réduction]
+- Date de début de validité : [Date de début de validité]
+- Date de fin de validité : [Date de fin de validité]
+- Conditions d'utilisation : [Conditions d'utilisation]
+
+Vous pouvez utiliser ce coupon pour bénéficier d'une réduction sur votre prochaine réservation. Pour utiliser le coupon, simplement saisissez le code de coupon lors de la réservation.
+
+Nous vous remercions de votre fidélité et nous nous réjouissons de vous accueillir dans notre établissement.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]
+
+P.S. N'oubliez pas de vérifier les conditions d'utilisation du coupon avant de l'utiliser.
+
+===========================================================
+debute dans 30 min
+début dans 30min 
+
+Voici les exemples de mail adaptés :
+
+Pour les clients :
+
+Objet : Rappel de votre réservation - Début dans 30 minutes !
+
+Bonjour [Nom du client],
+
+Nous vous rappelons que votre réservation pour [Nom de la ressource] commence dans 30 minutes ! Voici les détails de votre réservation :
+
+- Numéro de réservation : [Numéro de réservation]
+- Date et heure de début : [Date et heure de début]
+- Date et heure de fin : [Date et heure de fin]
+- Type de ressource : [Type de ressource]
+- Tarif total : [Tarif total]
+- Montant payé : [Montant payé]
+- Montant restant à payer : [Montant restant à payer]
+
+Nous vous rappelons que si le paiement n'est pas effectif ou total, vous devrez payer avant le début de l'heure de la réservation. De plus, si les 50% de la réservation n'ont pas été versés, rien ne garantit que la ressource soit disponible en agence.
+
+Nous vous invitons à vérifier votre paiement et à nous contacter si vous avez des questions ou des préoccupations.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]
+
+Pour les admins :
+
+Objet : Rappel de réservation - Début dans 30 minutes !
+
+Bonjour [Nom de l'admin],
+
+Nous vous rappelons que la réservation pour [Nom de la ressource] commence dans 30 minutes ! Voici les détails de la réservation :
+
+- Numéro de réservation : [Numéro de réservation]
+- Date et heure de début : [Date et heure de début]
+- Date et heure de fin : [Date et heure de fin]
+- Type de ressource : [Type de ressource]
+- Tarif total : [Tarif total]
+- Montant payé : [Montant payé]
+- Montant restant à payer : [Montant restant à payer]
+- Client : [Nom du client]
+
+Nous vous rappelons que si le paiement n'est pas effectif ou total, le client devra payer avant le début de l'heure de la réservation. De plus, si les 50% de la réservation n'ont pas été versés, rien ne garantit que la ressource soit disponible en agence.
+
+Nous vous invitons à vérifier le paiement et à contacter le client si nécessaire.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]
+
+=======================================================
+fin dans 30min
+
+fin dans 30min
+
+Voici les exemples de mail adaptés :
+
+Pour les clients :
+
+Objet : Rappel de fin de réservation - 30 minutes avant la fin !
+
+Bonjour [Nom du client],
+
+Nous vous rappelons que votre réservation pour [Nom de la ressource] se termine dans 30 minutes ! Voici les détails de votre réservation :
+
+- Numéro de réservation : [Numéro de réservation]
+- Date et heure de début : [Date et heure de début]
+- Date et heure de fin : [Date et heure de fin]
+- Type de ressource : [Type de ressource]
+- Tarif total : [Tarif total]
+- Montant payé : [Montant payé]
+
+Nous vous invitons à préparer vos affaires et à quitter les lieux avant la fin de la réservation. Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]
+
+Pour les admins :
+
+Objet : Rappel de fin de réservation - 30 minutes avant la fin !
+
+Bonjour [Nom de l'admin],
+
+Nous vous rappelons que la réservation pour [Nom de la ressource] se termine dans 30 minutes ! Voici les détails de la réservation :
+
+- Numéro de réservation : [Numéro de réservation]
+- Date et heure de début : [Date et heure de début]
+- Date et heure de fin : [Date et heure de fin]
+- Type de ressource : [Type de ressource]
+- Tarif total : [Tarif total]
+- Montant payé : [Montant payé]
+- Client : [Nom du client]
+
+Nous vous invitons à vérifier que le client a quitté les lieux avant la fin de la réservation et à procéder à la vérification des lieux et des équipements.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]
+
+=========================================================
+coupon expire
+
+oupon expiré 
+
+Voici un exemple d'un email à envoyer à un client pour lui rappeler que le coupon de réduction qu'il a reçu a expiré :
+
+Objet : Coupon de réduction expiré
+
+Bonjour [Nom du client],
+
+Nous vous rappelons que le coupon de réduction que vous avez reçu pour [Nom de la ressource] a expiré le [Date d'expiration]. Voici les détails du coupon :
+
+- Code de coupon : [Code de coupon]
+- Pourcentage de réduction : [Pourcentage de réduction]%
+- Montant maximum de réduction : [Montant maximum de réduction]
+- Date de début de validité : [Date de début de validité]
+- Date d'expiration : [Date d'expiration]
+
+Nous regrettons que vous n'ayez pas pu utiliser ce coupon avant son expiration. Si vous souhaitez continuer à bénéficier de réductions et d'offres spéciales, nous vous invitons à vous inscrire à notre newsletter ou à suivre nos réseaux sociaux.
+
+Nous vous remercions de votre fidélité et nous nous réjouissons de vous accueillir dans notre établissement.
+
+Cordialement,
+
+[Votre nom]
+[Votre établissement]

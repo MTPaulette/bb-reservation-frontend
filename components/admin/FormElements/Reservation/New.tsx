@@ -153,7 +153,7 @@ export default function NewReservation() {
       if(res?.ok) {
         setReservation_draft(response.reservation_draft);
         setApplied_coupon(response.coupon);
-        setSuccess(t_input("new_ressource_success_msg"));
+        setSuccess(t_input("new_reservation_draft_success_msg"));
         setTimeout(() => {
           setSelectedTab("summary");
           setSuccess("");
@@ -688,7 +688,7 @@ export default function NewReservation() {
             />
           </Tab>
           <Tab
-            isDisabled={disable_payment}
+            // isDisabled={disable_payment}
             key="payment"
             title={
               <div className="flex items-center space-x-2">
@@ -697,9 +697,10 @@ export default function NewReservation() {
               </div>
             }
           >
-            {reservation_draft? (
+            <NewPayment reservation_id="3" />
+            {/* {reservation_draft? (
               <NewPayment reservation_id={reservation_draft.id} />
-            ) : null}
+            ) : null} */}
           </Tab>
         </Tabs>
       </div>

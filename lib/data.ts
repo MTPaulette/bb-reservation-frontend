@@ -160,6 +160,13 @@ export const validitiesName = [
   {name_en: "Month", name_fr: "Mois", uid: "month"},
 ]
 
+export const paymentMethods = [
+  {name_en: "Bank", name_fr: "Carte bancaire", uid: "Bank"},
+  {name_en: "Cash", name_fr: "Cash", uid: "Cash"},
+  {name_en: "MTN Money", name_fr: "MTN Money", uid: "MTN Money"},
+  {name_en: "Orange Money", name_fr: "Orange Money", uid: "Orange Money"},
+]
+
 export const middayPeriods = [
   {name_en: "Morning (08h-13h)", name_fr: "En matinée (08h-13h)", uid: "morning"},
   {name_en: "Afternoon (13h-18h)", name_fr: "En soirée (13h-18h)", uid: "afternoon"},
@@ -263,7 +270,6 @@ export const columnsTabsRessourceStaff = [
   {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity", sortable: true},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
 ];
-
 
 /*
   * ======================== end tabs columns
