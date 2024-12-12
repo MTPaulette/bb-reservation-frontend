@@ -89,7 +89,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
         <Alert color="success" message={success} />
       ) : null}
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <div className="flex gap-4">
@@ -101,7 +101,8 @@ export default function EditStaff({ user }: { user: UserType} ) {
             label={t("lastname")}
             type="text"
             placeholder={t("lastname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             defaultValue={user.lastname? user.lastname: ""}
             {...register("lastname")}
             isInvalid={errors.lastname ? true: false}
@@ -114,7 +115,8 @@ export default function EditStaff({ user }: { user: UserType} ) {
             label={t("firstname")}
             type="text"
             placeholder={t("firstname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             defaultValue={user.firstname? user.firstname: ""}
             {...register("firstname")}
             isInvalid={errors.firstname ? true: false}
@@ -130,7 +132,8 @@ export default function EditStaff({ user }: { user: UserType} ) {
           type="email"
           placeholder={t("email_placeholder")}
           defaultValue={user.email? user.email: ""}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("email")}
           isInvalid={errors.email ? true: false}
           errorMessage={errors.email ? errors.email?.message: null}
@@ -141,7 +144,8 @@ export default function EditStaff({ user }: { user: UserType} ) {
           }
           label={t("phonenumber")}
           type="text"
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("phonenumber_placeholder")}
           defaultValue={user.phonenumber? user.phonenumber: ""}
           {...register("phonenumber")}
@@ -151,12 +155,12 @@ export default function EditStaff({ user }: { user: UserType} ) {
         <div className="flex gap-4">
           <Select
             label={t("role")}
-            variant="bordered"
+            labelPlacement="outside"
+            className="w-full bg-input rounded-small"
             placeholder={t("role_placeholder")}
             isInvalid={errors.role_id ? true: false}
             errorMessage={errors.role_id ? errors.role_id?.message: null}
             defaultSelectedKeys={[user.role_id.toString()]}
-            className="w-full bg-background rounded-small"
             {...register("role_id")}
           >
             {roles.map((role) => (
@@ -167,12 +171,12 @@ export default function EditStaff({ user }: { user: UserType} ) {
           </Select>
           <Select
             label={t("agency")}
-            variant="bordered"
+            labelPlacement="outside"
+            className="w-full bg-input rounded-small"
             placeholder={t("agency_placeholder")}
             isInvalid={errors.agency_id ? true: false}
             errorMessage={errors.agency_id ? errors.agency_id?.message: null}
             defaultSelectedKeys={[user.work_at.toString()]}
-            className="w-full bg-background rounded-small"
             {...register("agency_id")}
           >
             {agencies.map((agency) => (

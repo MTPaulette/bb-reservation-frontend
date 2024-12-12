@@ -86,7 +86,7 @@ export default function NewAgency() {
         <Alert color="success" message={success} />
       ) : null}
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-8 md:mt-10"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
@@ -98,7 +98,8 @@ export default function NewAgency() {
           label={t("name")}
           type="text"
           placeholder={t("name_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("name")}
           isInvalid={errors.name ? true: false}
           errorMessage={errors.name ? errors.name?.message: null}
@@ -111,7 +112,8 @@ export default function NewAgency() {
           label={t("email")}
           type="email"
           placeholder={t("email_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("email")}
           isInvalid={errors.email ? true: false}
           errorMessage={errors.email ? errors.email?.message: null}
@@ -123,7 +125,8 @@ export default function NewAgency() {
           }
           label={t("phonenumber")}
           type="text"
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("phonenumber_placeholder")}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
@@ -136,7 +139,8 @@ export default function NewAgency() {
           }
           label={t("address")}
           placeholder={t("address_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("address")}
           isInvalid={errors.address ? true: false}
           errorMessage={errors.address ? errors.address?.message: null}

@@ -87,13 +87,14 @@ export default function CancelReservation({ id, state }: { id: number, state: st
       ) : null}
       <Title className="text-base mt-4">{t_error("confirm_warning")}</Title>
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-8 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
           isRequired
           label={t("password")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("password_placeholder")}
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
@@ -116,7 +117,8 @@ export default function CancelReservation({ id, state }: { id: number, state: st
               isRequired
               label={t("reason_for_cancellation")}
               placeholder={t("reason_for_cancellation_placeholder")}
-              variant="bordered"
+              labelPlacement="outside"
+              classNames={{inputWrapper: "bg-input rounded-small"}}
               {...register("reason_for_cancellation")}
               isInvalid={errors.reason_for_cancellation ? true: false}
               errorMessage={errors.reason_for_cancellation ? errors.reason_for_cancellation?.message: null}
@@ -128,7 +130,8 @@ export default function CancelReservation({ id, state }: { id: number, state: st
             isRequired
             label={t("reason_for_cancellation")}
             placeholder={t("reason_for_cancellation_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             defaultValue=""
             {...register("reason_for_cancellation")}
           />

@@ -109,13 +109,14 @@ export default function NewRessource() {
       ) : null}
       {spaces && agencies ? (
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Select
           isRequired
           label={t("space")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("space_placeholder")}
           isInvalid={errors.space_id ? true: false}
           errorMessage={errors.space_id ? errors.space_id?.message: null}
@@ -131,7 +132,8 @@ export default function NewRessource() {
         <Select
           isRequired
           label={t("agency")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("agency_placeholder")}
           isInvalid={errors.agency_id ? true: false}
           errorMessage={errors.agency_id ? errors.agency_id?.message: null}
@@ -149,18 +151,20 @@ export default function NewRessource() {
           label={t("quantity")}
           type="number"
           placeholder={t("quantity_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("quantity")}
           isInvalid={errors.quantity ? true: false}
           errorMessage={errors.quantity ? errors.quantity?.message: null}
         />
-        <Title className="my-4 text-lg">{t("prices")} (XAF)</Title>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full px-3 sm:px-6">
+        <Title className="mb-0 text-lg">{t("prices")} (XAF)</Title>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full -mt-4 px-3">
           <Input
             isRequired
             label={t("price_hour")}
             type="number"
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             size="sm"
             className="w-full col-span-1"
             {...register("price_hour")}
@@ -171,7 +175,8 @@ export default function NewRessource() {
             isRequired
             label={t("price_midday")}
             type="number"
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             size="sm"
             className="w-full col-span-1 whitespace-nowrap"
             {...register("price_midday")}
@@ -182,7 +187,8 @@ export default function NewRessource() {
             isRequired
             label={t("price_day")}
             type="number"
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             size="sm"
             className="w-full col-span-1"
             {...register("price_day")}
@@ -193,7 +199,8 @@ export default function NewRessource() {
             isRequired
             label={t("price_week")}
             type="number"
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             size="sm"
             className="w-full col-span-1"
             {...register("price_week")}
@@ -204,7 +211,8 @@ export default function NewRessource() {
             isRequired
             label={t("price_month")}
             type="number"
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             size="sm"
             className="w-full col-span-1"
             {...register("price_month")}

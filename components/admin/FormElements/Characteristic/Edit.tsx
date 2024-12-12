@@ -92,7 +92,8 @@ export default function EditCharacteristic({ characteristic }: { characteristic:
           }
           label={t("characteristic_en")}
           placeholder={t("characteristic_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("name_en")}
           isInvalid={errors.name_en ? true: false}
           errorMessage={errors.name_en ? errors.name_en?.message: null}
@@ -105,7 +106,8 @@ export default function EditCharacteristic({ characteristic }: { characteristic:
           }
           label={t("characteristic_fr")}
           placeholder={t("characteristic_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("name_fr")}
           isInvalid={errors.name_fr ? true: false}
           errorMessage={errors.name_fr ? errors.name_fr?.message: null}

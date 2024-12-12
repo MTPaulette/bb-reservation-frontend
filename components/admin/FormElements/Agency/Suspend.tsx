@@ -89,13 +89,14 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
       ) : null}
       <Title className="text-base mt-4">{t_error("confirm_warning")}</Title>
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-8 md:mt-10"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
           isRequired
           label={t("password")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("password_placeholder")}
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
@@ -118,7 +119,8 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
               isRequired
               label={t("reason_for_suspension_en")}
               placeholder={t("reason_for_suspension_placeholder")}
-              variant="bordered"
+              labelPlacement="outside"
+              classNames={{inputWrapper: "bg-input rounded-small"}}
               {...register("reason_for_suspension_en")}
               isInvalid={errors.reason_for_suspension_en ? true: false}
               errorMessage={errors.reason_for_suspension_en ? errors.reason_for_suspension_en?.message: null}
@@ -127,7 +129,8 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
               isRequired
               label={t("reason_for_suspension_fr")}
               placeholder={t("reason_for_suspension_placeholder")}
-              variant="bordered"
+              labelPlacement="outside"
+              classNames={{inputWrapper: "bg-input rounded-small"}}
               {...register("reason_for_suspension_fr")}
               isInvalid={errors.reason_for_suspension_fr ? true: false}
               errorMessage={errors.reason_for_suspension_fr ? errors.reason_for_suspension_fr?.message: null}
@@ -139,7 +142,8 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
             isRequired
             label={t("reason_for_suspension_en")}
             placeholder={t("reason_for_suspension_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             defaultValue=""
             {...register("reason_for_suspension_en")}
           />
@@ -147,7 +151,8 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
             isRequired
             label={t("reason_for_suspension_fr")}
             placeholder={t("reason_for_suspension_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             defaultValue=""
             {...register("reason_for_suspension_fr")}
           />

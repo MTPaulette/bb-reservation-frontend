@@ -95,7 +95,7 @@ export default function NewClient() {
       ) : null}
       {/* <h1 className="flex flex-col gap-1 my-2 capitalize">{t("newClient")}</h1> */}
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <div className="flex gap-4">
@@ -108,7 +108,8 @@ export default function NewClient() {
             label={t("lastname")}
             type="text"
             placeholder={t("lastname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             {...register("lastname")}
             isInvalid={errors.lastname ? true: false}
             errorMessage={errors.lastname ? errors.lastname?.message: null}
@@ -121,7 +122,8 @@ export default function NewClient() {
             label={t("firstname")}
             type="text"
             placeholder={t("firstname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             {...register("firstname")}
             isInvalid={errors.firstname ? true: false}
             errorMessage={errors.firstname ? errors.firstname?.message: null}
@@ -135,7 +137,8 @@ export default function NewClient() {
           label={t("email")}
           type="email"
           placeholder={t("email_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("email")}
           isInvalid={errors.email ? true: false}
           errorMessage={errors.email ? errors.email?.message: null}
@@ -143,7 +146,8 @@ export default function NewClient() {
         <Input
           isRequired
           label={t("password")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("password_placeholder")}
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
@@ -166,7 +170,8 @@ export default function NewClient() {
           }
           label={t("phonenumber")}
           type="text"
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("phonenumber_placeholder")}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}

@@ -87,7 +87,7 @@ export default function NewCoupon() {
         <Alert color="success" message={success} />
       ) : null}
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
@@ -96,7 +96,8 @@ export default function NewCoupon() {
           label={t("coupon")}
           type="text"
           placeholder={t("coupon_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           className="w-full"
           {...register("name")}
           isInvalid={errors.name ? true: false}
@@ -107,19 +108,21 @@ export default function NewCoupon() {
           label={t("total_usage")}
           type="number"
           placeholder={t("total_usage_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           className="w-full"
           {...register("total_usage")}
           isInvalid={errors.total_usage ? true: false}
           errorMessage={errors.total_usage ? errors.total_usage?.message: null}
         />
-        <div className="flex flex-row justify-center items-center gap-4 w-full">
+        <div className="flex flex-row justify-center items-center gap-x-4 w-full">
           <Input
             isRequired
             label={t("amount")}
             type="number"
             placeholder={t("amount_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-1/2"
             {...register("amount")}
             isInvalid={errors.amount ? true: false}
@@ -131,7 +134,8 @@ export default function NewCoupon() {
             label={t("percent")}
             type="number"
             placeholder={t("percent_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-1/2"
             {...register("percent")}
             isInvalid={errors.percent ? true: false}
@@ -143,7 +147,8 @@ export default function NewCoupon() {
           label={t("expired_on")}
           type="date"
           placeholder={t("percent_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           className="w-full"
           {...register("expired_on")}
           isInvalid={errors.expired_on ? true: false}
@@ -155,7 +160,8 @@ export default function NewCoupon() {
           }
           label={t("note_en")}
           placeholder={t("note_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-full"
           {...register("note_en")}
           isInvalid={errors.note_en ? true: false}
@@ -167,7 +173,8 @@ export default function NewCoupon() {
           }
           label={t("note_fr")}
           placeholder={t("note_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("note_fr")}
           isInvalid={errors.note_fr ? true: false}
           errorMessage={errors.note_fr ? errors.note_fr?.message: null}

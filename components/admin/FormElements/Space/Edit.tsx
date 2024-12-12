@@ -224,7 +224,8 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
             label={t("name")}
             type="text"
             placeholder={t("name_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-full sm:w-3/4"
             {...register("name")}
             isInvalid={errors.name ? true: false}
@@ -236,7 +237,8 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
             label={t("nb_place")}
             type="number"
             placeholder={t("nb_place_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-full sm:w-1/4"
             {...register("nb_place")}
             isInvalid={errors.nb_place ? true: false}
@@ -251,7 +253,8 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
           }
           label={t("description_en")}
           placeholder={t("description_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("description_en")}
           isInvalid={errors.description_en ? true: false}
           errorMessage={errors.description_en ? errors.description_en?.message: null}
@@ -264,7 +267,8 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
           }
           label={t("description_fr")}
           placeholder={t("description_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("description_fr")}
           isInvalid={errors.description_fr ? true: false}
           errorMessage={errors.description_fr ? errors.description_fr?.message: null}

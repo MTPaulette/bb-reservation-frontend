@@ -98,7 +98,7 @@ export default function NewStaff() {
       ) : null}
       {/* <h1 className="flex flex-col gap-1 my-2 capitalize">{t("newStaff")}</h1> */}
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <div className="flex gap-4">
@@ -111,7 +111,8 @@ export default function NewStaff() {
             label={t("lastname")}
             type="text"
             placeholder={t("lastname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             {...register("lastname")}
             isInvalid={errors.lastname ? true: false}
             errorMessage={errors.lastname ? errors.lastname?.message: null}
@@ -124,7 +125,8 @@ export default function NewStaff() {
             label={t("firstname")}
             type="text"
             placeholder={t("firstname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             {...register("firstname")}
             isInvalid={errors.firstname ? true: false}
             errorMessage={errors.firstname ? errors.firstname?.message: null}
@@ -138,7 +140,8 @@ export default function NewStaff() {
           label={t("email")}
           type="email"
           placeholder={t("email_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("email")}
           isInvalid={errors.email ? true: false}
           errorMessage={errors.email ? errors.email?.message: null}
@@ -146,7 +149,8 @@ export default function NewStaff() {
         <Input
           isRequired
           label={t("password")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("password_placeholder")}
           endContent={
             <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
@@ -168,7 +172,8 @@ export default function NewStaff() {
           }
           label={t("phonenumber")}
           type="text"
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("phonenumber_placeholder")}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
@@ -178,13 +183,11 @@ export default function NewStaff() {
           <Select
             isRequired
             label={t("role")}
-            variant="bordered"
+            labelPlacement="outside"
+            className="bg-input rounded-small"
             placeholder={t("role_placeholder")}
             isInvalid={errors.role_id ? true: false}
             errorMessage={errors.role_id ? errors.role_id?.message: null}
-            // selectedKeys={value}
-            className="w-full bg-background rounded-small"
-            // onSelectionChange={setValue}
             {...register("role_id")}
           >
             {roles.map((role) => (
@@ -196,13 +199,11 @@ export default function NewStaff() {
           <Select
             isRequired
             label={t("agency")}
-            variant="bordered"
+            labelPlacement="outside"
+            className="bg-input rounded-small"
             placeholder={t("agency_placeholder")}
             isInvalid={errors.agency_id ? true: false}
             errorMessage={errors.agency_id ? errors.agency_id?.message: null}
-            // selectedKeys={value}
-            className="w-full bg-background rounded-small"
-            // onSelectionChange={setValue}
             {...register("agency_id")}
           >
             {agencies.map((agency) => (

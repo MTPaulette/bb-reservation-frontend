@@ -151,7 +151,7 @@ export default function EditCoupon({ id }: { id: number} ) {
       ) : null}
       {coupon ? (
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-8 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
@@ -160,7 +160,8 @@ export default function EditCoupon({ id }: { id: number} ) {
           label={t_input("coupon")}
           type="text"
           placeholder={t_input("coupon_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           className="w-full"
           {...register("name")}
           isInvalid={errors.name ? true: false}
@@ -172,7 +173,8 @@ export default function EditCoupon({ id }: { id: number} ) {
           label={t_input("total_usage")}
           type="number"
           placeholder={t_input("total_usage_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           className="w-full"
           {...register("total_usage")}
           isInvalid={errors.total_usage ? true: false}
@@ -185,7 +187,8 @@ export default function EditCoupon({ id }: { id: number} ) {
             label={t_input("amount")}
             type="number"
             placeholder={t_input("amount_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-1/2"
             {...register("amount")}
             isInvalid={errors.amount ? true: false}
@@ -198,7 +201,8 @@ export default function EditCoupon({ id }: { id: number} ) {
             label={t_input("percent")}
             type="number"
             placeholder={t_input("percent_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-1/2"
             {...register("percent")}
             isInvalid={errors.percent ? true: false}
@@ -211,7 +215,8 @@ export default function EditCoupon({ id }: { id: number} ) {
           label={t_input("expired_on")}
           type="text"
           placeholder={t_input("percent_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           className="w-full"
           {...register("expired_on")}
           isInvalid={errors.expired_on ? true: false}
@@ -224,7 +229,8 @@ export default function EditCoupon({ id }: { id: number} ) {
           }
           label={t_input("note_en")}
           placeholder={t_input("note_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
             className="w-full"
           {...register("note_en")}
           isInvalid={errors.note_en ? true: false}
@@ -237,7 +243,8 @@ export default function EditCoupon({ id }: { id: number} ) {
           }
           label={t_input("note_fr")}
           placeholder={t_input("note_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("note_fr")}
           isInvalid={errors.note_fr ? true: false}
           errorMessage={errors.note_fr ? errors.note_fr?.message: null}

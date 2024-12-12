@@ -86,7 +86,7 @@ export default function EditClient({ user }: { user: UserType} ) {
         <Alert color="success" message={success} />
       ) : null}
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <div className="flex gap-4">
@@ -98,7 +98,8 @@ export default function EditClient({ user }: { user: UserType} ) {
             label={t("lastname")}
             type="text"
             placeholder={t("lastname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             defaultValue={user.lastname? user.lastname: ""}
             {...register("lastname")}
             isInvalid={errors.lastname ? true: false}
@@ -111,7 +112,8 @@ export default function EditClient({ user }: { user: UserType} ) {
             label={t("firstname")}
             type="text"
             placeholder={t("firstname_placeholder")}
-            variant="bordered"
+            labelPlacement="outside"
+            classNames={{inputWrapper: "bg-input rounded-small"}}
             defaultValue={user.firstname? user.firstname: ""}
             {...register("firstname")}
             isInvalid={errors.firstname ? true: false}
@@ -127,7 +129,8 @@ export default function EditClient({ user }: { user: UserType} ) {
           type="email"
           placeholder={t("email_placeholder")}
           defaultValue={user.email? user.email: ""}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("email")}
           isInvalid={errors.email ? true: false}
           errorMessage={errors.email ? errors.email?.message: null}
@@ -138,7 +141,8 @@ export default function EditClient({ user }: { user: UserType} ) {
           }
           label={t("phonenumber")}
           type="text"
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("phonenumber_placeholder")}
           defaultValue={user.phonenumber? user.phonenumber: ""}
           {...register("phonenumber")}

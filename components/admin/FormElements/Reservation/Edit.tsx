@@ -16,7 +16,7 @@ import { Hours } from "@/lib/data";
 import { updateAgency } from "@/lib/action/agencies";
 
 
-export default function EditAgency({ agency }: { agency: AgencyType}) {
+export default function EditReservation({ agency }: { agency: AgencyType}) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
   const locale = useLocale();
@@ -140,7 +140,7 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
         <Alert color="success" message={success} />
       ) : null}
       <form
-        action="#" className="space-y-4 mt-4"
+        action="#" className="space-y-10 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
@@ -152,7 +152,8 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
           label={t("name")}
           type="text"
           placeholder={t("name_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("name")}
           isInvalid={errors.name ? true: false}
           errorMessage={errors.name ? errors.name?.message: null}
@@ -165,7 +166,8 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
           label={t("email")}
           type="email"
           placeholder={t("email_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("email")}
           isInvalid={errors.email ? true: false}
           errorMessage={errors.email ? errors.email?.message: null}
@@ -177,7 +179,8 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
           }
           label={t("phonenumber")}
           type="text"
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           placeholder={t("phonenumber_placeholder")}
           {...register("phonenumber")}
           isInvalid={errors.phonenumber ? true: false}
@@ -190,7 +193,8 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
           }
           label={t("address")}
           placeholder={t("address_placeholder")}
-          variant="bordered"
+          labelPlacement="outside"
+          classNames={{inputWrapper: "bg-input rounded-small"}}
           {...register("address")}
           isInvalid={errors.address ? true: false}
           errorMessage={errors.address ? errors.address?.message: null}
