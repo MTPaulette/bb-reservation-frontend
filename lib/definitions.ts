@@ -14,9 +14,10 @@ export type UserFormType = {
   firstname: string,
   email: string,
   password: string,
-  phonenumber: string,
+  phonenumber: string | undefined,
+  language: string | undefined,
   role_id: string,
-  agency_id: number|undefined;
+  agency_id: number | undefined;
 };
 
 export type ConfirmPasswordType = {

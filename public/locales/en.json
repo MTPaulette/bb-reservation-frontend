@@ -51,6 +51,7 @@
     "space_not_found": "Space not found",
     "image_not_found": "Image not found",
     "ressource_not_found": "Ressource not found",
+    "reservation_not_found": "Reservation not found",
     "unauthenticated": "unauthenticated"
  },
   "Input": {
@@ -84,6 +85,8 @@
     "current_password_placeholder": "Enter current password",
     "address_placeholder": "Enter address",
     "phonenumber_placeholder": "Enter phonenumber",
+    "language": "Language",
+    "language_placeholder": "Select your email default language",
     "role_placeholder": "Enter role",
     "agency_placeholder": "Enter agency",
     "nb_place_placeholder": "Enter nbr of place",
@@ -133,6 +136,8 @@
     "new_reservation_success_msg": "Reservation confirmed.",
     "cancel_reservation_success_msg": "Reservation successfully cancelled.",
     "undo_cancellation_account_success_msg": "Reservation's cancellation undo.",
+
+    "new_payment_success_msg": "Payment done with success.",
 
     "newClient": "New client",
     "editClient": "Edit client",
@@ -335,7 +340,8 @@
 
     "newReservation": "New reservation",
     "editReservation": "Edit reservation",
-    "cancelReservation": "Cancel reservation"
+    "cancelReservation": "Cancel reservation",
+    "new_payment": "New payment"
   },
   "Space": {
     "sits": "sit(s) available(s)",

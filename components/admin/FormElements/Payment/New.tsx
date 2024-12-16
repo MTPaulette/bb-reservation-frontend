@@ -38,7 +38,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
     resolver: zodResolver(schema),
   })
 
-  const handleFormSubmit = async (data: PaymentFormType) => {
+  const handleNewPayment = async (data: PaymentFormType) => {
     setError("");
     setSuccess("");
     setLoading(true);
@@ -46,7 +46,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
     .then(async (res) => {
       setLoading(false);
       if(res?.ok) {
-        setSuccess(t_input("update_account_success_msg"));
+        setSuccess(t_input("new_payment_success_msg"));
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -54,11 +54,15 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
         const status = res.status;
         switch(status) {
           case 404:
-            setError(t_error("coupon_not_found"));
+            setError(t_error("reservation_not_found"));
             break;
           case 422:
-            const err = await res.json();
-            setError(JSON.stringify(err.errors));
+            const response = await res.json();
+            if(response.errors.en){
+              setError(locale === "en" ? response.errors.en : response.errors.fr);
+            } else {
+              setError(JSON.stringify(response));
+            }
             break;
           case 403:
             setError(t_error("acces_denied"));
@@ -92,7 +96,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
     <div className="w-full">
       <form
         action="#" className="space-y-10 mt-8 md:mt-10"
-        onSubmit={handleSubmit(handleFormSubmit)}
+        onSubmit={handleSubmit(handleNewPayment)}
       >
         <Input
           isRequired
@@ -128,7 +132,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
         <Input
           label={t_input("transaction_id")}
           labelPlacement="outside"
-          type="number"
+          type="text"
           placeholder={t_input("transaction_id_placeholder")}
           className="w-full bg-input rounded-small"
           {...register("transaction_id")}

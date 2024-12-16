@@ -22,6 +22,7 @@ import EditReservation from "../FormElements/Reservation/Edit";
 import CancelReservation from '../FormElements/Reservation/Cancel';
 import { getReservations } from '@/lib/action/reservations';
 import { signOut } from 'next-auth/react';
+import NewPayment from '../FormElements/Payment/New';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -31,7 +32,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   totally_paid: "success",
   cancelled: "danger"
 };
-const INITIAL_VISIBLE_COLUMNS = ["ressource", "client", "date", "initial_amount", "amount_due", "state", "agency", "created_by", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "initial_amount", "amount_due", "state", "agency", "created_by", "actions"];
 
 export default function ReservationsTable() {
   const [reservations, setReservations] = useState([]);
@@ -95,6 +96,7 @@ export default function ReservationsTable() {
   const pages = Math.ceil(reservations.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
+  const [showPaymentModal, setShowPaymentModal] = React.useState<boolean>(false);
   const [showCancelModal, setShowCancelModal] = React.useState<boolean>(false);
   const [selectedReservation, setSelectedReservation] = React.useState<ReservationType>();
 
@@ -113,7 +115,7 @@ export default function ReservationsTable() {
 
     if (hasSearchFilter) {
       filteredReservations = filteredReservations.filter((reservation) =>
-        reservation.name.toLowerCase().includes(filterValue.toLowerCase()),
+        reservation.ressource.space.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
@@ -168,8 +170,7 @@ export default function ReservationsTable() {
         return (
           <div className="text-sm whitespace-nowrap">
             {/* <p className="font-semibold text-sm">{`${t_table("from")}: ${formatDateTime(reservation.start_date, locale)} - ${t_table("to")}: ${formatDateTime(reservation.end_date, locale)}`}</p> */}
-            <p className="font-semibold text-sm">{`${formatDateTime(reservation.start_date, locale)} - ${formatDateTime(reservation.end_date, locale)}`}</p>
-            {/* <p className="font-semibold text-sm">{`(${reservation.start_date} - ${reservation.end_date})`}</p> */}
+            <p className="font-semibold text-sm">{`${reservation.start_date} - ${reservation.end_date}`}</p>
             <p className="dark:text-foreground/60">{`(${reservation.start_hour} - ${reservation.end_hour})`}</p>
           </div>
         );
@@ -249,6 +250,13 @@ export default function ReservationsTable() {
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
+                <DropdownItem
+                  color="success"
+                  onClick={() => {
+                    setSelectedReservation(reservation);
+                    setShowPaymentModal(true);
+                  }}
+                >{t_table("new_payment")}</DropdownItem>
                 <DropdownItem
                   color="warning"
                   onClick={() => {
@@ -492,6 +500,14 @@ export default function ReservationsTable() {
         <EditReservation reservation={selectedReservation} />
       </Modal>
     
+
+      <Modal
+        open={showPaymentModal} close={() => setShowPaymentModal(false)}
+        title={`${t_table("editReservation")} "${selectedReservation? selectedReservation.ressource.space.name: ''}"`}
+      >
+        <NewPayment reservation_id={selectedReservation?.id} />
+      </Modal>
+
       <Modal
         open={showCancelModal} close={() => setShowCancelModal(false)}
         title={`${t_table("cancelReservation")} "${selectedReservation? selectedReservation.ressource.space.name: ''}"`}

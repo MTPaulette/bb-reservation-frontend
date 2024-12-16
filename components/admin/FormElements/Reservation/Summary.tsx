@@ -38,9 +38,9 @@ export default function SummaryReservation(
       if(res?.ok) {
         setSuccess(t_input("new_reservation_success_msg"));
         setTimeout(() => {
-          click_to_confirm();
+          click_to_confirm(response.reservation_id);
           setSuccess("");
-          //window.location.reload();
+          // window.location.reload();
         }, 3000);
       } else {
         const status = res.status;

@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { UploadIcon, EnvelopIcon, EyeIcon, EyeSlashIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import Title from "@/components/Title";
 import { CommonSkeleton } from "@/components/Skeletons";
-import { Avatar, Button, Input } from "@nextui-org/react";
+import { Avatar, Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
@@ -15,13 +15,14 @@ import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
 import { updateProfile, uploadImage, changePassword, deleteProfilePic } from "@/lib/action/profile";
 import { capitalize } from "@/lib/utils";
+import { languages } from "@/lib/data";
 
 
 export default function Profile () {
   const { data: session, update } = useSession();
   const user = session?.user;
   const locale = useLocale();
-  const t = useTranslations("Input");
+  const t_input = useTranslations("Input");
   const t_settings = useTranslations("Settings");
   const t_error = useTranslations("InputError");
   const t_requirements = useTranslations("Requirements");
@@ -51,7 +52,8 @@ export default function Profile () {
     .object({
       lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
       firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
-      phonenumber: z.string().max(250),
+      phonenumber: z.string().max(250).optional(),
+      language: z.string().optional(),
       email: z.string().email({ message: t_error("email") }).max(250),
   });
 
@@ -91,7 +93,7 @@ export default function Profile () {
           accessToken: response.token
         };
         await update(newSession);
-        setSuccess(t("update_account_success_msg"));
+        setSuccess(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccess("");
           // window.location.reload();
@@ -287,10 +289,10 @@ export default function Profile () {
                   endContent={
                     <UserIcon fill="currentColor" size={18} />
                   }
-                  label={t("lastname")}
+                  label={t_input("lastname")}
                   labelPlacement="outside"
                   type="text"
-                  placeholder={t("lastname_placeholder")}
+                  placeholder={t_input("lastname_placeholder")}
                   variant="bordered"
                   defaultValue={user.lastname? user.lastname: ""}
                   {...register("lastname")}
@@ -301,10 +303,10 @@ export default function Profile () {
                   endContent={
                     <UserIcon fill="currentColor" size={18} />
                   }
-                  label={t("firstname")}
+                  label={t_input("firstname")}
                   labelPlacement="outside"
                   type="text"
-                  placeholder={t("firstname_placeholder")}
+                  placeholder={t_input("firstname_placeholder")}
                   variant="bordered"
                   defaultValue={user.firstname? user.firstname: ""}
                   {...register("firstname")}
@@ -316,10 +318,10 @@ export default function Profile () {
                 endContent={
                   <EnvelopIcon fill="currentColor" size={18} />
                 }
-                label={t("email")}
+                label={t_input("email")}
                 labelPlacement="outside"
                 type="email"
-                placeholder={t("email_placeholder")}
+                placeholder={t_input("email_placeholder")}
                 defaultValue={user.email? user.email: ""}
                 variant="bordered"
                 {...register("email")}
@@ -330,16 +332,36 @@ export default function Profile () {
                 endContent={
                   <TelephoneIcon fill="currentColor" size={18} />
                 }
-                label={t("phonenumber")}
+                label={t_input("phonenumber")}
                 labelPlacement="outside"
                 type="text"
                 variant="bordered"
-                placeholder={t("phonenumber_placeholder")}
+                placeholder={t_input("phonenumber_placeholder")}
                 defaultValue={user.phonenumber? user.phonenumber: ""}
                 {...register("phonenumber")}
                 isInvalid={errors.phonenumber ? true: false}
                 errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
               />
+              {/* language */}
+              <Select
+              isRequired
+              aria-label={t_input("language")}
+              label={t_input("language")}
+              labelPlacement="outside"
+              variant="bordered"
+              placeholder={t_input("language_placeholder")}
+              isInvalid={errors.language ? true: false}
+              errorMessage={errors.language ? errors.language?.message: null}
+              // className="w-full bg-background rounded-small"
+              defaultSelectedKeys={[user.language]}
+              {...register("language")}
+              >
+              {languages.map((item) => (
+                <SelectItem key={item.uid}>
+                  {locale === "en" ? item.name_en: item.name_fr}
+                </SelectItem>
+              ))}
+              </Select>
 
               <div className="w-full -mt-12">
                 <Button 
@@ -348,7 +370,7 @@ export default function Profile () {
                   isLoading={loading}
                   className="w-full"
                 >
-                  {t("save")}
+                  {t_input("save")}
                 </Button>
               </div>
             </form>
@@ -419,7 +441,7 @@ export default function Profile () {
                   isLoading={loadingImg}
                   className="w-full"
                 >
-                  {t("save")}
+                  {t_input("save")}
                 </Button>
               </div>
             </form>
@@ -444,10 +466,10 @@ export default function Profile () {
               onSubmit={handleChangePassword}
             >
               <Input
-                label={t("current_password")}
+                label={t_input("current_password")}
                 labelPlacement="outside"
                 variant="bordered"
-                placeholder={t("current_password_placeholder")}
+                placeholder={t_input("current_password_placeholder")}
                 endContent={
                   <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
                     {isVisible ? (
@@ -461,10 +483,10 @@ export default function Profile () {
                 onChange={(e) => setCurrent_password(e.target.value)}
               />
               <Input
-                label={t("password")}
+                label={t_input("password")}
                 labelPlacement="outside"
                 variant="bordered"
-                placeholder={t("password_placeholder")}
+                placeholder={t_input("password_placeholder")}
                 endContent={
                   <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
                     {isVisible ? (
@@ -499,7 +521,7 @@ export default function Profile () {
                   isLoading={loadingPwd}
                   className="w-full"
                 >
-                  {t("save")}
+                  {t_input("save")}
                 </Button>
               </div>
             </form>
@@ -511,4 +533,3 @@ export default function Profile () {
     </>
   );
 };
-

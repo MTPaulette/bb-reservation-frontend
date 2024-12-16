@@ -77,6 +77,12 @@ export const agencies = [
   {id: 2, name: "Etoa-Meki"},
 ]
 
+
+export const languages = [
+  {name_en: "English", name_fr: "Anglais", uid: "en"},
+  {name_en: "French", name_fr: "Francais", uid: "fr"}
+]
+
 export const columnsClient = [
   {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
   {name_en: "EMAIL", name_fr: "EMAIL", uid: "email", sortable: true},
@@ -193,6 +199,7 @@ export const columnsCoupon = [
 
 
 export const columnsReservation = [
+  {name_en: "ID", name_fr: "ID", uid: "id", sortable: true},
   {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},
   {name_en: "CLIENT", name_fr: "CLIENT", uid: "client", sortable: true},
   {name_en: "DATE", name_fr: "DATE", uid: "date"},

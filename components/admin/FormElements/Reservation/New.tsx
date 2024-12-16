@@ -47,7 +47,7 @@ export default function NewReservation() {
   const [clientNotFound, setClientNotFound] = useState<string>("");
   const [loadingCoupon, setLoadingCoupon] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = React.useState<string>("reservations");
-  const [disable_payment, setDisable_payment] = useState<boolean>(true);
+  const [reservation_id, setReservation_id] = useState<string>();
 
   const schema: ZodType<ReservationFormType> = z
     .object({
@@ -268,8 +268,9 @@ export default function NewReservation() {
     }
   }
 
-  const handleConfirmReservation = () => {
-    setDisable_payment(false);
+  const handleConfirmReservation = (reservation_id: string) => {
+    console.log(reservation_id);
+    setReservation_id(reservation_id);
     setSelectedTab("payment");
   }
 
@@ -688,7 +689,7 @@ export default function NewReservation() {
             />
           </Tab>
           <Tab
-            // isDisabled={disable_payment}
+            isDisabled={reservation_id? false: true}
             key="payment"
             title={
               <div className="flex items-center space-x-2">
@@ -697,10 +698,9 @@ export default function NewReservation() {
               </div>
             }
           >
-            <NewPayment reservation_id="3" />
-            {/* {reservation_draft? (
-              <NewPayment reservation_id={reservation_draft.id} />
-            ) : null} */}
+            {reservation_id? (
+              <NewPayment reservation_id={reservation_id} />
+            ) : null}
           </Tab>
         </Tabs>
       </div>

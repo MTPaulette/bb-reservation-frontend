@@ -51,6 +51,7 @@
     "space_not_found": "Espace non trouvé",
     "image_not_found": "Image non trouvée",
     "ressource_not_found": "Ressource non trouvée",
+    "reservation_not_found": "Réservation non trouvée",
     "unauthenticated": "vous n'etes pas connecté"
   },
   "Input": {
@@ -83,7 +84,9 @@
     "password_placeholder": "Entrer le mot de passe",
     "current_password_placeholder": "Entrer le mot de passe actuel",
     "address_placeholder": "Entrer l'adresse",
-    "phonenumber_placeholder": "Entrer le  numéro de téléphone",
+    "phonenumber_placeholder": "Entrer le numéro de téléphone",
+    "language": "Langue",
+    "language_placeholder": "Sélectionner votre langue par défaut pour les emails",
     "role_placeholder": "Sélectionner un role",
     "agency_placeholder": "Sélectionner une agence",
     "nb_place_placeholder": "Entrer le nbr de place",
@@ -133,6 +136,8 @@
     "new_reservation_success_msg": "Réservation confirmée.",
     "cancel_reservation_success_msg": "Réservation annulée avec succès.",
     "undo_cancellation_account_success_msg": "Desactivation de l'annulation de la réservation.",
+
+    "new_payment_success_msg": "Paiement effectué avec succès.",
 
     "newClient": "Nouveau client",
     "editClient": "Editer client",
@@ -334,7 +339,8 @@
 
     "newReservation": "Nouvelle réservation",
     "editReservation": "Editer réservation",
-    "cancelReservation": "Annuler réservation"
+    "cancelReservation": "Annuler réservation",
+    "new_payment": "Nouveau paiement"
 
   },
   "Space": {
