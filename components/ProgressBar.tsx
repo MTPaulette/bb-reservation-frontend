@@ -1,22 +1,18 @@
-"use client";
-import { useProgress } from "@/lib/hooks/progressBar";
-import React, { createContext } from "react";
+"use client"
 
-export const ProgressBarContext = createContext(null);
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
-const ProgressBar = ({ children }) => {
-  const progress = useProgress();
 
+export default function ProgressBarComponent({ children }: { children: React.ReactNode }) {
   return (
-    <ProgressBarContext.Provider value={progress}>
-      {progress.state !== "initial" && (
-      <div
-        className="fixed top-0 z-50 h-1 bg-gradient-to-r from-blue-500 to-blue-300 duration-300 transition-all ease-in-out"
-        style={{ width: `${progress.value}%` }}
-      />
-      )}
+    <>
       {children}
-    </ProgressBarContext.Provider>
+      <ProgressBar
+        height="2px"
+        color="#22dd51" //"#29d" //"#0B9444"
+        options={{ showSpinner: false }}
+        shallowRouting
+      />
+    </>
   );
 };
-export default ProgressBar;

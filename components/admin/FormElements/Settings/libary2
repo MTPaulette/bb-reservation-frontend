@@ -1,0 +1,164 @@
+Voici l'exemple de mise en œuvre des permissions pour les routes dans Next.js 14 :
+
+Création des routes
+
+Créez des fichiers dans le répertoire app pour définir vos routes :
+
+bash
+app
+users
+page.js
+middleware.js
+agencies
+page.js
+middleware.js
+...
+...
+
+Définition des permissions
+
+Créez un fichier permissions.js dans le répertoire lib pour définir les permissions :
+
+// lib/permissions.js
+export const permissions = {
+  see_users: ['users'],
+  see_agencies: ['agencies'],
+};
+
+Création des middleware
+
+Créez des fichiers middleware.js dans les répertoires des routes pour définir les middleware :
+
+// app/users/middleware.js
+import { permissions } from '../../lib/permissions';
+
+export default async function middleware(req) {
+  const token = await verify(req.cookies['next-auth.session-token']);
+  const userId = token.sub;
+
+  // Récupérer les permissions de l'utilisateur
+  const userPermissions = await fetchPermissions(userId);
+
+  // Vérifier les permissions pour la route actuelle
+  const allowed = permissions.see_users.includes(req.url);
+
+  if (!allowed) {
+    return {
+      status: 401,
+      body: { error: 'Accès refusé' },
+    };
+  }
+
+  return next();
+}
+
+
+
+// app/agencies/middleware.js
+import { permissions } from '../../lib/permissions';
+
+export default async function middleware(req) {
+  const token = await verify(req.cookies['next-auth.session-token']);
+  const userId = token.sub;
+
+  // Récupérer les permissions de l'utilisateur
+  const userPermissions = await fetchPermissions(userId);
+
+  // Vérifier les permissions pour la route actuelle
+  const allowed = permissions.see_agencies.includes(req.url);
+
+  if (!allowed) {
+    return {
+      status: 401,
+      body: { error: 'Accès refusé' },
+    };
+  }
+
+  return next();
+}
+
+Application des middleware
+
+Les middleware seront automatiquement appliqués aux routes correspondantes.
+
+Voilà ! Vous avez maintenant un système de gestion des permissions pour les routes dans votre application Next.js 14.
+
+===========================================
+
+
+Pour gérer l'affichage des liens dans la sidebar en tenant compte des permissions, vous pouvez suivre ces étapes :
+
+1. Définir les permissions pour chaque lien dans votre fichier permissions.js :
+
+// lib/permissions.js
+export const permissions = {
+  see_users: ['users'],
+  see_agencies: ['agencies'],
+  see_dashboard: ['dashboard'],
+};
+
+1. Créer un composant Sidebar qui affiche les liens en fonction des permissions de l'utilisateur :
+
+// components/Sidebar.js
+import { permissions } from '../lib/permissions';
+import { useSession } from 'next-auth/react';
+
+function Sidebar() {
+  const { data: session } = useSession();
+
+  const userPermissions = session.permissions;
+
+  return (
+    <div>
+      {userPermissions.includes('see_dashboard') && (
+        <a href="/dashboard">Tableau de bord</a>
+      )}
+      {userPermissions.includes('see_users') && (
+        <a href="/users">Utilisateurs</a>
+      )}
+      {userPermissions.includes('see_agencies') && (
+        <a href="/agencies">Agences</a>
+      )}
+    </div>
+  );
+}
+
+export default Sidebar;
+
+1. Utiliser le composant Sidebar dans votre page principale :
+
+// pages/_app.js
+import Sidebar from '../components/Sidebar';
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <div>
+      <Sidebar />
+      <Component {...pageProps} />
+    </div>
+  );
+}
+
+export default MyApp;
+
+1. Mettre à jour les permissions de l'utilisateur dans votre fichier pages/api/auth/[...nextauth].js :
+
+// pages/api/auth/[...nextauth].js
+import { NextApiRequest, NextApiResponse } from 'next';
+import { permissions } from '../../lib/permissions';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req;
+
+  switch (method) {
+    case 'GET':
+      const user = await getUser(req);
+      const userPermissions = await getUserPermissions((link unavailable));
+
+      return res.json({ permissions: userPermissions });
+    default:
+      return res.status(405).json({ error: 'Method not allowed' });
+  }
+}
+
+Voilà ! Vous avez maintenant un système de gestion des permissions pour les liens dans la sidebar de votre application Next.js.

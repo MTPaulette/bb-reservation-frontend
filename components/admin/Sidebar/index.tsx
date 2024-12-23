@@ -55,7 +55,7 @@ const menuGroups = [
         route: "#",
         children: [
           { label: t_sidebar("coupons"), route: `/${locale}/admin/coupons` },
-          { label: t_sidebar("payments"), route: `/${locale}/admin/coupons` },
+          { label: t_sidebar("payments"), route: `/${locale}/admin/payments` },
         ],
       },
       {
@@ -124,7 +124,7 @@ const menuGroups = [
           <SettingIcon fill="none" size={18} />
         ),
         label: t_sidebar("settings"),
-        route: `/${locale}/admin/settings?group=general`,
+        route: `/${locale}/admin/settings?group=profile`,
       },
     ],
   },

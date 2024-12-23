@@ -2,13 +2,13 @@ import NotFound from '@/components/NotFound';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "404 coupon not found",
+  title: "404 payment not found",
   description:
-    "The coupon is not found ",
+    "The payment is not found ",
 };
 
 export default function NotFoundPage() {
   return (
-    <NotFound title="coupon_not_found" />
+    <NotFound title="payment_not_found" />
   );
 }

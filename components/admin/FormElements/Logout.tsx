@@ -15,6 +15,7 @@ export default function Logout() {
 
   const handleLogout = async () => {
     setLoading(true);
+    /*
     const csrfToken = await getCsrfToken();
     console.log("**************************** csrftoken");
     console.log(csrfToken);
@@ -36,7 +37,7 @@ export default function Logout() {
       setLoading(false);
       console.log("Logout error: ");
       console.log(error);
-    })
+    }) */
   }
 
   return (
@@ -45,7 +46,7 @@ export default function Logout() {
         rounded-sm px-4 py-2 duration-300 ease-in-out
         flex w-full items-center gap-2.5 text-foreground
         p-3 font-medium hover:bg-danger/20 hover:text-danger flex-none justify-start 
-        ${loading ? "cursor-progress": ""}`}
+        ${loading ? "cursor-progresss cursor-wait": ""}`}
     >
       <LogoutIcon fill="currentColor" size={18} />
       <div>{t("logout")}</div>

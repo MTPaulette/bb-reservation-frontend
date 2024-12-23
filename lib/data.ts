@@ -198,6 +198,20 @@ export const columnsCoupon = [
 ];
 
 
+export const columnsPayment = [
+  // {name_en: "ID", name_fr: "ID", uid: "id", sortable: true},
+  {name_en: "RESERVATION_ID", name_fr: "RESERVATION_ID", uid: "reservation_id", sortable: true},
+  {name_en: "AMOUNT", name_fr: "AMOUNT", uid: "amount", sortable: true},
+  {name_en: "METHOD", name_fr: "METHOD", uid: "payment_method", sortable: true},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "payment_status", sortable: true},
+  {name_en: "TRANSACTION ID", name_fr: "TRANSACTION ID", uid: "transaction_id", sortable: true},
+  {name_en: "BILL NUMBER", name_fr: "NUM. FACTURE", uid: "bill_number", sortable: true},
+  {name_en: "PROCESSED BY", name_fr: "EFFECTUE PAR", uid: "processed_by"},
+  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+
 export const columnsReservation = [
   {name_en: "ID", name_fr: "ID", uid: "id", sortable: true},
   {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},

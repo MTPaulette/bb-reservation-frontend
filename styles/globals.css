@@ -40,6 +40,27 @@
     select {
       border: none;
     }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: #b0fdd0;
+      /* background-color: #f0f0f0; */
+      z-index: 1000;
+    }
+    
+    .progress-bar__inner {
+      /* width: 0; */
+      width: 5px;
+      height: 100%;
+      background-color: #ff0000;
+      /* background-color: #3498db; */
+      transition: width 0.3s ease-in-out;
+    }
+    
 }
 
 @layer components {

@@ -60,7 +60,6 @@ export default function Profile () {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<UserFormType>({
     resolver: zodResolver(schema),
@@ -76,6 +75,7 @@ export default function Profile () {
 
 
   const handleFormSubmit = async (data: UserFormType) => {
+    console.log(session);
     setError("");
     setSuccess("");
     setLoading(true);
@@ -84,6 +84,13 @@ export default function Profile () {
       setLoading(false);
       if(res?.ok) {
         const response = await res.json();
+        // Mettre à jour les informations de session
+        session!.user = {
+          ...session!.user,
+          firstname: 'pascal'
+        };
+        console.log(session);
+        /*
         const newSession = {
           ...session,
           user: {
@@ -92,7 +99,7 @@ export default function Profile () {
           },
           accessToken: response.token
         };
-        await update(newSession);
+        await update(newSession); */
         setSuccess(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccess("");
@@ -187,7 +194,7 @@ export default function Profile () {
         const response = await res.json();
         session!.accessToken = response.token;
         update(session);
-        setSuccessPwd(t("update_account_success_msg"));
+        setSuccessPwd(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessPwd("");
         }, 1000);
@@ -229,7 +236,7 @@ export default function Profile () {
         const response = await res.json();
         setImage(response.src);
         setSrc(response.src);
-        setSuccessImg(t("update_account_success_msg"));
+        setSuccessImg(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessImg("");
         }, 1000);

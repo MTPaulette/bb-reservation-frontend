@@ -1,213 +1,3 @@
-Voici un exemple de code qui utilise fetch et TypeScript pour r
-écupérer les dates déjà choisies depuis la base de données Laravel
- et pour enregistrer le tableau de dates choisies :
-
-// Next.js 14 avec TypeScript
-import { useState, useEffect } from 'react';
-
-interface Holiday {
-  date: string;
-}
-
-const [holidays, setHolidays] = useState<Holiday[]>([]);
-
-const fetchHolidays = async () => {
-  const response = await fetch('/api/options');
-  const data = await response.json();
-  const holidaysOption = data.find((option: any) => option.name === 'holidays');
-  const holidaysValue = holidaysOption.value;
-  const holidaysArray = JSON.parse(holidaysValue);
-  setHolidays(holidaysArray);
-};
-
-const handleAddHoliday = (date: string) => {
-  setHolidays([...holidays, { date }]);
-};
-
-const handleRemoveHoliday = (index: number) => {
-  setHolidays(holidays.filter((holiday, i) => i !== index));
-};
-
-const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  const response = await fetch('/api/options', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: 'holidays', value: JSON.stringify(holidays) }),
-  });
-  const data = await response.json();
-  console.log(data);
-};
-
-useEffect(() => {
-  fetchHolidays();
-}, []);
-
-return (
-  <div>
-    <h1>Holidays</h1>
-    <ul>
-      {holidays.map((holiday, index) => (
-        <li key={index}>
-          {holiday.date}
-          <button onClick={() => handleRemoveHoliday(index)}>Supprimer</button>
-        </li>
-      ))}
-    </ul>
-    <form onSubmit={handleSubmit}>
-      <input type="date" onChange={(event) => handleAddHoliday(event.target.value)} />
-      <button type="submit">Enregistrer</button>
-    </form>
-  </div>
-);
-
-
-
-// Laravel API
-use Illuminate\Http\Request;
-use App\Models\Option;
-
-Route::get('/api/options', function (Request $request) {
-    $options = Option::all();
-    return response()->json($options);
-});
-
-Route::post('/api/options', function (Request $request) {
-    $option = Option::where('name', 'holidays')->first();
-    if (!$option) {
-        $option = new Option();
-        $option->name = 'holidays';
-    }
-    $option->value = $request->input('value');
-    $option->save();
-    return response()->json($option);
-});
-
-Dans cet exemple, nous utilisons la fonction fetch pour récupérer les dates
- déjà choisies depuis la base de données Laravel et pour enregistre
- r le tableau de dates choisies. Nous utilisons également la fonction 
- JSON.parse pour convertir la valeur de l'option holidays en un tableau
-  de dates. Nous utilisons également la fonction JSON.stringify pour 
-  convertir le tableau de dates en une chaîne de caractères qui peut 
-  être enregistrée dans la base de données.
-
-
-=====================================================
-Voici un exemple de code qui utilise Laravel, Next.js 14 et TypeScript 
-pour créer des inputs pour modifier les valeurs des options dans la base de 
-données Laravel :
-
-// Next.js 14 avec TypeScript
-import { useState, useEffect } from 'react';
-
-interface Option {
-  id: number;
-  name: string;
-  value: string;
-}
-
-const [options, setOptions] = useState<Option[]>([]);
-
-const fetchOptions = async () => {
-  const response = await fetch('/api/options');
-  const data = await response.json();
-  setOptions(data);
-};
-
-const handleUpdateOption = async (option: Option) => {
-  const response = await fetch(`/api/options/${(link unavailable)}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(option),
-  });
-  const data = await response.json();
-  setOptions(options.map((opt) => (link unavailable) === (link unavailable) ? data : opt));
-};
-
-useEffect(() => {
-  fetchOptions();
-}, []);
-
-return (
-  <div>
-    <h1>Options</h1>
-    <form>
-      <div>
-        <label>Company Name</label>
-        <input
-          type="text"
-          value={options.find((opt) => opt.name === 'companyname')?.value}
-          onChange={(event) => {
-            const updatedOption = { ...options.find((opt) => opt.name === 'companyname'), value: event.target.value };
-            handleUpdateOption(updatedOption);
-          }}
-        />
-      </div>
-      <div>
-        <label>Email</label>
-        <input
-          type="email"
-          value={options.find((opt) => opt.name === 'email')?.value}
-          onChange={(event) => {
-            const updatedOption = { ...options.find((opt) => opt.name === 'email'), value: event.target.value };
-            handleUpdateOption(updatedOption);
-          }}
-        />
-      </div>
-      <div>
-        <label>Contact</label>
-        <input
-          type="text"
-          value={options.find((opt) => opt.name === 'contact')?.value}
-          onChange={(event) => {
-            const updatedOption = { ...options.find((opt) => opt.name === 'contact'), value: event.target.value };
-            handleUpdateOption(updatedOption);
-          }}
-        />
-      </div>
-      <div>
-        <label>Facebook</label>
-        <input
-          type="text"
-          value={options.find((opt) => opt.name === 'facebook')?.value}
-          onChange={(event) => {
-            const updatedOption = { ...options.find((opt) => opt.name === 'facebook'), value: event.target.value };
-            handleUpdateOption(updatedOption);
-          }}
-        />
-      </div>
-      <div>
-        <label>Twitter</label>
-        <input
-          type="text"
-          value={options.find((opt) => opt.name === 'twitter')?.value}
-          onChange={(event) => {
-            const updatedOption = { ...options.find((opt) => opt.name === 'twitter'), value: event.target.value };
-            handleUpdateOption(updatedOption);
-          }}
-        />
-      </div>
-    </form>
-  </div>
-);
-
-
-
-// Laravel API
-use Illuminate\Http\Request;
-use App\Models\Option;
-
-Route::get('/api/options', function (Request $request) {
-    $options = Option::all();
-    return response()->json($options);
-});
-
-Route::put('/api/options/{id}', function (Request $request, $id) {
-    $option = Option::find($id);
-    $option->value = $request->input('value');
-    $option->save();
-    return response()->json($option);
-});
 
 =======================================================================
 Pour modifier les options logo_white et logo_dark, vous pouvez ajouter des
@@ -321,3 +111,22 @@ Dans cet exemple, nous utilisons la fonction handleUpdateLogo pour mettre à
 
 ====================================================
 
+Je m'excuse si mon explication était trop compliquée !
+
+En résumé, NextAuth ne crypte pas automatiquement le token d'accès avant de le stocker dans la session. Il est donc important de crypter le token avant de le stocker pour éviter les accès non autorisés.
+
+Pour crypter le token, vous pouvez utiliser une fonction de cryptage simple, comme par exemple :
+
+const crypterToken = (token) => {
+  return token + 'votre_clé_de_cryptage';
+};
+
+Et pour décrypter le token, vous pouvez utiliser une fonction de décryptage simple, comme par exemple :
+
+const décrypterToken = (token) => {
+  return token.replace('votre_clé_de_cryptage', '');
+};
+
+Il est important de remplacer 'votre_clé_de_cryptage' par une clé de cryptage sécurisée.
+
+Ensuite, vous pouvez utiliser ces fonctions pour crypter et décrypter le token d'accès avant de le stocker dans la session.

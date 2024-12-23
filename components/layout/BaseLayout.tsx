@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";
+import ProgressBarComponent from "@/components/ProgressBar";
 
 export const metadata: Metadata = {
   title: "BB-RESERVATION",
@@ -29,14 +30,16 @@ export default async function BaseLayout({
   return (
     <html lang={locale}>
     <body>
-      <div className="bg-background text-foreground">
-        {/* <NextIntlClientProvider> */}
-        <NextIntlClientProvider messages={messages}>
-        <Provider>
-          {children}
-        </Provider>
-        </NextIntlClientProvider>
-      </div>
+      <ProgressBarComponent>
+        <div className="bg-background text-foreground">
+          {/* <NextIntlClientProvider> */}
+          <NextIntlClientProvider messages={messages}>
+          <Provider>
+            {children}
+          </Provider>
+          </NextIntlClientProvider>
+        </div>
+      </ProgressBarComponent>
     </body>
     </html>
   );

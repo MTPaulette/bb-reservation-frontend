@@ -47,6 +47,8 @@
     "role_not_found": "Role non trouvé",
     "server_not_found": "Ressource non trouvé dans le serveur",
     "agency_not_found": "Agence non trouvé",
+    "payment_not_found": "Paiement non trouvé",
+    "coupon_not_found": "Coupon de reduction non trouvé",
     "characteristic_not_found": "caractérisque non trouvée",
     "space_not_found": "Espace non trouvé",
     "image_not_found": "Image non trouvée",
@@ -379,6 +381,7 @@
     "ressource": "ressource",
     "coupons": "coupons de réduction",
     "coupon": "coupon",
+    "payments": "paiements",
     "reservations": "réservations",
     "reservation": "réservation"
   },
