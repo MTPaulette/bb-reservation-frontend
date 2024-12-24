@@ -110,10 +110,6 @@ export const authOptions: NextAuthOptions = {
         if (session?.accessToken) {
           token.accessToken = session.accessToken
         }
-        console.log('token--------------------------------------');
-        console.log(token);
-      console.log('session token =================================================');
-      console.log(session);
       }
       if (user) {
         token.user = user.user;
@@ -122,12 +118,9 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-        // console.log('yes*******************************************');
-        // console.log(token);
-      session.accessToken = token.accessToken;
+      //session.accessToken = token.accessToken;
+      session.accessToken = encryptToken(String(token.accessToken));
       session.user = token.user;
-      console.log('session token ++++++++++++++++++++++++++++++');
-      console.log(session);
       return session
     },
   },

@@ -29,14 +29,10 @@ export const getUsername = (lastname: string, firstname: string) => {
 }
 
 export const headerOptions = async () => {
-// export const headerOptions = async (csrftokenn: string|undefined, tokenn: string|undefined) => {
   const csrftoken = await getCSRFToken();
-  const token = await getToken()
-  console.log("========================");
-  console.log("token: "+token);
-  // console.log("encryptToken: "+encryptToken(token));
-  // console.log("decryptToken: "+decryptToken(token));
-  console.log("csrftoken: "+csrftoken);
+  const encryptedToken = await getToken()
+  const token = encryptedToken? decryptToken(encryptedToken): "";
+  console.log("decryptToken: "+token);
   return {
     "Accept": "application/json",
     "Content-Type": "application/json",
@@ -49,9 +45,12 @@ export const headerOptions = async () => {
 }
 
 export const getImageUrl = (link : string) => {
+  if(process.env.API_URL) {
   const url = new URL(process.env.API_URL);
   url.pathname = `/storage/${link}`;
   return url.href;
+  }
+  return "";
 }
 
 
@@ -67,9 +66,38 @@ export const formatDateTime = (dateTime: moment.MomentInput, lang = 'fr') => {
   }
 };
 
+
 const encryptionKey = process.env.ENCRYPTION_KEY;
+const algorithm = "aes-256-cbc";
+const key =
+  crypto
+    .createHash("sha256").update(String(encryptionKey))
+    .digest("base64").substring(0, 32);
+const iv =
+  crypto
+    .createHash("sha256").update(String(encryptionKey))
+    .digest("base64").substring(0, 16);
 
 export const encryptToken = (token: string) => {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+  const encrypt_token = Buffer.concat([cipher.update(token), cipher.final()]);
+  const encryptedToken = encrypt_token.toString('hex');
+
+  return encryptedToken;
+};
+
+export const decryptToken = (encryptedToken: string) => {
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+
+  decipher.setAutoPadding(false);
+  const decrypt_token = Buffer.concat([decipher.update(Buffer.from(encryptedToken, 'hex')), decipher.final()]);
+  const decryptedToken = decrypt_token.toString();
+
+  return decryptedToken;
+};
+
+export const encryptTokenn = (token: string) => {
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
   const encryptedToken = Buffer.concat([cipher.update(token), cipher.final()]);
@@ -77,7 +105,7 @@ export const encryptToken = (token: string) => {
   return encryptedToken.toString('hex');
 };
 
-export const decryptToken = (encryptedToken: string) => {
+export const decryptTokenn = (encryptedToken: string) => {
   const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, crypto.randomBytes(16));
   decipher.setAutoPadding(false);
   const decryptedToken = Buffer.concat([decipher.update(Buffer.from(encryptedToken, 'hex')), decipher.final()]);

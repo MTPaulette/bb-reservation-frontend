@@ -74,7 +74,6 @@ export default function Profile () {
 
 
   const handleFormSubmit = async (data: UserFormType) => {
-    console.log(session);
     setError("");
     setSuccess("");
     setLoading(true);
@@ -94,8 +93,6 @@ export default function Profile () {
             language: response.user.language
           }
         })
-        console.log(response.user.firstname);
-        console.log(session);
         setSuccess(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccess("");
@@ -193,8 +190,6 @@ export default function Profile () {
       setLoadingPwd(false);
       if(res?.ok) {
         const response = await res.json();
-        // session!.accessToken = response.token;
-        // update(session);
         update({
           accessToken: response.token
         })
