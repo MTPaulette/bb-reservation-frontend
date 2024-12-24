@@ -1,4 +1,3 @@
-import { encryptToken } from "@/lib/utils";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 const api_url = process.env.API_URL;
@@ -66,7 +65,6 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    /*
     async jwt({ token, trigger, user }) {
       if (user) {
         token.user = user;
@@ -74,64 +72,13 @@ export const authOptions: NextAuthOptions = {
       }
       return token
     },
-    // Using the `...rest` parameter to be able to narrow down the type based on `trigger`
-    async session({ session, token, trigger, newSession }) {
-      console.log("newSession===============");
-      console.log(newSession);
-      // Note, that `rest.session` can be any arbitrary object, remember to validate it!
-      if (trigger === "update" && newSession?.user) {
-        // You can update the session in the database if it's not already updated.
-        // await adapter.updateUser(session.user.id, { name: newSession.name })
-
-        // Make sure the updated value is reflected on the client
-        session.user = newSession.user
-      }
+    async session({ session, token }) {
       session.accessToken = token.user.token;
       session.user = token.user.user;
-      console.log("session===============");
-      console.log(session);
-      return session
-    }
-    async jwt({ token, trigger, session }) {
-      console.log(session);
-      if (trigger === "update" && session?.user) {
-        token.user = session.user;
-        token.accessToken = session.user.token;
-      }
-      console.log("token===============");
-      console.log(token);
-      return token
-    }, */
-    async jwt({ token, trigger, user, session }) {
-      if(trigger == 'update') {
-        if (session?.user) {
-          token.user = session.user
-        }
-        if (session?.accessToken) {
-          token.accessToken = session.accessToken
-        }
-        console.log('token--------------------------------------');
-        console.log(token);
-      console.log('session token =================================================');
-      console.log(session);
-      }
-      if (user) {
-        token.user = user.user;
-        token.accessToken = user.token;
-      }
-      return token
-    },
-    async session({ session, token }) {
-        // console.log('yes*******************************************');
-        // console.log(token);
-      session.accessToken = token.accessToken;
-      session.user = token.user;
-      console.log('session token ++++++++++++++++++++++++++++++');
-      console.log(session);
       return session
     },
   },
 }
 const handler = NextAuth(authOptions)
-//export { handler as GET, handler as POST }
+// export { handler as GET, handler as POST }
 export { handler as GET, handler as POST, handler as DELETE, handler as UPDATE }

@@ -1,11 +1,11 @@
-import { headerOptions, getCSRFToken, getToken } from "../utils";
+import { headerOptions } from "../utils";
 
 const api_url = process.env.API_URL;
 
 export async function getOpeningdays() {
   const response = await fetch(`${api_url}/openingdays`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
   })
   return response.json();
 }

@@ -1,4 +1,4 @@
-import { headerOptions, getCSRFToken, getToken } from "../utils";
+import { headerOptions } from "../utils";
 import { ConfirmPasswordType, SpaceFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
@@ -6,7 +6,7 @@ const api_url = process.env.API_URL;
 export async function createSpace(data: SpaceFormType) {
   const response = await fetch(`${api_url}/space/store`, { 
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify(data),
   })
   return response;
@@ -15,7 +15,7 @@ export async function createSpace(data: SpaceFormType) {
 export async function getSpaces() {
   const response = await fetch(`${api_url}/spaces`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -23,7 +23,7 @@ export async function getSpaces() {
 export async function getSpaceById(id: number) {
   const response = await fetch(`${api_url}/space/${id}`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -31,7 +31,7 @@ export async function getSpaceById(id: number) {
 export async function updateSpace(data: SpaceFormType, id: number, characteristics: number[]) {
   const response = await fetch(`${api_url}/space/${id}/update`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "name": data.name,
       "nb_place": data.nb_place,
@@ -47,7 +47,7 @@ export async function deleteSpace(data: ConfirmPasswordType, id: number) {
   console.log(id);
   const response = await fetch(`${api_url}/space/${id}/delete`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify(data),
   })
   return response;
@@ -71,7 +71,7 @@ export async function uploadImages(data: FormData, space_id: number) {
 export async function deleteImage(image_id: number) {
   const response = await fetch(`${api_url}/space/image/${image_id}/delete`, { 
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
   })
   return response;
 }

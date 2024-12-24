@@ -1,4 +1,4 @@
-import { headerOptions, getCSRFToken, getToken } from "../utils";
+import { headerOptions } from "../utils";
 import { PaymentFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
@@ -6,7 +6,7 @@ const api_url = process.env.API_URL;
 export async function createdPayment(data: PaymentFormType, reservation_id: number) {
   const response = await fetch(`${api_url}/payment/store`, { 
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "reservation_id": reservation_id,
       "amount": data.amount,
@@ -22,7 +22,7 @@ export async function createdPayment(data: PaymentFormType, reservation_id: numb
 export async function getPayments() {
   const response = await fetch(`${api_url}/payments`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -30,7 +30,7 @@ export async function getPayments() {
 export async function getPaymentById(id: number) {
   const response = await fetch(`${api_url}/payment/${id}`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -38,7 +38,7 @@ export async function getPaymentById(id: number) {
 export async function updatePayment(data: PaymentFormType, id: number, reservation_id:number) {
   const response = await fetch(`${api_url}/payment/${id}/update`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "reservation_id": reservation_id,
       "amount": data.amount,

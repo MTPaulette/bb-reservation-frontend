@@ -1,6 +1,5 @@
 import { getSession, getCsrfToken } from "next-auth/react";
 import moment from 'moment';
-import * as crypto from 'crypto';
 
 
 export const getToken = async () => {
@@ -33,9 +32,8 @@ export const headerOptions = async () => {
   const csrftoken = await getCSRFToken();
   const token = await getToken()
   console.log("========================");
+  console.log("decryptToken: "+decryptToken(token));
   console.log("token: "+token);
-  // console.log("encryptToken: "+encryptToken(token));
-  // console.log("decryptToken: "+decryptToken(token));
   console.log("csrftoken: "+csrftoken);
   return {
     "Accept": "application/json",
@@ -43,8 +41,7 @@ export const headerOptions = async () => {
     "X-XSRF-TOKEN": `${csrftoken}`,
     "X-CSRF-TOKEN": `${csrftoken}`,
     "X-Requested-With": "XMLHttpRequest",
-    // "Authorization": `Bearer ${decryptToken(token)}`,
-    "Authorization": `Bearer ${token}`,
+    "Authorization": `Bearer ${decryptToken(token)}`,
   }
 }
 
@@ -67,20 +64,14 @@ export const formatDateTime = (dateTime: moment.MomentInput, lang = 'fr') => {
   }
 };
 
-const encryptionKey = process.env.ENCRYPTION_KEY;
-
-export const encryptToken = (token: string) => {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
-  const encryptedToken = Buffer.concat([cipher.update(token), cipher.final()]);
-
-  return encryptedToken.toString('hex');
+export const cryptedToken = (token: string) => {
+  console.log(process.env.CRYPT_KEY);
+  return token + process.env.CRYPT_KEY;
 };
 
-export const decryptToken = (encryptedToken: string) => {
-  const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, crypto.randomBytes(16));
-  decipher.setAutoPadding(false);
-  const decryptedToken = Buffer.concat([decipher.update(Buffer.from(encryptedToken, 'hex')), decipher.final()]);
-
-  return decryptedToken.toString();
+export const decryptedToken = (token: string|undefined) => {
+  if(token && process.env.CRYPT_KEY) {
+    return token.replace(process.env.CRYPT_KEY, '');
+  }
+  return '';
 };

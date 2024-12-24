@@ -105,29 +105,23 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, trigger, user, session }) {
       if(trigger == 'update') {
         if (session?.user) {
-          token.user = session.user
+          token.user.user = session.user
         }
-        if (session?.accessToken) {
-          token.accessToken = session.accessToken
-        }
-        console.log('token--------------------------------------');
+        console.log('yes--------------------------------------');
         console.log(token);
-      console.log('session token =================================================');
-      console.log(session);
       }
       if (user) {
-        token.user = user.user;
+        token.user = user;
         token.accessToken = user.token;
       }
       return token
     },
     async session({ session, token }) {
-        // console.log('yes*******************************************');
-        // console.log(token);
-      session.accessToken = token.accessToken;
-      session.user = token.user;
-      console.log('session token ++++++++++++++++++++++++++++++');
-      console.log(session);
+        console.log('yes*******************************************');
+        console.log(token);
+      session.accessToken = token.user.token;
+      session.user = token.user.user;
+      // console.log(session);
       return session
     },
   },

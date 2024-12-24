@@ -1,12 +1,12 @@
 import { HolidayType, OptionType } from "../definitions";
-import { headerOptions, getCSRFToken, getToken } from "../utils";
+import { headerOptions } from "../utils";
 
 const api_url = process.env.API_URL;
 
 export async function getOptions() {
   const response = await fetch(`${api_url}/options`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
   })
   return response;//.json();
 }
@@ -14,7 +14,7 @@ export async function getOptions() {
 export async function saveOptions(data: OptionType) {
   const response = await fetch(`${api_url}/option/store`, { 
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       options: data
     }),
@@ -26,7 +26,7 @@ export async function saveOptions(data: OptionType) {
 export async function saveHolidays(data: HolidayType[]) {
   const response = await fetch(`${api_url}/option/holidays/store`, { 
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       holidays: data,
     }),

@@ -5,6 +5,7 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
   env: {
     API_URL: process.env.API_URL,
+    CRYPT_KEY: process.env.CRYPT_KEY,
   },
   reactStrictMode: false,
   images: {

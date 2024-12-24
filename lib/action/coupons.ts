@@ -1,4 +1,4 @@
-import { headerOptions, getCSRFToken, getToken } from "../utils";
+import { headerOptions } from "../utils";
 import { ConfirmPasswordType, CouponFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
@@ -6,7 +6,7 @@ const api_url = process.env.API_URL;
 export async function createCoupon(data: CouponFormType) {
   const response = await fetch(`${api_url}/coupon/store`, { 
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify(data),
   })
   return response;
@@ -15,7 +15,7 @@ export async function createCoupon(data: CouponFormType) {
 export async function getCoupons() {
   const response = await fetch(`${api_url}/coupons`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -23,7 +23,7 @@ export async function getCoupons() {
 export async function getCouponById(id: number) {
   const response = await fetch(`${api_url}/coupon/${id}`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -31,7 +31,7 @@ export async function getCouponById(id: number) {
 export async function updateCoupon(data: CouponFormType, id: number, clients: number[]) {
   const response = await fetch(`${api_url}/coupon/${id}/update`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "name": data.name,
       "total_usage": data.total_usage,
@@ -50,7 +50,7 @@ export async function deleteCoupon(data: ConfirmPasswordType, id: number) {
   console.log(id);
   const response = await fetch(`${api_url}/coupon/${id}/delete`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify(data),
   })
   return response;
@@ -59,7 +59,7 @@ export async function deleteCoupon(data: ConfirmPasswordType, id: number) {
 export async function applyCoupon(coupon: string, client_id: number) {
   const response = await fetch(`${api_url}/coupon/apply`, {
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "coupon": coupon,
       "client_id": client_id

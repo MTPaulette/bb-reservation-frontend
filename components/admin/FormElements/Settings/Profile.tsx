@@ -14,7 +14,7 @@ import { useState } from "react";
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
 import { updateProfile, uploadImage, changePassword, deleteProfilePic } from "@/lib/action/profile";
-import { capitalize } from "@/lib/utils";
+import { capitalize, getImageUrl } from "@/lib/utils";
 import { languages } from "@/lib/data";
 
 
@@ -45,7 +45,6 @@ export default function Profile () {
   const [password, setPassword] = useState<string>("");
   const [current_password, setCurrent_password] = useState<string>("");
 
-  const [src, setSrc] = useState();
   const [image, setImage] = useState<File|null>(null);
 
   const schema: ZodType<UserFormType> = z
@@ -85,21 +84,18 @@ export default function Profile () {
       if(res?.ok) {
         const response = await res.json();
         // Mettre à jour les informations de session
-        session!.user = {
-          ...session!.user,
-          firstname: 'pascal'
-        };
-        console.log(session);
-        /*
-        const newSession = {
-          ...session,
+        update({
           user: {
-            ...session?.user,
-            firstname: "pascaline"
-          },
-          accessToken: response.token
-        };
-        await update(newSession); */
+            ...user,
+            lastname: response.user.lastname,
+            firstname: response.user.firstname,
+            email: response.user.email,
+            phonenumber: response.user.phonenumber,
+            language: response.user.language
+          }
+        })
+        console.log(response.user.firstname);
+        console.log(session);
         setSuccess(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccess("");
@@ -110,9 +106,9 @@ export default function Profile () {
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
-            await signOut({
-              callbackUrl: `/${locale}/auth/login`
-            });
+            // await signOut({
+            //   callbackUrl: `/${locale}/auth/login`
+            // });
             break;
           case 404:
             setError(t_error("user_not_found"));
@@ -149,9 +145,14 @@ export default function Profile () {
       setLoadingImg(false);
       if(res?.ok) {
         const response = await res.json();
+        update({
+          user: {
+            ...user,
+            image: response.src
+          }
+        })
         setImage(response.src);
-        setSrc(response.src);
-        setSuccessImg(t("update_account_success_msg"));
+        setSuccessImg(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessImg("");
         }, 1000);
@@ -192,8 +193,11 @@ export default function Profile () {
       setLoadingPwd(false);
       if(res?.ok) {
         const response = await res.json();
-        session!.accessToken = response.token;
-        update(session);
+        // session!.accessToken = response.token;
+        // update(session);
+        update({
+          accessToken: response.token
+        })
         setSuccessPwd(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessPwd("");
@@ -235,7 +239,12 @@ export default function Profile () {
       if(res?.ok) {
         const response = await res.json();
         setImage(response.src);
-        setSrc(response.src);
+        update({
+          user: {
+            ...user,
+            image: response.src
+          }
+        })
         setSuccessImg(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessImg("");
@@ -405,7 +414,7 @@ export default function Profile () {
                     className="transition-transform"
                     color="default"
                     size="lg"
-                    src={src? src: ''}
+                    src={user && user.image? getImageUrl(user.image): ""}
                   />
                 </div>
                 <div>

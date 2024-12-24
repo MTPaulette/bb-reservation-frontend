@@ -6,7 +6,8 @@ const api_url = process.env.API_URL;
 export async function updateProfile(data: UserFormType) {
   const response = await fetch(`${api_url}/profile`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    //headers: await headerOptions(),
+    headers: await headerOptions(),
     body: JSON.stringify(data),
   })
   return response;
@@ -15,7 +16,7 @@ export async function updateProfile(data: UserFormType) {
 export async function suspendClient(data: ConfirmPasswordType, id: number, status: string) {
   const response = await fetch(`${api_url}/client/${id}/suspend`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "password": data.password,
       "cancel_suspension": status == 'active'? false : true
@@ -27,7 +28,7 @@ export async function suspendClient(data: ConfirmPasswordType, id: number, statu
 export async function deleteClient(data: ConfirmPasswordType, id: number) {
   const response = await fetch(`${api_url}/client/${id}/delete`, { 
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify(data),
   })
   return response;
@@ -52,7 +53,7 @@ export async function uploadImage(data: FormData) {
 export async function changePassword(current_password: string, password: string) {
   const response = await fetch(`${api_url}/password`, { 
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       current_password: current_password,
       password: password
@@ -64,7 +65,7 @@ export async function changePassword(current_password: string, password: string)
 export async function deleteProfilePic() {
   const response = await fetch(`${api_url}/profile/image/delete`, { 
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
   })
   return response;
 }

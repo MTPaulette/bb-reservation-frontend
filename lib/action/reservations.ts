@@ -1,4 +1,4 @@
-import { headerOptions, getCSRFToken, getToken } from "../utils";
+import { headerOptions } from "../utils";
 import { ReservationFormType, CancellationFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
@@ -6,7 +6,7 @@ const api_url = process.env.API_URL;
 export async function createReservation(data: ReservationFormType) {
   const response = await fetch(`${api_url}/reservation/store`, { 
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify(data),
   })
   return response;
@@ -15,7 +15,7 @@ export async function createReservation(data: ReservationFormType) {
 export async function getReservations() {
   const response = await fetch(`${api_url}/reservations`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -23,7 +23,7 @@ export async function getReservations() {
 export async function getReservationById(id: number) {
   const response = await fetch(`${api_url}/reservation/${id}`, {
     method: "GET",
-    headers: headerOptions(await getCSRFToken(), await getToken())
+    headers: await headerOptions()
   })
   return response;
 }
@@ -31,7 +31,7 @@ export async function getReservationById(id: number) {
 export async function updateReservation(data: ReservationFormType, id: number) {
   const response = await fetch(`${api_url}/reservation/${id}/update`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify(data)
   })
   return response;
@@ -40,7 +40,7 @@ export async function updateReservation(data: ReservationFormType, id: number) {
 export async function cancelReservation(data: CancellationFormType, id: number, state: string) {
   const response = await fetch(`${api_url}/reservation/${id}/cancel`, {
     method: "PUT",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "password": data.password,
       "undo_cancellation": state != 'cancelled'? false : true,
@@ -53,7 +53,7 @@ export async function cancelReservation(data: CancellationFormType, id: number, 
 export async function confirmReservation(client_id: number, ressource_id: number) {
   const response = await fetch(`${api_url}/reservation/store/confirm`, { 
     method: "POST",
-    headers: headerOptions(await getCSRFToken(), await getToken()),
+    headers: await headerOptions(),
     body: JSON.stringify({
       "client_id": client_id,
       "ressource_id": ressource_id
