@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ViewAgency from "@/components/admin/View/Agency";
 
 export const metadata: Metadata = {
-  title: "Agency",
+  title: "Agency | BB-RESERVATION-SYST",
   description:
     "See more about the agency",
 };

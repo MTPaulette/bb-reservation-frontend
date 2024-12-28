@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import StaffTable from "@/components/admin/Lists/Staff";
 
 export const metadata: Metadata = {
-  title: "Staff",
+  title: "Staff | BB-RESERVATION-SYST",
   description:
     "Show all staff of system",
 };

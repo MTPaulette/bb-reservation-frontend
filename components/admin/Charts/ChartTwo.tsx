@@ -5,6 +5,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import Title from "@/components/Title";
 import { ChevronDownIcon } from "@/components/Icons";
+import { ChartType } from "@/lib/definitions";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -56,7 +57,7 @@ const options: ApexOptions = {
   },
   legend: {
     position: "top",
-    horizontalAlign: "left",
+    horizontalAlign: "right",
     fontFamily: "Satoshi",
     fontWeight: 500,
     fontSize: "14px",
@@ -70,7 +71,9 @@ const options: ApexOptions = {
   },
 };
 
-const ChartTwo: React.FC = () => {
+// const ChartTwo: React.FC = () => {
+export default function ChartTwo({series}: {series: ChartType}) {
+  /*
   const series = [
     {
       name: "Sales",
@@ -81,6 +84,7 @@ const ChartTwo: React.FC = () => {
       data: [13, 23, 20, 8, 13, 27, 15],
     },
   ];
+  */
 
   return (
     <div className="col-span-12 rounded-sm border border-divider bg-background p-7.5 shadow-default xl:col-span-4">
@@ -124,4 +128,4 @@ const ChartTwo: React.FC = () => {
   );
 };
 
-export default ChartTwo;
+// export default ChartTwo;

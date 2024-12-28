@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import ClientsTable from "@/components/admin/Lists/Clients";
 
 export const metadata: Metadata = {
-  title: "Clients",
+  title: "Clients | BB-RESERVATION-SYST",
   description:
     "Show all clients of system",
 };

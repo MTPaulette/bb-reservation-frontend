@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ViewSpace from "@/components/admin/View/Space";
 
 export const metadata: Metadata = {
-  title: "Space",
+  title: "Space | BB-RESERVATION-SYST",
   description:
     "See more about the space",
 };

@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import CharacteristicsTable from "@/components/admin/Lists/Characteristics";
 
 export const metadata: Metadata = {
-  title: "Characteristics",
+  title: "Characteristics | BB-RESERVATION-SYST",
   description:
     "Show all characteristics of system",
 };

@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ViewStaff from "@/components/admin/View/User/Staff";
 
 export const metadata: Metadata = {
-  title: "Staff Profile",
+  title: "Staff Profile | BB-RESERVATION-SYST",
   description:
     "See more about staff",
 };

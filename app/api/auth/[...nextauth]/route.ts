@@ -105,10 +105,10 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, trigger, user, session }) {
       if(trigger == 'update') {
         if (session?.user) {
-          token.user = session.user
+          token.user = session.user;
         }
         if (session?.accessToken) {
-          token.accessToken = session.accessToken
+          token.accessToken = encryptToken(String(session.accessToken));
         }
       }
       if (user) {

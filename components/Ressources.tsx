@@ -11,7 +11,7 @@ import { InvoicesTableSkeleton } from '@/components/Skeletons';
 // import { fetchRessources } from '@/lib/data';
 
 export const metadata: Metadata = {
-  title: 'Resevations',
+  title: 'Resevations | BB-RESERVATION-SYST',
 };
 
 

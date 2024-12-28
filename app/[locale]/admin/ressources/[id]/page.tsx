@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ViewRessource from "@/components/admin/View/Ressource";
 
 export const metadata: Metadata = {
-  title: "Ressource",
+  title: "Ressource | BB-RESERVATION-SYST",
   description:
     "See more about the ressource",
 };

@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import LogsTable from "@/components/admin/Lists/Logs";
 
 export const metadata: Metadata = {
-  title: "Logs",
+  title: "Logs | BB-RESERVATION-SYST",
   description:
     "Show all logs of system",
 };

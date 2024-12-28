@@ -2,7 +2,7 @@ import NotFound from '@/components/NotFound';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "404 User not found",
+  title: "404 User not found | BB-RESERVATION-SYST",
   description:
     "The User is not found ",
 };

@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import AgenciesTable from "@/components/admin/Lists/Agencies";
 
 export const metadata: Metadata = {
-  title: "Agencies",
+  title: "Agencies | BB-RESERVATION-SYST",
   description:
     "Show all agencies of system",
 };

@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import RolesTable from "@/components/admin/Lists/Roles";
 
 export const metadata: Metadata = {
-  title: "Roles",
+  title: "Roles | BB-RESERVATION-SYST",
   description:
     "Show all possible roles in system",
 };

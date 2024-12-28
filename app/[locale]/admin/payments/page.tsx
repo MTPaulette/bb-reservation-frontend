@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import PaymentsTable from "@/components/admin/Lists/Payments";
 
 export const metadata: Metadata = {
-  title: "Payments",
+  title: "Payments | BB-RESERVATION-SYST",
   description:
     "Show all payments of system",
 };

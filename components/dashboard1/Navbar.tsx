@@ -69,7 +69,7 @@ export default function NavBarDashboardComponent() {
                 name={user? getUsername(user.lastname, user.firstname): ""}
                 description="admin"
                 avatarProps={
-                  {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+                  {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                 }
               />
             </DropdownItem>

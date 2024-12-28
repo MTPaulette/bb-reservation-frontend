@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ViewClient from "@/components/admin/View/User/Client";
 
 export const metadata: Metadata = {
-  title: "Client Profile",
+  title: "Client Profile | BB-RESERVATION-SYST",
   description:
     "See more about client",
 };

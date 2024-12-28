@@ -131,7 +131,6 @@ const menuGroups = [
   {
     name: "OTHERS",
     menuItems: [
-      /*
       {
         icon: (
           <ChartIcon fill="none" size={18} />
@@ -160,7 +159,7 @@ const menuGroups = [
           { label: "Sign In", route: `/${locale}/admin/auth/signin` },
           { label: "Sign Up", route: `/${locale}/admin/auth/signup` },
         ],
-      },*/
+      },
     ],
   },
 ];

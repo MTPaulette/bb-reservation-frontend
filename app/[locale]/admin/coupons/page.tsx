@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import CouponsTable from "@/components/admin/Lists/Coupons";
 
 export const metadata: Metadata = {
-  title: "Coupons",
+  title: "Coupons | BB-RESERVATION-SYST",
   description:
     "Show all coupons of system",
 };

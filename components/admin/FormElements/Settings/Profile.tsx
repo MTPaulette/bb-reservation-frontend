@@ -103,9 +103,9 @@ export default function Profile () {
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
-            // await signOut({
-            //   callbackUrl: `/${locale}/auth/login`
-            // });
+            await signOut({
+              callbackUrl: `/${locale}/auth/login`
+            });
             break;
           case 404:
             setError(t_error("user_not_found"));

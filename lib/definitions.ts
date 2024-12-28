@@ -349,6 +349,12 @@ export type PaymentFormType = {
   note:           string | undefined;
 }
 
+export type ChartType = {
+  series: {
+    name: string;
+    data: number[];
+  }[];
+}
 
 
 

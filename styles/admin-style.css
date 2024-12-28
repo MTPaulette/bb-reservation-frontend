@@ -13,7 +13,8 @@
 }
 
 .apexcharts-text {
-    @apply !fill-background;
+    @apply !text-foreground/60;
+    /* @apply !fill-background; */
 }
 
 .apexcharts-xcrosshairs {

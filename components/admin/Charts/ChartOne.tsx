@@ -3,6 +3,7 @@
 import { ApexOptions } from "apexcharts";
 import React from "react";
 import dynamic from "next/dynamic";
+import { ChartType } from "@/lib/definitions";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -10,14 +11,14 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 
 const options: ApexOptions = {
   legend: {
-    show: false,
+    show: true,
     position: "top",
-    horizontalAlign: "left",
+    horizontalAlign: "right",
   },
   colors: ["#3C50E0", "#80CAEE"],
   chart: {
     fontFamily: "Satoshi, sans-serif",
-    height: 335,
+    height: 335, //335,
     type: "area",
     dropShadow: {
       enabled: true,
@@ -37,7 +38,7 @@ const options: ApexOptions = {
       breakpoint: 1024,
       options: {
         chart: {
-          height: 300,
+          height: 400, //300,
         },
       },
     },
@@ -45,7 +46,7 @@ const options: ApexOptions = {
       breakpoint: 1366,
       options: {
         chart: {
-          height: 350,
+          height: 550,
         },
       },
     },
@@ -90,10 +91,6 @@ const options: ApexOptions = {
   xaxis: {
     type: "category",
     categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
       "Jan",
       "Feb",
       "Mar",
@@ -102,6 +99,10 @@ const options: ApexOptions = {
       "Jun",
       "Jul",
       "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ],
     axisBorder: {
       show: false,
@@ -117,30 +118,14 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 100,
+    max: 50000,
   },
 };
 
-interface ChartOneState {
-  series: {
-    name: string;
-    data: number[];
-  }[];
-}
 
-const ChartOne: React.FC = () => {
-  const series = [
-      {
-        name: "Product One",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
-      },
+// const ChartOne: React.FC = () => {
 
-      {
-        name: "Product Two",
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
-      },
-    ]
-
+export default function ChartOne({series}: {series: ChartType}) {
   return (
     <div className="col-span-12 rounded-sm border border-divider bg-background px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
@@ -151,15 +136,6 @@ const ChartOne: React.FC = () => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">Total Revenue</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
-            </div>
-          </div>
-          <div className="flex min-w-47.5">
-            <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-            </span>
-            <div className="w-full">
-              <p className="font-semibold text-secondary">Total Sales</p>
               <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
             </div>
           </div>
@@ -185,7 +161,7 @@ const ChartOne: React.FC = () => {
             options={options}
             series={series}
             type="area"
-            height={350}
+            height={550}
             width={"100%"}
           />
         </div>
@@ -194,4 +170,4 @@ const ChartOne: React.FC = () => {
   );
 };
 
-export default ChartOne;
+// export default ChartOne;

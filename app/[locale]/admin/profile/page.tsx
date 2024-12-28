@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ViewProfile from "@/components/admin/View/User/Profile";
 
 export const metadata: Metadata = {
-  title: "My Profile",
+  title: "My Profile | BB-RESERVATION-SYST",
   description:
     "See more about me",
 };

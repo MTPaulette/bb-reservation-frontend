@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import SpacesTable from "@/components/admin/Lists/Spaces";
 
 export const metadata: Metadata = {
-  title: "Spaces",
+  title: "Spaces | BB-RESERVATION-SYST",
   description:
     "Show all spaces of system",
 };

@@ -402,6 +402,13 @@
     "holidays": "Jours fériés",
     "smtp_configurations": "Configurations SMTP"
   },
+  "Statistic": {
+    "total_clients": "Total Clients",
+    "total_staff": "Total Staff",
+    "total_ressources": "Total Ressources",
+    "total_reservations": "Total Réservations",
+    "total_payments": "Total Payments"
+  },
   "Requirements": {
     "pwd_label": "Assurez-vous que ces exigences soient respectées:",
     "pwd_1": "Au moins 8 caractères (et jusqu'à 50 caractères)",

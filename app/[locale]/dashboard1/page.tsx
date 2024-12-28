@@ -57,9 +57,9 @@ export default function DashboardPage() {
             <Suspense fallback={<RevenueChartSkeleton />}>
               <Charts />
             </Suspense>
-            <Suspense fallback={<LatestInvoicesSkeleton />}>
+            {/* <Suspense fallback={<LatestInvoicesSkeleton />}>
               <LatestInvoices />
-            </Suspense>
+            </Suspense> */}
           </div>
 
           <div className="grid grid-cols-2 text-white pt-10">
