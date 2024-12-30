@@ -4,10 +4,10 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import ChartOne from "../Charts/ChartOne";
 import ChartTwo from "../Charts/ChartTwo";
-import ChatCard from "../Chat/ChatCard";
+import TopClients from "./TopClients";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../DataStats/Card1";
-import { CalendarIcon, CharetIcon, PeopleIcon, PlusIcon, ShoppingBagIcon } from "@/components/Icons";
+import { CalendarIcon, CharetIcon, ChevronDownIcon, PeopleIcon, PlusIcon, ShoppingBagIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from 'next-intl';
 import { Button } from "@nextui-org/react";
 import Modal from "@/components/Modal";
@@ -16,7 +16,9 @@ import { CommonSkeleton } from "@/components/Skeletons";
 import { signOut } from "next-auth/react";
 import { getStatistics } from "@/lib/action/dashbord";
 import Alert from "@/components/Alert";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, getUsername } from "@/lib/utils";
+import { availableStats, Months } from "@/lib/data";
+import CardDataStats3 from "../DataStats/Card3";
 
 const MapOne = dynamic(() => import("@/components/admin/Maps/MapOne"), {
   ssr: false,
@@ -30,6 +32,7 @@ const ChartThree = dynamic(() => import("@/components/admin/Charts/ChartThree"),
 export default function ECommerce() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [selectedStat, setSelectedStat] = useState<string>("Generals stat.");
   const locale = useLocale();
   const t_error = useTranslations("InputError");
   const t_statistic = useTranslations("Statistic");
@@ -39,7 +42,6 @@ export default function ECommerce() {
     setError("");
     getStatistics()
       .then(async (res) => {
-        setLoading(false);
         if(res?.ok){
           setStatistics(await res.json());
         }else {
@@ -64,6 +66,7 @@ export default function ECommerce() {
               break;
           }
         }
+        setLoading(false);
       })
       .catch((error: any) => {
         setError(t_error("something_wrong"));
@@ -83,7 +86,6 @@ export default function ECommerce() {
       {error != "" ? (
         <Alert color="danger" message={error} />
       ) : null}
-      {/* {JSON.stringify(statistics)} */}
       {/* <!-- new purchase --> */}
       <div className="w-full flex justify-end py-4">
         <Button
@@ -96,8 +98,98 @@ export default function ECommerce() {
         </Button>
       </div>
 
-      {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5"> */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="relative z-20 inline-block mb-3">
+        <select
+          onChange={(e) => {
+            setSelectedStat(e.target.value);
+          }}
+          name=""
+          id=""
+          className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 outline-none font-semibold text-foreground tracking-wider text-xl"
+        >
+          {availableStats.map((item) => (
+            <option key={item.uid} value={item.uid} className="dark:bg-boxdark">
+              {locale === "en" ? item.name_en: item.name_fr}
+            </option>
+          ))}
+        </select>
+        <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
+          <ChevronDownIcon fill="currentColor" size={10} />
+        </span>
+      </div>
+      {selectedStat == "Generals stat." ? (
+      // <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="flex flex-wrap items-center gap-4 md:gap-6 2xl:gap-7.5">
+        <CardDataStats3
+          title={t_statistic("best_agency")}
+          value={statistics.bestAgency.name}
+          total={statistics.bestAgency.reservations_count}
+        />
+        <CardDataStats3
+          title={t_statistic("best_staff")}
+          value={getUsername(statistics.bestStaff.lastname, statistics.bestStaff.firstname)}
+          total={statistics.bestStaff.created_reservations_count}
+        />
+        <CardDataStats3
+          title={t_statistic("best_client")}
+          value={getUsername(statistics.bestClient.lastname, statistics.bestClient.firstname)}
+          total={statistics.bestClient.reservations_count}
+        />
+        <CardDataStats3
+          title={t_statistic("best_ressource")}
+          value={statistics.bestRessource.space.name}
+          total={statistics.bestRessource.reservations_count}
+        />
+        {statistics.bestMonth != null ? (
+          <CardDataStats3
+            title={t_statistic("best_ressource")}
+            value={locale === "en" ? Months[Number(statistics.bestMonth.month)-1].name_en: Months[Number(statistics.bestMonth.month)-1].name_fr}
+            total={statistics.bestMonth.count}
+          />
+        ) : null}
+      </div>
+      ) : null}
+
+      {selectedStat == "Users stat." ? (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+        <CardDataStats title={t_statistic("total_clients")} total={statistics.totalClients} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_staff")} total={statistics.totalStaff} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+      </div>
+      ) : null}
+
+      {selectedStat == "Payments stat." ? (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+        <CardDataStats title={t_statistic("total_revenue")} total={statistics.totalRevenue} rate="2.55%" levelUp>
+          <ShoppingBagIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_payment")} total={statistics.totalPayment} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_due")} total={statistics.totalDue} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+      </div>
+      ) : null}
+
+      {selectedStat == "Reservations stat." ? (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+        <CardDataStats title={t_statistic("total_ressources")} total={statistics.totalRessources} rate="2.55%" levelUp>
+          <ShoppingBagIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_reservations")} total={statistics.totalReservations} rate="0.43%" levelUp>
+          <CalendarIcon fill="currentColor" size={20} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_cancelled_reservations")} total={statistics.totalCancelledReservations} rate="0.43%" levelUp>
+          <CalendarIcon fill="currentColor" size={20} />
+        </CardDataStats>
+      </div>
+      ) : null}
+
+      {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats title={t_statistic("total_reservations")} total={statistics.totalReservations} rate="0.43%" levelUp>
           <CalendarIcon fill="currentColor" size={20} />
         </CardDataStats>
@@ -113,17 +205,17 @@ export default function ECommerce() {
         <CardDataStats title={t_statistic("total_staff")} total={statistics.totalStaff} rate="0.95%" levelDown>
           <PeopleIcon fill="currentColor" size={22} />
         </CardDataStats>
-      </div>
+      </div> */}
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <ChartOne series={statistics.agency_with_payments_per_month} />
         <ChartTwo series={statistics.payment_revenu_of_current_week} />
         <ChartThree data={statistics.ressource_with_reservations} />
-        <MapOne />
+        <MapOne title={t_statistic("map")} />
         <div className="col-span-12 xl:col-span-8">
           <TableOne />
         </div>
-        <ChatCard />
+        <TopClients clients={statistics.topClients} />
       </div>
 
       <div>

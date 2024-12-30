@@ -403,11 +403,26 @@
     "smtp_configurations": "SMTP Configurations"
   },
   "Statistic": {
+    "best_agency": "Best Agency",
+    "best_month": "Best Month",
+    "best_staff": "Best Staff",
+    "best_client": "Best Client",
+    "best_ressource": "Best Ressource",
     "total_clients": "Total Clients",
     "total_staff": "Total Staff",
+    "total_revenue": "Total Revenue",
+    "total_payment": "Total Paiement",
+    "total_due": "Total Due",
     "total_ressources": "Total Ressources",
     "total_reservations": "Total Reservations",
-    "total_payments": "Total Payments"
+    "total_cancelled_reservations": "Total Cancelled Reservations",
+    "total_payments": "Total Payments",
+    "map": "World map",
+    "agency": "agency",
+    "ressource_with_reservations": "Ressource with reservations",
+    "ressource_with_reservations_description": "List of ressources per agency and number of reservations",
+    "best_clients": "Five best clients",
+    "best_clients_description": "Top 5 of clients which have done more reservations"
   },
   "Requirements": {
     "pwd_label": "Ensure that these requirements are met:",

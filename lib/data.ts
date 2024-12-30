@@ -40,6 +40,20 @@ export const Hours = [
   { id: 18, hour: '22:00' },
 ];
 
+export const Months = [
+  {name_en: "January", name_fr: "Janvier"},
+  {name_en: "February", name_fr: "Février"},
+  {name_en: "March", name_fr: "Mars"},
+  {name_en: "April", name_fr: "Avril"},
+  {name_en: "May", name_fr: "Mai"},
+  {name_en: "June", name_fr: "Juin"},
+  {name_en: "July", name_fr: "Juillet"},
+  {name_en: "August", name_fr: "Aout"},
+  {name_en: "September", name_fr: "Septembre"},
+  {name_en: "October", name_fr: "Octobre"},
+  {name_en: "November", name_fr: "Novembre"},
+  {name_en: "December", name_fr: "Décembre"},
+];
 
 export const statusUser = [
   {name_en: "Active", name_fr: "Actif", uid: "active"},
@@ -176,6 +190,13 @@ export const paymentMethods = [
 export const middayPeriods = [
   {name_en: "Morning (08h-13h)", name_fr: "En matinée (08h-13h)", uid: "morning"},
   {name_en: "Afternoon (13h-18h)", name_fr: "En soirée (13h-18h)", uid: "afternoon"},
+]
+
+export const availableStats = [
+  {name_en: "General stat.", name_fr: "Stat. Généraux", uid: "Generals stat."},
+  {name_en: "Users stat.", name_fr: "Stat. Utilisateurs", uid: "Users stat."},
+  {name_en: "Payments stat.", name_fr: "Stat. Paiements", uid: "Payments stat."},
+  {name_en: "Reservations stat.", name_fr: "Stat. Réservations", uid: "Reservations stat."},
 ]
 
 export const columns = [

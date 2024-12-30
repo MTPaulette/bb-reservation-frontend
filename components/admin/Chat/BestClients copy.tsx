@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Chat } from "@/lib/definitions";
+import { BestClient, Client } from "@/lib/definitions";
 import Title from "@/components/Title";
+import { getImageUrl } from "@/lib/utils";
 
-const chatData: Chat[] = [
+const clientData: Client[] = [
   {
     avatar: "/images/user/user-01.png",
     name: "Devid Heilo",
@@ -54,13 +55,13 @@ const chatData: Chat[] = [
   },
 ];
 
-const ChatCard = () => {
+export default function BestClients({clients, title}: {clients: BestClient[], title: string}) {
   return (
     <div className="col-span-12 rounded-sm border border-divider bg-background py-6 shadow-default xl:col-span-4">
-      <Title className="mb-6 px-7.5 text-xl">Chats</Title>
+      <Title className="mb-6 px-7.5 text-xl">{title}</Title>
 
       <div>
-        {chatData.map((chat, key) => (
+        {clients.map((client, key) => (
           <Link
             href="/"
             className="flex items-center gap-5 px-7.5 py-3 hover:bg-gray-3 dark:hover:bg-meta-4"
@@ -70,7 +71,7 @@ const ChatCard = () => {
               <Image
                 width={56}
                 height={56}
-                src={chat.avatar}
+                src={client.image? getImageUrl(client.image): ""}
                 alt="User"
                 style={{
                   width: "auto",
@@ -79,7 +80,7 @@ const ChatCard = () => {
               />
               <span
                 className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white ${
-                  chat.dot === 6 ? "bg-meta-6" : `bg-meta-${chat.dot}`
+                  client.status === 'actibe' ? "bg-success" : `bg-danger`
                 } `}
               ></span>
             </div>
@@ -87,20 +88,20 @@ const ChatCard = () => {
             <div className="flex flex-1 items-center justify-between">
               <div>
                 <h5 className="font-medium text-foreground">
-                  {chat.name}
+                  {client.name}
                 </h5>
                 <p>
                   <span className="text-sm text-foreground">
-                    {chat.text}
+                    {client.text}
                   </span>
-                  <span className="text-xs"> . {chat.time} min</span>
+                  <span className="text-xs"> . {client.time} min</span>
                 </p>
               </div>
-              {chat.textCount !== 0 && (
+              {client.textCount !== 0 && (
                 <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary">
                   <span className="text-sm font-medium text-white">
                     {" "}
-                    {chat.textCount}
+                    {client.textCount}
                   </span>
                 </div>
               )}
@@ -112,4 +113,3 @@ const ChatCard = () => {
   );
 };
 
-export default ChatCard;

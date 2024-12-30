@@ -357,7 +357,28 @@ export type ChartType = {
 }
 
 
-
+export type TopClient = {
+  id:                       number;
+  firstname:                string;
+  lastname:                 string;
+  email:                    string;
+  email_verified_at:        Date;
+  phonenumber:              null;
+  image:                    null;
+  status:                   string;
+  language:                 string;
+  reason_for_suspension_en: null;
+  reason_for_suspension_fr: null;
+  role_id:                  number;
+  created_by:               number;
+  suspended_by:             null;
+  suspended_at:             null;
+  created_at:               Date;
+  updated_at:               Date;
+  work_at:                  null;
+  reservations_count:       number;
+  reservations:             ReservationType[];
+}
 
 
 
