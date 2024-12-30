@@ -280,12 +280,17 @@ export default function ViewAgency({id}: {id: string}) {
                   radius="sm"
                   variant="solid"
                 >
-                  <Tab key="photos" title="Photos">
-                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                      photo
-                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                  </Tab>
+                  {/* <Tab key="cancelled" title={t_tabs("cancelled_reservations")}>
+                    {ressources.length > 0 ? (
+                      <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                        <DefaultRessourceTable columns={columnsTabsRessourceAgency} ressources={ressources} />
+                      </div>
+                    ): (
+                      <div className="mt-2 px-3 py-5">
+                        <Alert color="default" message={t_alert("no_ressource")} />
+                      </div>
+                    )}
+                  </Tab> */}
                   <Tab key="music" title="Music">
                     <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
                       music

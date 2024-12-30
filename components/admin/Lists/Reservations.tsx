@@ -32,6 +32,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   totally_paid: "success",
   cancelled: "danger"
 };
+
 const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "initial_amount", "amount_due", "state", "agency", "created_by", "actions"];
 
 export default function ReservationsTable() {
@@ -193,7 +194,8 @@ export default function ReservationsTable() {
             color={
               reservation.state == "partially paid" ? statusColorMap["partially_paid"] : 
               reservation.state == "totally paid" ? statusColorMap["totally_paid"] : 
-              statusColorMap[reservation.state]}
+              statusColorMap[reservation.state]
+            }
             size="sm"
             variant="dot"
           >

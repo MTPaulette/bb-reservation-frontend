@@ -7,7 +7,7 @@ import ChartTwo from "../Charts/ChartTwo";
 import TopClients from "./TopClients";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../DataStats/Card1";
-import { CalendarIcon, CharetIcon, ChevronDownIcon, PeopleIcon, PlusIcon, ShoppingBagIcon } from "@/components/Icons";
+import { CalendarIcon, ChevronDownIcon, PeopleIcon, PlusIcon, ShoppingBagIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from 'next-intl';
 import { Button } from "@nextui-org/react";
 import Modal from "@/components/Modal";
@@ -19,6 +19,7 @@ import Alert from "@/components/Alert";
 import { formatCurrency, getUsername } from "@/lib/utils";
 import { availableStats, Months } from "@/lib/data";
 import CardDataStats3 from "../DataStats/Card3";
+import CurrentReservations from "./CurrentReservations";
 
 const MapOne = dynamic(() => import("@/components/admin/Maps/MapOne"), {
   ssr: false,
@@ -119,30 +120,41 @@ export default function ECommerce() {
       </div>
       {selectedStat == "Generals stat." ? (
       // <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-      <div className="flex flex-wrap items-center gap-4 md:gap-6 2xl:gap-7.5">
+      <div className="flex flex-wrap justify-between items-center gap-4 md:gap-5">
         <CardDataStats3
           title={t_statistic("best_agency")}
+          subtitle={t_statistic("reservations")}
           value={statistics.bestAgency.name}
           total={statistics.bestAgency.reservations_count}
         />
         <CardDataStats3
+          title={t_statistic("most_ressource_agency")}
+          subtitle={t_statistic("ressources")}
+          value={statistics.agencyWithMostRessources.name}
+          total={statistics.agencyWithMostRessources.ressources_count}
+        />
+        <CardDataStats3
           title={t_statistic("best_staff")}
+          subtitle={t_statistic("created_reservations")}
           value={getUsername(statistics.bestStaff.lastname, statistics.bestStaff.firstname)}
           total={statistics.bestStaff.created_reservations_count}
         />
         <CardDataStats3
           title={t_statistic("best_client")}
+          subtitle={t_statistic("reservations")}
           value={getUsername(statistics.bestClient.lastname, statistics.bestClient.firstname)}
           total={statistics.bestClient.reservations_count}
         />
         <CardDataStats3
           title={t_statistic("best_ressource")}
+          subtitle={t_statistic("reservations")}
           value={statistics.bestRessource.space.name}
           total={statistics.bestRessource.reservations_count}
         />
         {statistics.bestMonth != null ? (
           <CardDataStats3
-            title={t_statistic("best_ressource")}
+            title={t_statistic("best_month")}
+            subtitle={t_statistic("reservations")}
             value={locale === "en" ? Months[Number(statistics.bestMonth.month)-1].name_en: Months[Number(statistics.bestMonth.month)-1].name_fr}
             total={statistics.bestMonth.count}
           />
@@ -151,7 +163,7 @@ export default function ECommerce() {
       ) : null}
 
       {selectedStat == "Users stat." ? (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats title={t_statistic("total_clients")} total={statistics.totalClients} rate="0.95%" levelDown>
           <PeopleIcon fill="currentColor" size={22} />
         </CardDataStats>
@@ -162,14 +174,14 @@ export default function ECommerce() {
       ) : null}
 
       {selectedStat == "Payments stat." ? (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats title={t_statistic("total_revenue")} total={statistics.totalRevenue} rate="2.55%" levelUp>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:gap-4 xl:grid-cols-4 2xl:gap-7.5">
+        <CardDataStats title={t_statistic("total_revenue")} total={formatCurrency(Number(statistics.totalRevenue))} rate="2.55%" levelUp>
           <ShoppingBagIcon fill="currentColor" size={22} />
         </CardDataStats>
-        <CardDataStats title={t_statistic("total_payment")} total={statistics.totalPayment} rate="0.95%" levelDown>
+        <CardDataStats title={t_statistic("total_payment")} total={formatCurrency(Number(statistics.totalPayments))} rate="0.95%" levelDown>
           <PeopleIcon fill="currentColor" size={22} />
         </CardDataStats>
-        <CardDataStats title={t_statistic("total_due")} total={statistics.totalDue} rate="0.95%" levelDown>
+        <CardDataStats title={t_statistic("total_due")} total={formatCurrency(Number(statistics.totalDue))} rate="0.95%" levelDown>
           <PeopleIcon fill="currentColor" size={22} />
         </CardDataStats>
       </div>
@@ -212,10 +224,14 @@ export default function ECommerce() {
         <ChartTwo series={statistics.payment_revenu_of_current_week} />
         <ChartThree data={statistics.ressource_with_reservations} />
         <MapOne title={t_statistic("map")} />
-        <div className="col-span-12 xl:col-span-8">
-          <TableOne />
+        {/* <div className="col-span-12 xl:col-span-8"> */}
+        {/* <TableOne /> */}
+        <div className="col-span-12">
+          <CurrentReservations reservations={statistics.currentReservations} />
         </div>
-        <TopClients clients={statistics.topClients} />
+        <div className="col-span-12">
+          <TopClients clients={statistics.topClients} />
+        </div>
       </div>
 
       <div>

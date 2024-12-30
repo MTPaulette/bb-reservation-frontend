@@ -248,6 +248,17 @@ export const columnsReservation = [
   {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 
+export const columnsCurrentReservation = [
+  // {name_en: "ID", name_fr: "ID", uid: "id", sortable: true},
+  {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},
+  {name_en: "CLIENT", name_fr: "CLIENT", uid: "client", sortable: true},
+  {name_en: "DATE", name_fr: "DATE", uid: "date"},
+  {name_en: "AMOUNT", name_fr: "MONTANT", uid: "amount", sortable: true},
+  // {name_en: "STATE", name_fr: "ETAT", uid: "state", sortable: true},
+  {name_en: "AGENCY", name_fr: "AGENCE", uid: "agency", sortable: true},
+  // {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
+  // {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+];
 
 /*
   * ======================== tabs columns

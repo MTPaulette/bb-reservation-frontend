@@ -6,18 +6,19 @@ import dynamic from "next/dynamic";
 import Title from "@/components/Title";
 import { ChevronDownIcon } from "@/components/Icons";
 import { ChartType } from "@/lib/definitions";
+import { useTranslations } from 'next-intl';
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
 const options: ApexOptions = {
-  colors: ["#3C50E0", "#80CAEE"],
+  colors: ["#80CAEE", "#3C50E0"],
   chart: {
     fontFamily: "Satoshi, sans-serif",
     type: "bar",
-    height: 335,
-    stacked: true,
+    height: 400, //335,
+    stacked: false, //true,
     toolbar: {
       show: false,
     },
@@ -73,6 +74,7 @@ const options: ApexOptions = {
 
 // const ChartTwo: React.FC = () => {
 export default function ChartTwo({series}: {series: ChartType}) {
+  const t_statistic = useTranslations("Statistic");
   /*
   const series = [
     {
@@ -90,7 +92,7 @@ export default function ChartTwo({series}: {series: ChartType}) {
     <div className="col-span-12 rounded-sm border border-divider bg-background p-7.5 shadow-default xl:col-span-4">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
-          <Title className="text-xl">Profit this week</Title>
+          <Title className="text-xl">{t_statistic("payment_revenue")}</Title>
         </div>
         <div>
           <div className="relative z-20 inline-block">
@@ -119,7 +121,7 @@ export default function ChartTwo({series}: {series: ChartType}) {
             options={options}
             series={series}
             type="bar"
-            height={350}
+            height={400}
             width={"100%"}
           />
         </div>

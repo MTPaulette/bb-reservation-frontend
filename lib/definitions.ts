@@ -380,6 +380,29 @@ export type TopClient = {
   reservations:             ReservationType[];
 }
 
+export type CurrentReservation = {
+  id:                      number;
+  ressource_id:            number;
+  client_id:               number;
+  start_date:              Date;
+  end_date:                Date;
+  start_hour:              string;
+  end_hour:                string;
+  initial_amount:          number;
+  amount_due:              number;
+  state:                   string;
+  note:                    null;
+  coupon_id:               number | null;
+  reason_for_cancellation: string | null;
+  created_by:              number;
+  cancelled_by:            number | null;
+  cancelled_at:            Date | null;
+  created_at:              Date;
+  updated_at:              Date;
+  client:                  CreatedByType;
+  ressource:               RessourceType_2;
+}
+
 
 
 

@@ -4,6 +4,7 @@ import { ApexOptions } from "apexcharts";
 import React from "react";
 import dynamic from "next/dynamic";
 import { ChartType } from "@/lib/definitions";
+import { useTranslations } from 'next-intl';
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -46,7 +47,7 @@ const options: ApexOptions = {
       breakpoint: 1366,
       options: {
         chart: {
-          height: 550,
+          height: 400,
         },
       },
     },
@@ -126,6 +127,8 @@ const options: ApexOptions = {
 // const ChartOne: React.FC = () => {
 
 export default function ChartOne({series}: {series: ChartType}) {
+  const t_statistic = useTranslations("Statistic");
+
   return (
     <div className="col-span-12 rounded-sm border border-divider bg-background px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
@@ -135,7 +138,7 @@ export default function ChartOne({series}: {series: ChartType}) {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary">Total Revenue</p>
+              <p className="font-semibold text-primary">{t_statistic("payment_per_month")}</p>
               <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
             </div>
           </div>
@@ -161,7 +164,7 @@ export default function ChartOne({series}: {series: ChartType}) {
             options={options}
             series={series}
             type="area"
-            height={550}
+            height={400}
             width={"100%"}
           />
         </div>

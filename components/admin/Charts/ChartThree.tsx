@@ -59,7 +59,7 @@ export default function ChartThree({data}: {data: any}) {
 
   return (
     <div className="col-span-12 rounded-sm border border-divider bg-background px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5">
-      <div className="mb-3 justify-between gap-4 sm:flex">
+      <div className="mb-3 justify-between gap-x-4 sm:flex lg:block">
         <div>
           <Title className="mb-1.5 text-xl">{t_statistic("ressource_with_reservations")}</Title>
           <p className="text-foreground/60 font-med font-medium mb-6">{t_statistic("ressource_with_reservations_description")}</p>
@@ -113,7 +113,7 @@ export default function ChartThree({data}: {data: any}) {
 
       {/* <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row gap-y-12 w-full justify-between items-center"> */}
       <div className="">
-        <Title className="text-lg my-2">{data[selectedAgency].name}</Title>
+        <Title className="text-lg my-2 text-center">{data[selectedAgency].name}</Title>
         <div className="mb-2">
           <div id="chartThree" className="mx-auto flex justify-center">
             <ReactApexChart
