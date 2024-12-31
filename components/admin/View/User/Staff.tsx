@@ -24,14 +24,12 @@ import DefaultRessourceTable from "../../Tables/DefaultRessourceTable";
 import DefaultUserTable from "../../Tables/DefaultUserTable";
 import { columnsTabsStaffStaff, columnsTabsClientStaff, columnsTabsStaffCoupon } from "@/lib/data";
 import DefaultCouponTable from "../../Tables/DefaultCouponTable";
-import CardWrapper from "../../DataStats/Card2";
 import DefaultReservationTable from "../../Tables/DefaultReservationTable";
 import CardDataStats from "../../DataStats/Card1";
 
 export default function ViewStaff({id}: {id: string}) {
   const { data: session } = useSession();
   const authUserId = session?.user.id;
-  const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);

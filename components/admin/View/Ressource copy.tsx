@@ -21,12 +21,12 @@ import EditRessource from "@/components/admin/FormElements/Ressource/Edit";
 import DeleteRessource from "@/components/admin/FormElements/Ressource/Delete";
 import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
+import CardWrapper from "@/components/admin/DataStats/Card2";
 import Link from "next/link";
-import DefaultReservationTable from "../Tables/DefaultReservationTable";
 // import Image from "next/image";
 
 export default function ViewRessource({id}: {id: string}) {
-  const [response, setResponse] = useState([]);
+  const [ressource, setRessource] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
@@ -35,7 +35,6 @@ export default function ViewRessource({id}: {id: string}) {
   const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
   const t_ressource = useTranslations("Ressource");
-  const t_alert = useTranslations("Alert");
   const [selected, setSelected] = React.useState<string>("ressources");
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function ViewRessource({id}: {id: string}) {
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setResponse(response);
+          setRessource(response.ressource);
           // setReservations(response.reservations);
           setLoading(false);
         }else {
@@ -77,7 +76,7 @@ export default function ViewRessource({id}: {id: string}) {
   }, []);
 
 
-  if (!response) {
+  if (!ressource) {
     notFound();
   }
 
@@ -103,23 +102,23 @@ export default function ViewRessource({id}: {id: string}) {
             <div className="p-6 space-y-4 md:space-y-8">
               <p>
                 {locale === "en" ? validities[0].name_en: validities[0].name_fr}:
-                <span className="font-bold pl-2 text-sm">{response.ressource.price_hour? formatCurrency(response.ressource.price_hour) : ""}</span>
+                <span className="font-bold pl-2 text-sm">{ressource.price_hour? formatCurrency(ressource.price_hour) : ""}</span>
               </p>
               <p className="whitespace-nowrap">
                 {locale === "en" ? validities[1].name_en: validities[1].name_fr}:
-                <span className="font-bold pl-2 text-sm">{response.ressource.price_midday? formatCurrency(response.ressource.price_midday) : ""}</span>
+                <span className="font-bold pl-2 text-sm">{ressource.price_midday? formatCurrency(ressource.price_midday) : ""}</span>
               </p>
               <p>
                 {locale === "en" ? validities[2].name_en: validities[2].name_fr}:
-                <span className="font-bold pl-2 text-sm">{response.ressource.price_day? formatCurrency(response.ressource.price_day) : ""}</span>
+                <span className="font-bold pl-2 text-sm">{ressource.price_day? formatCurrency(ressource.price_day) : ""}</span>
               </p>
               <p>
                 {locale === "en" ? validities[3].name_en: validities[3].name_fr}:
-                <span className="font-bold pl-2 text-sm">{response.ressource.price_week? formatCurrency(response.ressource.price_week) : ""}</span>
+                <span className="font-bold pl-2 text-sm">{ressource.price_week? formatCurrency(ressource.price_week) : ""}</span>
               </p>
               <p>
                 {locale === "en" ? validities[4].name_en: validities[4].name_fr}:
-                <span className="font-bold pl-2 text-sm">{response.ressource.price_month? formatCurrency(response.ressource.price_month) : ""}</span>
+                <span className="font-bold pl-2 text-sm">{ressource.price_month? formatCurrency(ressource.price_month) : ""}</span>
               </p>
             </div>
           </div>
@@ -130,9 +129,9 @@ export default function ViewRessource({id}: {id: string}) {
               <Title className="font-medium text-foreground uppercase">{t_ressource("characteristics")}</Title>
             </div>
             <div className="p-6">
-              {response.ressource.space && response.ressource.space.characteristics.length > 0 ? (
+              {ressource.space && ressource.space.characteristics.length > 0 ? (
                 <ul className="space-y-6 sm:space-y-2 w-full">
-                  {response.ressource.space.characteristics.map((item) => (
+                  {ressource.space.characteristics.map((item) => (
                     <li key={item.id}>
                       {capitalize(locale === "en" ? item.name_en: item.name_fr)}
                     </li>
@@ -151,7 +150,7 @@ export default function ViewRessource({id}: {id: string}) {
               {/* title */}
               <div className="w-full flex justify-between items-center">
                 <Title className="text-2xl font-semibold sm:text-3xl">
-                  {capitalize(response.ressource.space.name)}
+                  {capitalize(ressource.space.name)}
                 </Title>
                 <div className="relative flex justify-end items-center gap-2">
                   <Dropdown className="bg-background border-1 border-divider">
@@ -176,52 +175,58 @@ export default function ViewRessource({id}: {id: string}) {
                   </Dropdown>
                 </div>
               </div>
-              {response.ressource.agency ? (
+              {ressource.agency ? (
                 <p className="mt-1 font-light text-tiny"> {t_ressource("from")}:
-                  <Link href={`/${locale}/admin/agencies/${response.ressource.agency.id}`} className="font-medium ms-2">
-                    {response.ressource.agency.name? capitalize(response.ressource.agency.name): ""}
+                  <Link href={`/${locale}/admin/agencies/${ressource.agency.id}`} className="font-medium ms-2">
+                    {ressource.agency.name? capitalize(ressource.agency.name): ""}
                   </Link>
                 </p>
               ): null }
-              {response.ressource.created_by ? (
+              {ressource.created_by ? (
                 <p className="mt-1 font-light text-tiny"> {t_ressource("created_by")}:
-                  <Link href={`/${locale}/admin/staff/${response.ressource.created_by.id}`} className="font-medium ms-2">
-                    {response.ressource.created_by.firstname && response.ressource.created_by.lastname ?
-                      getUsername(response.ressource.created_by.lastname, response.ressource.created_by.firstname)
+                  <Link href={`/${locale}/admin/staff/${ressource.created_by.id}`} className="font-medium ms-2">
+                    {ressource.created_by.firstname && ressource.created_by.lastname ?
+                      getUsername(ressource.created_by.lastname, ressource.created_by.firstname)
                     : ""}
                   </Link>
                 </p>
               ): null }
-              {response.ressource.created_at? (
-                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_ressource("at")}: {formatDateTime(response.ressource.created_at)}</p>
+              {ressource.created_at? (
+                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_ressource("at")}: {formatDateTime(ressource.created_at)}</p>
               ): ""}
             </div>
             <p className="text-foreground/60 text-justify pt-4">
-              {capitalize(locale === "en" ? response.ressource.space.description_en: response.ressource.space.description_fr)}
+              {capitalize(locale === "en" ? ressource.space.description_en: ressource.space.description_fr)}
             </p>
 
-            {response.ressource.space && response.ressource.space.images.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-6 py-4 md:py-6">
-              {response.ressource.space.images.map((item) => (
-                <div key={item.id} className="flex-shrink-0">
-                  <Image
-                    src={getImageUrl(item.src)}
-                    alt="space image"
-                    radius="none"
-                    width={140}
-                    height={140}
-                  />
-                </div>
-              ))}
+            {/* stats */}
+            <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
+              <CardWrapper />
             </div>
-            ) : (
-              <div className="mt-2 px-3 py-5">
-                <Alert color="default" message={t_alert("no_image")} />
-              </div>
-            )}
           </div>
         </div>
       </div>
+  
+      {ressource.space && ressource.space.images.length > 0 ? (
+      <div className="col-span-12 mt-6 md:mt-8 pt-6 md:pt-8 border-t border-divider z-1">
+        <p className="mb-8 py-1.5 bg-primary text-white rounded-lg text-center text-sm">{capitalize(t_ressource("images"))}</p>
+        <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default px-4 sm:px-6 py-8 antialiased">
+          <div className="w-full flex flex-wrap items-center gap-2 sm:gap-x-8">
+            {ressource.space.images.map((item) => (
+              <div key={item.id} className="flex-shrink-0">
+                <Image 
+                  src={getImageUrl(item.src)}
+                  alt="space image"
+                  radius="none"
+                  width={140}
+                  height={140}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      ) : null}
 
       <div className="col-span-12 mt-6 md:mt-8 py-6 md:py-8 border-t border-divider z-1">
         <div className="flex w-full flex-col">
@@ -235,17 +240,6 @@ export default function ViewRessource({id}: {id: string}) {
             onSelectionChange={setSelected}
           >
             <Tab key="reservations" title={t_ressource("reservations")}>
-              {response.reservations.length > 0 ? (
-                <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                  <DefaultReservationTable reservations={response.reservations} />
-                </div>
-              ): (
-                <div className="mt-2 px-3 py-5">
-                  <Alert color="default" message={t_alert("no_reservation")} />
-                </div>
-              )}
-            </Tab>
-            {/* <Tab key="reservations" title={t_ressource("reservations")}>
               <Tabs
                 isVertical
                 aria-label="Reservations" 
@@ -272,7 +266,7 @@ export default function ViewRessource({id}: {id: string}) {
                   </div>
                 </Tab>
               </Tabs>
-            </Tab> */}
+            </Tab>
           </Tabs>
         </div>
       </div>
@@ -285,16 +279,16 @@ export default function ViewRessource({id}: {id: string}) {
       <div>
         <Modal
           open={showEditModal} close={() => setShowEditModal(false)}
-          title={`${t_table("editRessource")} "${response.ressource? response.ressource.space.name: ""}"`}
+          title={`${t_table("editRessource")} "${ressource? ressource.space.name: ""}"`}
         >
-          <EditRessource ressource={response.ressource} />
+          <EditRessource ressource={ressource} />
         </Modal>
 
         <Modal
           open={showDeleteModal} close={() => setShowDeleteModal(false)}
-          title={`${t_table("deleteRessource")} "${response.ressource? response.ressource.space.name: ''}"`}
+          title={`${t_table("deleteRessource")} "${ressource? ressource.space.name: ''}"`}
         >
-          <DeleteRessource id={response.ressource?.id} />
+          <DeleteRessource id={ressource?.id} />
         </Modal>
       </div>
     </div>

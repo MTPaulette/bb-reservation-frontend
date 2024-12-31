@@ -20,7 +20,6 @@ import SuspendAgency from "@/components/admin/FormElements/Agency/Suspend";
 import DeleteAgency from "@/components/admin/FormElements/Agency/Delete";
 import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
-import CardWrapper from "@/components/admin/DataStats/Card2";
 import Link from "next/link";
 import { columnsTabsStaffAgency } from "@/lib/data";
 import DefaultUserTable from "../Tables/DefaultUserTable";
@@ -225,11 +224,6 @@ export default function ViewAgency({id}: {id: string}) {
                 ): null}
               </div>
             </div>
-
-            {/* stats */}
-            {/* <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
-              <CardWrapper />
-            </div> */}
           </div>
           <div className="mt-4 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-3 2xl:gap-7.5">
             <CardDataStats title={t_statistic("total_administrators")} total={response.totalAdministrators} rate="0.95%" levelDown>

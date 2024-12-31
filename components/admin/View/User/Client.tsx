@@ -3,7 +3,7 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { CameraIcon } from "@/components/Icons";
+import { CalendarIcon, CameraIcon } from "@/components/Icons";
 import { getClientById } from '@/lib/action/clients';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
@@ -21,14 +21,14 @@ import SuspendClient from '@/components/admin/FormElements/Client/Suspend';
 import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
 import Link from "next/link";
-import CardWrapper from "../../DataStats/Card2";
 import { columnsTabsClientCoupon } from "@/lib/data";
 import DefaultCouponTable from "../../Tables/DefaultCouponTable";
+import DefaultReservationTable from "../../Tables/DefaultReservationTable";
+import CardDataStats from "../../DataStats/Card1";
 
 export default function ViewClient({id}: {id: string}) {
   const { data: session } = useSession();
   const authUserId = session?.user.id;
-  const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
@@ -40,8 +40,9 @@ export default function ViewClient({id}: {id: string}) {
   const t_table = useTranslations("Table");
   const t_tabs = useTranslations("Tabs");
   const t_alert = useTranslations("Alert");
-  const [coupons, setCoupons] = useState([]);
+  const t_statistic = useTranslations("Statistic");
   const [selected, setSelected] = React.useState<string>("reservations");
+  const [response, setResponse] = useState([]);
 
   useEffect(() => {
     setError("");
@@ -49,8 +50,7 @@ export default function ViewClient({id}: {id: string}) {
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setUser(response.user);
-          setCoupons(response.coupons);
+          setResponse(response);
           setLoading(false);
         }else {
           const status = res.status;
@@ -82,7 +82,7 @@ export default function ViewClient({id}: {id: string}) {
   }, []);
 
 
-  if (!user) {
+  if (!response) {
     notFound();
   }
 
@@ -111,7 +111,7 @@ export default function ViewClient({id}: {id: string}) {
               height: "auto",
             }}
           />
-          <div className={`${user.id == authUserId? 'absolute': 'hidden'} bottom-1 right-1 z-1 xsm:bottom-4 xsm:right-4`}>
+          <div className={`${response.user.id == authUserId? 'absolute': 'hidden'} bottom-1 right-1 z-1 xsm:bottom-4 xsm:right-4`}>
             <label
               htmlFor="cover"
               className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-2 py-1 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
@@ -133,16 +133,16 @@ export default function ViewClient({id}: {id: string}) {
           <div className="relative z-3 mx-auto flex justify-center items-center -mt-24 sm:-mt-12 md:-mt-32 lg:-mt-40 xl:-mt-24 h-32 w-full max-w-30 sm:h-44 sm:max-w-44">
             <div className="relative drop-shadow-2 h-25 w-25 sm:h-30 sm:w-30 md:h-40 md:w-40">
               <Avatar
-                src={user && user.image? getImageUrl(user.image): ""}
+                src={response.user && response.user.image? getImageUrl(response.user.image): ""}
                 isBordered
-                color={user.status == 'active'? 'success': 'danger'}
+                color={response.user.status == 'active'? 'success': 'danger'}
                 className="rounded-full h-full w-full"
                 alt="profile pic"
               />
 
               <label
                 htmlFor="profile"
-                className={`${user.id == authUserId? 'absolute': 'hidden'} bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2`}
+                className={`${response.user.id == authUserId? 'absolute': 'hidden'} bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2`}
               >
                 <CameraIcon fill="white" size={14} />
                 <input
@@ -158,9 +158,9 @@ export default function ViewClient({id}: {id: string}) {
             
             <div className="relative flex justify-center items-center gap-1">
               <Title className="text-2xl font-semibold text-foreground">
-                {getUsername(user.lastname, user.firstname)}
+                {getUsername(response.user.lastname, response.user.firstname)}
               </Title>
-              <div className={`${user.id == authUserId? 'hidden': 'relative'}`}>
+              <div className={`${response.user.id == authUserId? 'hidden': 'relative'}`}>
                 <Dropdown className="bg-background border-1 border-default-200">
                   <DropdownTrigger>
                     <Button isIconOnly radius="full" size="sm" variant="light" className="z-2">
@@ -178,7 +178,7 @@ export default function ViewClient({id}: {id: string}) {
                       onClick={() => {
                         setShowSuspendModal(true);
                       }}
-                    >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
+                    >{response.user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                     <DropdownItem
                       color="danger"
                       onClick={() => {
@@ -190,8 +190,8 @@ export default function ViewClient({id}: {id: string}) {
               </div>
             </div>
 
-            <p className="font-medium capitalize"> {user.role} {user.agency? ' | '+ user.agency: ""}</p>
-            <p className="mt-2 font-light"> {user.email} {user.phonenumber? ' | '+ user.phonenumber: ""}</p>
+            <p className="font-medium capitalize"> {response.user.role} {response.user.agency? ' | '+ response.user.agency: ""}</p>
+            <p className="mt-2 font-light"> {response.user.email} {response.user.phonenumber? ' | '+ response.user.phonenumber: ""}</p>
             <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-3 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
               <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
                 <span className="font-semibold text-foreground">
@@ -215,12 +215,12 @@ export default function ViewClient({id}: {id: string}) {
 
             <div className="mx-auto max-w-203">
               <Title className="font-semibold text-foreground">
-                {t("about")+' '+getUsername(user.lastname, user.firstname)}
+                {t("about")+' '+getUsername(response.user.lastname, response.user.firstname)}
               </Title>
-              {user.created_by ? (
+              {response.user.created_by ? (
                 <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
-                    <Link href={`/${locale}/admin/staff/${user.created_by.id}`} className="font-medium ms-2">
-                      {user.created_by.firstname && user.created_by.lastname? getUsername(user.created_by.lastname, user.created_by.firstname): ""}
+                    <Link href={`/${locale}/admin/staff/${response.user.created_by.id}`} className="font-medium ms-2">
+                      {response.user.created_by.firstname && response.user.created_by.lastname? getUsername(response.user.created_by.lastname, response.user.created_by.firstname): ""}
                     </Link>
                 </p>
               ): null }
@@ -232,13 +232,22 @@ export default function ViewClient({id}: {id: string}) {
                 fermentum, pharetra ligula sed, aliquam lacus.
               </p>
 
-              {/* stats */}
+              {/* stats
               <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
                 <CardWrapper />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="mt-4 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-3 2xl:gap-7.5">
+        <CardDataStats title={t_statistic("total_reservations")} total={response.totalReservations} rate="0.43%" levelUp>
+          <CalendarIcon fill="currentColor" size={20} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_coupons")} total={response.totalCoupons} rate="0.43%" levelUp>
+          <CalendarIcon fill="currentColor" size={20} />
+        </CardDataStats>
       </div>
 
       <div className="grid grid-cols-12 md:gap-8">
@@ -257,9 +266,9 @@ export default function ViewClient({id}: {id: string}) {
                 key="coupons"
                 title={t_tabs("coupons")}
               >
-                {coupons.length > 0 ? (
+                {response.coupons.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultCouponTable columns={columnsTabsClientCoupon} coupons={coupons} />
+                    <DefaultCouponTable columns={columnsTabsClientCoupon} coupons={response.coupons} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -268,32 +277,15 @@ export default function ViewClient({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="reservations" title={t_tabs("reservations")}>
-                <Tabs
-                  isVertical
-                  aria-label="Reservations" 
-                  color="primary"
-                  radius="sm"
-                  variant="solid"
-                >
-                  <Tab key="photos" title="Photos">
-                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                      photo
-                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                  </Tab>
-                  <Tab key="music" title="Music">
-                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                      music
-                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                  </Tab>
-                  <Tab key="videos" title="Videos">
-                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                      videos
-                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                  </Tab>
-                </Tabs>
+                {response.reservations.length > 0 ? (
+                  <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                    <DefaultReservationTable reservations={response.reservations} />
+                  </div>
+                ): (
+                  <div className="mt-2 px-3 py-5">
+                    <Alert color="default" message={t_alert("no_cancelled_reservation")} />
+                  </div>
+                )}
               </Tab>
             </Tabs>
           </div>
@@ -304,23 +296,23 @@ export default function ViewClient({id}: {id: string}) {
       <div>
         <Modal
           open={showEditModal} close={() => setShowEditModal(false)}
-          title={`${t_table("editClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+          title={`${t_table("editClient")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <EditClient user={user} />
+          <EditClient user={response.user} />
         </Modal>
       
         <Modal
           open={showSuspendModal} close={() => setShowSuspendModal(false)}
-          title={`${t_table("suspendClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+          title={`${t_table("suspendClient")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <SuspendClient id={user?.id} status={user?.status} />
+          <SuspendClient id={response.user?.id} status={response.user?.status} />
         </Modal>
         
         <Modal
           open={showDeleteModal} close={() => setShowDeleteModal(false)}
-          title={`${t_table("deleteClient")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+          title={`${t_table("deleteClient")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <DeleteClient id={user?.id} />
+          <DeleteClient id={response.user?.id} />
         </Modal>
       </div>
     </>

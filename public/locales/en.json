@@ -31,6 +31,7 @@
     "no_payment": "No payment",
     "no_ressource": "No ressource",
     "no_reservation": "No reservation",
+    "no_image": "No image",
     "no_cancelled_reservation": "No cancelled reservation"
   },
   "InputError": {
