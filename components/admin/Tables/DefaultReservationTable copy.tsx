@@ -4,43 +4,45 @@ import React from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Chip, User, Pagination, Selection, ChipProps, SortDescriptor,
-  Tooltip
+  DropdownItem, Pagination, Selection, SortDescriptor,
+  ChipProps,
+  Chip
 } from "@nextui-org/react";
 
 import { SearchIcon, ChevronDownIcon, EyeIcon } from "@/components/Icons";
-import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
-import { statusUser as statusOptions } from "@/lib/data";
+import { capitalize, getUsername, formatCurrency, formatDateTime } from "@/lib/utils";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  suspended: "danger"
+  pending: "warning",
+  partially_paid : "primary",
+  confirmed : "success",
+  totally_paid: "success",
+  cancelled: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "phonenumber", "status", "created_at", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "amount", "agency", "actions"];
 
-export default function DefaultUserTable({ columns, users }: { columns: any[], users: any[] }) {
+export default function DefaultReservationTable({ columns, reservations }: { columns: any[], reservations: any[] }) {
   const locale = useLocale();
   const t_table = useTranslations("Table");
-  type User = typeof users[0];
+  type Reservation = typeof reservations[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-  const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "lastname",
+    column: "space",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+  const pages = Math.ceil(reservations.length / rowsPerPage);
 
-  // const changeSelectedUser
+  // const changeSelectedReservation
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -51,21 +53,15 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredReservations = [...reservations];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.lastname.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredReservations = filteredReservations.filter((reservation) =>
+        reservation.ressource.space.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
-    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
-      );
-    }
-
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredReservations;
+  }, [reservations, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -75,74 +71,109 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: Reservation, b: Reservation) => {
+      const first = a[sortDescriptor.column as keyof Reservation] as number;
+      const second = b[sortDescriptor.column as keyof Reservation] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = React.useCallback((reservation: Reservation, columnKey: React.Key) => {
+    const cellValue = reservation[columnKey as keyof Reservation];
 
     switch (columnKey) {
-      case "lastname":
+      case "ressource":
         return (
-          <User
-            avatarProps={
-              {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
-            }
-            classNames={{
-              name: "font-semibold",
-            }}
-            description={user.firstname}
-            name={cellValue}
-          />
+          <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
+            {capitalize(reservation.ressource.space.name)}
+          </Link>
         );
-      case "status":
+      case "client":
         return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
-            {cellValue}
-          </Chip>
+          <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
+            {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
+          </Link>
         );
       case "agency":
         return (
           <div>
-          { user.work_at ? (
-            <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
-              {capitalize(user.agency)}
-            </Link>
-          ): null}
+            {capitalize(reservation.ressource.agency.name)}
+            <p className="text-xs truncate">
+              {t_table("by")}:
+              <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="ml-1">
+                {reservation.created_by.firstname && reservation.created_by.lastname ?
+                  getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+              </Link>
+            </p>
           </div>
+          // <Link href={`/${locale}/admin/agencies/${reservation.ressource.agency.id}`}>
+          //   {capitalize(reservation.ressource.agency.name)}
+          // </Link>
+        );
+      case "date":
+        return (
+          <div className="text-sm whitespace-nowrap">
+            {/* <p className="font-semibold text-sm">{`${t_table("from")}: ${formatDateTime(reservation.start_date, locale)} - ${t_table("to")}: ${formatDateTime(reservation.end_date, locale)}`}</p> */}
+            <p className="font-semibold text-sm">{`${reservation.start_date} - ${reservation.end_date}`}</p>
+            <p className="dark:text-foreground/60">{`(${reservation.start_hour} - ${reservation.end_hour})`}</p>
+          </div>
+        );
+      case "state":
+        return (
+          <Chip
+            className="capitalize border-none gap-1"
+            color={
+              reservation.state == "partially paid" ? statusColorMap["partially_paid"] : 
+              reservation.state == "totally paid" ? statusColorMap["totally_paid"] : 
+              statusColorMap[reservation.state]
+            }
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
         );
       case "created_at":
         return (
-          <p className="whitespace-nowrap">{formatDateTime(user.created_at, locale)}</p>
+          <p className="whitespace-nowrap">{formatDateTime(reservation.created_at, locale)}</p>
         );
       case "created_by":
         return (
+          <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="font-medium">
+            {reservation.created_by.firstname && reservation.created_by.lastname? getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+          </Link>
+        );
+      case "created_by":
+        return (
+          <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="font-medium">
+            {reservation.created_by.firstname && reservation.created_by.lastname? getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+          </Link>
+        );
+      case "amount":
+        return (
           <div>
-          { user.created_by ? (
-            <Link href={`/${locale}/admin/staff/${user.created_by}`}>
-              {
-                user.parent_lastname && user.parent_firstname ? 
-                getUsername(user.parent_lastname, user.parent_firstname): ""
-              }
-            </Link>
-          ): null}
+            <p className="dark:text-foreground/60">
+              {reservation.initial_amount? formatCurrency(reservation.initial_amount): ''}
+            </p>
+            <div>
+              <span className="mr-1.5 text-xs">
+                {t_table("left")}:
+              </span>
+              <span className={`${reservation.amount_due > 0 ? "font-medium text-danger": "font-semibold dark:font-normal"}`}>
+                {reservation.amount_due > 0 ? formatCurrency(reservation.amount_due): "0"}
+              </span>
+            </div>
           </div>
         );
       case "actions":
         return (
-          <Tooltip content={t_table("see_more")}>
-            <Link href={user.role == 'client' ? `/${locale}/admin/clients/${user.id}`: `/${locale}/admin/staff/${user.id}`}>
-              <Button isIconOnly radius="full" size="sm" variant="light">
-                <EyeIcon fill="currentColor" size={16} />
-              </Button>
-            </Link>
-          </Tooltip>
+          <Link href={`/${locale}/admin/reservations/${reservation.id}`}>
+            <Button isIconOnly radius="full" size="sm" variant="light">
+              <EyeIcon fill="currentColor" size={16} />
+            </Button>
+          </Link>
         );
       default:
         return cellValue;
@@ -194,32 +225,6 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
                       variant="flat"
                       className="bg-foreground text-background"
                     >
-                      {t_table("status")}
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu
-                    disallowEmptySelection
-                    aria-label="Table Columns"
-                    closeOnSelect={false}
-                    selectedKeys={statusFilter}
-                    selectionMode="multiple"
-                    onSelectionChange={setStatusFilter}
-                  >
-                    {statusOptions.map((status) => (
-                      <DropdownItem key={status.uid}>
-                        {capitalize(locale === "en" ? status.name_en: status.name_fr)}
-                      </DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                </Dropdown>
-                <Dropdown>
-                  <DropdownTrigger className="flex z-1">
-                    <Button
-                      endContent={<ChevronDownIcon fill="currentColor" size={10} />}
-                      size="sm"
-                      variant="flat"
-                      className="bg-foreground text-background"
-                    >
                       {t_table("colunms")}
                     </Button>
                   </DropdownTrigger>
@@ -241,7 +246,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {users.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {reservations.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -262,7 +267,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
       </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, ]);
+    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, reservations.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -290,12 +295,14 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]",
-        "!rounded-none","relative", "!shadow-none", "!border-none",
-        "overflow-hidden", "over-x", "over-y", "!bg-transparent", "!pr-10"
+      wrapper: ["!w-[calc(100vw_-_180px)]", "!rounded-none","relative",
+        "overflow-hiddenn", "!over-x", "!over-y", "!bg-transparent",
+        "!shadow-none", "!border-none", "!py-0", "!px-0", "!m-0",
+        "h-full"
       ],
-      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
+      th: ["bg-transparent", "text-default-500", "border-b", "border-divider",],
       td: [
+        "data-[hover=true]:bg-content2",
         "group-data-[first=true]:first:before:rounded-none",
         "group-data-[first=true]:last:before:rounded-none",
         "group-data-[middle=true]:before:rounded-none",

@@ -22,9 +22,10 @@ import Link from "next/link";
 import Alert from "@/components/Alert";
 import DefaultRessourceTable from "../../Tables/DefaultRessourceTable";
 import DefaultUserTable from "../../Tables/DefaultUserTable";
-import { columnsTabsStaffStaff, columnsTabsClientStaff, columnsTabsRessourceStaff, columnsTabsStaffCoupon } from "@/lib/data";
+import { columnsTabsStaffStaff, columnsTabsClientStaff, columnsTabsStaffCoupon } from "@/lib/data";
 import DefaultCouponTable from "../../Tables/DefaultCouponTable";
 import CardWrapper from "../../DataStats/Card2";
+import DefaultReservationTable from "../../Tables/DefaultReservationTable";
 
 export default function ViewStaff({id}: {id: string}) {
   const { data: session } = useSession();
@@ -45,6 +46,7 @@ export default function ViewStaff({id}: {id: string}) {
   const [createdClients, setCreatedClients] = useState([]);
   const [createdStaff, setCreatedStaff] = useState([]);
   const [ressources, setRessources] = useState([]);
+  const [reservations, setReservations] = useState([]);
   const [coupons, setCoupons] = useState([]);
 
   useEffect(() => {
@@ -55,6 +57,7 @@ export default function ViewStaff({id}: {id: string}) {
           const response = await res.json();
           setUser(response.user);
           setRessources(response.ressources);
+          setReservations(response.reservations);
           setCoupons(response.coupons);
           setCreatedClients(response.created_clients);
           setCreatedStaff(response.created_staff);
@@ -309,37 +312,20 @@ export default function ViewStaff({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="reservations" title={t_tabs("reservations")}>
-                <Tabs
-                  isVertical
-                  aria-label="Reservations" 
-                  color="primary"
-                  radius="sm"
-                  variant="solid"
-                >
-                  <Tab key="photos" title="Photos">
-                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                      photo
-                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                  </Tab>
-                  <Tab key="music" title="Music">
-                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                      music
-                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                  </Tab>
-                  <Tab key="videos" title="Videos">
-                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                      videos
-                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
-                  </Tab>
-                </Tabs>
+                {reservations.length > 0 ? (
+                  <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                    <DefaultReservationTable reservations={reservations} />
+                  </div>
+                ): (
+                  <div className="mt-2 px-3 py-5">
+                    <Alert color="default" message={t_alert("no_cancelled_reservation")} />
+                  </div>
+                )}
               </Tab>
               <Tab key="ressources" title={t_tabs("ressources")}>
                 {ressources.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultRessourceTable columns={columnsTabsRessourceStaff} ressources={ressources} />
+                    <DefaultRessourceTable ressources={ressources} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">

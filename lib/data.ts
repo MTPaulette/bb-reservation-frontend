@@ -280,6 +280,7 @@ export const columnsTabsClientCoupon = [
   {name_en: "EXPIRE ON", name_fr: "EXPIRE LE", uid: "expired_on", sortable: true},
   {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 export const columnsTabsStaffAgency = [
   {name_en: "NAME", name_fr: "NOM", uid: "lastname", sortable: true},
@@ -288,6 +289,7 @@ export const columnsTabsStaffAgency = [
   {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
   {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 
 export const columnsTabsStaffStaff = [
@@ -297,6 +299,7 @@ export const columnsTabsStaffStaff = [
   {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
   {name_en: "WORK AT", name_fr: "TRAVAILLE A", uid: "agency", sortable: true},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 
 export const columnsTabsClientStaff = [
@@ -305,23 +308,27 @@ export const columnsTabsClientStaff = [
   {name_en: "PHONENUMBER", name_fr: "TELEPHONE", uid: "phonenumber"},
   {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 
-export const columnsTabsRessourceAgency = [
-  {name_en: "SPACE", name_fr: "ESPACE", uid: "space", sortable: true},
-  {name_en: "PRICE", name_fr: "PRIX", uid: "price"},
-  {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place", sortable: true},
-  {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity", sortable: true},
-  {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
-  {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
-];
-
-export const columnsTabsRessourceStaff = [
+export const columnsTabsRessource = [
   {name_en: "SPACE", name_fr: "ESPACE", uid: "space", sortable: true},
   {name_en: "PRICE", name_fr: "PRIX", uid: "price"},
   {name_en: "NB PLACE", name_fr: "NB PLACE", uid: "nb_place", sortable: true},
   {name_en: "QUANTITY", name_fr: "QUANTITE", uid: "quantity", sortable: true},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
+];
+
+export const columnsTabsReservation= [
+  {name_en: "ID", name_fr: "ID", uid: "id", sortable: true},
+  {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},
+  {name_en: "CLIENT", name_fr: "CLIENT", uid: "client", sortable: true},
+  {name_en: "DATE", name_fr: "DATE", uid: "date"},
+  {name_en: "AMOUNT", name_fr: "MONTANT", uid: "amount", sortable: true},
+  {name_en: "STATE", name_fr: "ETAT", uid: "state", sortable: true},
+  {name_en: "AGENCY", name_fr: "AGENCE", uid: "agency", sortable: true},
+  {name_en: "ACTIONS", name_fr: "ACTIONS", uid: "actions"},
 ];
 
 /*

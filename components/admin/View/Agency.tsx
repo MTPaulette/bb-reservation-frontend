@@ -22,13 +22,15 @@ import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
 import CardWrapper from "@/components/admin/DataStats/Card2";
 import Link from "next/link";
-import { columnsTabsStaffAgency, columnsTabsRessourceAgency } from "@/lib/data";
+import { columnsTabsStaffAgency } from "@/lib/data";
 import DefaultUserTable from "../Tables/DefaultUserTable";
 import DefaultRessourceTable from "../Tables/DefaultRessourceTable";
+import DefaultReservationTable from "../Tables/DefaultReservationTable";
 
 export default function ViewAgency({id}: {id: string}) {
   const [agency, setAgency] = useState([]);
   const [ressources, setRessources] = useState([]);
+  const [reservations, setReservations] = useState([]);
   const [administrators, setAdministrators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
@@ -50,6 +52,7 @@ export default function ViewAgency({id}: {id: string}) {
           const response = await res.json();
           setAgency(response.agency);
           setRessources(response.ressources);
+          setReservations(response.reservations);
           setAdministrators(response.administrators);
           setLoading(false);
         }else {
@@ -264,7 +267,7 @@ export default function ViewAgency({id}: {id: string}) {
               <Tab key="ressources" title={t_tabs("ressources")}>
                 {ressources.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultRessourceTable columns={columnsTabsRessourceAgency} ressources={ressources} />
+                    <DefaultRessourceTable ressources={ressources} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -273,6 +276,17 @@ export default function ViewAgency({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="reservations" title={t_tabs("reservations")}>
+                {reservations.length > 0 ? (
+                  <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                    <DefaultReservationTable reservations={reservations} />
+                  </div>
+                ): (
+                  <div className="mt-2 px-3 py-5">
+                    <Alert color="default" message={t_alert("no_cancelled_reservation")} />
+                  </div>
+                )}
+              </Tab>
+              {/* <Tab key="reservations" title={t_tabs("reservations")}>
                 <Tabs
                   isVertical
                   aria-label="Reservations" 
@@ -280,17 +294,6 @@ export default function ViewAgency({id}: {id: string}) {
                   radius="sm"
                   variant="solid"
                 >
-                  {/* <Tab key="cancelled" title={t_tabs("cancelled_reservations")}>
-                    {ressources.length > 0 ? (
-                      <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                        <DefaultRessourceTable columns={columnsTabsRessourceAgency} ressources={ressources} />
-                      </div>
-                    ): (
-                      <div className="mt-2 px-3 py-5">
-                        <Alert color="default" message={t_alert("no_ressource")} />
-                      </div>
-                    )}
-                  </Tab> */}
                   <Tab key="music" title="Music">
                     <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
                       music
@@ -304,7 +307,7 @@ export default function ViewAgency({id}: {id: string}) {
                     </div>
                   </Tab>
                 </Tabs>
-              </Tab>
+              </Tab> */}
             </Tabs>
           </div>
         </div>

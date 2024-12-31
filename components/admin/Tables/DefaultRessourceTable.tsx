@@ -4,18 +4,19 @@ import React from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Pagination, Selection, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor,
+  Tooltip
 } from "@nextui-org/react";
 
-import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
+import { SearchIcon, ChevronDownIcon, EyeIcon } from "@/components/Icons";
 import { capitalize, getUsername, formatCurrency, formatDateTime } from "@/lib/utils";
 import { useLocale, useTranslations } from 'next-intl';
-import { validitiesName as validities } from "@/lib/data";
+import { validitiesName as validities, columnsTabsRessource as columns } from "@/lib/data";
 import Link from "next/link";
 
-const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "created_by", "created_at"];
+const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "created_at", "actions"];
 
-export default function DefaultRessourceTable({ columns, ressources }: { columns: any[], ressources: any[] }) {
+export default function DefaultRessourceTable({ ressources }: { ressources: any[] }) {
   const locale = useLocale();
   const t_table = useTranslations("Table");
   type Ressource = typeof ressources[0];
@@ -114,20 +115,32 @@ export default function DefaultRessourceTable({ columns, ressources }: { columns
         );
       case "created_at":
         return (
+        <div>
           <p className="whitespace-nowrap">{formatDateTime(ressource.created_at, locale)}</p>
-        );
-      case "created_by":
-        return (
-          <div>
-          { ressource.created_by ? (
-            <Link href={`/${locale}/admin/staff/${ressource.created_by.id}`}>
-              {
-                ressource.parent_lastname && ressource.parent_firstname ? 
-                getUsername(ressource.parent_lastname, ressource.parent_firstname): ""
-              }
-            </Link>
-          ): null}
+          <p className="text-xs truncate mt-1">
+            { ressource.created_by ? (
+              <>
+                {t_table("by")}:
+                <Link href={`/${locale}/admin/staff/${ressource.created_by.id}`} className="ml-1">
+                  {
+                    ressource.parent_lastname && ressource.parent_firstname ? 
+                    getUsername(ressource.parent_lastname, ressource.parent_firstname): ""
+                  }
+                </Link>
+              </>
+            ): null}
+          </p>
           </div>
+        );
+      case "actions":
+        return (
+          <Tooltip content={t_table("see_more")}>
+            <Link href={`/${locale}/admin/ressources/${ressource.id}`}>
+              <Button isIconOnly radius="full" size="sm" variant="light">
+                <EyeIcon fill="currentColor" size={16} />
+              </Button>
+            </Link>
+          </Tooltip>
         );
       default:
         return cellValue;
@@ -249,9 +262,10 @@ export default function DefaultRessourceTable({ columns, ressources }: { columns
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
-        "overflow-hidden", "over-x", "over-y", "!bg-transparent",
-        "!shadow-none", "!border-none", "!py-0", "!px-0", "!m-0"],
+      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]",
+        "!rounded-none","relative", "!shadow-none", "!border-none",
+        "overflow-hidden", "over-x", "over-y", "!bg-transparent", "!pr-10"
+      ],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
       td: [
         "group-data-[first=true]:first:before:rounded-none",

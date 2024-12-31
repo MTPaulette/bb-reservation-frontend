@@ -121,7 +121,7 @@ export default function ReservationsTable() {
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
       filteredReservations = filteredReservations.filter((reservation) =>
-        Array.from(statusFilter).includes(reservation.status),
+        Array.from(statusFilter).includes(reservation.state),
       );
     }
 

@@ -4,18 +4,29 @@ import React from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Pagination, Selection, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor,
+  ChipProps,
+  Chip,
+  Tooltip
 } from "@nextui-org/react";
 
-import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
+import { SearchIcon, ChevronDownIcon, EyeIcon } from "@/components/Icons";
 import { capitalize, getUsername, formatCurrency, formatDateTime } from "@/lib/utils";
 import { useLocale, useTranslations } from 'next-intl';
-import { validitiesName as validities } from "@/lib/data";
 import Link from "next/link";
+import { columnsTabsReservation as columns, statusReservation as statusOptions } from "@/lib/data";
 
-const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "created_by", "created_at"];
+const statusColorMap: Record<string, ChipProps["color"]> = {
+  pending: "warning",
+  partially_paid : "primary",
+  confirmed : "success",
+  totally_paid: "success",
+  cancelled: "danger"
+};
 
-export default function DefaultReservationTable({ columns, reservations }: { columns: any[], reservations: any[] }) {
+const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "amount", "state", "actions"];
+
+export default function DefaultReservationTable({ reservations }: { reservations: any[] }) {
   const locale = useLocale();
   const t_table = useTranslations("Table");
   type Reservation = typeof reservations[0];
@@ -23,18 +34,15 @@ export default function DefaultReservationTable({ columns, reservations }: { col
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "space",
+    column: "ressource",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
-
   const pages = Math.ceil(reservations.length / rowsPerPage);
-
-  // const changeSelectedReservation
-
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
@@ -48,11 +56,17 @@ export default function DefaultReservationTable({ columns, reservations }: { col
 
     if (hasSearchFilter) {
       filteredReservations = filteredReservations.filter((reservation) =>
-        reservation.lastname.toLowerCase().includes(filterValue.toLowerCase()),
+        reservation.ressource.space.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
+    if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
+      filteredReservations = filteredReservations.filter((reservation) =>
+        Array.from(statusFilter).includes(reservation.state),
+      );
+    }
+
     return filteredReservations;
-  }, [reservations, filterValue]);
+  }, [reservations, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -75,59 +89,86 @@ export default function DefaultReservationTable({ columns, reservations }: { col
     const cellValue = reservation[columnKey as keyof Reservation];
 
     switch (columnKey) {
-      case "space":
+      case "ressource":
         return (
-          <Link href={`/${locale}/admin/spaces/${reservation.space_id}`} className="font-semibold">
-            {capitalize(reservation.space)}
+          <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
+            {capitalize(reservation.ressource.space.name)}
           </Link>
         );
-      case "price":
+      case "client":
         return (
-          <div className="flex flex-col gap-1">
-            <p>
-              {locale === "en" ? validities[0].name_en: validities[0].name_fr}:
-              <span className="font-bold pl-2 text-xs">{reservation.price_hour? formatCurrency(reservation.price_hour) : ""}</span>
-            </p>
-            <p className="whitespace-nowrap">
-              {locale === "en" ? validities[1].name_en: validities[1].name_fr}:
-              <span className="font-bold pl-2 text-xs">{reservation.price_midday? formatCurrency(reservation.price_midday) : ""}</span>
-            </p>
-            <p>
-              {locale === "en" ? validities[2].name_en: validities[2].name_fr}:
-              <span className="font-bold pl-2 text-xs">{reservation.price_day? formatCurrency(reservation.price_day) : ""}</span>
-            </p>
-            <p>
-              {locale === "en" ? validities[3].name_en: validities[3].name_fr}:
-              <span className="font-bold pl-2 text-xs">{reservation.price_week? formatCurrency(reservation.price_week) : ""}</span>
-            </p>
-            <p>
-              {locale === "en" ? validities[4].name_en: validities[4].name_fr}:
-              <span className="font-bold pl-2 text-xs">{reservation.price_month? formatCurrency(reservation.price_month) : ""}</span>
-            </p>
-          </div>
+          <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
+            {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
+          </Link>
         );
       case "agency":
         return (
-          <Link href={`/${locale}/admin/agencies/${reservation.agency_id}`}>
-            {capitalize(reservation.agency)}
-          </Link>
+          <div className="text-foreground/60">
+            {capitalize(reservation.ressource.agency.name)}
+            <p className="text-xs truncate mt-1 text-foreground">
+              {t_table("by")}:
+              <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="ml-1">
+                {reservation.created_by.firstname && reservation.created_by.lastname ?
+                  getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+              </Link>
+            </p>
+            <p className="text-xs truncate mt-1">
+              {t_table("at")}: {formatDateTime(reservation.created_at, locale)}
+            </p>
+          </div>
         );
-      case "created_at":
+      case "date":
         return (
-          <p className="whitespace-nowrap">{formatDateTime(reservation.created_at, locale)}</p>
+          <div className="text-sm whitespace-nowrap">
+            {/* <p className="font-semibold text-sm">{`${t_table("from")}: ${formatDateTime(reservation.start_date, locale)} - ${t_table("to")}: ${formatDateTime(reservation.end_date, locale)}`}</p> */}
+            <p className="font-semibold text-sm">{`${reservation.start_date} - ${reservation.end_date}`}</p>
+            <p className="dark:text-foreground/60">{`(${reservation.start_hour} - ${reservation.end_hour})`}</p>
+          </div>
         );
-      case "created_by":
+      case "state":
+        return (
+          <Chip
+            className="capitalize border-none gap-1"
+            color={
+              reservation.state == "partially paid" ? statusColorMap["partially_paid"] : 
+              reservation.state == "totally paid" ? statusColorMap["totally_paid"] : 
+              statusColorMap[reservation.state]
+            }
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
+        );
+      // case "created_at":
+      //   return (
+      //     <p className="whitespace-nowrap">{formatDateTime(reservation.created_at, locale)}</p>
+      //   );
+      case "amount":
         return (
           <div>
-          { reservation.created_by ? (
-            <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`}>
-              {
-                reservation.parent_lastname && reservation.parent_firstname ? 
-                getUsername(reservation.parent_lastname, reservation.parent_firstname): ""
-              }
-            </Link>
-          ): null}
+            <p className="dark:text-foreground/60">
+              {reservation.initial_amount? formatCurrency(reservation.initial_amount): ''}
+            </p>
+            <div>
+              <span className="mr-1.5 text-xs">
+                {t_table("left")}:
+              </span>
+              <span className={`${reservation.amount_due > 0 ? "font-medium text-danger": "font-semibold dark:font-normal"}`}>
+                {reservation.amount_due > 0 ? formatCurrency(reservation.amount_due): "0"}
+              </span>
+            </div>
           </div>
+        );
+      case "actions":
+        return (
+          <Tooltip content={t_table("see_more")}>
+            <Link href={`/${locale}/admin/reservations/${reservation.id}`}>
+              <Button isIconOnly radius="full" size="sm" variant="light">
+                <EyeIcon fill="currentColor" size={16} />
+              </Button>
+            </Link>
+          </Tooltip>
         );
       default:
         return cellValue;
@@ -151,7 +192,6 @@ export default function DefaultReservationTable({ columns, reservations }: { col
 
   const topContent = React.useMemo(() => {
     return (
-      <>
       <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 bg-content2 shadow-defaultt sm:px-7.5 xl:pb-2">
         <div className="max-w-full overflow-x-auto">
           <div className="flex flex-col gap-4">
@@ -162,6 +202,7 @@ export default function DefaultReservationTable({ columns, reservations }: { col
                   base: "w-full sm:max-w-[50%] z-1",
                   inputWrapper: "border-1",
                 }}
+                aria-label="search"
                 placeholder={t_table("search_placeholder")}
                 size="sm"
                 startContent={<SearchIcon fill="currentColor" size={18} />}
@@ -177,7 +218,31 @@ export default function DefaultReservationTable({ columns, reservations }: { col
                       endContent={<ChevronDownIcon fill="currentColor" size={10} />}
                       size="sm"
                       variant="flat"
-                      className="bg-foreground text-background"
+                    >
+                      {t_table("status")}
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    disallowEmptySelection
+                    aria-label="Table Columns"
+                    closeOnSelect={false}
+                    selectedKeys={statusFilter}
+                    selectionMode="multiple"
+                    onSelectionChange={setStatusFilter}
+                  >
+                    {statusOptions.map((status) => (
+                      <DropdownItem key={status.uid}>
+                        {capitalize(locale === "en" ? status.name_en: status.name_fr)}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                </Dropdown>
+                <Dropdown>
+                  <DropdownTrigger className="flex z-1">
+                    <Button
+                      endContent={<ChevronDownIcon fill="currentColor" size={10} />}
+                      size="sm"
+                      variant="flat"
                     >
                       {t_table("colunms")}
                     </Button>
@@ -218,10 +283,9 @@ export default function DefaultReservationTable({ columns, reservations }: { col
           </div>
         </div>
       </div>
-      </>
     );
   }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, reservations.length, hasSearchFilter, ]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, reservations.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -249,9 +313,10 @@ export default function DefaultReservationTable({ columns, reservations }: { col
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
-        "overflow-hidden", "over-x", "over-y", "!bg-transparent",
-        "!shadow-none", "!border-none", "!py-0", "!px-0", "!m-0"],
+      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]",
+        "!rounded-none","relative", "!shadow-none", "!border-none",
+        "overflow-hidden", "over-x", "over-y", "!bg-transparent", "!pr-10"
+      ],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
       td: [
         "group-data-[first=true]:first:before:rounded-none",
@@ -263,6 +328,11 @@ export default function DefaultReservationTable({ columns, reservations }: { col
     }),
     [],
   );
+
+  // wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
+  //   "overflow-hidden", "over-x", "over-y", "!bg-transparentt !bg-red-900",
+  //   "!shadow-none", "!border-none", "!py-0", "!px-0", "!m-0"],
+
   return (
     <>
       <Table
@@ -300,4 +370,6 @@ export default function DefaultReservationTable({ columns, reservations }: { col
     </>
   );
 }
+
+
 

@@ -1,5 +1,4 @@
-import { BRAND, CurrentReservation } from "@/lib/definitions";
-import Image from "next/image";
+import { CurrentReservation } from "@/lib/definitions";
 import Title from "@/components/Title";
 import { useLocale, useTranslations } from 'next-intl';
 import { capitalize, formatCurrency, getUsername } from "@/lib/utils";

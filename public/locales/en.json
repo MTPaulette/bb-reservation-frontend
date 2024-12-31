@@ -17,7 +17,8 @@
     "clients": "Clients",
     "summary": "Reservation summary",
     "newReservation": "New reservation",
-    "define_time_slot": "Define a time slot"
+    "define_time_slot": "Define a time slot",
+    "cancelled": "Cancelled"
   },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
@@ -29,7 +30,8 @@
     "no_coupon": "No coupon",
     "no_payment": "No payment",
     "no_ressource": "No ressource",
-    "no_reservation": "No reservation"
+    "no_reservation": "No reservation",
+    "no_cancelled_reservation": "No cancelled reservation"
   },
   "InputError": {
     "name": "the name is required",
@@ -307,6 +309,9 @@
     "work_at": "Work at",
     "at": "at",
     "since": "Since",
+    "by": "By",
+    "left": "Left",
+    "see_more": "see more",
 
     "newClient": "New client",
     "editClient": "Edit client",

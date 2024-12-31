@@ -17,7 +17,8 @@
     "clients": "Clients",
     "summary": "Récapitulatif de réservation",
     "newReservation": "Nouvelle réservation",
-    "define_time_slot": "Définir une plage horaire"
+    "define_time_slot": "Définir une plage horaire",
+    "cancelled": "Annulées"
   },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
@@ -29,7 +30,8 @@
     "no_coupon": "Aucun coupon",
     "no_payment": "Aucun payment",
     "no_ressource": "Aucune ressource",
-    "no_reservation": "Aucune reservation"
+    "no_reservation": "Aucune réservation",
+    "no_cancelled_reservation": "Aucune réservation annulée"
   },
   "InputError": {
     "name": "Le nom est obligatoire",
@@ -306,6 +308,9 @@
     "work_at": "Travaille à",
     "at": "le",
     "since": "Depuis",
+    "by": "Par",
+    "left": "Reste",
+    "see_more": "voir plus",
     
     "newClient": "Nouveau client",
     "editClient": "Editer client",
