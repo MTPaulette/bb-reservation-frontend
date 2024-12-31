@@ -174,7 +174,7 @@ export default function ECommerce() {
       ) : null}
 
       {selectedStat == "Payments stat." ? (
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:gap-4 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:gap-4 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats title={t_statistic("total_revenue")} total={formatCurrency(Number(statistics.totalRevenue))} rate="2.55%" levelUp>
           <ShoppingBagIcon fill="currentColor" size={22} />
         </CardDataStats>
@@ -188,7 +188,7 @@ export default function ECommerce() {
       ) : null}
 
       {selectedStat == "Reservations stat." ? (
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats title={t_statistic("total_ressources")} total={statistics.totalRessources} rate="2.55%" levelUp>
           <ShoppingBagIcon fill="currentColor" size={22} />
         </CardDataStats>

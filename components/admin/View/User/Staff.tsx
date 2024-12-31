@@ -11,7 +11,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Tabs, Tab, Avatar } from "@nextui-org/react";
-import { VerticalDotsIcon } from "@/components/Icons";
+import { CalendarIcon, PeopleIcon, ShoppingBagIcon, VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
 import EditStaff from "@/components/admin/FormElements/Staff/Edit";
@@ -26,6 +26,7 @@ import { columnsTabsStaffStaff, columnsTabsClientStaff, columnsTabsStaffCoupon }
 import DefaultCouponTable from "../../Tables/DefaultCouponTable";
 import CardWrapper from "../../DataStats/Card2";
 import DefaultReservationTable from "../../Tables/DefaultReservationTable";
+import CardDataStats from "../../DataStats/Card1";
 
 export default function ViewStaff({id}: {id: string}) {
   const { data: session } = useSession();
@@ -42,12 +43,9 @@ export default function ViewStaff({id}: {id: string}) {
   const t_table = useTranslations("Table");
   const t_tabs = useTranslations("Tabs");
   const t_alert = useTranslations("Alert");
+  const t_statistic = useTranslations("Statistic");
   const [selected, setSelected] = React.useState<string>("reservations");
-  const [createdClients, setCreatedClients] = useState([]);
-  const [createdStaff, setCreatedStaff] = useState([]);
-  const [ressources, setRessources] = useState([]);
-  const [reservations, setReservations] = useState([]);
-  const [coupons, setCoupons] = useState([]);
+  const [response, setResponse] = useState([]);
 
   useEffect(() => {
     setError("");
@@ -55,12 +53,7 @@ export default function ViewStaff({id}: {id: string}) {
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setUser(response.user);
-          setRessources(response.ressources);
-          setReservations(response.reservations);
-          setCoupons(response.coupons);
-          setCreatedClients(response.created_clients);
-          setCreatedStaff(response.created_staff);
+          setResponse(response);
           setLoading(false);
         }else {
           const status = res.status;
@@ -92,7 +85,7 @@ export default function ViewStaff({id}: {id: string}) {
   }, []);
 
 
-  if (!user) {
+  if (!response) {
     notFound();
   }
 
@@ -126,9 +119,9 @@ export default function ViewStaff({id}: {id: string}) {
           <div className="relative z-3 mx-auto flex justify-center items-center -mt-24 sm:-mt-12 md:-mt-32 lg:-mt-40 xl:-mt-24 h-32 w-full max-w-30 sm:h-44 sm:max-w-44">
             <div className="relative drop-shadow-2 h-25 w-25 sm:h-30 sm:w-30 md:h-40 md:w-40">
               <Avatar
-                src={user && user.image? getImageUrl(user.image): ""}
+                src={response.user && response.user.image? getImageUrl(response.user.image): ""}
                 isBordered
-                color={user.status == 'active'? 'success': 'danger'}
+                color={response.user.status == 'active'? 'success': 'danger'}
                 className="rounded-full h-full w-full"
                 alt="profile pic"
               />
@@ -138,9 +131,9 @@ export default function ViewStaff({id}: {id: string}) {
             
             <div className="relative flex justify-center items-center gap-1">
               <Title className="text-2xl font-semibold text-foreground">
-                {getUsername(user.lastname, user.firstname)}
+                {getUsername(response.user.lastname, response.user.firstname)}
               </Title>
-              <div className={`${user.id == authUserId? 'hidden': 'relative'}`}>
+              <div className={`${response.user.id == authUserId? 'hidden': 'relative'}`}>
                 <Dropdown className="bg-background border-1 border-default-200">
                   <DropdownTrigger>
                     <Button isIconOnly radius="full" size="sm" variant="light" className="z-2">
@@ -158,7 +151,7 @@ export default function ViewStaff({id}: {id: string}) {
                       onClick={() => {
                         setShowSuspendModal(true);
                       }}
-                    >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
+                    >{response.user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                     <DropdownItem
                       color="danger"
                       onClick={() => {
@@ -170,8 +163,8 @@ export default function ViewStaff({id}: {id: string}) {
               </div>
             </div>
 
-            <p className="font-medium capitalize"> {user.role} {user.agency? ' | '+ user.agency: ""}</p>
-            <p className="mt-2 font-light"> {user.email} {user.phonenumber? ' | '+ user.phonenumber: ""}</p>
+            <p className="font-medium capitalize"> {response.user.role} {response.user.agency? ' | '+ response.user.agency: ""}</p>
+            <p className="mt-2 font-light"> {response.user.email} {response.user.phonenumber? ' | '+ response.user.phonenumber: ""}</p>
             <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-3 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
               <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
                 <span className="font-semibold text-foreground">
@@ -195,40 +188,40 @@ export default function ViewStaff({id}: {id: string}) {
 
             <div className="mx-auto max-w-203 flex flex-col items-center">
               <Title className="font-semibold text-foreground">
-                {t("about")+' '+getUsername(user.lastname, user.firstname)}
+                {t("about")+' '+getUsername(response.user.lastname, response.user.firstname)}
               </Title>
-              {user.work_at ? (
+              {response.user.work_at ? (
                 <p className="mt-1 font-light text-tiny"> {t_table("work_at")}:
-                  <Link href={`/${locale}/admin/agencies/${user.work_at.id}`} className="font-medium ms-2">
-                    {user.work_at.name?
-                      capitalize(user.work_at.name)
+                  <Link href={`/${locale}/admin/agencies/${response.user.work_at.id}`} className="font-medium ms-2">
+                    {response.user.work_at.name?
+                      capitalize(response.user.work_at.name)
                     : ""}
                   </Link>
                 </p>
               ): null }
-              {user.created_by ? (
+              {response.user.created_by ? (
                 <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
-                  <Link href={`/${locale}/admin/staff/${user.created_by.id}`} className="font-medium ms-2">
-                    {user.created_by.firstname && user.created_by.lastname ?
-                      getUsername(user.created_by.lastname, user.created_by.firstname)
+                  <Link href={`/${locale}/admin/staff/${response.user.created_by.id}`} className="font-medium ms-2">
+                    {response.user.created_by.firstname && response.user.created_by.lastname ?
+                      getUsername(response.user.created_by.lastname, response.user.created_by.firstname)
                     : ""}
                   </Link>
                 </p>
               ): null }
-              {user.created_at? (
-                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_table("since")}: {formatDateTime(user.created_at)}</p>
+              {response.user.created_at? (
+                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_table("since")}: {formatDateTime(response.user.created_at)}</p>
               ): ""}
 
               <div
                 className={`my-3 inline-block rounded px-1.5 py-0.5 uppercase font-bold text-sm text-white
-                ${user.status == "active"? "bg-success" :"bg-danger"}`}
-              >{user.status}</div>
+                ${response.user.status == "active"? "bg-success" :"bg-danger"}`}
+              >{response.user.status}</div>
               <div>
-                {user.status == 'suspended' && user.suspended_by ? (
+                {response.user.status == 'suspended' && response.user.suspended_by ? (
                   <p className="font-light text-tiny"> {t_table("suspended_by")}:
-                    <Link href={`/${locale}/admin/staff/${user.suspended_by.id}`} className="font-medium ms-2">
-                      {user.suspended_by.firstname && user.suspended_by.lastname ?
-                        getUsername(user.suspended_by.lastname, user.suspended_by.firstname)
+                    <Link href={`/${locale}/admin/staff/${response.user.suspended_by.id}`} className="font-medium ms-2">
+                      {response.user.suspended_by.firstname && response.user.suspended_by.lastname ?
+                        getUsername(response.user.suspended_by.lastname, response.user.suspended_by.firstname)
                       : ""}
                     </Link>
                   </p>
@@ -236,9 +229,9 @@ export default function ViewStaff({id}: {id: string}) {
               </div>
 
               <div>
-                {user.status != "active" ? (
+                {response.user.status != "active" ? (
                   <p className="mt-4.5">
-                    {locale === "en" ? user.reason_for_suspension_en: user.reason_for_suspension_fr}
+                    {locale === "en" ? response.user.reason_for_suspension_en: response.user.reason_for_suspension_fr}
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Pellentesque posuere fermentum urna, eu condimentum mauris
                     tempus ut. Donec fermentum blandit aliquet. Etiam dictum
@@ -248,15 +241,32 @@ export default function ViewStaff({id}: {id: string}) {
                 ): null}
               </div>
 
-              {/* stats */}
+              {/* stats
               <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
                 <CardWrapper />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
       </div>
 
+      <div className="mt-4 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-3 2xl:gap-7.5">
+        <CardDataStats title={t_statistic("total_clients")} total={response.totalCreatedClients} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_administrators")} total={response.totalCreatedStaff} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_ressources")} total={response.totalRessources} rate="2.55%" levelUp>
+          <ShoppingBagIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_reservations")} total={response.totalReservations} rate="0.43%" levelUp>
+          <CalendarIcon fill="currentColor" size={20} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_coupons")} total={response.totalCoupons} rate="0.43%" levelUp>
+          <CalendarIcon fill="currentColor" size={20} />
+        </CardDataStats>
+      </div>
       <div className="grid grid-cols-12 md:gap-8">
         <div className="col-span-12 mt-6 md:mt-8 py-6 md:py-8 border-t border-divider z-1">
           <div className="flex w-full flex-col">
@@ -273,9 +283,9 @@ export default function ViewStaff({id}: {id: string}) {
                 key="administrators"
                 title={t_tabs("administrators")}
               >
-                {createdStaff.length > 0 ? (
+                {response.createdStaff.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultUserTable columns={columnsTabsStaffStaff} users={createdStaff} />
+                    <DefaultUserTable columns={columnsTabsStaffStaff} users={response.createdStaff} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -287,9 +297,9 @@ export default function ViewStaff({id}: {id: string}) {
                 key="clients"
                 title={t_tabs("clients")}
               >
-                {createdClients.length > 0 ? (
+                {response.createdClients.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultUserTable columns={columnsTabsClientStaff} users={createdClients} />
+                    <DefaultUserTable columns={columnsTabsClientStaff} users={response.createdClients} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -301,9 +311,9 @@ export default function ViewStaff({id}: {id: string}) {
                 key="coupons"
                 title={t_tabs("coupons")}
               >
-                {coupons.length > 0 ? (
+                {response.coupons.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultCouponTable columns={columnsTabsStaffCoupon} coupons={coupons} />
+                    <DefaultCouponTable columns={columnsTabsStaffCoupon} coupons={response.coupons} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -312,9 +322,9 @@ export default function ViewStaff({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="reservations" title={t_tabs("reservations")}>
-                {reservations.length > 0 ? (
+                {response.reservations.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultReservationTable reservations={reservations} />
+                    <DefaultReservationTable reservations={response.reservations} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -323,9 +333,9 @@ export default function ViewStaff({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="ressources" title={t_tabs("ressources")}>
-                {ressources.length > 0 ? (
+                {response.ressources.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultRessourceTable ressources={ressources} />
+                    <DefaultRessourceTable ressources={response.ressources} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -342,23 +352,23 @@ export default function ViewStaff({id}: {id: string}) {
       <div>
         <Modal
           open={showEditModal} close={() => setShowEditModal(false)}
-          title={`${t_table("editStaff")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+          title={`${t_table("editStaff")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <EditStaff user={user} />
+          <EditStaff user={response.user} />
         </Modal>
       
         <Modal
           open={showSuspendModal} close={() => setShowSuspendModal(false)}
-          title={`${t_table("suspendStaff")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+          title={`${t_table("suspendStaff")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <SuspendStaff id={user?.id} status={user?.status} />
+          <SuspendStaff id={response.user?.id} status={response.user?.status} />
         </Modal>
         
         <Modal
           open={showDeleteModal} close={() => setShowDeleteModal(false)}
-          title={`${t_table("deleteStaff")} "${user? getUsername(user.lastname, user.firstname): ""}"`}
+          title={`${t_table("deleteStaff")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <DeleteStaff id={user?.id} />
+          <DeleteStaff id={response.user?.id} />
         </Modal>
 
       </div>

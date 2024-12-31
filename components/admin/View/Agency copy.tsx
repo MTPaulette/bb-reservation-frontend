@@ -29,7 +29,11 @@ import DefaultReservationTable from "../Tables/DefaultReservationTable";
 import CardDataStats from "../DataStats/Card1";
 
 export default function ViewAgency({id}: {id: string}) {
-  const [response, setResponse] = useState([]);
+  const [agency, setAgency] = useState([]);
+  const [result, setResult] = useState([]);
+  const [ressources, setRessources] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [administrators, setAdministrators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
@@ -49,7 +53,11 @@ export default function ViewAgency({id}: {id: string}) {
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
-          setResponse(response);
+          setResult(response);
+          setAgency(response.agency);
+          setRessources(response.ressources);
+          setReservations(response.reservations);
+          setAdministrators(response.administrators);
           setLoading(false);
         }else {
           const status = res.status;
@@ -81,7 +89,7 @@ export default function ViewAgency({id}: {id: string}) {
   }, []);
 
 
-  if (!response) {
+  if (!agency) {
     notFound();
   }
 
@@ -109,21 +117,21 @@ export default function ViewAgency({id}: {id: string}) {
                   <dt className="font-medium">{t_tabs("phonenumber")}</dt>
                   <dd className="flex items-center gap-1 text-foreground/60">
                     <TelephoneIcon fill="currentColor" size={18} />
-                    <span>{response.agency.phonenumber ? response.agency.phonenumber: "-"}</span>
+                    <span>{agency.phonenumber ? agency.phonenumber: "-"}</span>
                   </dd>
                 </dl>
                 <dl>
                   <dt className="font-medium">{t_tabs("email")}</dt>
                   <dd className="flex items-center gap-1 text-foreground/60">
                     <EnvelopIcon fill="currentColor" size={18} />
-                    <span>{response.agency.email ? response.agency.email: "-"}</span>
+                    <span>{agency.email ? agency.email: "-"}</span>
                   </dd>
                 </dl>
                 <dl>
                   <dt className="font-medium">{t_tabs("address")}</dt>
                   <dd className="flex items-center gap-1 text-foreground/60">
                     <LocalisationIcon fill="currentColor" size={18} />
-                    <span>{response.agency.address ? response.agency.address: "-"}</span>
+                    <span>{agency.address ? agency.address: "-"}</span>
                   </dd>
                 </dl>
               </div>
@@ -135,9 +143,9 @@ export default function ViewAgency({id}: {id: string}) {
                 <Title className="font-medium text-foreground uppercase">{t_tabs("openingdays")}</Title>
               </div>
               <div className="p-6">
-                {response.agency.openingdays.length > 0 ? (
+                {agency.openingdays.length > 0 ? (
                   <div className="flex flex-wrap gap-6 sm:gap-2 w-full justify-start sm:justify-between items-center">
-                    {response.agency.openingdays.map((item) => (
+                    {agency.openingdays.map((item) => (
                       <dl key={item.id}>
                         <dt className="font-semibold">{capitalize(locale === "en" ? item.name_en: item.name_fr)}</dt>
                         <dd className="text-foreground/60">
@@ -154,93 +162,96 @@ export default function ViewAgency({id}: {id: string}) {
         <div className="col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-8 my-8 md:my-0">
           <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default py-8 antialiased">
             <div className="mx-auto max-w-screen-lg px-4 2xl:px-0">
-              {/* title */}
-              <div className="w-full flex justify-between items-center">
-                <Title className="text-2xl font-semibold sm:text-3xl">
-                  {capitalize(response.agency.name)}
-                </Title>
-                <div className="relative flex justify-end items-center gap-2">
-                <Dropdown className="bg-background border-1 border-divider">
-                    <DropdownTrigger>
-                      <Button isIconOnly radius="full" size="sm" variant="light" className="z-1">
-                        <VerticalDotsIcon fill="none" size={24} />
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu>
-                      <DropdownItem
-                        onClick={() => {
-                          setShowEditModal(true);
-                        }}
-                      >{t_table("edit")}</DropdownItem>
-                      <DropdownItem
-                        color="warning"
-                        onClick={() => {
-                          setShowSuspendModal(true);
-                        }}
-                      >{response.agency.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
-                      <DropdownItem
-                        color="danger"
-                        onClick={() => {
-                          setShowDeleteModal(true);
-                        }}
-                      >{t_table("delete")}</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
+              <div className="mb-4 md:mb-6">
+                {/* title */}
+                <div className="w-full flex justify-between items-center">
+                  <Title className="text-2xl font-semibold sm:text-3xl">
+                    {capitalize(agency.name)}
+                  </Title>
+                  <div className="relative flex justify-end items-center gap-2">
+                    <Dropdown className="bg-background border-1 border-divider">
+                      <DropdownTrigger>
+                        <Button isIconOnly radius="full" size="sm" variant="light" className="z-1">
+                          <VerticalDotsIcon fill="none" size={24} />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu>
+                        <DropdownItem
+                          onClick={() => {
+                            setShowEditModal(true);
+                          }}
+                        >{t_table("edit")}</DropdownItem>
+                        <DropdownItem
+                          color="warning"
+                          onClick={() => {
+                            setShowSuspendModal(true);
+                          }}
+                        >{agency.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
+                        <DropdownItem
+                          color="danger"
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                          }}
+                        >{t_table("delete")}</DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
                 </div>
-              </div>
-              {response.agency.created_by ? (
-                <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
-                  <Link href={`/${locale}/admin/staff/${response.agency.created_by.id}`} className="font-medium ms-2">
-                    {response.agency.created_by.firstname && response.agency.created_by.lastname ?
-                      getUsername(response.agency.created_by.lastname, response.agency.created_by.firstname)
-                    : ""}
-                  </Link>
-                </p>
-              ): null }
-              {response.agency.created_at? (
-                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_tabs("since")}: {formatDateTime(response.agency.created_at)}</p>
-              ): ""}
-              <div className="flex items-center gap-2">
-                <div
-                  className={`my-3 inline-block rounded px-1.5 py-0.5 uppercase font-bold text-sm text-white
-                  ${response.agency.status == "active"? "bg-success" :"bg-danger"}`}
-                >{response.agency.status}</div>
-                <div>
-                  {response.agency.status == 'suspended' && response.agency.suspended_by ? (
-                    <p className="mt-1 font-light text-tiny"> {t_tabs("suspended_by")}:
-                      <Link href={`/${locale}/admin/staff/${response.agency.suspended_by.id}`} className="font-medium ms-2">
-                        {response.agency.suspended_by.firstname && response.agency.suspended_by.lastname ?
-                          getUsername(response.agency.suspended_by.lastname, response.agency.suspended_by.firstname)
-                        : ""}
-                      </Link>
-                    </p>
-                  ): null }
-                </div>
-              </div>
-              <div>
-                {response.agency.status != "active" ? (
-                  <p className="text-foreground/60 text-justify pt-4">
-                    {locale === "en" ? response.agency.reason_for_suspension_en: response.agency.reason_for_suspension_fr}
+                {agency.created_by ? (
+                  <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
+                    <Link href={`/${locale}/admin/staff/${agency.created_by.id}`} className="font-medium ms-2">
+                      {agency.created_by.firstname && agency.created_by.lastname ?
+                        getUsername(agency.created_by.lastname, agency.created_by.firstname)
+                      : ""}
+                    </Link>
                   </p>
-                ): null}
+                ): null }
+                {agency.created_at? (
+                  <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_tabs("since")}: {formatDateTime(agency.created_at)}</p>
+                ): ""}
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`my-3 inline-block rounded px-1.5 py-0.5 uppercase font-bold text-sm text-white
+                    ${agency.status == "active"? "bg-success" :"bg-danger"}`}
+                  >{agency.status}</div>
+                  <div>
+                    {agency.status == 'suspended' && agency.suspended_by ? (
+                      <p className="mt-1 font-light text-tiny"> {t_tabs("suspended_by")}:
+                        <Link href={`/${locale}/admin/staff/${agency.suspended_by.id}`} className="font-medium ms-2">
+                          {agency.suspended_by.firstname && agency.suspended_by.lastname ?
+                            getUsername(agency.suspended_by.lastname, agency.suspended_by.firstname)
+                          : ""}
+                        </Link>
+                      </p>
+                    ): null }
+                  </div>
+                </div>
+                <div>
+                  {agency.status != "active" ? (
+                    <p className="text-foreground/60 text-justify pt-4">
+                      {locale === "en" ? agency.reason_for_suspension_en: agency.reason_for_suspension_fr}
+                    </p>
+                  ): null}
+                </div>
+              </div>
+
+              {/* stats */}
+              {/* <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
+                <CardWrapper />
+              </div> */}
+              ici {agency.totalAdministrators}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-4 2xl:gap-7.5">
+                <CardDataStats title={t_statistic("total_staff")} total={agency.totalAdministrators} rate="0.95%" levelDown>
+                  <PeopleIcon fill="currentColor" size={22} />
+                </CardDataStats>
+                <CardDataStats title={t_statistic("total_ressources")} total={agency.totalRessources} rate="2.55%" levelUp>
+                  <ShoppingBagIcon fill="currentColor" size={22} />
+                </CardDataStats>
+                <CardDataStats title={t_statistic("total_reservations")} total={agency.totalReservations} rate="0.43%" levelUp>
+                  <CalendarIcon fill="currentColor" size={20} />
+                </CardDataStats>
               </div>
             </div>
-
-            {/* stats */}
-            {/* <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
-              <CardWrapper />
-            </div> */}
-          </div>
-          <div className="mt-4 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-3 2xl:gap-7.5">
-            <CardDataStats title={t_statistic("total_administrators")} total={response.totalAdministrators} rate="0.95%" levelDown>
-              <PeopleIcon fill="currentColor" size={22} />
-            </CardDataStats>
-            <CardDataStats title={t_statistic("total_ressources")} total={response.totalRessources} rate="2.55%" levelUp>
-              <ShoppingBagIcon fill="currentColor" size={22} />
-            </CardDataStats>
-            <CardDataStats title={t_statistic("total_reservations")} total={response.totalReservations} rate="0.43%" levelUp>
-              <CalendarIcon fill="currentColor" size={20} />
-            </CardDataStats>
           </div>
         </div>
 
@@ -259,9 +270,9 @@ export default function ViewAgency({id}: {id: string}) {
                 key="administrators"
                 title={t_tabs("administrators")}
               >
-                {response.administrators.length > 0 ? (
+                {administrators.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultUserTable columns={columnsTabsStaffAgency} users={response.administrators} />
+                    <DefaultUserTable columns={columnsTabsStaffAgency} users={administrators} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -270,9 +281,9 @@ export default function ViewAgency({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="ressources" title={t_tabs("ressources")}>
-                {response.ressources.length > 0 ? (
+                {ressources.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultRessourceTable ressources={response.ressources} />
+                    <DefaultRessourceTable ressources={ressources} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -281,9 +292,9 @@ export default function ViewAgency({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="reservations" title={t_tabs("reservations")}>
-                {response.reservations.length > 0 ? (
+                {reservations.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultReservationTable reservations={response.reservations} />
+                    <DefaultReservationTable reservations={reservations} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -291,6 +302,28 @@ export default function ViewAgency({id}: {id: string}) {
                   </div>
                 )}
               </Tab>
+              {/* <Tab key="reservations" title={t_tabs("reservations")}>
+                <Tabs
+                  isVertical
+                  aria-label="Reservations" 
+                  color="primary"
+                  radius="sm"
+                  variant="solid"
+                >
+                  <Tab key="music" title="Music">
+                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                      music
+                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </div>
+                  </Tab>
+                  <Tab key="videos" title="Videos">
+                    <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                      videos
+                      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </div>
+                  </Tab>
+                </Tabs>
+              </Tab> */}
             </Tabs>
           </div>
         </div>
@@ -307,23 +340,23 @@ export default function ViewAgency({id}: {id: string}) {
       <div>
         <Modal
           open={showEditModal} close={() => setShowEditModal(false)}
-          title={`${t_table("editAgency")} "${response.agency? response.agency.name: ""}"`}
+          title={`${t_table("editAgency")} "${agency? agency.name: ""}"`}
         >
-          <EditAgency agency={response.agency} />
+          <EditAgency agency={agency} />
         </Modal>
     
         <Modal
           open={showSuspendModal} close={() => setShowSuspendModal(false)}
-          title={`${t_table("suspendAgency")} "${response.agency? response.agency.name: ''}"`}
+          title={`${t_table("suspendAgency")} "${agency? agency.name: ''}"`}
         >
-          <SuspendAgency id={response.agency?.id} status={response.agency?.status} />
+          <SuspendAgency id={agency?.id} status={agency?.status} />
         </Modal>
         
         <Modal
           open={showDeleteModal} close={() => setShowDeleteModal(false)}
-          title={`${t_table("deleteAgency")} "${response.agency? response.agency.name: ''}"`}
+          title={`${t_table("deleteAgency")} "${agency? agency.name: ''}"`}
         >
-          <DeleteAgency id={response.agency?.id} />
+          <DeleteAgency id={agency?.id} />
         </Modal>
       </div>
     </div>
