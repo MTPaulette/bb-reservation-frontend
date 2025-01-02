@@ -25,7 +25,10 @@ export const formatCurrency = (amount: number) => {
 };
 
 export const getUsername = (lastname: string, firstname: string) => {
-  return capitalize(firstname)+" "+lastname.toUpperCase();
+  if(lastname != "" && firstname != "") {
+    return capitalize(firstname)+" "+lastname.toUpperCase();
+  }
+  return "";
 }
 
 export const headerOptions = async () => {

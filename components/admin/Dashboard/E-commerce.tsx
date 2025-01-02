@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import ChartOne from "../Charts/ChartOne";
 import ChartTwo from "../Charts/ChartTwo";
 import TopClients from "./TopClients";
-import TableOne from "../Tables/TableOne";
 import CardDataStats from "../DataStats/Card1";
 import { CalendarIcon, ChevronDownIcon, PeopleIcon, PlusIcon, ShoppingBagIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from 'next-intl';
@@ -80,6 +79,11 @@ export default function ECommerce() {
 
   return (
     <>
+    <div className="w-full">
+    {error != "" ? (
+      <Alert color="danger" message={error} />
+    ) : 
+    <>
     {loading ? (
       <CommonSkeleton />
     ) : (
@@ -99,14 +103,14 @@ export default function ECommerce() {
         </Button>
       </div>
 
-      <div className="relative z-20 inline-block mb-3">
+      <div className="relative inline-block mb-3">
         <select
           onChange={(e) => {
             setSelectedStat(e.target.value);
           }}
           name=""
           id=""
-          className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 outline-none font-semibold text-foreground tracking-wider text-xl"
+          className="relative inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 outline-none font-semibold text-foreground tracking-wider text-xl"
         >
           {availableStats.map((item) => (
             <option key={item.uid} value={item.uid} className="dark:bg-boxdark">
@@ -114,7 +118,7 @@ export default function ECommerce() {
             </option>
           ))}
         </select>
-        <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
+        <span className="absolute right-3 top-1/2 z-1 -translate-y-1/2">
           <ChevronDownIcon fill="currentColor" size={10} />
         </span>
       </div>
@@ -246,5 +250,8 @@ export default function ECommerce() {
     </div>
     )}
     </>
+    }
+    </div>
+    </>
   );
-};
+}

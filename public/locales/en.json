@@ -57,6 +57,7 @@
     "image_not_found": "Image not found",
     "ressource_not_found": "Ressource not found",
     "reservation_not_found": "Reservation not found",
+    "permissions_not_found": "Permissions not found",
     "unauthenticated": "unauthenticated"
  },
   "Input": {
@@ -285,7 +286,8 @@
     "reservations": "reservations",
     "finances": "finance",
     "coupons": "coupons",
-    "payments": "payments"
+    "payments": "payments",
+    "my_profile": "my profile"
   },
   "Table": {
     "view": "View",

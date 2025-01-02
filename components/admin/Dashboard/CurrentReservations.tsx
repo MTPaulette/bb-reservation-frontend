@@ -22,7 +22,8 @@ export default function CurrentReservations({reservations}: {reservations: Curre
     <div className="rounded-sm border border-divider bg-background px-5 pb-2.5 pt-6 shadow-default sm:px-7.5 xl:pb-1">
       <Title className="mb-6 text-xl">{t_statistic("current_reservations")}</Title>
       <div className="flex flex-col">
-        <div className="grid grid-cols-3 sm:grid-cols-5 rounded-sm bg-content2 mb-2">
+        <div className="grid grid-cols-2 sm:grid-cols-5 rounded-sm bg-content2 mb-2">
+        {/* <div className="grid grid-cols-3 sm:grid-cols-5 rounded-sm bg-content2 mb-2"> */}
           {columns.map((column) => (
             <div key={column.uid} className="p-2.5 xl:p-5">
               <h5 className="text-sm font-medium xsm:text-base">
@@ -36,7 +37,8 @@ export default function CurrentReservations({reservations}: {reservations: Curre
         {reservations.map((reservation, key) => (
           <Link
             href={`/${locale}/admin/reservations/${reservation.id}`}
-            className={`grid grid-cols-3 sm:grid-cols-5 hover:bg-content2/80 hover:!no-underline ${
+            className={`grid grid-cols-2 sm:grid-cols-5 hover:bg-content2/80 hover:!no-underline ${
+            // className={`grid grid-cols-3 sm:grid-cols-5 hover:bg-content2/80 hover:!no-underline ${
               key === reservation.length - 1
                 ? ""
                 : "border-b border-divider"

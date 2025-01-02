@@ -35,12 +35,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           ),
           label: t_sidebar("dashboard"),
           route: "#",
-          children: [
-            { 
-              label: "eCommerce", route: `/${locale}/admin`,
-              permissions: ["view_dashboard"]
-            }
-          ],
+          children: [{ label: "eCommerce", route: `/${locale}/admin` }],
           permissions: ["view_dashboard"]
         },
         {
@@ -66,16 +61,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           label: t_sidebar("finances"),
           route: "#",
           children: [
-            {
-              label: t_sidebar("coupons"),
-              route: `/${locale}/admin/coupons`,
-              permissions: ["manage_coupons", "show_all_coupon"]
-            },
-            {
-              label: t_sidebar("payments"),
-              route: `/${locale}/admin/payments`,
-              permissions: ["manage_payments", "show_all_payment"]
-            },
+            { label: t_sidebar("coupons"), route: `/${locale}/admin/coupons` },
+            { label: t_sidebar("payments"), route: `/${locale}/admin/payments` },
           ],
           permissions: [
             "manage_coupons", "show_all_coupon",
@@ -89,21 +76,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           label: t_sidebar("ressources"),
           route: "#",
           children: [
-            {
-              label: t_sidebar("characteristics"),
-              route: `/${locale}/admin/characteristics`,
-              permissions: ["manage_spaces", "create_space", "edit_space"]
-            },
-            {
-              label: t_sidebar("spaces"),
-              route: `/${locale}/admin/spaces`,
-              permissions: ["manage_spaces", "show_all_space"]
-            },
-            {
-              label: t_sidebar("ressources"),
-              route: `/${locale}/admin/ressources`,
-              permissions: ["manage_ressources", "show_all_ressource", "show_all_ressource_of_agency"]
-            },
+            { label: t_sidebar("characteristics"), route: `/${locale}/admin/characteristics` },
+            { label: t_sidebar("spaces"), route: `/${locale}/admin/spaces` },
+            { label: t_sidebar("ressources"), route: `/${locale}/admin/ressources` },
           ],
           permissions: [
             "manage_ressources", "show_all_ressource", "show_all_ressource_of_agency",
@@ -118,21 +93,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           label: t_sidebar("utilities"),
           route: "#",
           children: [
-            {
-              label: t_sidebar("agencies"),
-              route: `/${locale}/admin/agencies`,
-              permissions: ["manage_agency", "manage_all_agencies"]
-            },
-            {
-              label: t_sidebar("roles"),
-              route: `/${locale}/admin/roles`,
-              permissions: ["manage_permissions"]
-            },
-            {
-              label: t_sidebar("logs"),
-              route: `/${locale}/admin/logs`,
-              permissions: ["view_logactivity"]
-            },
+            { label: t_sidebar("agencies"), route: `/${locale}/admin/agencies` },
+            { label: t_sidebar("roles"), route: `/${locale}/admin/roles` },
+            { label: t_sidebar("logs"), route: `/${locale}/admin/logs` },
           ],
           permissions: [
             "manage_agency", "manage_all_agencies",
@@ -147,16 +110,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           label: t_sidebar("users"),
           route: "#",
           children: [
-            {
-              label: t_sidebar("clients"),
-              route: `/${locale}/admin/clients`,
-              permissions: ["show_all_client"]
-            },
-            {
-              label: t_sidebar("staff"),
-              route: `/${locale}/admin/staff`,
-              permissions: ["show_all_admin", "show_all_admin_of_agency", "show_all_superadmin"]
-            },
+            { label: t_sidebar("clients"), route: `/${locale}/admin/clients` },
+            { label: t_sidebar("staff"), route: `/${locale}/admin/staff` },
           ],
           permissions: [
             "show_all_client",
@@ -196,34 +151,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           ),
           label: t_sidebar("settings"),
           route: `/${locale}/admin/settings?group=profile`,
-          permissions: ["manage_option"]
-        },
-        {
-          icon: (
-            <SettingIcon fill="none" size={18} />
-          ),
-          label: t_sidebar("settings"),
-          route: "#",
-          children: [
-            {
-              label: t_sidebar("my_profile"),
-              route: `/${locale}/admin/settings?group=profile`,
-              permissions: null
-            },
-            {
-              label: t_sidebar("settings"),
-              route: `/${locale}/admin/settings?group=general`,
-              permissions: ["manage_option"]
-            },
-          ],
-          permissions: null //["view_dashboard"]
+          permissions: ["view_dashboard"]
         },
       ],
     },
     {
       name: "OTHERS",
       menuItems: [
-        /*
         {
           icon: (
             <ChartIcon fill="none" size={18} />
@@ -254,9 +188,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             { label: "Sign In", route: `/${locale}/admin/auth/signin` },
             { label: "Sign Up", route: `/${locale}/admin/auth/signup` },
           ],
-          permissions: null
+          permissions: ["view_dashboard"]
         },
-        */
       ],
     },
   ];
