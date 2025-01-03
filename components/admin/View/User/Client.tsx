@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { CalendarIcon, CameraIcon } from "@/components/Icons";
 import { getClientById } from '@/lib/action/clients';
@@ -18,7 +17,8 @@ import Modal from "@/components/Modal";
 import EditClient from "@/components/admin/FormElements/Client/Edit";
 import DeleteClient from "@/components/admin/FormElements/Client/Delete";
 import SuspendClient from '@/components/admin/FormElements/Client/Suspend';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import Link from "next/link";
 import { columnsTabsClientCoupon } from "@/lib/data";
@@ -43,6 +43,13 @@ export default function ViewClient({id}: {id: string}) {
   const t_statistic = useTranslations("Statistic");
   const [selected, setSelected] = React.useState<string>("reservations");
   const [response, setResponse] = useState([]);
+
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["view_client"];
+
+  const update_client_permissions: string[] = ["edit_client"];
+  const delete_client_permissions: string[] = ["delete_client"];
+
 
   useEffect(() => {
     setError("");
@@ -86,8 +93,18 @@ export default function ViewClient({id}: {id: string}) {
     notFound();
   }
 
+
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+    {requiredPermissions.every(permission =>
+      !permissions.includes(permission)) && (
+        redirect(`/${locale}/admin/forbidden`)
+    )}
+
     <div className="w-full">
       {error != "" ? (
         <Alert color="danger" message={error} />
@@ -169,17 +186,25 @@ export default function ViewClient({id}: {id: string}) {
                   </DropdownTrigger>
                   <DropdownMenu>
                     <DropdownItem
+                      className={
+                        update_client_permissions.some(permission =>
+                        permissions.includes(permission)) ? "block" : "hidden"
+                      }
                       onClick={() => {
                         setShowEditModal(true);
                       }}
                     >{t_table("edit")}</DropdownItem>
-                    <DropdownItem
+                    {/* <DropdownItem
                       color="warning"
                       onClick={() => {
                         setShowSuspendModal(true);
                       }}
-                    >{response.user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
+                    >{response.user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem> */}
                     <DropdownItem
+                      className={
+                        delete_client_permissions.some(permission =>
+                        permissions.includes(permission)) ? "block" : "hidden"
+                      }
                       color="danger"
                       onClick={() => {
                         setShowDeleteModal(true);
@@ -321,5 +346,7 @@ export default function ViewClient({id}: {id: string}) {
     }
     </div>
     </>
-  )
+    )}
+    </>
+  );
 }

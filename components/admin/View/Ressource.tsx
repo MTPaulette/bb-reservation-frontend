@@ -19,7 +19,8 @@ import {
 import Modal from "@/components/Modal";
 import EditRessource from "@/components/admin/FormElements/Ressource/Edit";
 import DeleteRessource from "@/components/admin/FormElements/Ressource/Delete";
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import Link from "next/link";
 import DefaultReservationTable from "../Tables/DefaultReservationTable";
@@ -37,6 +38,13 @@ export default function ViewRessource({id}: {id: string}) {
   const t_ressource = useTranslations("Ressource");
   const t_alert = useTranslations("Alert");
   const [selected, setSelected] = React.useState<string>("ressources");
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
+
+  const update_ressource_permissions: string[] = ["manage_ressources", "edit_ressource", "edit_ressource_of_agency"];
+  const delete_ressource_permissions: string[] = ["manage_ressources", "delete_ressource", "delete_ressource_of_agency"];
 
   useEffect(() => {
     setError("");
@@ -83,6 +91,15 @@ export default function ViewRessource({id}: {id: string}) {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+    {requiredPermissions.every(permission =>
+      !permissions.includes(permission)) && (
+        redirect(`/${locale}/admin/forbidden`)
+    )}
+
     <div className="w-full">
     {error != "" ? (
       <Alert color="danger" message={error} />
@@ -162,11 +179,19 @@ export default function ViewRessource({id}: {id: string}) {
                     </DropdownTrigger>
                     <DropdownMenu>
                       <DropdownItem
+                        className={
+                          update_ressource_permissions.some(permission =>
+                          permissions.includes(permission)) ? "block" : "hidden"
+                        }
                         onClick={() => {
                           setShowEditModal(true);
                         }}
                       >{t_table("edit")}</DropdownItem>
                       <DropdownItem
+                        className={
+                          delete_ressource_permissions.some(permission =>
+                          permissions.includes(permission)) ? "block" : "hidden"
+                        }
                         color="danger"
                         onClick={() => {
                           setShowDeleteModal(true);
@@ -303,5 +328,7 @@ export default function ViewRessource({id}: {id: string}) {
     }
     </div>
     </>
-  )
+    )}
+    </>
+  );
 }

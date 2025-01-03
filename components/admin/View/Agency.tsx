@@ -18,7 +18,8 @@ import Modal from "@/components/Modal";
 import EditAgency from "@/components/admin/FormElements/Agency/Edit";
 import SuspendAgency from "@/components/admin/FormElements/Agency/Suspend";
 import DeleteAgency from "@/components/admin/FormElements/Agency/Delete";
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import Link from "next/link";
 import { columnsTabsStaffAgency } from "@/lib/data";
@@ -41,6 +42,14 @@ export default function ViewAgency({id}: {id: string}) {
   const t_alert = useTranslations("Alert");
   const t_statistic = useTranslations("Statistic");
   const [selected, setSelected] = React.useState<string>("reservations");
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["manage_agency", "manage_all_agencies"];
+
+  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
+  const delete_agency_permissions: string[] = ["delete_agency"];
+  
 
   useEffect(() => {
     setError("");
@@ -86,6 +95,15 @@ export default function ViewAgency({id}: {id: string}) {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+    {requiredPermissions.every(permission =>
+      !permissions.includes(permission)) && (
+        redirect(`/${locale}/admin/forbidden`)
+    )}
+
     <div className="w-full">
     {error != "" ? (
       <Alert color="danger" message={error} />
@@ -167,17 +185,29 @@ export default function ViewAgency({id}: {id: string}) {
                     </DropdownTrigger>
                     <DropdownMenu>
                       <DropdownItem
+                        className={
+                          view_agency_permissions.some(permission =>
+                          permissions.includes(permission)) ? "block" : "hidden"
+                        }
                         onClick={() => {
                           setShowEditModal(true);
                         }}
                       >{t_table("edit")}</DropdownItem>
                       <DropdownItem
+                        className={
+                          view_agency_permissions.some(permission =>
+                          permissions.includes(permission)) ? "block" : "hidden"
+                        }
                         color="warning"
                         onClick={() => {
                           setShowSuspendModal(true);
                         }}
                       >{response.agency.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                       <DropdownItem
+                        className={
+                          delete_agency_permissions.some(permission =>
+                          permissions.includes(permission)) ? "block" : "hidden"
+                        }
                         color="danger"
                         onClick={() => {
                           setShowDeleteModal(true);
@@ -326,5 +356,7 @@ export default function ViewAgency({id}: {id: string}) {
     }
     </div>
     </>
-  )
+    )}
+    </>
+  );
 }

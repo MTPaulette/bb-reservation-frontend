@@ -21,7 +21,7 @@ import NewClient from "../FormElements/Client/New";
 import EditClient from "../FormElements/Client/Edit";
 import DeleteClient from "../FormElements/Client/Delete";
 import { getClients } from '@/lib/action/clients';
-import SuspendClient from '../FormElements/Client/Suspend';
+// import SuspendClient from '../FormElements/Client/Suspend';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
@@ -96,7 +96,7 @@ export default function UsersTable() {
   const pages = Math.ceil(users.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
+  // const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedUser, setSelectedUser] = React.useState<UserType>();
 
@@ -512,12 +512,12 @@ export default function UsersTable() {
         <EditClient user={selectedUser} />
       </Modal>
     
-      <Modal
+      {/* <Modal
         open={showSuspendModal} close={() => setShowSuspendModal(false)}
         title={`${t_table("suspendClient")} "${selectedUser? getUsername(selectedUser.lastname, selectedUser.firstname): ""}"`}
       >
         <SuspendClient id={selectedUser?.id} status={selectedUser?.status} />
-      </Modal>
+      </Modal> */}
       
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}

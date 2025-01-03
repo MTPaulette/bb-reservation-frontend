@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { getStaffById } from '@/lib/action/staff';
 import { notFound } from 'next/navigation';
@@ -17,7 +16,8 @@ import Modal from "@/components/Modal";
 import EditStaff from "@/components/admin/FormElements/Staff/Edit";
 import DeleteStaff from "@/components/admin/FormElements/Staff/Delete";
 import SuspendStaff from '@/components/admin/FormElements/Staff/Suspend';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import Link from "next/link";
 import Alert from "@/components/Alert";
 import DefaultRessourceTable from "../../Tables/DefaultRessourceTable";
@@ -44,6 +44,13 @@ export default function ViewStaff({id}: {id: string}) {
   const t_statistic = useTranslations("Statistic");
   const [selected, setSelected] = React.useState<string>("reservations");
   const [response, setResponse] = useState([]);
+  
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+
+  const update_staff_permissions: string[] = ["edit_admin", "edit_superadmin"];
+  const delete_staff_permissions: string[] = ["delete_admin", "delete_superadmin"];
+  const suspend_staff_permissions: string[] = ["suspend_staff"];
 
   useEffect(() => {
     setError("");
@@ -87,8 +94,18 @@ export default function ViewStaff({id}: {id: string}) {
     notFound();
   }
 
+
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+    {requiredPermissions.every(permission =>
+      !permissions.includes(permission)) && (
+        redirect(`/${locale}/admin/forbidden`)
+    )}
+
     <div className="w-full">
     {error != "" ? (
       <Alert color="danger" message={error} />
@@ -140,17 +157,29 @@ export default function ViewStaff({id}: {id: string}) {
                   </DropdownTrigger>
                   <DropdownMenu>
                     <DropdownItem
+                      className={
+                        update_staff_permissions.some(permission =>
+                        permissions.includes(permission)) ? "block" : "hidden"
+                      }
                       onClick={() => {
                         setShowEditModal(true);
                       }}
                     >{t_table("edit")}</DropdownItem>
                     <DropdownItem
+                      className={
+                        suspend_staff_permissions.some(permission =>
+                        permissions.includes(permission)) ? "block" : "hidden"
+                      }
                       color="warning"
                       onClick={() => {
                         setShowSuspendModal(true);
                       }}
                     >{response.user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                     <DropdownItem
+                      className={
+                        delete_staff_permissions.some(permission =>
+                        permissions.includes(permission)) ? "block" : "hidden"
+                      }
                       color="danger"
                       onClick={() => {
                         setShowDeleteModal(true);
@@ -376,5 +405,7 @@ export default function ViewStaff({id}: {id: string}) {
     }
     </div>
     </>
-  )
+    )}
+    </>
+  );
 }

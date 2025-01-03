@@ -106,6 +106,8 @@ export default function AgenciesTable() {
   const new_agency_permissions: string[] = ["create_agency"];
   const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
   const delete_agency_permissions: string[] = ["delete_agency"];
+
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
   
 
   const hasSearchFilter = Boolean(filterValue);
@@ -206,10 +208,21 @@ export default function AgenciesTable() {
       case "created_by":
         return (
           <div>
-          { agency.created_by ? (
-            <Link href={`/${locale}/admin/staff/${agency.created_by.id}`}>
-              {getUsername(agency.created_by.lastname, agency.created_by.firstname)}
-            </Link>
+          {agency.created_by ? (
+            <>
+            {!permissions ? null : (
+              <>
+              {view_staff_permissions.some(permission =>
+              permissions.includes(permission)) ? (
+                <Link href={`/${locale}/admin/staff/${agency.created_by.id}`}>
+                  {getUsername(agency.created_by.lastname, agency.created_by.firstname)}
+                </Link>
+              ): (
+                <p>{getUsername(agency.created_by.lastname, agency.created_by.firstname)}</p>
+              )}
+              </>
+            )}
+            </>
           ): null}
           </div>
         );

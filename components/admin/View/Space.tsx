@@ -18,7 +18,8 @@ import { VerticalDotsIcon } from "@/components/Icons";
 import Modal from "@/components/Modal";
 import EditSpace from "@/components/admin/FormElements/Space/Edit";
 import DeleteSpace from "@/components/admin/FormElements/Space/Delete";
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import { SpaceType } from "@/lib/definitions";
 
@@ -32,6 +33,14 @@ export default function ViewSpace({id}: {id: string}) {
   const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
   const t_space = useTranslations("Space");
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["manage_spaces", "view_space"];
+
+  const update_space_permissions: string[] = ["manage_spaces", "edit_space"];
+  const delete_space_permissions: string[] = ["manage_spaces", "delete_space"];
+
 
   useEffect(() => {
     setError("");
@@ -77,6 +86,15 @@ export default function ViewSpace({id}: {id: string}) {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+    {requiredPermissions.every(permission =>
+      !permissions.includes(permission)) && (
+        redirect(`/${locale}/admin/forbidden`)
+    )}
+
     <div className="w-full">
       {error != "" ? (
         <Alert color="danger" message={error} />
@@ -100,11 +118,19 @@ export default function ViewSpace({id}: {id: string}) {
                 </DropdownTrigger>
                 <DropdownMenu>
                   <DropdownItem
+                    className={
+                      update_space_permissions.some(permission =>
+                      permissions.includes(permission)) ? "block" : "hidden"
+                    }
                     onClick={() => {
                       setShowEditModal(true);
                     }}
                   >{t_table("edit")}</DropdownItem>
                   <DropdownItem
+                    className={
+                      delete_space_permissions.some(permission =>
+                      permissions.includes(permission)) ? "block" : "hidden"
+                    }
                     color="danger"
                     onClick={() => {
                       setShowDeleteModal(true);
@@ -215,5 +241,7 @@ export default function ViewSpace({id}: {id: string}) {
     }
     </div>
     </>
-  )
+    )}
+    </>
+  );
 }
