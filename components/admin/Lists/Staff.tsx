@@ -22,7 +22,8 @@ import EditStaff from "../FormElements/Staff/Edit";
 import DeleteStaff from "../FormElements/Staff/Delete";
 import { getStaff } from '@/lib/action/staff';
 import SuspendStaff from '../FormElements/Staff/Suspend';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -40,6 +41,17 @@ export default function UsersTable() {
   const t_error = useTranslations("InputError");
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["show_all_admin", "show_all_admin_of_agency", "show_all_superadmin"];
+  
+  const new_staff_permissions: string[] = ["create_superadmin", "create_admin"];
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const update_staff_permissions: string[] = ["edit_admin", "edit_superadmin"];
+  const delete_staff_permissions: string[] = ["delete_admin", "delete_superadmin"];
+  const suspend_staff_permissions: string[] = ["suspend_staff"];
+
 
   useEffect(() => {
     setError("");
@@ -206,19 +218,34 @@ export default function UsersTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
+              <>
+              {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem>
+                <DropdownItem
+                  className={
+                    view_staff_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
+                >
                   <Link href={`/${locale}/admin/staff/${user.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
+                  className={
+                    update_staff_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   onClick={() => {
                     setSelectedUser(user);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
+                  className={
+                    suspend_staff_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   color="warning"
                   onClick={() => {
                     setSelectedUser(user);
@@ -226,6 +253,10 @@ export default function UsersTable() {
                   }}
                 >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                 <DropdownItem
+                  className={
+                    delete_staff_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   color="danger"
                   onClick={() => {
                     setSelectedUser(user);
@@ -233,13 +264,15 @@ export default function UsersTable() {
                   }}
                 >{t_table("delete")}</DropdownItem>
               </DropdownMenu>
+              )}
+              </>
             </Dropdown>
           </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -258,6 +291,10 @@ export default function UsersTable() {
 
   const topContent = React.useMemo(() => {
     return (
+      <>
+      {!permissions ? (
+        <CommonSkeleton />
+      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -331,14 +368,18 @@ export default function UsersTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
-                >
-                  {t_table("new")}
-                </Button>
+                <>
+                  {new_staff_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <Button
+                      endContent={<PlusIcon fill="currentColor" size={14} />}
+                      size="sm" variant="solid" color="primary"
+                      onClick={() => setShowNewModal(true)}
+                    >
+                      {t_table("new")}
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -361,9 +402,11 @@ export default function UsersTable() {
         </div>
       </div>
       </>
+      )}
+      </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, ]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, permissions]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -405,8 +448,18 @@ export default function UsersTable() {
     }),
     [],
   );
+
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+      {requiredPermissions.every(permission =>
+        !permissions.includes(permission)) && (
+          redirect(`/${locale}/admin/forbidden`)
+      )}
+
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -480,6 +533,7 @@ export default function UsersTable() {
       </div>
       )}
     </>
+    )}
+    </>
   );
 }
-

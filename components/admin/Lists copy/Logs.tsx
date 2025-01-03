@@ -7,26 +7,23 @@ import {
   DropdownItem, Pagination, Selection, SortDescriptor
 } from "@nextui-org/react";
 
-import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { CharacteristicType } from "@/lib/definitions";
-import { capitalize } from "@/lib/utils";
-import { columnsCharacteristic as columns } from "@/lib/data";
+import { SearchIcon, ChevronDownIcon, TrashIcon } from "@/components/Icons";
+import { LogType } from "@/lib/definitions";
+import { capitalize, getUsername } from "@/lib/utils";
+import { columnsLog as columns } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
-
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import EditCharacteristic from "../FormElements/Characteristic/Edit";
-import DeleteCharacteristic from "../FormElements/Characteristic/Delete";
-import { getCharacteristics } from '@/lib/action/characteristics';
-import { signOut, useSession } from 'next-auth/react';
-import NewCharacteristic from '../FormElements/Characteristic/New';
-import { redirect } from 'next/navigation';
+import ClearLog from "../FormElements/Log/Clear";
+import { getLogs } from '@/lib/action/logs';
+import { signOut } from 'next-auth/react';
 
-const INITIAL_VISIBLE_COLUMNS = ["characteristic", "actions"];
+// const INITIAL_VISIBLE_COLUMNS = ["description", "url", "agent", "author", "created_at"];
+const INITIAL_VISIBLE_COLUMNS = ["description", "agent", "author", "created_at"];
 
-export default function CharacteristicsTable() {
-  const [characteristics, setCharacteristics] = useState([]);
+export default function LogsTable() {
+  const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
@@ -34,19 +31,13 @@ export default function CharacteristicsTable() {
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
 
-  const { data: session } = useSession();
-  const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_spaces", "create_space", "edit_space"];
-  
-  const characteristic_permissions: string[] = ["manage_spaces", "create_space", "edit_space"];
-
   useEffect(() => {
     setError("");
-    getCharacteristics()
+    getLogs()
       .then(async (res) => {
         setLoading(false);
         if(res?.ok){
-          setCharacteristics(await res.json());
+          setLogs(await res.json());
         }else {
           const status = res.status;
           switch(status) {
@@ -76,26 +67,23 @@ export default function CharacteristicsTable() {
       });
   }, []);
 
-  type Characteristic = typeof characteristics[0];
+  type Log = typeof logs[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+  const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "characteristic",
-    direction: "ascending",
+    column: "created_at",
+    direction: "descending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(characteristics.length / rowsPerPage);
-  const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedCharacteristic, setSelectedCharacteristic] = React.useState<CharacteristicType>();
-
-  // const changeSelectedCharacteristic
+  const pages = Math.ceil(logs.length / rowsPerPage);
+  const [showClearModal, setShowClearModal] = React.useState<boolean>(false);
+  const [selectedLog, setSelectedLog] = React.useState<LogType>();
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -106,17 +94,16 @@ export default function CharacteristicsTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredCharacteristics = [...characteristics];
+    let filteredLogs = [...logs];
 
     if (hasSearchFilter) {
-      filteredCharacteristics = filteredCharacteristics.filter((characteristic) => 
-        locale === "en" ? characteristic.name_en.toLowerCase().includes(filterValue.toLowerCase()) :
-      characteristic.name_fr.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredLogs = filteredLogs.filter((log) =>
+        log.description.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
-    return filteredCharacteristics;
-  }, [characteristics, filterValue]);
+    return filteredLogs;
+  }, [logs, filterValue,]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -126,70 +113,34 @@ export default function CharacteristicsTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Characteristic, b: Characteristic) => {
-      const first = a[sortDescriptor.column as keyof Characteristic] as number;
-      const second = b[sortDescriptor.column as keyof Characteristic] as number;
+    return [...items].sort((a: Log, b: Log) => {
+      const first = a[sortDescriptor.column as keyof Log] as number;
+      const second = b[sortDescriptor.column as keyof Log] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((characteristic: Characteristic, columnKey: React.Key) => {
-    const cellValue = characteristic[columnKey as keyof Characteristic];
+  const renderCell = React.useCallback((log: Log, columnKey: React.Key) => {
+    const cellValue = log[columnKey as keyof Log];
 
     switch (columnKey) {
-      case "characteristic":
+      case "description":
         return (
-          <p className="font-semibold">
-            {capitalize(locale === "en" ? characteristic.name_en || characteristic.name_fr : characteristic.name_fr)}
+          <p className="font-medium text-foreground">
+            {cellValue}
           </p>
         );
-      case "actions":
+      case "author":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon fill="none" size={24} />
-                </Button>
-              </DropdownTrigger>
-              <>
-              {!permissions ? null : (
-              <DropdownMenu>
-                <DropdownItem
-                  className={
-                    characteristic_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  onClick={() => {
-                    setSelectedCharacteristic(characteristic);
-                    setShowEditModal(true);
-                  }}
-                >{t_table("edit")}</DropdownItem>
-                <DropdownItem
-                  className={
-                    characteristic_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  color="danger"
-                  onClick={() => {
-                    setSelectedCharacteristic(characteristic);
-                    setShowDeleteModal(true);
-                  }}
-                >{t_table("delete")}</DropdownItem>
-              </DropdownMenu>
-              )}
-              </>
-            </Dropdown>
-          </div>
+          <p className="font-medium text-small">{log.lastname && log.firstname? getUsername(log.lastname, log.firstname): ""}</p>
         );
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, []);
   
-
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
     setPage(1);
@@ -206,10 +157,6 @@ export default function CharacteristicsTable() {
 
   const topContent = React.useMemo(() => {
     return (
-      <>
-      {!permissions ? (
-        <CommonSkeleton />
-      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -258,22 +205,17 @@ export default function CharacteristicsTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <>
-                  {characteristic_permissions.some(permission =>
-                  permissions.includes(permission)) && (
-                    <Button
-                      endContent={<PlusIcon fill="currentColor" size={14} />}
-                      size="sm" variant="solid" color="primary"
-                      onClick={() => setShowNewModal(true)}
-                    >
-                      {t_table("new")}
-                    </Button>
-                  )}
-                </>
+                <Button
+                  endContent={<TrashIcon fill="currentColor" size={14} />}
+                  size="sm" variant="solid" color="danger"
+                  onClick={() => setShowClearModal(true)}
+                >
+                  {t_table("clear_log")}
+                </Button>
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {characteristics.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {logs.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -292,11 +234,9 @@ export default function CharacteristicsTable() {
         </div>
       </div>
       </>
-      )}
-      </>
     );
   }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, characteristics.length, hasSearchFilter, permissions]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, logs.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -339,18 +279,8 @@ export default function CharacteristicsTable() {
     }),
     [],
   );
-
   return (
     <>
-    {!permissions ? (
-      <CommonSkeleton />
-    ) : (
-    <>
-      {requiredPermissions.every(permission =>
-        !permissions.includes(permission)) && (
-          redirect(`/${locale}/admin/forbidden`)
-      )}
-
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -393,32 +323,16 @@ export default function CharacteristicsTable() {
           )}
         </TableBody>
       </Table>
-
-
+      
       <Modal
-        open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newCharacteristic")}
+        open={showClearModal} close={() => setShowClearModal(false)}
+        title={`${t_table("clear_log")}`}
       >
-        <NewCharacteristic />
-      </Modal>
-
-      <Modal
-        open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
-      >
-        <EditCharacteristic characteristic={selectedCharacteristic} />
-      </Modal>
-
-      <Modal
-        open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteCharacteristic")} "${selectedCharacteristic? selectedCharacteristic.name_fr: ''}"`}
-      >
-        <DeleteCharacteristic id={selectedCharacteristic?.id} />
+        <ClearLog id={selectedLog?.id} />
       </Modal>
       </div>
       )}
     </>
-    )}
-    </>
   );
 }
+

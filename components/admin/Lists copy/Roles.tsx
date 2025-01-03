@@ -8,8 +8,7 @@ import { getRoles } from '@/lib/action/roles';
 import { CommonSkeleton } from '@/components/Skeletons';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
 
 
@@ -19,10 +18,6 @@ export default function RolesTable() {
   const [error, setError] = useState<string>("");
   const locale = useLocale();
   const t_error = useTranslations("InputError");
-
-  const { data: session } = useSession();
-  const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_permissions"];
 
   useEffect(() => {
     getRoles()
@@ -116,55 +111,43 @@ export default function RolesTable() {
     [],
   );
 
-  
   return (
     <>
-    {!permissions ? (
+    <div className="w-full">
+    {error != "" ? (
+      <Alert color="danger" message={error} />
+    ) : 
+    <>
+    {loading ? (
       <CommonSkeleton />
     ) : (
-    <>
-    {requiredPermissions.every(permission =>
-      !permissions.includes(permission)) && (
-        redirect(`/${locale}/admin/forbidden`)
+      <div>
+      <Table 
+        isCompact
+        isStriped
+        aria-label="roles table"
+        classNames={classNames}
+      >
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
+              {locale === "en" ? column.name_en: column.name_fr}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody items={roles}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      </div>
     )}
-  
-    <div className="w-full">
-      {error != "" ? (
-        <Alert color="danger" message={error} />
-      ) : 
-      <>
-      {loading ? (
-        <CommonSkeleton />
-      ) : (
-        <div>
-        <Table 
-          isCompact
-          isStriped
-          aria-label="roles table"
-          classNames={classNames}
-        >
-          <TableHeader columns={columns}>
-            {(column) => (
-              <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
-                {locale === "en" ? column.name_en: column.name_fr}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={roles}>
-            {(item) => (
-              <TableRow key={item.id}>
-                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        </div>
-      )}
-      </>
-      }
-    </div>
     </>
-    )}
+    }
+    </div>
     </>
   );
 }

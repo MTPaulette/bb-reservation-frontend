@@ -4,37 +4,35 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
-  DropdownItem, Chip, Pagination, Selection, ChipProps, SortDescriptor
+  DropdownItem, Pagination, Selection, SortDescriptor, Chip, ChipProps
 } from "@nextui-org/react";
 
-import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon, EnvelopIcon, TelephoneIcon } from "@/components/Icons";
-import { AgencyType } from "@/lib/definitions";
-import { capitalize, formatDateTime, getUsername } from "@/lib/utils";
-import { columnsAgency as columns, statusUser as statusOptions } from "@/lib/data";
+import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
+import { CouponType } from "@/lib/definitions";
+import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
+import { columnsCoupon as columns, statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewAgency from "../FormElements/Agency/New";
-import EditAgency from "../FormElements/Agency/Edit";
-import DeleteAgency from "../FormElements/Agency/Delete";
-import SuspendAgency from '../FormElements/Agency/Suspend';
-import { getAgencies } from '@/lib/action/agencies';
-import { signOut, useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import NewCoupon from "../FormElements/Coupon/New";
+import EditCoupon from "../FormElements/Coupon/Edit";
+import DeleteCoupon from "../FormElements/Coupon/Delete";
+import { getCoupons } from '@/lib/action/coupons';
+import { signOut } from 'next-auth/react';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
-  suspended: "danger"
+  expired: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "email", "address", "contact", "openingdays", "created_by", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "total_usage", "value", "status", "expired_on", "sending_to", "created_by", "actions"];
 
-export default function AgenciesTable() {
-  const [agencies, setAgencies] = useState([]);
+export default function CouponsTable() {
+  const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
@@ -44,11 +42,11 @@ export default function AgenciesTable() {
 
   useEffect(() => {
     setError("");
-    getAgencies()
+    getCoupons()
       .then(async (res) => {
         setLoading(false);
         if(res?.ok){
-          setAgencies(await res.json());
+          setCoupons(await res.json());
         }else {
           const status = res.status;
           switch(status) {
@@ -78,7 +76,7 @@ export default function AgenciesTable() {
       });
   }, []);
 
-  type Agency = typeof agencies[0];
+  type Coupon = typeof coupons[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
@@ -86,27 +84,17 @@ export default function AgenciesTable() {
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "email",
+    column: "name",
     direction: "ascending",
   });
 
   const [page, setPage] = React.useState(1);
 
-  const pages = Math.ceil(agencies.length / rowsPerPage);
+  const pages = Math.ceil(coupons.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedAgency, setSelectedAgency] = React.useState<AgencyType>();
-
-  const { data: session } = useSession();
-  const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_agency", "manage_all_agencies"];
-  
-  const new_agency_permissions: string[] = ["create_agency"];
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
-  const delete_agency_permissions: string[] = ["delete_agency"];
-  
+  const [selectedCoupon, setSelectedCoupon] = React.useState<CouponType>();
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -117,21 +105,21 @@ export default function AgenciesTable() {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredAgencies = [...agencies];
+    let filteredCoupons = [...coupons];
 
     if (hasSearchFilter) {
-      filteredAgencies = filteredAgencies.filter((agency) =>
-        agency.name.toLowerCase().includes(filterValue.toLowerCase()),
+      filteredCoupons = filteredCoupons.filter((coupon) =>
+        coupon.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-      filteredAgencies = filteredAgencies.filter((agency) =>
-        Array.from(statusFilter).includes(agency.status),
+      filteredCoupons = filteredCoupons.filter((coupon) =>
+        Array.from(statusFilter).includes(coupon.status),
       );
     }
 
-    return filteredAgencies;
-  }, [agencies, filterValue, statusFilter]);
+    return filteredCoupons;
+  }, [coupons, filterValue, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -141,58 +129,47 @@ export default function AgenciesTable() {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Agency, b: Agency) => {
-      const first = a[sortDescriptor.column as keyof Agency] as number;
-      const second = b[sortDescriptor.column as keyof Agency] as number;
+    return [...items].sort((a: Coupon, b: Coupon) => {
+      const first = a[sortDescriptor.column as keyof Coupon] as number;
+      const second = b[sortDescriptor.column as keyof Coupon] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((agency: Agency, columnKey: React.Key) => {
-    const cellValue = agency[columnKey as keyof Agency];
+  const renderCell = React.useCallback((coupon: Coupon, columnKey: React.Key) => {
+    const cellValue = coupon[columnKey as keyof Coupon];
 
     switch (columnKey) {
+      case "sending_to":
+        return (
+          <p className="whitespace-nowrap">{coupon.users_count} client(s)</p>
+        );
       case "name":
         return (
-          <p className="font-semibold">
-            {agency.name}
-          </p>
+          <div className="min-w-[80px]">
+            <Link
+              href={`/${locale}/admin/coupons/${coupon.id}`}
+              className="font-semibold whitespace-nowrap"
+            >{coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}</Link>
+            <p className="font-light text-small text-foreground/70">
+              {capitalize(locale === "en" ? coupon.note_en: coupon.note_fr)}
+            </p>
+          </div>
         );
-      case "address":
-        return (
-          <p className="font-medium text-small min-w-30">{cellValue}</p>
-        );
-      case "contact":
+      case "value":
         return (
           <div>
-            <p className="font-medium text-small flex items-center gap-2 mb-1 whitespace-nowrap">
-              <EnvelopIcon fill="currentColor" size={18} />
-              {agency.email? agency.email : ''}
-            </p>
-            <p className="font-medium text-small flex items-center gap-2">
-              <TelephoneIcon fill="currentColor" size={20} />
-              {agency.phonenumber? agency.phonenumber : ''}
-            </p>
+            <p className="font-semibold">{coupon.percent? coupon.percent+' %': ''}</p>
+            <p className="font-semibold">{coupon.amount? formatCurrency(coupon.amount): ''}</p>
           </div>
         );
-      case "openingdays":
-        return (
-          <div className="text-sm">
-            {agency.openingdays.map((item) => (
-              <div key={item.id}>
-                <span className="font-semibold mr-1.5">{capitalize(locale === "en" ? item.name_en: item.name_fr)}</span>
-                <span className="font-light text-xs">{`(${item.from} - ${item.to})`}</span>
-              </div>
-            ))}
-          </div>
-          );
       case "status":
         return (
           <Chip
             className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[agency.status]}
+            color={statusColorMap[coupon.status]}
             size="sm"
             variant="dot"
           >
@@ -201,14 +178,14 @@ export default function AgenciesTable() {
         );
       case "created_at":
         return (
-          <p className="whitespace-nowrap">{formatDateTime(agency.created_at, locale)}</p>
+          <p className="whitespace-nowrap">{formatDateTime(coupon.created_at, locale)}</p>
         );
       case "created_by":
         return (
           <div>
-          { agency.created_by ? (
-            <Link href={`/${locale}/admin/staff/${agency.created_by.id}`}>
-              {getUsername(agency.created_by.lastname, agency.created_by.firstname)}
+          { coupon.created_by ? (
+            <Link href={`/${locale}/admin/staff/${coupon.created_by.id}`}>
+              {coupon.created_by.lastname && coupon.created_by.firstname? getUsername(coupon.created_by.lastname, coupon.created_by.firstname): ""}
             </Link>
           ): null}
           </div>
@@ -222,62 +199,35 @@ export default function AgenciesTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
-              <>
-              {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem
-                  className={
-                    view_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                >
-                  <Link href={`/${locale}/admin/agencies/${agency.id}`}>
+                <DropdownItem>
+                  <Link href={`/${locale}/admin/coupons/${coupon.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
-                  className={
-                    view_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
                   onClick={() => {
-                    setSelectedAgency(agency);
+                    setSelectedCoupon(coupon);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
-                  className={
-                    view_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  color="warning"
-                  onClick={() => {
-                    setSelectedAgency(agency);
-                    setShowSuspendModal(true);
-                  }}
-                >{agency.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
-                <DropdownItem
-                  className={
-                    delete_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
                   color="danger"
                   onClick={() => {
-                    setSelectedAgency(agency);
+                    setSelectedCoupon(coupon);
                     setShowDeleteModal(true);
                   }}
                 >{t_table("delete")}</DropdownItem>
               </DropdownMenu>
-              )}
-              </>
             </Dropdown>
           </div>
         );
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, []);
   
+
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
@@ -293,17 +243,14 @@ export default function AgenciesTable() {
     }
   }, []);
 
+
   const topContent = React.useMemo(() => {
     return (
-      <>
-      {!permissions ? (
-        <CommonSkeleton />
-      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
       </div>
-      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 sm:px-7.5 xl:pb-2 bg-background shadow-default">
+      <div className="rounded-sm border border-divider px-5 pb-2.5 mb-4 pt-6 bg-background shadow-default sm:px-7.5 xl:pb-2">
         <div className="max-w-full overflow-x-auto">
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap justify-between gap-3 items-end">
@@ -373,7 +320,7 @@ export default function AgenciesTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {new_agency_permissions.some(permission =>
+                  {new_ressource_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -387,7 +334,7 @@ export default function AgenciesTable() {
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-default-400 text-small">{`${t_table("total")}`} {agencies.length}</span>
+              <span className="text-default-400 text-small">{`${t_table("total")}`} {coupons.length}</span>
               <label className="flex items-center text-default-400 text-small">
                 {t_table("row_per_page")}
                 <select
@@ -406,11 +353,9 @@ export default function AgenciesTable() {
         </div>
       </div>
       </>
-      )}
-      </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, agencies.length, hasSearchFilter, permissions]);
+    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -438,8 +383,7 @@ export default function AgenciesTable() {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["!w-[calc(100vw_-_32px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
-
+      wrapper: ["!w-[calc(100vw_-_30px)] sm:!w-[calc(100vw_-_3rem)] lg:!w-[calc(100vw_-_19.75rem)]", "!rounded-none","relative",
         "overflow-hidden", "over-x", "over-y", "!bg-transparent",
         "!shadow-none", "!border-none", "!p-0", "!m-0"],
       th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
@@ -454,18 +398,8 @@ export default function AgenciesTable() {
     [],
   );
 
-
   return (
     <>
-    {!permissions ? (
-      <CommonSkeleton />
-    ) : (
-    <>
-      {requiredPermissions.every(permission =>
-        !permissions.includes(permission)) && (
-          redirect(`/${locale}/admin/forbidden`)
-      )}
-
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -475,14 +409,8 @@ export default function AgenciesTable() {
         aria-label="bb-reservation table"
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
-        checkboxesProps={{
-          classNames: {
-            wrapper: "after:bg-foreground after:text-background text-background",
-          },
-        }}
         classNames={classNames}
         selectedKeys={selectedKeys}
-        selectionMode="multiple"
         sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
@@ -511,35 +439,26 @@ export default function AgenciesTable() {
 
       <Modal
         open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newAgency")}
+        title={t_table("newCoupon")}
       >
-        <NewAgency />
+        <NewCoupon />
       </Modal>
 
       <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editAgency")} "${selectedAgency? selectedAgency.name: ''}"`}
+        title={`${t_table("editCoupon")} "${selectedCoupon? selectedCoupon.name: ''}"`}
       >
-        <EditAgency agency={selectedAgency} />
-      </Modal>
-    
-      <Modal
-        open={showSuspendModal} close={() => setShowSuspendModal(false)}
-        title={`${t_table("suspendAgency")} "${selectedAgency? selectedAgency.name: ''}"`}
-      >
-        <SuspendAgency id={selectedAgency?.id} status={selectedAgency?.status} />
+        <EditCoupon id={selectedCoupon?.id} />
       </Modal>
       
       <Modal
         open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deleteAgency")} "${selectedAgency? selectedAgency.name: ''}"`}
+        title={`${t_table("deleteCoupon")} "${selectedCoupon? selectedCoupon.name: ''}"`}
       >
-        <DeleteAgency id={selectedAgency?.id} />
+        <DeleteCoupon id={selectedCoupon?.id} />
       </Modal>
       </div>
       )}
-    </>
-    )}
     </>
   );
 }

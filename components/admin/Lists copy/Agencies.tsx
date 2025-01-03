@@ -22,8 +22,7 @@ import EditAgency from "../FormElements/Agency/Edit";
 import DeleteAgency from "../FormElements/Agency/Delete";
 import SuspendAgency from '../FormElements/Agency/Suspend';
 import { getAgencies } from '@/lib/action/agencies';
-import { signOut, useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -99,14 +98,7 @@ export default function AgenciesTable() {
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedAgency, setSelectedAgency] = React.useState<AgencyType>();
 
-  const { data: session } = useSession();
-  const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_agency", "manage_all_agencies"];
-  
-  const new_agency_permissions: string[] = ["create_agency"];
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
-  const delete_agency_permissions: string[] = ["delete_agency"];
-  
+  // const changeSelectedAgency
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -222,34 +214,19 @@ export default function AgenciesTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
-              <>
-              {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem
-                  className={
-                    view_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                >
+                <DropdownItem>
                   <Link href={`/${locale}/admin/agencies/${agency.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
-                  className={
-                    view_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
                   onClick={() => {
                     setSelectedAgency(agency);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
-                  className={
-                    view_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
                   color="warning"
                   onClick={() => {
                     setSelectedAgency(agency);
@@ -257,10 +234,6 @@ export default function AgenciesTable() {
                   }}
                 >{agency.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                 <DropdownItem
-                  className={
-                    delete_agency_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
                   color="danger"
                   onClick={() => {
                     setSelectedAgency(agency);
@@ -268,15 +241,13 @@ export default function AgenciesTable() {
                   }}
                 >{t_table("delete")}</DropdownItem>
               </DropdownMenu>
-              )}
-              </>
             </Dropdown>
           </div>
         );
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, []);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -295,10 +266,6 @@ export default function AgenciesTable() {
 
   const topContent = React.useMemo(() => {
     return (
-      <>
-      {!permissions ? (
-        <CommonSkeleton />
-      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -373,7 +340,7 @@ export default function AgenciesTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {new_agency_permissions.some(permission =>
+                  {new_ressource_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -406,11 +373,9 @@ export default function AgenciesTable() {
         </div>
       </div>
       </>
-      )}
-      </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, agencies.length, hasSearchFilter, permissions]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, agencies.length, hasSearchFilter, ]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -454,18 +419,8 @@ export default function AgenciesTable() {
     [],
   );
 
-
   return (
     <>
-    {!permissions ? (
-      <CommonSkeleton />
-    ) : (
-    <>
-      {requiredPermissions.every(permission =>
-        !permissions.includes(permission)) && (
-          redirect(`/${locale}/admin/forbidden`)
-      )}
-
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -538,8 +493,6 @@ export default function AgenciesTable() {
       </Modal>
       </div>
       )}
-    </>
-    )}
     </>
   );
 }

@@ -195,14 +195,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <SettingIcon fill="none" size={18} />
           ),
           label: t_sidebar("settings"),
-          route: `/${locale}/admin/settings?group=profile`,
-          permissions: ["manage_option"]
-        },
-        {
-          icon: (
-            <SettingIcon fill="none" size={18} />
-          ),
-          label: t_sidebar("settings"),
           route: "#",
           children: [
             {

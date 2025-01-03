@@ -17,7 +17,8 @@ import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
 import ClearLog from "../FormElements/Log/Clear";
 import { getLogs } from '@/lib/action/logs';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 // const INITIAL_VISIBLE_COLUMNS = ["description", "url", "agent", "author", "created_at"];
 const INITIAL_VISIBLE_COLUMNS = ["description", "agent", "author", "created_at"];
@@ -30,6 +31,12 @@ export default function LogsTable() {
   const t_error = useTranslations("InputError");
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["view_logactivity"];
+
+  const clear_log_permissions: string[] = ["delete_logactivity"];
 
   useEffect(() => {
     setError("");
@@ -158,6 +165,10 @@ export default function LogsTable() {
   const topContent = React.useMemo(() => {
     return (
       <>
+      {!permissions ? (
+        <CommonSkeleton />
+      ) : (
+      <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
       </div>
@@ -205,13 +216,18 @@ export default function LogsTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  endContent={<TrashIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="danger"
-                  onClick={() => setShowClearModal(true)}
-                >
-                  {t_table("clear_log")}
-                </Button>
+                <>
+                  {clear_log_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <Button
+                      endContent={<TrashIcon fill="currentColor" size={14} />}
+                      size="sm" variant="solid" color="danger"
+                      onClick={() => setShowClearModal(true)}
+                    >
+                      {t_table("clear_log")}
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -234,9 +250,11 @@ export default function LogsTable() {
         </div>
       </div>
       </>
+      )}
+      </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, logs.length, hasSearchFilter, ]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, logs.length, hasSearchFilter, session, permissions]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -279,8 +297,18 @@ export default function LogsTable() {
     }),
     [],
   );
+
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+      {requiredPermissions.every(permission =>
+        !permissions.includes(permission)) && (
+          redirect(`/${locale}/admin/forbidden`)
+      )}
+
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -332,6 +360,8 @@ export default function LogsTable() {
       </Modal>
       </div>
       )}
+    </>
+    )}
     </>
   );
 }

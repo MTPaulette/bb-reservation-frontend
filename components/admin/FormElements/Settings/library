@@ -110,264 +110,59 @@ Dans cet exemple, nous utilisons la fonction handleUpdateLogo pour mettre à
 
 
 ====================================================
+Voici un exemple de comment faire la redirection vers la 403 page lorsque l'utilisateur veut accéder à une page sans permission dans Next.js 14 avec TypeScript :
 
-Je m'excuse si mon explication était trop compliquée !
+import { useNavigate } from 'next/navigation';
+import { useEffect } from 'react';
 
-En résumé, NextAuth ne crypte pas automatiquement le token d'accès avant de le stocker dans la session. Il est donc important de crypter le token avant de le stocker pour éviter les accès non autorisés.
+const Page = () => {
+  const navigate = useNavigate();
+  const permissions = ['read', 'write', 'delete'];
+  const requiredPermissions = ['read', 'write'];
 
-Pour crypter le token, vous pouvez utiliser une fonction de cryptage simple, comme par exemple :
+  useEffect(() => {
+    if (!requiredPermissions.every(permission => permissions.includes(permission))) {
+      navigate('/403', { replace: true });
+    }
+  }, [permissions, requiredPermissions, navigate]);
 
-const crypterToken = (token) => {
-  return token + 'votre_clé_de_cryptage';
-};
-
-Et pour décrypter le token, vous pouvez utiliser une fonction de décryptage simple, comme par exemple :
-
-const décrypterToken = (token) => {
-  return token.replace('votre_clé_de_cryptage', '');
-};
-
-Il est important de remplacer 'votre_clé_de_cryptage' par une clé de cryptage sécurisée.
-
-Ensuite, vous pouvez utiliser ces fonctions pour crypter et décrypter le token d'accès avant de le stocker dans la session.
-
-======================================
-Voici un exemple de code qui montre comment créer une session avec Next-Auth, la mettre à jour et l'afficher dans une navbar.
-
-Étape 1 : Créer une session avec Next-Auth
-
-Créez un fichier pages/api/auth/[...nextauth].js pour configurer Next-Auth :
-
-import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
-
-export default NextAuth({
-  providers: [
-    Providers.Credentials({
-      name: 'Credentials',
-      credentials: {
-        username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' },
-      },
-      authorize: async (credentials) => {
-        // Vérifiez les informations d'identification ici
-        const user = { id: 1, name: 'John Doe', email: 'john.doe@example.com' };
-        return user;
-      },
-    }),
-  ],
-  callbacks: {
-    async session(session, token) {
-      // Mettez à jour la session ici
-      session.user = token.user;
-      return session;
-    },
-  },
-});
-
-Étape 2 : Créer une navbar pour afficher les informations de l'utilisateur
-
-Créez un fichier components/Navbar.js pour créer une navbar :
-
-import { useSession } from 'next-auth/client';
-
-function Navbar() {
-  const { data: session, status } = useSession();
-
-  if (status === 'loading') return null;
-
-  return (
-    <nav>
-      <ul>
-        <li>
-          <a href="#">Bonjour, {session.user.name}!</a>
-        </li>
-        <li>
-          <a href="#">Mon profil</a>
-        </li>
-      </ul>
-    </nav>
-  );
-}
-
-export default Navbar;
-
-Étape 3 : Mettre à jour la session lorsque les informations de l'utilisateur changent
-
-Créez un fichier pages/api/user/[...nextauth].js pour mettre à jour la session lorsque les informations de l'utilisateur changent :
-
-import { NextApiRequest, NextApiResponse } from 'next';
-import { useSession } from 'next-auth/client';
-
-const updateUser = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { data: session, status } = useSession();
-
-  if (status === 'loading') return res.status(401).json({ error: 'Vous devez être connecté pour mettre à jour vos informations.' });
-
-  const updatedUser = { ...session.user, ...req.body };
-
-  // Mettez à jour la session ici
-  session.user = updatedUser;
-
-  return res.json({ message: 'Vos informations ont été mises à jour avec succès.' });
-};
-
-export default updateUser;
-
-Étape 4 : Afficher la navbar dans votre application
-
-Créez un fichier pages/_app.js pour afficher la navbar dans votre application :
-
-import Navbar from '../components/Navbar';
-
-function MyApp({ Component, pageProps }) {
   return (
     <div>
-      <Navbar />
-      <Component {...pageProps} />
+      <!-- Contenu de la page -->
     </div>
   );
-}
-
-export default MyApp;
-
-=========================================
-
-Pour crypter le token d'accès, vous pouvez utiliser une bibliothèque de cryptage telle que crypto en Node.js. Voici un exemple de code qui montre comment crypter le token d'accès avant de le stocker dans la session :
-
-import { session } from 'next-auth/client';
-import crypto from 'crypto';
-
-const encryptToken = (token) => {
-  const encryptionKey = process.env.ENCRYPTION_KEY;
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
-  const encryptedToken = Buffer.concat([cipher.update(token), cipher.final()]);
-
-  return encryptedToken.toString('hex');
 };
 
-const storeAccessToken = async (accessToken) => {
-  const encryptedAccessToken = encryptToken(accessToken);
-  await session.update({
-    accessToken: encryptedAccessToken,
-  });
+Dans cet exemple, nous utilisons le hook useNavigate pour obtenir une instance de la fonction navigate, qui nous permet de rediriger l'utilisateur vers une autre page.
+
+Nous utilisons également le hook useEffect pour vérifier si l'utilisateur a les permissions nécessaires pour accéder à la page. Si ce n'est pas le cas, nous utilisons la fonction navigate pour rediriger l'utilisateur vers la page 403.
+
+Notez que nous utilisons l'option { replace: true } pour remplacer l'historique de navigation de l'utilisateur, de sorte que l'utilisateur ne puisse pas revenir à la page précédente en utilisant le bouton "Retour" du navigateur.
+
+Vous pouvez également utiliser la fonction getServerSideProps pour vérifier les permissions avant de rendre la page.
+
+import { GetServerSideProps } from 'next';
+
+const Page = () => {
+  // Contenu de la page
 };
 
-Dans cet exemple, nous utilisons la bibliothèque crypto pour crypter le token d'accès à l'aide d'une clé de cryptage. Nous stockons ensuite le token crypté dans la session.
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const permissions = ['read', 'write', 'delete'];
+  const requiredPermissions = ['read', 'write'];
 
-Lorsque vous souhaitez utiliser le token d'accès, vous devez le décrypter avant de l'utiliser. Voici un exemple de code qui montre comment décrypter le token d'accès :
-
-const decryptToken = (encryptedToken) => {
-  const encryptionKey = process.env.ENCRYPTION_KEY;
-  const iv = crypto.randomBytes(16);
-  const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, iv);
-  const decryptedToken = Buffer.concat([decipher.update(encryptedToken), decipher.final()]);
-
-  return decryptedToken.toString();
-};
-
-const getAccessToken = async () => {
-  const encryptedAccessToken = await session.get('accessToken');
-  const accessToken = decryptToken(encryptedAccessToken);
-
-  return accessToken;
-};
-===============================88888888888888888888888888888888888================================Voici un exemple de code qui utilise Next.js 14 et TypeScript pour crypter un token à l'aide de la bibliothèque crypto de Node.js, sans stocker le IV dans la session.
-
-utils/crypto.ts
-
-import * as crypto from 'crypto';
-
-const encryptionKey = process.env.ENCRYPTION_KEY;
-
-const encryptToken = (token: string) => {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
-  const encryptedToken = Buffer.concat([cipher.update(token), cipher.final()]);
-
-  return encryptedToken.toString('hex');
-};
-
-const decryptToken = (encryptedToken: string) => {
-  const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, crypto.randomBytes(16));
-  decipher.setAutoPadding(false);
-  const decryptedToken = Buffer.concat([decipher.update(Buffer.from(encryptedToken, 'hex')), decipher.final()]);
-
-  return decryptedToken.toString();
-};
-
-export { encryptToken, decryptToken };
-
-pages/api/auth/[...nextauth].js
-
-import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
-import { encryptToken } from '../../utils/crypto';
-
-export default NextAuth({
-  providers: [
-    Providers.Credentials({
-      name: 'Credentials',
-      credentials: {
-        username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+  if (!requiredPermissions.every(permission => permissions.includes(permission))) {
+    return {
+      redirect: {
+        destination: '/403',
+        permanent: false,
       },
-      authorize: async (credentials) => {
-        // Vérifiez les informations d'identification ici
-        const user = { id: 1, name: 'John Doe', email: 'john.doe@example.com' };
-        const token = 'token-123';
-        const encryptedToken = encryptToken(token);
+    };
+  }
 
-        return {
-          ...user,
-          token: encryptedToken,
-        };
-      },
-    }),
-  ],
-  callbacks: {
-    async session(session, token) {
-      // Mettez à jour la session ici
-      session.user = token.user;
-      session.token = token.token;
-      return session;
-    },
-  },
-});
-
-components/Navbar.tsx
-
-import { useSession } from 'next-auth/client';
-import { decryptToken } from '../utils/crypto';
-
-interface NavbarProps {
-  // Ajoutez des props si nécessaire
-}
-
-const Navbar: React.FC<NavbarProps> = () => {
-  const { data: session, status } = useSession();
-
-  if (status === 'loading') return null;
-
-  const decryptedToken = decryptToken(session.token);
-
-  return (
-    <nav>
-      <ul>
-        <li>
-          <a href="#">Bonjour, {session.user.name}!</a>
-        </li>
-        <li>
-          <a href="#">Mon profil</a>
-        </li>
-      </ul>
-    </nav>
-  );
+  return {
+    props: {},
+  };
 };
 
-export default Navbar;
-
-Dans cet exemple, nous utilisons la même fonction encryptToken pour crypter le token, mais nous ne stockons pas le IV dans la session. Au lieu de cela, nous utilisons une nouvelle instance de crypto.randomBytes(16) pour générer un nouveau IV pour le déchiffrement.
-
-Notez que cela signifie que le token ne peut être déchiffré que si la même clé de cryptage est utilisée pour le cryptage et le déchiffrement.
+Dans cet exemple, nous utilisons la fonction getServerSideProps pour vérifier les permissions avant de rendre la page. Si l'utilisateur n'a pas les permissions nécessaires, nous redirigeons l'utilisateur vers la page 403.

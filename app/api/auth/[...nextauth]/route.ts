@@ -67,8 +67,8 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, trigger, user, session }) {
-      console.log("jwt token============")
-      console.log(token)
+      console.log("jwt user============")
+      console.log(user)
       // when update
       if(trigger == 'update') {
         if (session?.user) {
@@ -90,8 +90,8 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      console.log("session token============")
-      console.log(token)
+      // console.log("session token============")
+      // console.log(token)
       session.accessToken = encryptToken(String(token.accessToken));
       session.user = token.user;
       session.permissions = token.permissions;

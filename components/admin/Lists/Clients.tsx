@@ -22,7 +22,8 @@ import EditClient from "../FormElements/Client/Edit";
 import DeleteClient from "../FormElements/Client/Delete";
 import { getClients } from '@/lib/action/clients';
 import SuspendClient from '../FormElements/Client/Suspend';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -99,7 +100,15 @@ export default function UsersTable() {
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedUser, setSelectedUser] = React.useState<UserType>();
 
-  // const changeSelectedUser
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["show_all_client"];
+  
+  const new_client_permissions: string[] = ["create_client"];
+  const view_client_permissions: string[] = ["view_client"];
+  const update_client_permissions: string[] = ["edit_client"];
+  const delete_client_permissions: string[] = ["delete_client"];
+
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -201,19 +210,35 @@ export default function UsersTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
+              <>
+              {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem>
+                <DropdownItem
+                  className={
+                    view_client_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
+                >
                   <Link href={`/${locale}/admin/clients/${user.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
+                  className={
+                    update_client_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   onClick={() => {
                     setSelectedUser(user);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
+                {/*
                 <DropdownItem
+                  className={
+                    suspend_client_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   isReadOnly
                   color="warning"
                   onClick={() => {
@@ -221,7 +246,12 @@ export default function UsersTable() {
                     setShowSuspendModal(true);
                   }}
                 >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
+                */}
                 <DropdownItem
+                  className={
+                    delete_client_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   color="danger"
                   onClick={() => {
                     setSelectedUser(user);
@@ -229,13 +259,15 @@ export default function UsersTable() {
                   }}
                 >{t_table("delete")}</DropdownItem>
               </DropdownMenu>
+              )}
+              </>
             </Dropdown>
           </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -254,6 +286,10 @@ export default function UsersTable() {
 
   const topContent = React.useMemo(() => {
     return (
+      <>
+      {!permissions ? (
+        <CommonSkeleton />
+      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -327,14 +363,18 @@ export default function UsersTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
-                >
-                  {t_table("new")}
-                </Button>
+                <>
+                  {new_client_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <Button
+                      endContent={<PlusIcon fill="currentColor" size={14} />}
+                      size="sm" variant="solid" color="primary"
+                      onClick={() => setShowNewModal(true)}
+                    >
+                      {t_table("new")}
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -357,9 +397,11 @@ export default function UsersTable() {
         </div>
       </div>
       </>
+      )}
+      </>
     );
   }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, ]);
+    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, permissions]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -404,6 +446,15 @@ export default function UsersTable() {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+      {requiredPermissions.every(permission =>
+        !permissions.includes(permission)) && (
+          redirect(`/${locale}/admin/forbidden`)
+      )}
+
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -476,6 +527,8 @@ export default function UsersTable() {
       </Modal>
       </div>
       )}
+    </>
+    )}
     </>
   );
 }

@@ -21,8 +21,8 @@ import NewRessource from "../FormElements/Ressource/New";
 import EditRessource from "../FormElements/Ressource/Edit";
 import DeleteRessource from "../FormElements/Ressource/Delete";
 import { getRessources } from '@/lib/action/ressources';
-import { signOut } from 'next-auth/react';
-
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "agency", "created_by", "actions"];
 
@@ -90,7 +90,15 @@ export default function RessourcesTable() {
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedRessource, setSelectedRessource] = React.useState<RessourceType>();
 
-  // const changeSelectedRessource
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["manage_ressources", "show_all_ressource", "show_all_ressource_of_agency"];
+  
+  const new_ressource_permissions: string[] = ["manage_ressources", "create_ressource", "create_ressource_of_agency"];
+  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
+  const update_ressource_permissions: string[] = ["manage_ressources", "edit_ressource", "edit_ressource_of_agency"];
+  const delete_ressource_permissions: string[] = ["manage_ressources", "delete_ressource", "delete_ressource_of_agency"];
+
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -182,40 +190,57 @@ export default function RessourcesTable() {
         );
       case "actions":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon fill="none" size={24} />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>
-                  <Link href={`/${locale}/admin/ressources/${ressource.id}`}>
-                    {t_table("view")}
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => {
-                    setSelectedRessource(ressource);
-                    setShowEditModal(true);
-                  }}
-                >{t_table("edit")}</DropdownItem>
-                <DropdownItem
-                  color="danger"
-                  onClick={() => {
-                    setSelectedRessource(ressource);
-                    setShowDeleteModal(true);
-                  }}
-                >{t_table("delete")}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+            <div className="relative flex justify-end items-center gap-2">
+              <Dropdown className="bg-background border-1 border-default-200">
+                <DropdownTrigger>
+                  <Button isIconOnly radius="full" size="sm" variant="light">
+                    <VerticalDotsIcon fill="none" size={24} />
+                  </Button>
+                </DropdownTrigger>
+                <>
+                {!permissions ? null : (
+                <DropdownMenu>
+                  <DropdownItem
+                    className={
+                      view_ressource_permissions.some(permission =>
+                      permissions.includes(permission)) ? "block" : "hidden"
+                    }
+                  >
+                    <Link href={`/${locale}/admin/ressources/${ressource.id}`}>
+                      {t_table("view")}
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem
+                    className={
+                      update_ressource_permissions.some(permission =>
+                      permissions.includes(permission)) ? "block" : "hidden"
+                    }
+                    onClick={() => {
+                      setSelectedRessource(ressource);
+                      setShowEditModal(true);
+                    }}
+                  >{t_table("edit")}</DropdownItem>
+                  <DropdownItem
+                    className={
+                      delete_ressource_permissions.some(permission =>
+                      permissions.includes(permission)) ? "block" : "hidden"
+                    }
+                    color="danger"
+                    onClick={() => {
+                      setSelectedRessource(ressource);
+                      setShowDeleteModal(true);
+                    }}
+                  >{t_table("delete")}</DropdownItem>
+                </DropdownMenu>
+                )}
+                </>
+              </Dropdown>
+            </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -234,6 +259,10 @@ export default function RessourcesTable() {
 
   const topContent = React.useMemo(() => {
     return (
+      <>
+      {!permissions ? (
+        <CommonSkeleton />
+      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -282,14 +311,18 @@ export default function RessourcesTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
-                >
-                  {t_table("new")}
-                </Button>
+                <>
+                  {new_ressource_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <Button
+                      endContent={<PlusIcon fill="currentColor" size={14} />}
+                      size="sm" variant="solid" color="primary"
+                      onClick={() => setShowNewModal(true)}
+                    >
+                      {t_table("new")}
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -312,9 +345,11 @@ export default function RessourcesTable() {
         </div>
       </div>
       </>
+      )}
+      </>
     );
   }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, ressources.length, hasSearchFilter, ]);
+    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, ressources.length, hasSearchFilter, permissions]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -360,10 +395,25 @@ export default function RessourcesTable() {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+      {requiredPermissions.every(permission =>
+        !permissions.includes(permission)) && (
+          redirect(`/${locale}/admin/forbidden`)
+      )}
+
       {loading ? (
         <CommonSkeleton />
       ) : (
       <div>
+      {/* <div className="full">
+        {permissions.map((permission, index) => (
+          <p key={index}>
+          {permission}</p>
+        ))}
+      </div> */}
       <Table
         isCompact
         aria-label="bb-reservation table"
@@ -425,6 +475,8 @@ export default function RessourcesTable() {
       </Modal>
       </div>
       )}
+    </>
+    )}
     </>
   );
 }

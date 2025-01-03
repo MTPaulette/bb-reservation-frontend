@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/admin/Breadcrumb";
 import RessourcesTable from "@/components/admin/Lists/Ressources";
 
 export const metadata: Metadata = {
-  title: "Ressources",
+  title: "Ressources | BB-RESERVATION-SYST",
   description:
     "Show all ressources of system",
 };

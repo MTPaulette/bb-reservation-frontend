@@ -21,8 +21,8 @@ import NewSpace from "../FormElements/Space/New";
 import EditSpace from "../FormElements/Space/Edit";
 import DeleteSpace from "../FormElements/Space/Delete";
 import { getSpaces } from '@/lib/action/spaces';
-import { signOut } from 'next-auth/react';
-// import Image from 'next/image';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "nb_place", "characteristics", "images", "created_at", "actions"];
@@ -35,6 +35,15 @@ export default function SpacesTable() {
   const t_error = useTranslations("InputError");
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["manage_spaces", "show_all_space"];
+  
+  const new_space_permissions: string[] = ["manage_spaces", "create_space"];
+  const view_space_permissions: string[] = ["manage_spaces", "view_space"];
+  const update_space_permissions: string[] = ["manage_spaces", "edit_space"];
+  const delete_space_permissions: string[] = ["manage_spaces", "delete_space"];
 
   useEffect(() => {
     setError("");
@@ -182,19 +191,34 @@ export default function SpacesTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
+              <>
+              {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem>
+                <DropdownItem
+                  className={
+                    view_space_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
+                >
                   <Link href={`/${locale}/admin/spaces/${space.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
+                  className={
+                    update_space_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   onClick={() => {
                     setSelectedSpace(space);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
+                  className={
+                    delete_space_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   color="danger"
                   onClick={() => {
                     setSelectedSpace(space);
@@ -202,13 +226,15 @@ export default function SpacesTable() {
                   }}
                 >{t_table("delete")}</DropdownItem>
               </DropdownMenu>
+              )}
+              </>
             </Dropdown>
           </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -227,6 +253,10 @@ export default function SpacesTable() {
 
   const topContent = React.useMemo(() => {
     return (
+      <>
+      {!permissions ? (
+        <CommonSkeleton />
+      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -275,14 +305,18 @@ export default function SpacesTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
-                >
-                  {t_table("new")}
-                </Button>
+                <>
+                  {new_space_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <Button
+                      endContent={<PlusIcon fill="currentColor" size={14} />}
+                      size="sm" variant="solid" color="primary"
+                      onClick={() => setShowNewModal(true)}
+                    >
+                      {t_table("new")}
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -305,9 +339,11 @@ export default function SpacesTable() {
         </div>
       </div>
       </>
+      )}
+      </>
     );
   }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, spaces.length, hasSearchFilter, ]);
+    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, spaces.length, hasSearchFilter, permissions]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -331,7 +367,7 @@ export default function SpacesTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, items.length, page, pages, hasSearchFilter, permissions]);
 
   const classNames = React.useMemo(
     () => ({
@@ -353,6 +389,15 @@ export default function SpacesTable() {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+      {requiredPermissions.every(permission =>
+        !permissions.includes(permission)) && (
+          redirect(`/${locale}/admin/forbidden`)
+      )}
+  
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -419,6 +464,7 @@ export default function SpacesTable() {
       </div>
       )}
     </>
+    )}
+    </>
   );
 }
-

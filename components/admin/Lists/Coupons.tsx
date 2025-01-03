@@ -21,7 +21,8 @@ import NewCoupon from "../FormElements/Coupon/New";
 import EditCoupon from "../FormElements/Coupon/Edit";
 import DeleteCoupon from "../FormElements/Coupon/Delete";
 import { getCoupons } from '@/lib/action/coupons';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -39,6 +40,16 @@ export default function CouponsTable() {
   const t_error = useTranslations("InputError");
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["manage_coupons", "show_all_coupon"];
+  
+  const new_coupon_permissions: string[] = ["manage_coupons", "create_coupon"];
+  const view_coupon_permissions: string[] = ["manage_coupons", "view_coupon"];
+  const update_coupon_permissions: string[] = ["manage_coupons", "edit_coupon"];
+  const delete_coupon_permissions: string[] = ["manage_coupons", "delete_coupon"];
+
 
   useEffect(() => {
     setError("");
@@ -199,19 +210,34 @@ export default function CouponsTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
+              <>
+              {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem>
+                <DropdownItem
+                  className={
+                    view_coupon_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
+                >
                   <Link href={`/${locale}/admin/coupons/${coupon.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
+                  className={
+                    update_coupon_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   onClick={() => {
                     setSelectedCoupon(coupon);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
+                  className={
+                    delete_coupon_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   color="danger"
                   onClick={() => {
                     setSelectedCoupon(coupon);
@@ -219,14 +245,15 @@ export default function CouponsTable() {
                   }}
                 >{t_table("delete")}</DropdownItem>
               </DropdownMenu>
+              )}
+              </>
             </Dropdown>
           </div>
         );
       default:
         return cellValue;
     }
-  }, []);
-  
+  }, [session, permissions]);
 
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -246,6 +273,10 @@ export default function CouponsTable() {
 
   const topContent = React.useMemo(() => {
     return (
+      <>
+      {!permissions ? (
+        <CommonSkeleton />
+      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -319,14 +350,18 @@ export default function CouponsTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
-                >
-                  {t_table("new")}
-                </Button>
+                <>
+                  {new_coupon_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <Button
+                      endContent={<PlusIcon fill="currentColor" size={14} />}
+                      size="sm" variant="solid" color="primary"
+                      onClick={() => setShowNewModal(true)}
+                    >
+                      {t_table("new")}
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -349,9 +384,11 @@ export default function CouponsTable() {
         </div>
       </div>
       </>
+      )}
+      </>
     );
   }, [
-    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, ]);
+    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, permissions]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -396,6 +433,15 @@ export default function CouponsTable() {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+      {requiredPermissions.every(permission =>
+        !permissions.includes(permission)) && (
+          redirect(`/${locale}/admin/forbidden`)
+      )}
+
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -456,6 +502,7 @@ export default function CouponsTable() {
       </div>
       )}
     </>
+    )}
+    </>
   );
 }
-

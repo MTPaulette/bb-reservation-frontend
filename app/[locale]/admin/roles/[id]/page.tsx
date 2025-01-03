@@ -9,6 +9,7 @@ import Title from '@/components/Title';
 import { Button, Checkbox } from '@nextui-org/react';
 import { CommonSkeleton } from '@/components/Skeletons';
 import Alert from '@/components/Alert';
+import { useSession } from 'next-auth/react';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -23,6 +24,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [save, setSave] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+  const { update } = useSession();
 
   let perms: number[]= [];
   useEffect(() => {
@@ -77,6 +79,10 @@ export default function Page({ params }: { params: { id: string } }) {
       setSave(false);
       if(res?.ok) {
         setSuccess(t("update_role_success_msg"));
+        const response = await res.json();
+        update({
+          permissions: response.permissions
+        })
         // setTimeout(() => {
         // // window.location.reload();
         // }, 1000);

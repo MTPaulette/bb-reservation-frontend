@@ -21,9 +21,8 @@ import NewPayment from "../FormElements/Payment/New";
 import EditPayment from "../FormElements/Payment/Edit";
 import DeletePayment from "../FormElements/Payment/Delete";
 import { getPayments } from '@/lib/action/payments';
-import { signOut } from 'next-auth/react';
-// import ProgressBar from "@/components/ProgressBar";
-
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -40,6 +39,13 @@ export default function PaymentsTable() {
   const t_error = useTranslations("InputError");
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
+  
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["manage_payments", "show_all_payment"];
+
+  const new_payment_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
+  const view_payment_permissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
 
   useEffect(() => {
     setError("");
@@ -189,19 +195,34 @@ export default function PaymentsTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
+              <>
+              {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem>
+                <DropdownItem
+                  className={
+                    view_payment_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
+                >
                   <Link href={`/${locale}/admin/payments/${payment.id}`}>
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
                 <DropdownItem
+                  className={
+                    view_payment_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   onClick={() => {
                     setSelectedPayment(payment);
                     setShowEditModal(true);
                   }}
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
+                  className={
+                    view_payment_permissions.some(permission =>
+                    permissions.includes(permission)) ? "block" : "hidden"
+                  }
                   color="danger"
                   onClick={() => {
                     setSelectedPayment(payment);
@@ -209,13 +230,15 @@ export default function PaymentsTable() {
                   }}
                 >{t_table("delete")}</DropdownItem>
               </DropdownMenu>
+              )}
+              </>
             </Dropdown>
           </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
 
@@ -233,9 +256,12 @@ export default function PaymentsTable() {
     }
   }, []);
 
-
   const topContent = React.useMemo(() => {
     return (
+      <>
+      {!permissions ? (
+        <CommonSkeleton />
+      ) : (
       <>
       <div className="block md:hidden mb-4 max-w-screen">
         <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
@@ -309,14 +335,18 @@ export default function PaymentsTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <Button
-                  // className="bg-foregroundd text-backgroundd"
-                  endContent={<PlusIcon fill="currentColor" size={14} />}
-                  size="sm" variant="solid" color="primary"
-                  onClick={() => setShowNewModal(true)}
-                >
-                  {t_table("new")}
-                </Button>
+                <>
+                  {new_payment_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <Button
+                      endContent={<PlusIcon fill="currentColor" size={14} />}
+                      size="sm" variant="solid" color="primary"
+                      onClick={() => setShowNewModal(true)}
+                    >
+                      {t_table("new")}
+                    </Button>
+                  )}
+                </>
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -339,9 +369,11 @@ export default function PaymentsTable() {
         </div>
       </div>
       </>
+      )}
+      </>
     );
   }, [
-    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, payments.length, hasSearchFilter, ]);
+    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, payments.length, hasSearchFilter, permissions]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -386,6 +418,15 @@ export default function PaymentsTable() {
 
   return (
     <>
+    {!permissions ? (
+      <CommonSkeleton />
+    ) : (
+    <>
+      {requiredPermissions.every(permission =>
+        !permissions.includes(permission)) && (
+          redirect(`/${locale}/admin/forbidden`)
+      )}
+
       {loading ? (
         <CommonSkeleton />
       ) : (
@@ -446,6 +487,7 @@ export default function PaymentsTable() {
       </div>
       )}
     </>
+    )}
+    </>
   );
 }
-

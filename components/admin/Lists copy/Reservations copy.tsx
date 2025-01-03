@@ -45,6 +45,9 @@ export default function ReservationsTable() {
   const t_alert = useTranslations("Alert");
   const t_table = useTranslations("Table");
 
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+  const requiredPermissions: string[] = ["view_dashboard"];
 
   useEffect(() => {
     setError("");
@@ -102,10 +105,6 @@ export default function ReservationsTable() {
   const [showPaymentModal, setShowPaymentModal] = React.useState<boolean>(false);
   const [showCancelModal, setShowCancelModal] = React.useState<boolean>(false);
   const [selectedReservation, setSelectedReservation] = React.useState<ReservationType>();
-
-  const { data: session } = useSession();
-  const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
 
   const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
   const view_reservation_permissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
@@ -238,6 +237,10 @@ export default function ReservationsTable() {
         );
       case "actions":
         return (
+          <>
+          {!permissions ? (
+            <p>rien</p>
+          ) : (
           <div className="relative flex justify-end items-center gap-2">
             <Dropdown className="bg-background border-1 border-default-200">
               <DropdownTrigger>
@@ -245,61 +248,62 @@ export default function ReservationsTable() {
                   <VerticalDotsIcon fill="none" size={24} />
                 </Button>
               </DropdownTrigger>
-          <>
-          {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem
-                  className={
-                    view_reservation_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                >
-                  <Link href={`/${locale}/admin/reservations/${reservation.id}`}>
-                    {t_table("view")}
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  className={
-                    update_reservation_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  onClick={() => {
-                    setSelectedReservation(reservation);
-                    setShowEditModal(true);
-                  }}
-                >{t_table("edit")}</DropdownItem>
-                <DropdownItem
-                  className={
-                    new_reservation_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  color="success"
-                  onClick={() => {
-                    setSelectedReservation(reservation);
-                    setShowPaymentModal(true);
-                  }}
-                >{t_table("new_payment")}</DropdownItem>
-                <DropdownItem
-                  className={
-                    cancel_reservation_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  color="warning"
-                  onClick={() => {
-                    setSelectedReservation(reservation);
-                    setShowCancelModal(true);
-                  }}
-                >{reservation.state != 'cancelled'? t_table("cancel"): t_table("undo_cancellation")}</DropdownItem>
+                <>
+                  {view_reservation_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                  <DropdownItem>
+                    <Link href={`/${locale}/admin/reservations/${reservation.id}`}>
+                      {t_table("view")}
+                    </Link>
+                  </DropdownItem>
+                  )}
+                </>
+                <>
+                  {update_reservation_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <DropdownItem
+                      onClick={() => {
+                        setSelectedReservation(reservation);
+                        setShowEditModal(true);
+                      }}
+                    >{t_table("edit")}</DropdownItem>
+                  )}
+                </>
+                <>
+                  {new_reservation_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <DropdownItem
+                      color="success"
+                      onClick={() => {
+                        setSelectedReservation(reservation);
+                        setShowPaymentModal(true);
+                      }}
+                    >{t_table("new_payment")}</DropdownItem>
+                  )}
+                </>
+                <>
+                  {cancel_reservation_permissions.some(permission =>
+                  permissions.includes(permission)) && (
+                    <DropdownItem
+                      color="warning"
+                      onClick={() => {
+                        setSelectedReservation(reservation);
+                        setShowCancelModal(true);
+                      }}
+                    >{reservation.state != 'cancelled'? t_table("cancel"): t_table("undo_cancellation")}</DropdownItem>
+                  )}
+                </>
               </DropdownMenu>
-          )}
-          </>
             </Dropdown>
           </div>
+          )}
+          </>
         );
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -494,6 +498,12 @@ export default function ReservationsTable() {
         <CommonSkeleton />
       ) : (
       <div>
+                    {/* <div className="full">
+                      {permissions.map((permission, index) => (
+                        <p key={index}>
+                        {permission}</p>
+                      ))}
+                    </div> */}
       <Table
         isCompact
         aria-label="bb-reservation table"
