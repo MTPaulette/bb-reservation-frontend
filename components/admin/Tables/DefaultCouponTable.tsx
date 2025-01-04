@@ -12,6 +12,7 @@ import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/u
 import { statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
+import { useSession } from 'next-auth/react';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -39,7 +40,11 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
 
   const pages = Math.ceil(coupons.length / rowsPerPage);
 
-  // const changeSelectedCoupon
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const view_coupon_permissions: string[] = ["manage_coupons", "view_coupon"];
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -94,10 +99,23 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
       case "name":
         return (
           <div className="min-w-[80px]">
-            <Link
-              href={`/${locale}/admin/coupons/${coupon.id}`}
-              className="font-semibold whitespace-nowrap"
-            >{coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}</Link>
+            <>
+            {!permissions || !coupon.created_by ? null : (
+              <>
+                {view_coupon_permissions.some(permission =>
+                permissions.includes(permission)) ? (
+                  <Link
+                    href={`/${locale}/admin/coupons/${coupon.id}`}
+                    className="font-semibold whitespace-nowrap"
+                  >{coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}</Link>
+                ): (
+                  <span className="font-semibold whitespace-nowrap">
+                  {coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}
+                  </span>
+                )}
+              </>
+            )}
+            </>
             <p className="font-light text-small text-foreground/70">
               {capitalize(locale === "en" ? coupon.note_en: coupon.note_fr)}
             </p>
@@ -127,18 +145,27 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
         );
       case "created_by":
         return (
-          <div>
-          { coupon.created_by ? (
-            <Link href={`/${locale}/admin/staff/${coupon.created_by.id}`}>
-              {coupon.created_by.lastname && coupon.created_by.firstname? getUsername(coupon.created_by.lastname, coupon.created_by.firstname): ""}
-            </Link>
-          ): null}
-          </div>
+          <>
+          {!permissions || !coupon.created_by ? null : (
+            <>
+            {view_staff_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/staff/${coupon.created_by.id}`}>
+                {coupon.created_by.lastname && coupon.created_by.firstname? getUsername(coupon.created_by.lastname, coupon.created_by.firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {coupon.created_by.lastname && coupon.created_by.firstname? getUsername(coupon.created_by.lastname, coupon.created_by.firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {

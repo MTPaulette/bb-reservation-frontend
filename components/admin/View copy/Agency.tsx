@@ -218,30 +218,31 @@ export default function ViewAgency({id}: {id: string}) {
                   </Dropdown>
                 </div>
               </div>
+              
+            <>
+            {!permissions || !response.agency.created_by ? null : (
               <>
-              {!permissions || !response.agency.created_by ? null : (
-                <>
-                {view_staff_permissions.some(permission =>
-                permissions.includes(permission)) ? (
-                  <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
-                    <Link href={`/${locale}/admin/staff/${response.agency.created_by.id}`} className="font-medium ms-2">
-                      {response.agency.created_by.firstname && response.agency.created_by.lastname ?
-                        getUsername(response.agency.created_by.lastname, response.agency.created_by.firstname)
-                      : ""}
-                    </Link>
-                  </p>
-                ): (
-                  <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
-                    <span className="font-medium ms-2">
-                      {response.agency.created_by.firstname && response.agency.created_by.lastname ?
-                        getUsername(response.agency.created_by.lastname, response.agency.created_by.firstname)
-                      : ""}
-                    </span>
-                  </p>
-                )}
-                </>
+              {view_staff_permissions.some(permission =>
+              permissions.includes(permission)) ? (
+                <Link href={`/${locale}/admin/staff/${agency.created_by.id}`}>
+                  {getUsername(agency.created_by.lastname, agency.created_by.firstname)}
+                </Link>
+              ): (
+                <p>{getUsername(agency.created_by.lastname, agency.created_by.firstname)}</p>
               )}
               </>
+            )}
+            </>
+              {response.agency.created_by ? (
+                <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
+                  <Link href={`/${locale}/admin/staff/${response.agency.created_by.id}`} className="font-medium ms-2">
+                    {response.agency.created_by.firstname && response.agency.created_by.lastname ?
+                      getUsername(response.agency.created_by.lastname, response.agency.created_by.firstname)
+                    : ""}
+                  </Link>
+                </p>
+              ): null }
+
               {response.agency.created_at? (
                 <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_tabs("since")}: {formatDateTime(response.agency.created_at)}</p>
               ): ""}
@@ -250,11 +251,8 @@ export default function ViewAgency({id}: {id: string}) {
                   className={`my-3 inline-block rounded px-1.5 py-0.5 uppercase font-bold text-sm text-white
                   ${response.agency.status == "active"? "bg-success" :"bg-danger"}`}
                 >{response.agency.status}</div>
-                <>
-                {!permissions || response.agency.status != 'suspended' || !response.agency.suspended_by ? null : (
-                  <>
-                  {view_staff_permissions.some(permission =>
-                  permissions.includes(permission)) ? (
+                <div>
+                  {response.agency.status == 'suspended' && response.agency.suspended_by ? (
                     <p className="mt-1 font-light text-tiny"> {t_tabs("suspended_by")}:
                       <Link href={`/${locale}/admin/staff/${response.agency.suspended_by.id}`} className="font-medium ms-2">
                         {response.agency.suspended_by.firstname && response.agency.suspended_by.lastname ?
@@ -262,18 +260,8 @@ export default function ViewAgency({id}: {id: string}) {
                         : ""}
                       </Link>
                     </p>
-                  ): (
-                    <p className="mt-1 font-light text-tiny"> {t_tabs("suspended_by")}:
-                      <span className="font-medium ms-2">
-                        {response.agency.suspended_by.firstname && response.agency.suspended_by.lastname ?
-                          getUsername(response.agency.suspended_by.lastname, response.agency.suspended_by.firstname)
-                        : ""}
-                      </span>
-                    </p>
-                  )}
-                  </>
-                )}
-                </>
+                  ): null }
+                </div>
               </div>
               <div>
                 {response.agency.status != "active" ? (

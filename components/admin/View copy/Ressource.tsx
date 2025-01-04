@@ -46,9 +46,6 @@ export default function ViewRessource({id}: {id: string}) {
   const update_ressource_permissions: string[] = ["manage_ressources", "edit_ressource", "edit_ressource_of_agency"];
   const delete_ressource_permissions: string[] = ["manage_ressources", "delete_ressource", "delete_ressource_of_agency"];
 
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-
   useEffect(() => {
     setError("");
     getRessourceById(Number(id))
@@ -204,54 +201,22 @@ export default function ViewRessource({id}: {id: string}) {
                   </Dropdown>
                 </div>
               </div>
-              
-              
-              <>
-              {!permissions || !response.ressource.agency ? null : (
-                <>
-                {view_agency_permissions.some(permission =>
-                permissions.includes(permission)) ? (
-                  <p className="mt-1 font-light text-tiny"> {t_ressource("from")}:
-                    <Link href={`/${locale}/admin/agencies/${response.ressource.agency.id}`} className="font-medium ms-2">
-                      {response.ressource.agency.name? capitalize(response.ressource.agency.name): ""}
-                    </Link>
-                  </p>
-                ): (
-                  <p className="mt-1 font-light text-tiny"> {t_ressource("from")}:
-                    <span className="font-medium ms-2">
-                      {response.ressource.agency.name? capitalize(response.ressource.agency.name): ""}
-                    </span>
-                  </p>
-                )}
-                </>
-              )}
-              </>
-
-              <>
-              {!permissions || !response.ressource.created_by ? null : (
-                <>
-                {view_staff_permissions.some(permission =>
-                permissions.includes(permission)) ? (
-                  <p className="mt-1 font-light text-tiny"> {t_ressource("created_by")}:
-                    <Link href={`/${locale}/admin/staff/${response.ressource.created_by.id}`} className="font-medium ms-2">
-                      {response.ressource.created_by.firstname && response.ressource.created_by.lastname ?
-                        getUsername(response.ressource.created_by.lastname, response.ressource.created_by.firstname)
-                      : ""}
-                    </Link>
-                  </p>
-                ): (
-                  <p className="mt-1 font-light text-tiny"> {t_ressource("created_by")}:
-                    <span className="font-medium ms-2">
-                      {response.ressource.created_by.firstname && response.ressource.created_by.lastname ?
-                        getUsername(response.ressource.created_by.lastname, response.ressource.created_by.firstname)
-                      : ""}
-                    </span>
-                  </p>
-                )}
-                </>
-              )}
-              </>
-
+              {response.ressource.agency ? (
+                <p className="mt-1 font-light text-tiny"> {t_ressource("from")}:
+                  <Link href={`/${locale}/admin/agencies/${response.ressource.agency.id}`} className="font-medium ms-2">
+                    {response.ressource.agency.name? capitalize(response.ressource.agency.name): ""}
+                  </Link>
+                </p>
+              ): null }
+              {response.ressource.created_by ? (
+                <p className="mt-1 font-light text-tiny"> {t_ressource("created_by")}:
+                  <Link href={`/${locale}/admin/staff/${response.ressource.created_by.id}`} className="font-medium ms-2">
+                    {response.ressource.created_by.firstname && response.ressource.created_by.lastname ?
+                      getUsername(response.ressource.created_by.lastname, response.ressource.created_by.firstname)
+                    : ""}
+                  </Link>
+                </p>
+              ): null }
               {response.ressource.created_at? (
                 <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_ressource("at")}: {formatDateTime(response.ressource.created_at)}</p>
               ): ""}

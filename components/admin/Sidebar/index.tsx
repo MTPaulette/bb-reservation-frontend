@@ -189,7 +189,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           ),
           label: "Tables",
           route: `/${locale}/admin/tables`,
-        }, */
+        },
         {
           icon: (
             <SettingIcon fill="none" size={18} />
@@ -205,10 +205,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             {
               label: t_sidebar("settings"),
               route: `/${locale}/admin/settings?group=general`,
-              permissions: ["manage_option"]
+              permissions: ["manage_options"]
             },
           ],
           permissions: null //["view_dashboard"]
+        }, */
+        {
+          icon: (
+            <SettingIcon fill="none" size={18} />
+          ),
+          label: t_sidebar("settings"),
+          route: `/${locale}/admin/settings?group=profile`,
+          permissions: null
         },
       ],
     },
@@ -292,7 +300,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 ) : (
                 <ul className="mb-6 flex flex-col gap-1.5">
                   {group.menuItems.map((menuItem, menuIndex) => (
-                    <>
+                    <div key={menuIndex}>
                     {!menuItem.permissions ? (
                       <SidebarItem
                         key={menuIndex}
@@ -301,7 +309,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         setPageName={setPageName}
                       />
                     ) : (
-                      <>
+                      <div key={menuIndex}>
                       {menuItem.permissions.some(permission =>
                         permissions.includes(permission)) && (
                         <SidebarItem
@@ -311,9 +319,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           setPageName={setPageName}
                         />
                       )}
-                      </>
+                      </div>
                     )}
-                    </>
+                    </div>
                   ))}
                 </ul>
                 )}

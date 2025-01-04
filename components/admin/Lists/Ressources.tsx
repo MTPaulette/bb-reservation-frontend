@@ -24,7 +24,8 @@ import { getRessources } from '@/lib/action/ressources';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
-const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "agency", "created_by", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["space", "agency", "created_by"];
+// const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "agency", "created_by", "actions"];
 
 export default function RessourcesTable() {
   const [ressources, setRessources] = useState([]);
@@ -99,6 +100,9 @@ export default function RessourcesTable() {
   const update_ressource_permissions: string[] = ["manage_ressources", "edit_ressource", "edit_ressource_of_agency"];
   const delete_ressource_permissions: string[] = ["manage_ressources", "delete_ressource", "delete_ressource_of_agency"];
 
+  const view_space_permissions: string[] = ["manage_spaces", "view_space"];
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -143,9 +147,22 @@ export default function RessourcesTable() {
     switch (columnKey) {
       case "space":
         return (
-          <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
-            {capitalize(ressource.space)}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_space_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
+                {capitalize(ressource.space)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(ressource.space)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "price":
         return (
@@ -174,9 +191,22 @@ export default function RessourcesTable() {
         );
       case "agency":
         return (
-          <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
-            {capitalize(ressource.agency)}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_agency_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
+                {capitalize(ressource.agency)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(ressource.agency)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "created_at":
         return (
@@ -184,9 +214,22 @@ export default function RessourcesTable() {
         );
       case "created_by":
         return (
-          <Link href={`/${locale}/admin/staff/${ressource.created_by}`} className="font-medium">
-            {ressource.parent_firstname && ressource.parent_lastname? getUsername(ressource.parent_lastname, ressource.parent_firstname): ""}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_staff_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/staff/${ressource.created_by}`} className="font-medium">
+                {ressource.parent_firstname && ressource.parent_lastname? getUsername(ressource.parent_lastname, ressource.parent_firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {ressource.parent_firstname && ressource.parent_lastname? getUsername(ressource.parent_lastname, ressource.parent_firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "actions":
         return (

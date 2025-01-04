@@ -52,6 +52,7 @@ export default function UsersTable() {
   const delete_staff_permissions: string[] = ["delete_admin", "delete_superadmin"];
   const suspend_staff_permissions: string[] = ["suspend_staff"];
 
+  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
 
   useEffect(() => {
     setError("");
@@ -180,9 +181,22 @@ export default function UsersTable() {
         );
       case "agency":
         return (
-          <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
-            {capitalize(user.agency)}
-          </Link>
+          <>
+          {!permissions || !user.work_at  ? null : (
+            <>
+            {view_agency_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
+                {capitalize(user.agency)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(user.agency)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "created_at":
         return (
@@ -191,12 +205,21 @@ export default function UsersTable() {
       case "created_by":
         return (
           <>
-          {user.created_by ? (
-            <Link href={`/${locale}/admin/staff/${user.created_by}`}>
-              {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
-            </Link>
-          ): null
-          }</>
+          {!permissions || !user.created_by  ? null : (
+            <>
+            {view_staff_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/staff/${user.created_by}`}>
+                {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "status":
         return (

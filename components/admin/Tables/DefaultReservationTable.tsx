@@ -15,6 +15,7 @@ import { capitalize, getUsername, formatCurrency, formatDateTime } from "@/lib/u
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 import { columnsTabsReservation as columns, statusReservation as statusOptions } from "@/lib/data";
+import { useSession } from 'next-auth/react';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   pending: "warning",
@@ -43,6 +44,15 @@ export default function DefaultReservationTable({ reservations }: { reservations
 
   const [page, setPage] = React.useState(1);
   const pages = Math.ceil(reservations.length / rowsPerPage);
+
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+
+  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
+  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const view_client_permissions: string[] = ["view_client"];
+
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
@@ -91,26 +101,71 @@ export default function DefaultReservationTable({ reservations }: { reservations
     switch (columnKey) {
       case "ressource":
         return (
-          <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
-            {capitalize(reservation.ressource.space.name)}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_ressource_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
+                {capitalize(reservation.ressource.space.name)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(reservation.ressource.space.name)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "client":
         return (
-          <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
-            {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_client_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
+                {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "agency":
         return (
           <div className="text-foreground/60">
             {capitalize(reservation.ressource.agency.name)}
             <p className="text-xs truncate mt-1 text-foreground">
-              {t_table("by")}:
-              <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="ml-1">
-                {reservation.created_by.firstname && reservation.created_by.lastname ?
-                  getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
-              </Link>
+              <>
+              {!permissions ? null : (
+                <>
+                {view_staff_permissions.some(permission =>
+                permissions.includes(permission)) ? (
+                  <>
+                    {t_table("by")}:
+                    <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="ml-1">
+                      {reservation.created_by.firstname && reservation.created_by.lastname ?
+                        getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+                    </Link>
+                  </>
+                ): (
+                  <>
+                    {t_table("by")}:
+                    <span className="ml-1">
+                      {reservation.created_by.firstname && reservation.created_by.lastname ?
+                        getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+                    </span>
+                  </>
+                )}
+                </>
+              )}
+              </>
             </p>
             <p className="text-xs truncate mt-1">
               {t_table("at")}: {formatDateTime(reservation.created_at, locale)}
@@ -162,18 +217,25 @@ export default function DefaultReservationTable({ reservations }: { reservations
         );
       case "actions":
         return (
-          <Tooltip content={t_table("see_more")}>
-            <Link href={`/${locale}/admin/reservations/${reservation.id}`}>
-              <Button isIconOnly radius="full" size="sm" variant="light">
-                <EyeIcon fill="currentColor" size={16} />
-              </Button>
-            </Link>
-          </Tooltip>
+          <div
+            className={
+              view_reservation_permissions.some(permission =>
+              permissions.includes(permission)) ? "block" : "hidden"
+            }
+          >
+            <Tooltip content={t_table("see_more")}>
+              <Link href={`/${locale}/admin/reservations/${reservation.id}`}>
+                <Button isIconOnly radius="full" size="sm" variant="light">
+                  <EyeIcon fill="currentColor" size={16} />
+                </Button>
+              </Link>
+            </Tooltip>
+          </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {

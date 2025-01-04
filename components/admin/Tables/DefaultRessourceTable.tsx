@@ -13,6 +13,7 @@ import { capitalize, getUsername, formatCurrency, formatDateTime } from "@/lib/u
 import { useLocale, useTranslations } from 'next-intl';
 import { validitiesName as validities, columnsTabsRessource as columns } from "@/lib/data";
 import Link from "next/link";
+import { useSession } from 'next-auth/react';
 
 const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "created_at", "actions"];
 
@@ -34,7 +35,13 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
 
   const pages = Math.ceil(ressources.length / rowsPerPage);
 
-  // const changeSelectedRessource
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
+  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
+  const view_space_permissions: string[] = ["manage_spaces", "view_space"];
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -78,9 +85,22 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
     switch (columnKey) {
       case "space":
         return (
-          <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
-            {capitalize(ressource.space)}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_space_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
+                {capitalize(ressource.space)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(ressource.space)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "price":
         return (
@@ -109,43 +129,80 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
         );
       case "agency":
         return (
-          <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
-            {capitalize(ressource.agency)}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_agency_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
+                {capitalize(ressource.agency)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(ressource.agency)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "created_at":
         return (
         <div>
           <p className="whitespace-nowrap">{formatDateTime(ressource.created_at, locale)}</p>
           <p className="text-xs truncate mt-1">
-            { ressource.created_by ? (
+            <>
+            {!permissions || !ressource.created_by  ? null : (
               <>
-                {t_table("by")}:
-                <Link href={`/${locale}/admin/staff/${ressource.created_by.id}`} className="ml-1">
-                  {
-                    ressource.parent_lastname && ressource.parent_firstname ? 
-                    getUsername(ressource.parent_lastname, ressource.parent_firstname): ""
-                  }
-                </Link>
+              {view_staff_permissions.some(permission =>
+              permissions.includes(permission)) ? (
+                <>
+                  {t_table("by")}:
+                  <Link href={`/${locale}/admin/staff/${ressource.created_by.id}`} className="ml-1">
+                    {
+                      ressource.parent_lastname && ressource.parent_firstname ? 
+                      getUsername(ressource.parent_lastname, ressource.parent_firstname): ""
+                    }
+                  </Link>
+                </>
+              ): (
+                <>
+                  {t_table("by")}:
+                  <span className="ml-1">
+                    {
+                      ressource.parent_lastname && ressource.parent_firstname ? 
+                      getUsername(ressource.parent_lastname, ressource.parent_firstname): ""
+                    }
+                  </span>
+                </>
+              )}
               </>
-            ): null}
+            )}
+            </>
           </p>
           </div>
         );
       case "actions":
         return (
-          <Tooltip content={t_table("see_more")}>
-            <Link href={`/${locale}/admin/ressources/${ressource.id}`}>
-              <Button isIconOnly radius="full" size="sm" variant="light">
-                <EyeIcon fill="currentColor" size={16} />
-              </Button>
-            </Link>
-          </Tooltip>
+          <div
+            className={
+              view_ressource_permissions.some(permission =>
+              permissions.includes(permission)) ? "block" : "hidden"
+            }
+          >
+            <Tooltip content={t_table("see_more")}>
+              <Link href={`/${locale}/admin/ressources/${ressource.id}`}>
+                <Button isIconOnly radius="full" size="sm" variant="light">
+                  <EyeIcon fill="currentColor" size={16} />
+                </Button>
+              </Link>
+            </Tooltip>
+          </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {

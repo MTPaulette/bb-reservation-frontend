@@ -48,9 +48,12 @@ export default function ViewStaff({id}: {id: string}) {
   const permissions = session?.permissions;
   const requiredPermissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
 
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
   const update_staff_permissions: string[] = ["edit_admin", "edit_superadmin"];
   const delete_staff_permissions: string[] = ["delete_admin", "delete_superadmin"];
   const suspend_staff_permissions: string[] = ["suspend_staff"];
+
+  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
 
   useEffect(() => {
     setError("");
@@ -217,24 +220,52 @@ export default function ViewStaff({id}: {id: string}) {
               <Title className="font-semibold text-foreground">
                 {t("about")+' '+getUsername(response.user.lastname, response.user.firstname)}
               </Title>
-              {response.user.work_at ? (
-                <p className="mt-1 font-light text-tiny"> {t_table("work_at")}:
-                  <Link href={`/${locale}/admin/agencies/${response.user.work_at.id}`} className="font-medium ms-2">
-                    {response.user.work_at.name?
-                      capitalize(response.user.work_at.name)
-                    : ""}
-                  </Link>
-                </p>
-              ): null }
-              {response.user.created_by ? (
-                <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
-                  <Link href={`/${locale}/admin/staff/${response.user.created_by.id}`} className="font-medium ms-2">
-                    {response.user.created_by.firstname && response.user.created_by.lastname ?
-                      getUsername(response.user.created_by.lastname, response.user.created_by.firstname)
-                    : ""}
-                  </Link>
-                </p>
-              ): null }
+              <>
+              {!permissions || !response.user.work_at ? null : (
+                <>
+                {view_agency_permissions.some(permission =>
+                permissions.includes(permission)) ? (
+                  <p className="mt-1 font-light text-tiny"> {t_table("work_at")}:
+                    <Link href={`/${locale}/admin/agencies/${response.user.work_at.id}`} className="font-medium ms-2">
+                      {response.user.work_at.name?
+                        capitalize(response.user.work_at.name)
+                      : ""}
+                    </Link>
+                  </p>
+                ): (
+                  <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
+                    <span className="font-medium ms-2">
+                      {response.user.work_at.name?
+                        capitalize(response.user.work_at.name)
+                      : ""}
+                    </span>
+                  </p>
+                )}
+                </>
+              )}
+              </>
+
+              <>
+              {!permissions || !response.user.created_by ? null : (
+                <>
+                {view_staff_permissions.some(permission =>
+                permissions.includes(permission)) ? (
+                  <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
+                    <Link href={`/${locale}/admin/staff/${response.user.created_by.id}`} className="font-medium ms-2">
+                      {response.user.created_by.firstname && response.user.created_by.lastname? getUsername(response.user.created_by.lastname, response.user.created_by.firstname): ""}
+                    </Link>
+                  </p>
+                ): (
+                  <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
+                    <span className="font-medium ms-2">
+                      {response.user.created_by.firstname && response.user.created_by.lastname? getUsername(response.user.created_by.lastname, response.user.created_by.firstname): ""}
+                    </span>
+                  </p>
+                )}
+                </>
+              )}
+              </>
+
               {response.user.created_at? (
                 <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_table("since")}: {formatDateTime(response.user.created_at)}</p>
               ): ""}
@@ -243,17 +274,31 @@ export default function ViewStaff({id}: {id: string}) {
                 className={`my-3 inline-block rounded px-1.5 py-0.5 uppercase font-bold text-sm text-white
                 ${response.user.status == "active"? "bg-success" :"bg-danger"}`}
               >{response.user.status}</div>
-              <div>
-                {response.user.status == 'suspended' && response.user.suspended_by ? (
-                  <p className="font-light text-tiny"> {t_table("suspended_by")}:
-                    <Link href={`/${locale}/admin/staff/${response.user.suspended_by.id}`} className="font-medium ms-2">
-                      {response.user.suspended_by.firstname && response.user.suspended_by.lastname ?
-                        getUsername(response.user.suspended_by.lastname, response.user.suspended_by.firstname)
-                      : ""}
-                    </Link>
-                  </p>
-                ): null }
-              </div>
+              
+              <>
+                {!permissions || response.user.status != 'suspended' || !response.user.suspended_by ? null : (
+                  <>
+                  {view_staff_permissions.some(permission =>
+                  permissions.includes(permission)) ? (
+                    <p className="font-light text-tiny"> {t_table("suspended_by")}:
+                      <Link href={`/${locale}/admin/staff/${response.user.suspended_by.id}`} className="font-medium ms-2">
+                        {response.user.suspended_by.firstname && response.user.suspended_by.lastname ?
+                          getUsername(response.user.suspended_by.lastname, response.user.suspended_by.firstname)
+                        : ""}
+                      </Link>
+                    </p>
+                  ): (
+                    <p className="mt-1 font-light text-tiny"> {t_tabs("suspended_by")}:
+                      <span className="font-medium ms-2">
+                        {response.user.suspended_by.firstname && response.user.suspended_by.lastname ?
+                            getUsername(response.user.suspended_by.lastname, response.user.suspended_by.firstname)
+                          : ""}
+                      </span>
+                    </p>
+                  )}
+                  </>
+                )}
+              </>
 
               <div>
                 {response.user.status != "active" ? (

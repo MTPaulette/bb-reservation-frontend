@@ -109,6 +109,8 @@ export default function UsersTable() {
   const update_client_permissions: string[] = ["edit_client"];
   const delete_client_permissions: string[] = ["delete_client"];
 
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -194,12 +196,21 @@ export default function UsersTable() {
       case "created_by":
         return (
           <>
-          {user.created_by ? (
-            <Link href={`/${locale}/admin/staff/${user.created_by}`}>
-              {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
-            </Link>
-          ): null
-          }</>
+          {!permissions || !user.created_by  ? null : (
+            <>
+            {view_staff_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/staff/${user.created_by}`}>
+                {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "actions":
         return (

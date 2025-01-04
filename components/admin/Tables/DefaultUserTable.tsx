@@ -13,6 +13,7 @@ import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/util
 import { statusUser as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
+import { useSession } from 'next-auth/react';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -40,7 +41,12 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
 
   const pages = Math.ceil(users.length / rowsPerPage);
 
-  // const changeSelectedUser
+  const { data: session } = useSession();
+  const permissions = session?.permissions;
+
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
+  const view_client_permissions: string[] = ["view_client"];
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -109,13 +115,22 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
         );
       case "agency":
         return (
-          <div>
-          { user.work_at ? (
-            <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
-              {capitalize(user.agency)}
-            </Link>
-          ): null}
-          </div>
+          <>
+          {!permissions || !user.work_at ? null : (
+            <>
+            {view_agency_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
+                {capitalize(user.agency)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(user.agency)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "created_at":
         return (
@@ -123,31 +138,71 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
         );
       case "created_by":
         return (
-          <div>
-          { user.created_by ? (
-            <Link href={`/${locale}/admin/staff/${user.created_by}`}>
-              {
-                user.parent_lastname && user.parent_firstname ? 
-                getUsername(user.parent_lastname, user.parent_firstname): ""
-              }
-            </Link>
-          ): null}
-          </div>
+          <>
+          {!permissions || !user.created_by ? null : (
+            <>
+            {view_staff_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/staff/${user.created_by}`}>
+                {
+                  user.parent_lastname && user.parent_firstname ? 
+                  getUsername(user.parent_lastname, user.parent_firstname): ""
+                }
+              </Link>
+            ): (
+              <span>
+                {
+                  user.parent_lastname && user.parent_firstname ? 
+                  getUsername(user.parent_lastname, user.parent_firstname): ""
+                }
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "actions":
         return (
-          <Tooltip content={t_table("see_more")}>
-            <Link href={user.role == 'client' ? `/${locale}/admin/clients/${user.id}`: `/${locale}/admin/staff/${user.id}`}>
-              <Button isIconOnly radius="full" size="sm" variant="light">
-                <EyeIcon fill="currentColor" size={16} />
-              </Button>
-            </Link>
-          </Tooltip>
+          <>
+          {user.role == 'client' ? (
+            <div
+              className={
+                view_client_permissions.some(permission =>
+                permissions.includes(permission)) ? "block" : "hidden"
+              }
+            >
+              <Tooltip content={t_table("see_more")}>
+                <Link href={`/${locale}/admin/clients/${user.id}`}>
+                  <Button isIconOnly radius="full" size="sm" variant="light">
+                    <EyeIcon fill="currentColor" size={16} />
+                  </Button>
+                </Link>
+              </Tooltip>
+            </div>
+          ) : null}
+
+          {user.role != 'client' ? (
+            <div
+              className={
+                view_staff_permissions.some(permission =>
+                permissions.includes(permission)) ? "block" : "hidden"
+              }
+            >
+              <Tooltip content={t_table("see_more")}>
+                <Link href={`/${locale}/admin/staff/${user.id}`}>
+                  <Button isIconOnly radius="full" size="sm" variant="light">
+                    <EyeIcon fill="currentColor" size={16} />
+                  </Button>
+                </Link>
+              </Tooltip>
+            </div>
+          ) : null}
+          </>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [session, permissions]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {

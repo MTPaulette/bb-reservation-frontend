@@ -50,7 +50,6 @@ export default function ViewClient({id}: {id: string}) {
   const update_client_permissions: string[] = ["edit_client"];
   const delete_client_permissions: string[] = ["delete_client"];
 
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
 
   useEffect(() => {
     setError("");
@@ -243,26 +242,13 @@ export default function ViewClient({id}: {id: string}) {
               <Title className="font-semibold text-foreground">
                 {t("about")+' '+getUsername(response.user.lastname, response.user.firstname)}
               </Title>
-              <>
-              {!permissions || !response.user.created_by ? null : (
-                <>
-                {view_staff_permissions.some(permission =>
-                permissions.includes(permission)) ? (
-                  <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
+              {response.user.created_by ? (
+                <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
                     <Link href={`/${locale}/admin/staff/${response.user.created_by.id}`} className="font-medium ms-2">
                       {response.user.created_by.firstname && response.user.created_by.lastname? getUsername(response.user.created_by.lastname, response.user.created_by.firstname): ""}
                     </Link>
-                  </p>
-                ): (
-                  <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
-                    <span className="font-medium ms-2">
-                      {response.user.created_by.firstname && response.user.created_by.lastname? getUsername(response.user.created_by.lastname, response.user.created_by.firstname): ""}
-                    </span>
-                  </p>
-                )}
-                </>
-              )}
-              </>
+                </p>
+              ): null }
               <p className="mt-4.5">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Pellentesque posuere fermentum urna, eu condimentum mauris

@@ -2,31 +2,32 @@
 
 import React from "react";
 import Image from "next/image";
-import { CalendarIcon, CameraIcon } from "@/components/Icons";
-import { getClientById } from '@/lib/action/clients';
+import { getStaffById } from '@/lib/action/staff';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
-import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
+import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Tabs, Tab, Avatar } from "@nextui-org/react";
-import { VerticalDotsIcon } from "@/components/Icons";
+import { CalendarIcon, PeopleIcon, ShoppingBagIcon, VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
-import EditClient from "@/components/admin/FormElements/Client/Edit";
-import DeleteClient from "@/components/admin/FormElements/Client/Delete";
-import SuspendClient from '@/components/admin/FormElements/Client/Suspend';
+import EditStaff from "@/components/admin/FormElements/Staff/Edit";
+import DeleteStaff from "@/components/admin/FormElements/Staff/Delete";
+import SuspendStaff from '@/components/admin/FormElements/Staff/Suspend';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
-import Alert from "@/components/Alert";
 import Link from "next/link";
-import { columnsTabsClientCoupon } from "@/lib/data";
+import Alert from "@/components/Alert";
+import DefaultRessourceTable from "../../Tables/DefaultRessourceTable";
+import DefaultUserTable from "../../Tables/DefaultUserTable";
+import { columnsTabsStaffStaff, columnsTabsClientStaff, columnsTabsStaffCoupon } from "@/lib/data";
 import DefaultCouponTable from "../../Tables/DefaultCouponTable";
 import DefaultReservationTable from "../../Tables/DefaultReservationTable";
 import CardDataStats from "../../DataStats/Card1";
 
-export default function ViewClient({id}: {id: string}) {
+export default function ViewStaff({id}: {id: string}) {
   const { data: session } = useSession();
   const authUserId = session?.user.id;
   const [loading, setLoading] = useState(true);
@@ -43,18 +44,17 @@ export default function ViewClient({id}: {id: string}) {
   const t_statistic = useTranslations("Statistic");
   const [selected, setSelected] = React.useState<string>("reservations");
   const [response, setResponse] = useState([]);
-
+  
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["view_client"];
+  const requiredPermissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
 
-  const update_client_permissions: string[] = ["edit_client"];
-  const delete_client_permissions: string[] = ["delete_client"];
-
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const update_staff_permissions: string[] = ["edit_admin", "edit_superadmin"];
+  const delete_staff_permissions: string[] = ["delete_admin", "delete_superadmin"];
+  const suspend_staff_permissions: string[] = ["suspend_staff"];
 
   useEffect(() => {
     setError("");
-    getClientById(Number(id))
+    getStaffById(Number(id))
       .then(async (res) => {
         if(res?.ok){
           const response = await res.json();
@@ -107,10 +107,10 @@ export default function ViewClient({id}: {id: string}) {
     )}
 
     <div className="w-full">
-      {error != "" ? (
-        <Alert color="danger" message={error} />
-      ) :
-      <>
+    {error != "" ? (
+      <Alert color="danger" message={error} />
+    ) :
+    <>
     {loading ? (
       <CommonSkeleton />
     ) : (
@@ -129,23 +129,6 @@ export default function ViewClient({id}: {id: string}) {
               height: "auto",
             }}
           />
-          <div className={`${response.user.id == authUserId? 'absolute': 'hidden'} bottom-1 right-1 z-1 xsm:bottom-4 xsm:right-4`}>
-            <label
-              htmlFor="cover"
-              className="flex cursor-pointer items-center justify-center gap-2 rounded bg-primary px-2 py-1 text-sm font-medium text-white hover:bg-opacity-80 xsm:px-4"
-            >
-              <input
-                type="file"
-                name="cover"
-                id="cover"
-                className="sr-only"
-              />
-              <span>
-                <CameraIcon fill="white" size={14} />
-              </span>
-              <span>{t("edit")}</span>
-            </label>
-          </div>
         </div>
         <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
           <div className="relative z-3 mx-auto flex justify-center items-center -mt-24 sm:-mt-12 md:-mt-32 lg:-mt-40 xl:-mt-24 h-32 w-full max-w-30 sm:h-44 sm:max-w-44">
@@ -157,19 +140,6 @@ export default function ViewClient({id}: {id: string}) {
                 className="rounded-full h-full w-full"
                 alt="profile pic"
               />
-
-              <label
-                htmlFor="profile"
-                className={`${response.user.id == authUserId? 'absolute': 'hidden'} bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2`}
-              >
-                <CameraIcon fill="white" size={14} />
-                <input
-                  type="file"
-                  name="profile"
-                  id="profile"
-                  className="sr-only"
-                />
-              </label>
             </div>
           </div>
           <div className="mt-4">
@@ -188,22 +158,26 @@ export default function ViewClient({id}: {id: string}) {
                   <DropdownMenu>
                     <DropdownItem
                       className={
-                        update_client_permissions.some(permission =>
+                        update_staff_permissions.some(permission =>
                         permissions.includes(permission)) ? "block" : "hidden"
                       }
                       onClick={() => {
                         setShowEditModal(true);
                       }}
                     >{t_table("edit")}</DropdownItem>
-                    {/* <DropdownItem
+                    <DropdownItem
+                      className={
+                        suspend_staff_permissions.some(permission =>
+                        permissions.includes(permission)) ? "block" : "hidden"
+                      }
                       color="warning"
                       onClick={() => {
                         setShowSuspendModal(true);
                       }}
-                    >{response.user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem> */}
+                    >{response.user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                     <DropdownItem
                       className={
-                        delete_client_permissions.some(permission =>
+                        delete_staff_permissions.some(permission =>
                         permissions.includes(permission)) ? "block" : "hidden"
                       }
                       color="danger"
@@ -239,37 +213,60 @@ export default function ViewClient({id}: {id: string}) {
               </div>
             </div>
 
-            <div className="mx-auto max-w-203">
+            <div className="mx-auto max-w-203 flex flex-col items-center">
               <Title className="font-semibold text-foreground">
                 {t("about")+' '+getUsername(response.user.lastname, response.user.firstname)}
               </Title>
-              <>
-              {!permissions || !response.user.created_by ? null : (
-                <>
-                {view_staff_permissions.some(permission =>
-                permissions.includes(permission)) ? (
-                  <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
-                    <Link href={`/${locale}/admin/staff/${response.user.created_by.id}`} className="font-medium ms-2">
-                      {response.user.created_by.firstname && response.user.created_by.lastname? getUsername(response.user.created_by.lastname, response.user.created_by.firstname): ""}
+              {response.user.work_at ? (
+                <p className="mt-1 font-light text-tiny"> {t_table("work_at")}:
+                  <Link href={`/${locale}/admin/agencies/${response.user.work_at.id}`} className="font-medium ms-2">
+                    {response.user.work_at.name?
+                      capitalize(response.user.work_at.name)
+                    : ""}
+                  </Link>
+                </p>
+              ): null }
+              {response.user.created_by ? (
+                <p className="mt-1 font-light text-tiny"> {t_table("created_by")}:
+                  <Link href={`/${locale}/admin/staff/${response.user.created_by.id}`} className="font-medium ms-2">
+                    {response.user.created_by.firstname && response.user.created_by.lastname ?
+                      getUsername(response.user.created_by.lastname, response.user.created_by.firstname)
+                    : ""}
+                  </Link>
+                </p>
+              ): null }
+              {response.user.created_at? (
+                <p className="mt-1 font-light text-tiny whitespace-nowrap">{t_table("since")}: {formatDateTime(response.user.created_at)}</p>
+              ): ""}
+
+              <div
+                className={`my-3 inline-block rounded px-1.5 py-0.5 uppercase font-bold text-sm text-white
+                ${response.user.status == "active"? "bg-success" :"bg-danger"}`}
+              >{response.user.status}</div>
+              <div>
+                {response.user.status == 'suspended' && response.user.suspended_by ? (
+                  <p className="font-light text-tiny"> {t_table("suspended_by")}:
+                    <Link href={`/${locale}/admin/staff/${response.user.suspended_by.id}`} className="font-medium ms-2">
+                      {response.user.suspended_by.firstname && response.user.suspended_by.lastname ?
+                        getUsername(response.user.suspended_by.lastname, response.user.suspended_by.firstname)
+                      : ""}
                     </Link>
                   </p>
-                ): (
-                  <p className="mt-1 font-light text-tiny"> {t_tabs("created_by")}:
-                    <span className="font-medium ms-2">
-                      {response.user.created_by.firstname && response.user.created_by.lastname? getUsername(response.user.created_by.lastname, response.user.created_by.firstname): ""}
-                    </span>
+                ): null }
+              </div>
+
+              <div>
+                {response.user.status != "active" ? (
+                  <p className="mt-4.5">
+                    {locale === "en" ? response.user.reason_for_suspension_en: response.user.reason_for_suspension_fr}
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Pellentesque posuere fermentum urna, eu condimentum mauris
+                    tempus ut. Donec fermentum blandit aliquet. Etiam dictum
+                    dapibus ultricies. Sed vel aliquet libero. Nunc a augue
+                    fermentum, pharetra ligula sed, aliquam lacus.
                   </p>
-                )}
-                </>
-              )}
-              </>
-              <p className="mt-4.5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque posuere fermentum urna, eu condimentum mauris
-                tempus ut. Donec fermentum blandit aliquet. Etiam dictum
-                dapibus ultricies. Sed vel aliquet libero. Nunc a augue
-                fermentum, pharetra ligula sed, aliquam lacus.
-              </p>
+                ): null}
+              </div>
 
               {/* stats
               <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
@@ -281,6 +278,15 @@ export default function ViewClient({id}: {id: string}) {
       </div>
 
       <div className="mt-4 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-3 2xl:gap-7.5">
+        <CardDataStats title={t_statistic("total_clients")} total={response.totalCreatedClients} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_administrators")} total={response.totalCreatedStaff} rate="0.95%" levelDown>
+          <PeopleIcon fill="currentColor" size={22} />
+        </CardDataStats>
+        <CardDataStats title={t_statistic("total_ressources")} total={response.totalRessources} rate="2.55%" levelUp>
+          <ShoppingBagIcon fill="currentColor" size={22} />
+        </CardDataStats>
         <CardDataStats title={t_statistic("total_reservations")} total={response.totalReservations} rate="0.43%" levelUp>
           <CalendarIcon fill="currentColor" size={20} />
         </CardDataStats>
@@ -288,7 +294,6 @@ export default function ViewClient({id}: {id: string}) {
           <CalendarIcon fill="currentColor" size={20} />
         </CardDataStats>
       </div>
-
       <div className="grid grid-cols-12 md:gap-8">
         <div className="col-span-12 mt-6 md:mt-8 py-6 md:py-8 border-t border-divider z-1">
           <div className="flex w-full flex-col">
@@ -302,12 +307,40 @@ export default function ViewClient({id}: {id: string}) {
               onSelectionChange={setSelected}
             >
               <Tab 
+                key="administrators"
+                title={t_tabs("administrators")}
+              >
+                {response.createdStaff.length > 0 ? (
+                  <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                    <DefaultUserTable columns={columnsTabsStaffStaff} users={response.createdStaff} />
+                  </div>
+                ): (
+                  <div className="mt-2 px-3 py-5">
+                    <Alert color="default" message={t_alert("no_administrator")} />
+                  </div>
+                )}
+              </Tab>
+              <Tab 
+                key="clients"
+                title={t_tabs("clients")}
+              >
+                {response.createdClients.length > 0 ? (
+                  <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                    <DefaultUserTable columns={columnsTabsClientStaff} users={response.createdClients} />
+                  </div>
+                ): (
+                  <div className="mt-2 px-3 py-5">
+                    <Alert color="default" message={t_alert("no_client")} />
+                  </div>
+                )}
+              </Tab>
+              <Tab 
                 key="coupons"
                 title={t_tabs("coupons")}
               >
                 {response.coupons.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
-                    <DefaultCouponTable columns={columnsTabsClientCoupon} coupons={response.coupons} />
+                    <DefaultCouponTable columns={columnsTabsStaffCoupon} coupons={response.coupons} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
@@ -326,6 +359,17 @@ export default function ViewClient({id}: {id: string}) {
                   </div>
                 )}
               </Tab>
+              <Tab key="ressources" title={t_tabs("ressources")}>
+                {response.ressources.length > 0 ? (
+                  <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
+                    <DefaultRessourceTable ressources={response.ressources} />
+                  </div>
+                ): (
+                  <div className="mt-2 px-3 py-5">
+                    <Alert color="default" message={t_alert("no_ressource")} />
+                  </div>
+                )}
+              </Tab>
             </Tabs>
           </div>
         </div>
@@ -335,24 +379,25 @@ export default function ViewClient({id}: {id: string}) {
       <div>
         <Modal
           open={showEditModal} close={() => setShowEditModal(false)}
-          title={`${t_table("editClient")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
+          title={`${t_table("editStaff")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <EditClient user={response.user} />
+          <EditStaff user={response.user} />
         </Modal>
       
         <Modal
           open={showSuspendModal} close={() => setShowSuspendModal(false)}
-          title={`${t_table("suspendClient")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
+          title={`${t_table("suspendStaff")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <SuspendClient id={response.user?.id} status={response.user?.status} />
+          <SuspendStaff id={response.user?.id} status={response.user?.status} />
         </Modal>
         
         <Modal
           open={showDeleteModal} close={() => setShowDeleteModal(false)}
-          title={`${t_table("deleteClient")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
+          title={`${t_table("deleteStaff")} "${response.user? getUsername(response.user.lastname, response.user.firstname): ""}"`}
         >
-          <DeleteClient id={response.user?.id} />
+          <DeleteStaff id={response.user?.id} />
         </Modal>
+
       </div>
     </>
     )}

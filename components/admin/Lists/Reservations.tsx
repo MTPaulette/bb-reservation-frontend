@@ -108,9 +108,15 @@ export default function ReservationsTable() {
   const requiredPermissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
 
   const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
-  const view_reservation_permissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
+  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
   const update_reservation_permissions: string[] = ["manage_reservations", "edit_reservation", "edit_reservation_of_agency"];
   const cancel_reservation_permissions: string[] = ["manage_reservations", "cancel_all_reservation", "cancel_reservation_of_agency", "cancel_own_reservation"];
+
+  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
+  const view_client_permissions: string[] = ["view_client"];
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
+
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -160,21 +166,60 @@ export default function ReservationsTable() {
     switch (columnKey) {
       case "ressource":
         return (
-          <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
-            {capitalize(reservation.ressource.space.name)}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_ressource_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
+                {capitalize(reservation.ressource.space.name)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(reservation.ressource.space.name)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "client":
         return (
-          <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
-            {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_client_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
+                {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "agency":
         return (
-          <Link href={`/${locale}/admin/agencies/${reservation.ressource.agency.id}`}>
-            {capitalize(reservation.ressource.agency.name)}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_agency_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/agencies/${reservation.ressource.agency.id}`}>
+                {capitalize(reservation.ressource.agency.name)}
+              </Link>
+            ): (
+              <span>
+                {capitalize(reservation.ressource.agency.name)}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "date":
         return (
@@ -232,9 +277,22 @@ export default function ReservationsTable() {
         );
       case "created_by":
         return (
-          <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="font-medium">
-            {reservation.created_by.firstname && reservation.created_by.lastname? getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_staff_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="font-medium">
+                {reservation.created_by.firstname && reservation.created_by.lastname? getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {reservation.created_by.firstname && reservation.created_by.lastname? getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "actions":
         return (

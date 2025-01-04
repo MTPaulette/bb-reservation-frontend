@@ -107,7 +107,7 @@ export default function ReservationsTable() {
   const [selectedReservation, setSelectedReservation] = React.useState<ReservationType>();
 
   const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
-  const view_reservation_permissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
+  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
   const update_reservation_permissions: string[] = ["manage_reservations", "edit_reservation", "edit_reservation_of_agency"];
   const cancel_reservation_permissions: string[] = ["manage_reservations", "cancel_all_reservation", "cancel_reservation_of_agency", "cancel_own_reservation"];
 

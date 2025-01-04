@@ -48,7 +48,7 @@
     "acces_denied": "acces denied",
     "user_not_found": "User not found",
     "role_not_found": "Role not found",
-    "server_not_found": "Ressource not found in server",
+    "server_not_found": "Element not found in server",
     "agency_not_found": "Agency not found",
     "payment_not_found": "Payment not found",
     "coupon_not_found": "Discount coupon not found",

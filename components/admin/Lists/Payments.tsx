@@ -8,18 +8,20 @@ import {
 } from "@nextui-org/react";
 
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
-import { PaymentType } from "@/lib/definitions";
 import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsPayment as columns, statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
+/*
 import Modal from "@/components/Modal";
-import Alert from "@/components/Alert";
-import { CommonSkeleton } from '@/components/Skeletons';
 import NewPayment from "../FormElements/Payment/New";
 import EditPayment from "../FormElements/Payment/Edit";
 import DeletePayment from "../FormElements/Payment/Delete";
+*/
+
+import Alert from "@/components/Alert";
+import { CommonSkeleton } from '@/components/Skeletons';
 import { getPayments } from '@/lib/action/payments';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
@@ -46,6 +48,10 @@ export default function PaymentsTable() {
 
   const new_payment_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
   const view_payment_permissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
+
+  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
+
 
   useEffect(() => {
     setError("");
@@ -98,10 +104,12 @@ export default function PaymentsTable() {
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(payments.length / rowsPerPage);
+  /*
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
   const [selectedPayment, setSelectedPayment] = React.useState<PaymentType>();
+*/
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -151,9 +159,22 @@ export default function PaymentsTable() {
     switch (columnKey) {
       case "reservation_id":
         return (
-          <Link href={`/${locale}/admin/reservations/${payment.reservation_id}`}>
-            {payment.reservation_id}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_reservation_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/reservations/${payment.reservation_id}`}>
+                {payment.reservation_id}
+              </Link>
+            ): (
+              <span>
+                {payment.reservation_id}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "amount":
         return (
@@ -167,9 +188,22 @@ export default function PaymentsTable() {
         );
       case "processed_by":
         return (
-          <Link href={`/${locale}/admin/staff/${payment.processed_by.id}`}>
-            {payment.processed_by.lastname && payment.processed_by.firstname? getUsername(payment.processed_by.lastname, payment.processed_by.firstname): ""}
-          </Link>
+          <>
+          {!permissions ? null : (
+            <>
+            {view_staff_permissions.some(permission =>
+            permissions.includes(permission)) ? (
+              <Link href={`/${locale}/admin/staff/${payment.processed_by.id}`}>
+                {payment.processed_by.lastname && payment.processed_by.firstname? getUsername(payment.processed_by.lastname, payment.processed_by.firstname): ""}
+              </Link>
+            ): (
+              <span>
+                {payment.processed_by.lastname && payment.processed_by.firstname? getUsername(payment.processed_by.lastname, payment.processed_by.firstname): ""}
+              </span>
+            )}
+            </>
+          )}
+          </>
         );
       case "created_at":
         return (
