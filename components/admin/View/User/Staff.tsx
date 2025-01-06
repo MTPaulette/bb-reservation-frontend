@@ -195,24 +195,39 @@ export default function ViewStaff({id}: {id: string}) {
 
             <p className="font-medium capitalize"> {response.user.role} {response.user.agency? ' | '+ response.user.agency: ""}</p>
             <p className="mt-2 font-light"> {response.user.email} {response.user.phonenumber? ' | '+ response.user.phonenumber: ""}</p>
-            <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-3 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
+            <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-2 sm:grid-cols-3 gap-2 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
               <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
                 <span className="font-semibold text-foreground">
-                  259
+                  {response.totalCreatedClients}
                 </span>
-                <span className="text-sm sm:whitespace-nowrap">{capitalize(t("reservations"))}</span>
+                <span className="text-sm sm:whitespace-nowrap truncate">{t_statistic("total_clients")} </span>
               </div>
               <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
                 <span className="font-semibold text-foreground">
-                  129K
+                  {response.totalCreatedStaff}
                 </span>
-                <span className="text-sm sm:whitespace-nowrap">{capitalize(t("given_gift"))}</span>
+                <span className="text-sm sm:whitespace-nowrap truncate">{t_statistic("total_administrators")} </span>
+              </div>
+              <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
+                <span className="font-semibold text-foreground">
+                  {response.totalRessources}
+                </span>
+                <span className="text-sm sm:whitespace-nowrap truncate">{t_statistic("total_ressources")} </span>
+              </div>
+            {/* </div>
+
+            <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-2 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2"> */}
+              <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
+                <span className="font-semibold text-foreground">
+                  {response.totalReservations}
+                </span>
+                <span className="text-sm sm:whitespace-nowrap truncate">{t_statistic("total_reservations")} </span>
               </div>
               <div className="flex flex-col justify-start items-center sm:justify-center gap-1 px-4 xsm:flex-row">
                 <span className="font-semibold text-foreground">
-                  2K
+                  {response.totalCoupons}
                 </span>
-                <span className="text-sm sm:whitespace-nowrap">{capitalize(t("receiven_gift"))}</span>
+                <span className="text-sm sm:whitespace-nowrap truncate">{t_statistic("total_coupons")} </span>
               </div>
             </div>
 
@@ -322,23 +337,6 @@ export default function ViewStaff({id}: {id: string}) {
         </div>
       </div>
 
-      <div className="mt-4 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-3 2xl:gap-7.5">
-        <CardDataStats title={t_statistic("total_clients")} total={response.totalCreatedClients} rate="0.95%" levelDown>
-          <PeopleIcon fill="currentColor" size={22} />
-        </CardDataStats>
-        <CardDataStats title={t_statistic("total_administrators")} total={response.totalCreatedStaff} rate="0.95%" levelDown>
-          <PeopleIcon fill="currentColor" size={22} />
-        </CardDataStats>
-        <CardDataStats title={t_statistic("total_ressources")} total={response.totalRessources} rate="2.55%" levelUp>
-          <ShoppingBagIcon fill="currentColor" size={22} />
-        </CardDataStats>
-        <CardDataStats title={t_statistic("total_reservations")} total={response.totalReservations} rate="0.43%" levelUp>
-          <CalendarIcon fill="currentColor" size={20} />
-        </CardDataStats>
-        <CardDataStats title={t_statistic("total_coupons")} total={response.totalCoupons} rate="0.43%" levelUp>
-          <CalendarIcon fill="currentColor" size={20} />
-        </CardDataStats>
-      </div>
       <div className="grid grid-cols-12 md:gap-8">
         <div className="col-span-12 mt-6 md:mt-8 py-6 md:py-8 border-t border-divider z-1">
           <div className="flex w-full flex-col">

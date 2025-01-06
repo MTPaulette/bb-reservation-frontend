@@ -61,3 +61,11 @@ export async function confirmReservation(client_id: number, ressource_id: number
   })
   return response;
 }
+
+export async function getCalendar() {
+  const response = await fetch(`${api_url}/calendar`, {
+    method: "GET",
+    headers: await headerOptions()
+  })
+  return response;
+}

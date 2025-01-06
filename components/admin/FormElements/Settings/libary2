@@ -162,3 +162,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 Voilà ! Vous avez maintenant un système de gestion des permissions pour les liens dans la sidebar de votre application Next.js.
+
+
+=====================================
+
+import { useState } from 'react';
+
+const Reservations = ({ reservations }) => {
+  const [filteredReservations, setFilteredReservations] = useState(reservations);
+  const [agencyFilter, setAgencyFilter] = useState(null);
+
+  const handleFilter = (agency) => {
+    setAgencyFilter(agency);
+    const filteredReservations = reservations.filter((reservation) => {
+      if (agency === 'all') {
+        return true;
+      }
+      return reservation.agency === agency;
+    });
+    setFilteredReservations(filteredReservations);
+  };
+
+  return (
+    <div>
+      <button onClick={() => handleFilter('agency1')}>Agence 1</button>
+      <button onClick={() => handleFilter('agency2')}>Agence 2</button>
+      <button onClick={() => handleFilter('all')}>Toutes les agences</button>
+      <ul>
+        {filteredReservations.map((reservation) => (
+          <li key={(link unavailable)}>{reservation.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};

@@ -59,3 +59,18 @@
   background-color: transparent !important;
   color: inherit !important;
 }
+
+.fc .fc-scroller {
+  overflow: hidden block !important;
+  max-height:  300px !important;
+}
+
+.fc-scroller:first-child {
+  overflow: hidden block !important;
+  max-height:  400px !important;
+}
+
+.fc-view-harness-active {
+  height: auto;
+  min-height: 700px !important;
+}

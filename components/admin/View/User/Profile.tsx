@@ -130,22 +130,6 @@ export default function ViewProfile() {
               dapibus ultricies. Sed vel aliquet libero. Nunc a augue
               fermentum, pharetra ligula sed, aliquam lacus.
             </p>
-
-            {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5"> */}
-            <div className="mt-4.5 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-              <CardDataStats title="Total views" total="$3.456K" rate="0.43%" levelUp>
-                <EyeIcon fill="currentColor" size={20} />
-              </CardDataStats>
-              <CardDataStats title="Total Profit" total="$45,2K" rate="4.35%" levelUp>
-                <CharetIcon fill="currentColor" size={20} />
-              </CardDataStats>
-              <CardDataStats title="Total Product" total="2.450" rate="2.59%" levelUp>
-                <ShoppingBagIcon fill="currentColor" size={22} />
-              </CardDataStats>
-              <CardDataStats title="Total Users" total="3.456" rate="0.95%" levelDown>
-                <PeopleIcon fill="currentColor" size={22} />
-              </CardDataStats>
-            </div>
           </div>
         </div>
       </div>

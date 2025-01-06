@@ -24,8 +24,7 @@ import { getRessources } from '@/lib/action/ressources';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
-const INITIAL_VISIBLE_COLUMNS = ["space", "agency", "created_by"];
-// const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "agency", "created_by", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "agency", "created_by", "actions"];
 
 export default function RessourcesTable() {
   const [ressources, setRessources] = useState([]);
