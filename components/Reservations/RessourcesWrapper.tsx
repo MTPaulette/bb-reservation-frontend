@@ -17,14 +17,6 @@ export const metadata: Metadata = {
 
 export default function RessourcesWrapper() {
   const searchParams = useSearchParams();
-  /*
-  const agency = searchParams.get("agency") || '';
-  const validity = searchParams.get("validity") || '';
-  const service_type = searchParams.get("service_type") || '';
-  const page = Number(searchParams.get("page")) || 1;
-
-  */
-  // const ressources = fetchRessources(page);
 
   return (
     <>

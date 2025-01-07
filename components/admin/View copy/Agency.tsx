@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import { getAgencyById } from '@/lib/action/agencies';
+import { getAgencyById } from '@/lib/action/admin/agencies';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";

@@ -9,9 +9,9 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { AgencyType, RessourceFormType, RessourceType, SpaceType } from "@/lib/definitions";
-import { updateRessource } from "@/lib/action/ressources";
-import { getAgencies } from "@/lib/action/agencies";
-import { getSpaces } from "@/lib/action/spaces";
+import { updateRessource } from "@/lib/action/admin/ressources";
+import { getAgencies } from "@/lib/action/admin/agencies";
+import { getSpaces } from "@/lib/action/admin/spaces";
 import Title from "@/components/Title";
 import Loader from "../../Common/Loader";
 

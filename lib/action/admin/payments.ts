@@ -1,10 +1,10 @@
-import { headerOptions } from "../utils";
-import { PaymentFormType } from "../definitions";
+import { headerOptions } from "../../utils";
+import { PaymentFormType } from "../../definitions";
 
 const api_url = process.env.API_URL;
 
 export async function createdPayment(data: PaymentFormType, reservation_id: number) {
-  const response = await fetch(`${api_url}/payment/store`, { 
+  const response = await fetch(`${api_url}/admin/payment/store`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -20,7 +20,7 @@ export async function createdPayment(data: PaymentFormType, reservation_id: numb
 }
 
 export async function getPayments() {
-  const response = await fetch(`${api_url}/payments`, {
+  const response = await fetch(`${api_url}/admin/payments`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -28,7 +28,7 @@ export async function getPayments() {
 }
 
 export async function getPaymentById(id: number) {
-  const response = await fetch(`${api_url}/payment/${id}`, {
+  const response = await fetch(`${api_url}/admin/payment/${id}`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -36,7 +36,7 @@ export async function getPaymentById(id: number) {
 }
 
 export async function updatePayment(data: PaymentFormType, id: number, reservation_id:number) {
-  const response = await fetch(`${api_url}/payment/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/payment/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({

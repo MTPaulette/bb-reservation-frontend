@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { CalendarIcon, CameraIcon } from "@/components/Icons";
-import { getClientById } from '@/lib/action/clients';
+import { getClientById } from '@/lib/action/admin/clients';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";

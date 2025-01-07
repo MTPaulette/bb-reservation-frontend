@@ -11,7 +11,7 @@ import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { agencies, roles } from "@/lib/data";
 import { UserType, UserFormType } from "@/lib/definitions";
-import { updateStaff } from "@/lib/action/staff";
+import { updateStaff } from "@/lib/action/admin/staff";
 
 
 export default function EditStaff({ user }: { user: UserType} ) {

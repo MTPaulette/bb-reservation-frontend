@@ -20,7 +20,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import NewClient from "../FormElements/Client/New";
 import EditClient from "../FormElements/Client/Edit";
 import DeleteClient from "../FormElements/Client/Delete";
-import { getClients } from '@/lib/action/clients';
+import { getClients } from '@/lib/action/admin/clients';
 // import SuspendClient from '../FormElements/Client/Suspend';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
@@ -162,7 +162,7 @@ export default function UsersTable() {
         return (
           <User
             avatarProps={
-              {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+              {className:"flex-shrink-0", radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
             }
             classNames={{
               name: "font-semibold",

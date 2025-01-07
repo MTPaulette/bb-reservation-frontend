@@ -97,7 +97,7 @@ export default function Profile () {
         setTimeout(() => {
           setSuccess("");
           // window.location.reload();
-        }, 1000);
+        }, 3000);
       } else {
         const status = res.status;
         switch(status) {
@@ -152,7 +152,7 @@ export default function Profile () {
         setSuccessImg(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessImg("");
-        }, 1000);
+        }, 3000);
       } else {
         const status = res.status;
         switch(status) {
@@ -193,10 +193,11 @@ export default function Profile () {
         update({
           accessToken: response.token
         })
+        console.log("wanda");
         setSuccessPwd(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessPwd("");
-        }, 1000);
+        }, 3000);
       } else {
         const status = res.status;
         switch(status) {
@@ -243,7 +244,7 @@ export default function Profile () {
         setSuccessImg(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessImg("");
-        }, 1000);
+        }, 3000);
       } else {
         const status = res.status;
         switch(status) {

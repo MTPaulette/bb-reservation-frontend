@@ -69,7 +69,7 @@ export default function NavBarDashboardComponent() {
                 name={user? getUsername(user.lastname, user.firstname): ""}
                 description="admin"
                 avatarProps={
-                  {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
+                  {className:"flex-shrink-0", radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                 }
               />
             </DropdownItem>
@@ -78,7 +78,7 @@ export default function NavBarDashboardComponent() {
               <p className="font-semibold">{user? user.email : ""}</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
+            <DropdownItem key="settings">Team Settings</DropdownItem>
             <DropdownItem key="analytics">Analytics</DropdownItem>
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>

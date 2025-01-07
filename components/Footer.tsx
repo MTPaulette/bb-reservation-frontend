@@ -41,7 +41,7 @@ export default function Footer() {
 
 
   return (
-    <footer className="max-w-full relative overflow-hidden px-6 py-10 sm:px-10 sm:py-16 mb-0">
+    <footer className="max-w-full bg-background text-foreground relative overflow-hidden px-6 py-10 sm:px-10 sm:py-16 mb-0">
       <div className="grid grid-cols-3 md:grid-cols-6 gap-10 justify-between flex-wrap">
         <div className="col-span-3 md:col-span-3">
           <div className="mb-4 -mt-4 shrink-0">

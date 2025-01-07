@@ -403,6 +403,47 @@ export type CurrentReservation = {
   ressource:               RessourceType_2;
 }
 
+export type EventType = ({
+  title:  string;
+  agency: string;
+  start:  string;
+  end:    string;
+} | {
+  title:  string;
+  agency: string;
+  state:  string;
+  start:  string;
+  end:    string;
+})
+
+export type RessourceDefaultType = {
+  id:              number;
+  agency:          string;
+  nb_place:        null;
+  price_hour:      number;
+  price_midday:    number;
+  price_day:       number;
+  price_week:      number;
+  price_month:     number;
+  space:           string;
+  quantity:        number;
+  image:           null | string;
+  characteristics: {
+    name_en: string;
+    name_fr: string;
+  }[];
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,5 @@
-import { headerOptions, getCSRFToken, getToken } from "../utils";
-import { ConfirmPasswordType, UserFormType } from "../definitions";
+import { headerOptions, getCSRFToken, getToken, decryptToken } from "../utils";
+import { UserFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
 
@@ -13,34 +13,15 @@ export async function updateProfile(data: UserFormType) {
   return response;
 }
 
-export async function suspendClient(data: ConfirmPasswordType, id: number, status: string) {
-  const response = await fetch(`${api_url}/client/${id}/suspend`, {
-    method: "PUT",
-    headers: await headerOptions(),
-    body: JSON.stringify({
-      "password": data.password,
-      "cancel_suspension": status == 'active'? false : true
-    }),
-  })
-  return response;
-}
-
-export async function deleteClient(data: ConfirmPasswordType, id: number) {
-  const response = await fetch(`${api_url}/client/${id}/delete`, { 
-    method: "PUT",
-    headers: await headerOptions(),
-    body: JSON.stringify(data),
-  })
-  return response;
-}
-
 export async function uploadImage(data: FormData) {
+  const encryptedToken = await getToken()
+  const token = encryptedToken? decryptToken(encryptedToken): "";
   const response = await fetch(`${api_url}/profile/image/store`, { 
     method: "POST",
     headers: {
       // "Content-Type": "application/json",
       // Content-Type: image/png
-      "Authorization": `Bearer ${await getToken()}`,
+      "Authorization": `Bearer ${token}`,
       "X-XSRF-TOKEN": `${await getCSRFToken()}`,
       "X-CSRF-TOKEN": `${await getCSRFToken()}`,
       "X-Requested-With": "XMLHttpRequest",

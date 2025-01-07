@@ -7,7 +7,7 @@ import Alert from "@/components/Alert";
 import { CouponType, Reservation_draftType, RessourceType, UserType } from "@/lib/definitions";
 import Title from "@/components/Title";
 import { capitalize, formatCurrency, getImageUrl, getUsername } from "@/lib/utils";
-import { confirmReservation } from "@/lib/action/reservations";
+import { confirmReservation } from "@/lib/action/admin/reservations";
 
 export default function SummaryReservation(
   { 

@@ -1,10 +1,10 @@
-import { headerOptions } from "../utils";
-import { ConfirmPasswordType, SpaceFormType } from "../definitions";
+import { headerOptions } from "../../utils";
+import { ConfirmPasswordType, SpaceFormType } from "../../definitions";
 
 const api_url = process.env.API_URL;
 
 export async function createSpace(data: SpaceFormType) {
-  const response = await fetch(`${api_url}/space/store`, { 
+  const response = await fetch(`${api_url}/admin/space/store`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -13,7 +13,7 @@ export async function createSpace(data: SpaceFormType) {
 }
 
 export async function getSpaces() {
-  const response = await fetch(`${api_url}/spaces`, {
+  const response = await fetch(`${api_url}/admin/spaces`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -21,7 +21,7 @@ export async function getSpaces() {
 }
 
 export async function getSpaceById(id: number) {
-  const response = await fetch(`${api_url}/space/${id}`, {
+  const response = await fetch(`${api_url}/admin/space/${id}`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -29,7 +29,7 @@ export async function getSpaceById(id: number) {
 }
 
 export async function updateSpace(data: SpaceFormType, id: number, characteristics: number[]) {
-  const response = await fetch(`${api_url}/space/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/space/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -45,7 +45,7 @@ export async function updateSpace(data: SpaceFormType, id: number, characteristi
 
 export async function deleteSpace(data: ConfirmPasswordType, id: number) {
   console.log(id);
-  const response = await fetch(`${api_url}/space/${id}/delete`, {
+  const response = await fetch(`${api_url}/admin/space/${id}/delete`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -54,7 +54,7 @@ export async function deleteSpace(data: ConfirmPasswordType, id: number) {
 }
 
 export async function uploadImages(data: FormData, space_id: number) {
-  const response = await fetch(`${api_url}/space/${space_id}/image/store`, { 
+  const response = await fetch(`${api_url}/admin/space/${space_id}/image/store`, { 
     method: "POST",
     headers: {
       "Authorization": `Bearer ${await getToken()}`,
@@ -69,7 +69,7 @@ export async function uploadImages(data: FormData, space_id: number) {
 }
 
 export async function deleteImage(image_id: number) {
-  const response = await fetch(`${api_url}/space/image/${image_id}/delete`, { 
+  const response = await fetch(`${api_url}/admin/space/image/${image_id}/delete`, { 
     method: "PUT",
     headers: await headerOptions(),
   })

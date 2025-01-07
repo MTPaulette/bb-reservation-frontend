@@ -8,7 +8,7 @@ import { CommonSkeleton } from "@/components/Skeletons";
 import { Button, Input } from "@nextui-org/react";
 import Alert from "@/components/Alert";
 import { OptionType } from "@/lib/definitions";
-import { getOptions, saveOptions } from '@/lib/action/options';
+import { getOptions, saveOptions } from '@/lib/action/admin/options';
 
 export default function EmailSettings () {
   const locale = useLocale();

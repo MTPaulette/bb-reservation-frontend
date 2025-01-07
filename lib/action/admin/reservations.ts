@@ -1,10 +1,10 @@
-import { headerOptions } from "../utils";
-import { ReservationFormType, CancellationFormType } from "../definitions";
+import { headerOptions } from "../../utils";
+import { ReservationFormType, CancellationFormType } from "../../definitions";
 
 const api_url = process.env.API_URL;
 
 export async function createReservation(data: ReservationFormType) {
-  const response = await fetch(`${api_url}/reservation/store`, { 
+  const response = await fetch(`${api_url}/admin/reservation/store`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -13,7 +13,7 @@ export async function createReservation(data: ReservationFormType) {
 }
 
 export async function getReservations() {
-  const response = await fetch(`${api_url}/reservations`, {
+  const response = await fetch(`${api_url}/admin/reservations`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -21,7 +21,7 @@ export async function getReservations() {
 }
 
 export async function getReservationById(id: number) {
-  const response = await fetch(`${api_url}/reservation/${id}`, {
+  const response = await fetch(`${api_url}/admin/reservation/${id}`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -29,7 +29,7 @@ export async function getReservationById(id: number) {
 }
 
 export async function updateReservation(data: ReservationFormType, id: number) {
-  const response = await fetch(`${api_url}/reservation/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/reservation/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data)
@@ -38,7 +38,7 @@ export async function updateReservation(data: ReservationFormType, id: number) {
 }
 
 export async function cancelReservation(data: CancellationFormType, id: number, state: string) {
-  const response = await fetch(`${api_url}/reservation/${id}/cancel`, {
+  const response = await fetch(`${api_url}/admin/reservation/${id}/cancel`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -51,7 +51,7 @@ export async function cancelReservation(data: CancellationFormType, id: number, 
 }
 
 export async function confirmReservation(client_id: number, ressource_id: number) {
-  const response = await fetch(`${api_url}/reservation/store/confirm`, { 
+  const response = await fetch(`${api_url}/admin/reservation/store/confirm`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -63,7 +63,7 @@ export async function confirmReservation(client_id: number, ressource_id: number
 }
 
 export async function getCalendar() {
-  const response = await fetch(`${api_url}/calendar`, {
+  const response = await fetch(`${api_url}/admin/calendar`, {
     method: "GET",
     headers: await headerOptions()
   })

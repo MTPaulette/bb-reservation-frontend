@@ -9,9 +9,9 @@ import { z, ZodType } from "zod";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { CouponFormType } from "@/lib/definitions";
-import { getClients } from "@/lib/action/clients";
+import { getClients } from "@/lib/action/admin/clients";
 import Title from "@/components/Title";
-import { getCouponById, updateCoupon } from "@/lib/action/coupons";
+import { getCouponById, updateCoupon } from "@/lib/action/admin/coupons";
 import { getUsername } from "@/lib/utils";
 import Loader from "../../Common/Loader";
 

@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { AgencyFormType } from "@/lib/definitions";
-import { createAgency } from "@/lib/action/agencies";
+import { createAgency } from "@/lib/action/admin/agencies";
 
 export default function NewAgency() {
   const t = useTranslations("Input");

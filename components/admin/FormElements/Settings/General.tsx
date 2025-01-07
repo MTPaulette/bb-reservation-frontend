@@ -9,7 +9,7 @@ import { CommonSkeleton } from "@/components/Skeletons";
 import { Button, Input } from "@nextui-org/react";
 import Alert from "@/components/Alert";
 import { HolidayType, OptionType } from "@/lib/definitions";
-import { getOptions, saveHolidays, saveOptions } from '@/lib/action/options';
+import { getOptions, saveHolidays, saveOptions } from '@/lib/action/admin/options';
 
 export default function General () {
   const locale = useLocale();

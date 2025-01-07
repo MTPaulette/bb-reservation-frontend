@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { deleteAgency } from "@/lib/action/agencies";
+import { deleteAgency } from "@/lib/action/admin/agencies";
 import Title from "@/components/Title";
 
 export default function DeleteAgency({ id }: { id: number} ) {

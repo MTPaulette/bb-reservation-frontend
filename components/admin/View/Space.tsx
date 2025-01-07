@@ -2,7 +2,7 @@
 
 import React from "react";
 // import Image from "next/image";
-import { getSpaceById } from '@/lib/action/spaces';
+import { getSpaceById } from '@/lib/action/admin/spaces';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";

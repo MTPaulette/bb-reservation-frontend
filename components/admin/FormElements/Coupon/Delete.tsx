@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { deleteCoupon } from "@/lib/action/coupons";
+import { deleteCoupon } from "@/lib/action/admin/coupons";
 import Title from "@/components/Title";
 
 export default function DeleteCoupon({ id }: { id: number} ) {

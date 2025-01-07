@@ -1,7 +1,7 @@
 import { CurrentReservation } from "@/lib/definitions";
 import Title from "@/components/Title";
 import { useLocale, useTranslations } from 'next-intl';
-import { capitalize, formatCurrency, getUsername } from "@/lib/utils";
+import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsCurrentReservation as columns } from "@/lib/data";
 import Link from "next/link";
 import { Chip, ChipProps } from "@nextui-org/react";
@@ -75,11 +75,11 @@ export default function CurrentReservations({reservations}: {reservations: Curre
               <p className="dark:text-foreground/60">
                 {reservation.initial_amount? formatCurrency(reservation.initial_amount): ''}
               </p>
-              <div>
-                <span className="mr-1.5 text-xs">
+              <div className="text-xs">
+                <span className="mr-1.5">
                   {t_statistic("left")}:
                 </span>
-                <span className={`${reservation.amount_due > 0 ? "font-medium text-danger": "font-semibold dark:font-normal"}`}>
+                <span className={`${reservation.amount_due > 0 ? "font-medium text-danger/80": "font-semibold dark:font-normal"}`}>
                   {reservation.amount_due > 0 ? formatCurrency(reservation.amount_due): "0"}
                 </span>
               </div>
@@ -92,6 +92,12 @@ export default function CurrentReservations({reservations}: {reservations: Curre
                 <span className="font-medium ml-1">
                   {reservation.created_by.firstname && reservation.created_by.lastname ?
                     getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
+                </span>
+              </p>
+              <p className="text-xs truncate dark:text-foreground/60 mt-2">
+                {t_statistic("at")}:
+                <span className="ml-1">
+                  {formatDateTime(reservation.created_at, locale)}
                 </span>
               </p>
             </div>

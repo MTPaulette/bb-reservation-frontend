@@ -22,7 +22,7 @@ import DeletePayment from "../FormElements/Payment/Delete";
 
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import { getPayments } from '@/lib/action/payments';
+import { getPayments } from '@/lib/action/admin/payments';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 

@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { UserType, UserFormType } from "@/lib/definitions";
-import { updateClient } from "@/lib/action/clients";
+import { updateClient } from "@/lib/action/admin/clients";
 
 
 export default function EditClient({ user }: { user: UserType} ) {

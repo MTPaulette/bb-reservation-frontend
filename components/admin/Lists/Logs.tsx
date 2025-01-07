@@ -16,7 +16,7 @@ import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
 import ClearLog from "../FormElements/Log/Clear";
-import { getLogs } from '@/lib/action/logs';
+import { getLogs } from '@/lib/action/admin/logs';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 

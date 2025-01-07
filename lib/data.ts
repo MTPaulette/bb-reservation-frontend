@@ -238,6 +238,7 @@ export const columnsReservation = [
   {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},
   {name_en: "CLIENT", name_fr: "CLIENT", uid: "client", sortable: true},
   {name_en: "DATE", name_fr: "DATE", uid: "date"},
+  {name_en: "HOUR", name_fr: "HEURE", uid: "hour"},
   {name_en: "INITIAL AMOUNT", name_fr: "MONTANT INITIAL", uid: "initial_amount", sortable: true},
   {name_en: "AMOUNT DUE", name_fr: "MONTANT RESTANT", uid: "amount_due", sortable: true},
   {name_en: "STATE", name_fr: "ETAT", uid: "state", sortable: true},
@@ -249,15 +250,11 @@ export const columnsReservation = [
 ];
 
 export const columnsCurrentReservation = [
-  // {name_en: "ID", name_fr: "ID", uid: "id", sortable: true},
   {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},
   {name_en: "CLIENT", name_fr: "CLIENT", uid: "client", sortable: true},
   {name_en: "DATE", name_fr: "DATE", uid: "date"},
   {name_en: "AMOUNT", name_fr: "MONTANT", uid: "amount", sortable: true},
-  // {name_en: "STATE", name_fr: "ETAT", uid: "state", sortable: true},
   {name_en: "AGENCY", name_fr: "AGENCE", uid: "agency", sortable: true},
-  // {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
-  // {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},
 ];
 
 /*
@@ -325,6 +322,7 @@ export const columnsTabsReservation= [
   {name_en: "RESSOURCE", name_fr: "RESSOURCE", uid: "ressource", sortable: true},
   {name_en: "CLIENT", name_fr: "CLIENT", uid: "client", sortable: true},
   {name_en: "DATE", name_fr: "DATE", uid: "date"},
+  {name_en: "HOUR", name_fr: "HEURE", uid: "hour"},
   {name_en: "AMOUNT", name_fr: "MONTANT", uid: "amount", sortable: true},
   {name_en: "STATE", name_fr: "ETAT", uid: "state", sortable: true},
   {name_en: "AGENCY", name_fr: "AGENCE", uid: "agency", sortable: true},

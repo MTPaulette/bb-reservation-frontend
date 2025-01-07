@@ -1,10 +1,10 @@
-import { ConfirmPasswordType } from "../definitions";
-import { headerOptions } from "../utils";
+import { ConfirmPasswordType } from "../../definitions";
+import { headerOptions } from "../../utils";
 
 const api_url = process.env.API_URL;
 
 export async function getLogs() {
-  const response = await fetch(`${api_url}/logs`, {
+  const response = await fetch(`${api_url}/admin/logs`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -12,7 +12,7 @@ export async function getLogs() {
 }
 
 export async function clearLog(data: ConfirmPasswordType) {
-  const response = await fetch(`${api_url}/clear_logs`, { 
+  const response = await fetch(`${api_url}/admin/clear_logs`, { 
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),

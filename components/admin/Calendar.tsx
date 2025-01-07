@@ -11,11 +11,12 @@ import frLocale from "@fullcalendar/core/locales/fr";
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { useLocale, useTranslations } from 'next-intl';
-import { getCalendar } from "@/lib/action/reservations";
+import { getCalendar } from "@/lib/action/admin/reservations";
 import { signOut, useSession } from "next-auth/react";
 import { notFound, redirect } from "next/navigation";
 import { CommonSkeleton } from "../Skeletons";
-import { Chip, ChipProps, Button, Select, SelectItem } from "@nextui-org/react";
+import { Chip, ChipProps, Select, SelectItem } from "@nextui-org/react";
+import { EventType } from "@/lib/definitions";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   pending: "warning",
@@ -24,188 +25,6 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   totally_paid: "success",
   cancelled: "danger"
 };
-
-const reservationss = [
-  { title: "Meeting", start: new Date() },
-  { title: "conception et modelisation", start: new Date("2024/10/13 18:00:00"), end: new Date("2024/10/13 19:00:00") },
-  { title: "design graphique", start: new Date("2024/10/17 8:00:00"), end: new Date("2024/10/17 10:00:00") },
-  { title: "midday reservation", start: new Date("2024/10/20 8:00:00"), end: new Date("2024/10/20 14:00:00") },
-  { title: "allday reservation", start: new Date("2024/09/27 00:00:00"), end: new Date("2024/09/27 23:59") },
-  { title: "all the day", start: new Date("2024/10/28 8:00:00"), end: new Date("2024/10/29 14:00:00") },
-  { title: "break", date: new Date("2024/10/19") },
-  {
-    title: 'All Day Reservation',
-    start: '2020-09-01'
-  },
-  {
-    title: 'Long Reservation',
-    start: '2020-09-07',
-    end: '2020-09-10'
-  },
-  {
-    groupId: 999,
-    title: 'Repeating Reservation',
-    start: '2020-09-09T16:00:00'
-  },
-  {
-    groupId: 999,
-    title: 'Repeating Reservation',
-    start: '2020-09-16T16:00:00'
-  },
-  {
-    title: 'Conference',
-    start: '2020-09-11',
-    end: '2020-09-13'
-  },
-  {
-    title: 'Meeting',
-    start: '2020-09-12T10:30:00',
-    end: '2020-09-12T12:30:00'
-  },
-  {
-    title: 'Lunch',
-    start: '2020-09-12T12:00:00'
-  },
-  {
-    title: 'Meeting',
-    start: '2020-09-12T14:30:00'
-  },
-  {
-    title: 'Happy Hour',
-    start: '2020-09-12T17:30:00'
-  },
-  {
-    title: 'Dinner',
-    start: '2020-09-12T20:00:00'
-  },
-  {
-    title: 'Birthday Party',
-    start: '2020-09-13T07:00:00'
-  },
-  {
-    title: 'Click for Google',
-    url: 'http://google.com/',
-    start: '2024-12-28 08:00',
-    end: '2024-12-28 10:00',
-  }
-]
-
-const reservation3 = [
-  {
-    title: "Creator's 2",
-    agency: "Etoa-Meki",
-    start: "2024-12-14 08:00",
-    end: "2024-12-15 19:00"
-  },
-  {
-    title: "Game Changer Room",
-    agency: "Etoa-Meki",
-    start: "2024-12-20 08:00",
-    end: "2024-12-29 19:00"
-  },
-  {
-    title: "Game Changer Room",
-    agency: "Etoa-Meki",
-    start: "2024-12-30 08:00",
-    end: "2025-01-19 19:00"
-  },
-  {
-    title: "Grand Bureau Privé",
-    agency: "Etoa-Meki",
-    start: "2025-03-08 08:00",
-    end: "2025-03-08 19:00"
-  },
-  {
-    title: "Game Changer Room",
-    agency: "Etoa-Meki",
-    start: "2024-12-30 10:00",
-    end: "2025-01-19 18:00"
-  },
-  {
-    title: "Meeting Corner",
-    agency: "Etoa-Meki",
-    start: "2025-01-06 13:00",
-    end: "2025-01-06 18:00"
-  },
-  {
-    title: "The Good Deal",
-    agency: "Etoa-Meki",
-    start: "2025-01-10 08:00",
-    end: "2025-01-11 18:00"
-  },
-  {
-    title: "Creator's 2",
-    agency: "Etoa-Meki",
-    start: "2024-12-30 16:00",
-    end: "2024-12-30 17:00"
-  },
-  {
-    title: "Game Changer Room",
-    agency: "Etoa-Meki",
-    start: "2024-12-23 08:00",
-    end: "2025-01-02 18:00"
-  },
-  {
-    title: "The Good Deal",
-    agency: "Etoa-Meki",
-    start: "2024-12-27 08:00",
-    end: "2024-12-27 09:00"
-  },
-  {
-    title: "Master Mind",
-    agency: "Etoa-Meki",
-    start: "2024-12-30 08:00",
-    end: "2025-01-19 13:00"
-  },
-  {
-    title: "Master Mind",
-    agency: "Etoa-Meki",
-    start: "2024-12-21 13:00",
-    end: "2024-12-21 18:00"
-  },
-  {
-    title: "The Good Deal",
-    agency: "Etoa-Meki",
-    start: "2024-12-16 08:00",
-    end: "2024-12-17 18:00"
-  },
-  {
-    title: "Master Mind",
-    agency: "Etoa-Meki",
-    start: "2024-12-30 08:00",
-    end: "2025-01-19 18:00"
-  },
-  {
-    title: "Grand Bureau Privé",
-    agency: "Etoa-Meki",
-    start: "2025-01-04 11:00",
-    end: "2025-01-04 12:00"
-  },
-  {
-    title: "Grand Bureau Privé",
-    agency: "Etoa-Meki",
-    start: "2025-01-04 11:00",
-    end: "2025-01-04 12:00"
-  },
-  {
-    title: "Grand Bureau Privé",
-    agency: "Etoa-Meki",
-    start: "2025-01-04 11:00",
-    end: "2025-01-04 12:00"
-  },
-  {
-    title: "Creator's 1",
-    agency: "Etoa-Meki",
-    start: "2024-12-18 10:00",
-    end: "2024-12-18 13:00"
-  },
-  {
-    title: "Creator's 1",
-    agency: "Etoa-Meki",
-    start: "2024-12-18 10:00",
-    end: "2024-12-18 13:00"
-  }
-]
 
 const renderEventContent = (eventInfo: any) => {
   return (
@@ -244,8 +63,8 @@ export default function Calendar() {
   const t_error = useTranslations("InputError");
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [selectedCell, setSelectedCell] = React.useState<any>();
-  const [reservations, setReservations] = useState([]);
-  const [filteredReservations, setFilteredReservations] = useState([]);
+  const [reservations, setReservations] = useState<EventType[]>([]);
+  const [filteredReservations, setFilteredReservations] = useState<EventType[]>([]);
   const [agencyFilter, setAgencyFilter] = React.useState<string>("all");
   const locale = useLocale();
   const [loading, setLoading] = useState(true);
@@ -340,27 +159,6 @@ export default function Calendar() {
             <div className="block md:hidden my-4 md:my-4">
               <Alert color="warning" message={t_alert("mobileDisplayWarning")} />
             </div>
-            {/* <div className="flex items-center gap-x-4 md:w-full md:justify-end md:mt-4">
-              {agencies.map((agency, index) => (
-                <Button
-                  key={index}
-                  disableRipple
-                  radius="md"
-                  className={`data-[hover=true]:bg-default ${agencyFilter === agency ? "text-white bg-primary" : "text-foreground/50 bg-transparent"}`}
-                  onClick={() => handleFilter(agency)}
-                >
-                  {agency}
-                </Button>
-              ))}
-              <Button
-                disableRipple
-                radius="md"
-                className={`data-[hover=true]:bg-default ${agencyFilter === "all" ? "text-white bg-primary" : "text-foreground/50 bg-transparent"}`}
-                onClick={() => handleFilter("all")}
-              >
-                {(locale === "en" ? "All agencies": "Toutes les agences")}
-              </Button>
-            </div> */}
             <div className="flex items-center gap-x-4 md:w-full justify-end mt-8">
               <Select
                 selectedKeys={[agencyFilter]}

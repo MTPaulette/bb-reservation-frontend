@@ -3,52 +3,44 @@
 import {
   Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button,
   DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar,
-  NavbarMenuToggle, NavbarMenu, NavbarMenuItem,
-  Divider
+  NavbarMenuToggle, NavbarMenu, NavbarMenuItem, User
 } from "@nextui-org/react";
 
 import { useLocale, useTranslations } from 'next-intl';
-import { ChevronDownIcon } from "@/components/Icons";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import { BbLogo } from "@/components/BbLogo";
+import { ChevronDownIcon, SettingIcon, UserIcon } from "@/components/Icons";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import Logout from "@/components/admin/FormElements/Logout";
+
+import { getImageUrl, getUsername } from "@/lib/utils";
 
 export default function NavBarComponent() {
   const pathname = usePathname();
   const t = useTranslations("Header");
   const locale = useLocale();
 
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const communityItems = [
-    { name: "Articles", href: "/products"},
-    { name: "Evènement", href: "/event"},
-    { name: "Repertoire", href: "/repository"},
+    { name_en: "Products", name_fr: "Articles", href: "/products"},
+    { name_en: "Events", name_fr: "Evènement", href: "/event"},
+    { name_en: "Repository", name_fr: "Repertoire", href: "/repository"},
   ];
 
   const reservationItems = [
-    { name: "Agency", href: "/meeting_corner"},
-    { name: "Réservations", href: "/reservations"},
+    { name_en: "Agency", name_fr: "Agency", href: "/meeting_corner"},
+    { name_en: "Reservations", name_fr: "Réservations", href: "/reservations"},
   ];
 
   const menuItems_1 = [
-    { name: "Pourquoi Brain-Booster ?", href: "/about"},
-    { name: "Communaute", href: "/community"},
-    { name: "Faire une visite", href: "/visit-us"},
-    { name: "Reservations", href: "/reservations"},
-  ];
-
-  const menuItems_2 = [
-    { name: "Profile", href: "/profile"},
-    { name: "Dashboard", href: "/dashboard"},
-    { name: "Activity", href: "/activity"},
-    { name: "Analytics", href: "/analytics"},
-  ];
-
-  const menuItems_3 = [
-    { name: "My Settings", href: "/settings"},
-    { name: "Team Settings", href: "/team-settings"},
-    { name: "Help & Feedback", href: "/Help-feedback"},
-    { name: "Log Out", href: "/logout"},
+    { name_en: "Why choose Brain-Booster ?", name_fr: "Pourquoi Brain-Booster ?", href: "/about"},
+    { name_en: "Community", name_fr: "Communauté", href: "/community"},
+    { name_en: "Visit us", name_fr: "Faire une visite", href: "/visit-us"},
+    { name_en: "Reservations", name_fr: "Réservations", href: "/reservations"},
   ];
 
   return (
@@ -73,18 +65,25 @@ export default function NavBarComponent() {
       }}
     >
 
+      <NavbarContent className="md:hidden max-w-[25px] -ml-1" justify="end">
+        <NavbarMenuToggle />
+      </NavbarContent>
+
       <NavbarBrand className="block md:hidden">
-        <Link href="/">
-          <BbLogo />
+        <Link href="/" className="flex-shrink-0">
+          <BbLogo width={50} />
         </Link>
       </NavbarBrand>
 
+
       <NavbarContent className="hidden md:flex sm:gap-4 md:gap-1.5 lg:gap-4" justify="center">
-        <NavbarBrand className="hidden md:block min-w-[72px]">
-          <BbLogo />
+        <NavbarBrand className="hidden md:block min-w-[72px] p-2">
+          <BbLogo width={60} />
         </NavbarBrand>
-        <NavbarItem isActive={pathname === "/about"}>
-          <Link href="/about" className="text-foreground text-small">Pourquoi Brain-Booster ?</Link>
+        
+        {/* Pourquoi Brain-Booster ? */}
+        <NavbarItem isActive={pathname === `/${locale}/about`}>
+          <Link href={`/${locale}/about`} className="text-foreground text-small">{t("about")}</Link>
         </NavbarItem>
 
         {/* community */}
@@ -114,20 +113,28 @@ export default function NavBarComponent() {
               // className="data-[hover=true]:bg-primary"
             >
               <Link
-                href={item.href} color={pathname === item.href ? "warning" : "foreground"}
+                href={`/${locale}${item.href}`} color={pathname === `/${locale}${item.href}` ? "warning" : "foreground"}
                 className="whitespace-nowrap" size="sm"
                 aria-current={pathname === item.href ? "page" : "false"}
-              >{item.name}</Link>
+              >
+                {locale === "en" ? item.name_en: item.name_fr}
+              </Link>
             </DropdownItem>
             ))}
           </DropdownMenu>
         </Dropdown>
         
-        <NavbarItem isActive={pathname === "/visit-us"}>
-          <Link href="/visit-us" className="text-foreground text-small">Faire une visite</Link>
+        {/* Faire une visit ? */}
+        <NavbarItem isActive={pathname === `/${locale}/visit-us`}>
+          <Link href={`/${locale}/visit-us`} className="text-foreground text-small">{t("visit_us")}</Link>
         </NavbarItem>
 
         {/* reservations */}
+        <NavbarItem isActive={pathname === `/${locale}/reservations`}>
+          <Link href={`/${locale}/reservations`} className="text-foreground text-small">{t("reservations")}</Link>
+        </NavbarItem>
+
+        {/* booking */}
         <Dropdown>
           <NavbarItem>
             <DropdownTrigger>
@@ -138,7 +145,7 @@ export default function NavBarComponent() {
                 radius="sm"
                 variant="light"
               >
-                Reservation
+                Booking
               </Button>
             </DropdownTrigger>
           </NavbarItem>
@@ -154,15 +161,18 @@ export default function NavBarComponent() {
               key={`${item}-${index}`}
             >
               <Link
-                href={item.href} color={pathname === item.href ? "warning" : "foreground"}
+                href={`/${locale}${item.href}`} color={pathname === `/${locale}${item.href}` ? "warning" : "foreground"}
                 className="whitespace-nowrap" size="sm"
                 aria-current={pathname === item.href ? "page" : "false"}
-              >{item.name}</Link>
+              >
+                {locale === "en" ? item.name_en: item.name_fr}
+              </Link>
             </DropdownItem>
             ))}
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
+
 
       <NavbarContent as="div" justify="end">
         {/* dark mode switcher */}
@@ -170,82 +180,92 @@ export default function NavBarComponent() {
           <ThemeSwitcher />
         </NavbarItem>
   
+        {!user ? (
         <NavbarItem>
           <Button 
             as={Link} href={`/${locale}/auth/login`} 
             className="bg-gradient-to-tr from-success to-[#262262] text-white hover:no-underline shadow-lg"
           >
-          {/* <Button as={Link} href="/login" color="success" className="hover:no-underline text-white"> */}
-            Log in
+            {t("login")}
           </Button>
         </NavbarItem>
-
+        ): (
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
-            <Avatar
-              isBordered
-              as="button"
-              className="transition-transform"
-              color="warning"
-              name="Jason Hughes"
-              size="sm"
-              src="/images/brain-orange-400.png"
-            />
+            <div>
+              <div className="block md:hidden flex-shrink-0">
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  color="warning"
+                  // name={user? getUsername(user.lastname, user.firstname): ""}
+                  size="sm"
+                  src={user && user.image? getImageUrl(user.image) : ''}
+                />
+              </div>
+              <div className="hidden md:flex items-center gap-3">
+                <User
+                  isFocusable
+                  name={user? getUsername(user.lastname, user.firstname): ""}
+                  description={user? user.role: ""}
+                  avatarProps={
+                    {className:"flex-shrink-0", radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
+                  }
+                />
+                <ChevronDownIcon fill="currentColor" size={10} />
+              </div>
+            </div>
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+            <DropdownItem className="block md:hidden">
+              <User
+                isFocusable
+                name={user? getUsername(user.lastname, user.firstname): ""}
+                description={user? user.role: ""}
+                avatarProps={
+                  {className:"flex-shrink-0", radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
+                }
+              />
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
+            <DropdownItem key="profile" className="h-14 gap-2">
+              <p className="font-semibold truncate">{t("signedAs")}</p>
+              <p className="font-semibold">{user? user.email : ""}</p>
+            </DropdownItem>
+            <DropdownItem key="dashboard" className="p-0 m-0">
+              <Link href={`/${locale}/admin/`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
+                <SettingIcon fill="currentColor" size={18} />
+                {t("dashboard")}
+              </Link>
+            </DropdownItem>
+            <DropdownItem key="prodile" className="p-0 m-0">
+              <Link href={`/${locale}/admin/profile`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
+                <UserIcon fill="currentColor" size={18} />
+                {t("profile")}
+              </Link>
+            </DropdownItem>
+            <DropdownItem key="settings" className="p-0 m-0">
+              <Link href={`/${locale}/admin/settings?group=general`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
+                <SettingIcon fill="currentColor" size={18} />
+                {t("settings")}
+              </Link>
+            </DropdownItem>
+            <DropdownItem key="logout" className="p-0 m-0 mt-2 border-t-1 border-divider rounded-none">
+              <Logout />
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-
-        <NavbarItem></NavbarItem>
-      </NavbarContent>
-
-      <NavbarContent className="md:hidden max-w-[25px] -ml-1" justify="end">
-        <NavbarMenuToggle />
+        )}
       </NavbarContent>
 
       <NavbarMenu className="pt-8 bg-background">
         {menuItems_1.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
-              href={item.href} color={pathname === item.href ? "primary" : "foreground"}
+              href={`/${locale}${item.href}`} color={pathname === `/${locale}${item.href}` ? "primary" : "foreground"}
               className="w-full whitespace-nowrap text-base" size="lg"
             >
-              {item.name}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-        <Divider className="my-3"></Divider>
-        {menuItems_2.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              href={item.href} color={pathname === item.href ? "primary" : "foreground"}
-              className="w-full whitespace-nowrap text-base md:text-large" size="lg"
-            >
-              {item.name}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-        <Divider className="my-3"></Divider>
-        {menuItems_3.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              href={item.href} color={pathname === item.href ? "primary" : index === menuItems_2.length - 1 ? "danger" : "foreground"}
-              className="w-full whitespace-nowrap text-base md:text-large" size="lg"
-            >
-              {item.name}
+              {locale === "en" ? item.name_en: item.name_fr}
             </Link>
           </NavbarMenuItem>
         ))}

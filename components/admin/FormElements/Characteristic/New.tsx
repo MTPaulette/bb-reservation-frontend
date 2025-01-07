@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { CharacteristicFormType } from "@/lib/definitions";
-import { newCharacteristic } from "@/lib/action/characteristics";
+import { newCharacteristic } from "@/lib/action/admin/characteristics";
 
 export default function NewCharacteristic() {
   const t = useTranslations("Input");

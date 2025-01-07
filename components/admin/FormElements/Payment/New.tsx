@@ -10,7 +10,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { PaymentFormType } from "@/lib/definitions";
 import { paymentMethods } from "@/lib/data";
-import { createdPayment } from "@/lib/action/payments";
+import { createdPayment } from "@/lib/action/admin/payments";
 
 export default function NewPayment({ reservation_id }: { reservation_id: number|string} ) {
   const t_input = useTranslations("Input");

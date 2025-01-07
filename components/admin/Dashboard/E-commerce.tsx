@@ -13,7 +13,7 @@ import Modal from "@/components/Modal";
 import NewReservation from "../FormElements/Reservation/New";
 import { CommonSkeleton } from "@/components/Skeletons";
 import { signOut, useSession } from "next-auth/react";
-import { getStatistics } from "@/lib/action/dashbord";
+import { getStatistics } from "@/lib/action/admin/dashbord";
 import Alert from "@/components/Alert";
 import { formatCurrency, getUsername } from "@/lib/utils";
 import { availableStats, Months } from "@/lib/data";
@@ -225,34 +225,17 @@ export default function ECommerce() {
         </div>
         ) : null}
 
-        {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-          <CardDataStats title={t_statistic("total_reservations")} total={statistics.totalReservations} rate="0.43%" levelUp>
-            <CalendarIcon fill="currentColor" size={20} />
-          </CardDataStats>
-          <CardDataStats title={t_statistic("total_payments")} total={statistics.totalPayments ? formatCurrency(Number(statistics.totalPayments)) : 0} rate="4.35%" levelUp>
-            <CharetIcon fill="currentColor" size={20} />
-          </CardDataStats>
-          <CardDataStats title={t_statistic("total_ressources")} total={statistics.totalRessources} rate="2.55%" levelUp>
-            <ShoppingBagIcon fill="currentColor" size={22} />
-          </CardDataStats>
-          <CardDataStats title={t_statistic("total_clients")} total={statistics.totalClients} rate="0.95%" levelDown>
-            <PeopleIcon fill="currentColor" size={22} />
-          </CardDataStats>
-          <CardDataStats title={t_statistic("total_staff")} total={statistics.totalStaff} rate="0.95%" levelDown>
-            <PeopleIcon fill="currentColor" size={22} />
-          </CardDataStats>
-        </div> */}
-
         <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-          <ChartOne series={statistics.agency_with_payments_per_month} />
-          <ChartTwo series={statistics.payment_revenu_of_current_week} />
-          <ChartThree data={statistics.ressource_with_reservations} />
-          <MapOne title={t_statistic("map")} />
-          {/* <div className="col-span-12 xl:col-span-8"> */}
-          {/* <TableOne /> */}
           <div className="col-span-12">
             <CurrentReservations reservations={statistics.currentReservations} />
           </div>
+          {/* payment par mois sur un an pour chaque agence /> */}
+          <ChartOne series={statistics.agency_with_payments_per_month} />
+          {/* comparaison payment revenu de la semain en cours /> */}
+          <ChartTwo series={statistics.payment_revenu_of_current_week} />
+          {/* ressource avec les reservations/> */}
+          <ChartThree data={statistics.ressource_with_reservations} />
+          <MapOne title={t_statistic("map")} />
           <div className="col-span-12">
             <TopClients clients={statistics.topClients} />
           </div>

@@ -20,7 +20,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import NewRessource from "../FormElements/Ressource/New";
 import EditRessource from "../FormElements/Ressource/Edit";
 import DeleteRessource from "../FormElements/Ressource/Delete";
-import { getRessources } from '@/lib/action/ressources';
+import { getRessources } from '@/lib/action/admin/ressources';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
@@ -486,7 +486,8 @@ export default function RessourcesTable() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={error? <Alert color="danger" message={error} />: t_table("noItems")} items={sortedItems}>
+        <TableBody emptyContent={error? <Alert color="danger" message={error} />: t_table("noItems")}
+          items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

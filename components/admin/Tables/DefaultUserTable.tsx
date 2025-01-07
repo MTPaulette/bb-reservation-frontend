@@ -98,7 +98,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
         return (
           <User
             avatarProps={
-              {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+              {className:"flex-shrink-0", radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
             }
             classNames={{
               name: "font-semibold",

@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
-import { createClient } from "@/lib/action/clients";
+import { createClient } from "@/lib/action/admin/clients";
 
 export default function NewClient() {
   const t = useTranslations("Input");

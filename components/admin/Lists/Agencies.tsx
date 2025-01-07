@@ -21,7 +21,7 @@ import NewAgency from "../FormElements/Agency/New";
 import EditAgency from "../FormElements/Agency/Edit";
 import DeleteAgency from "../FormElements/Agency/Delete";
 import SuspendAgency from '../FormElements/Agency/Suspend';
-import { getAgencies } from '@/lib/action/agencies';
+import { getAgencies } from '@/lib/action/admin/agencies';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 

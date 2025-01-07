@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { deleteRessource } from "@/lib/action/ressources";
+import { deleteRessource } from "@/lib/action/admin/ressources";
 import Title from "@/components/Title";
 
 export default function DeleteRessource({ id }: { id: number} ) {

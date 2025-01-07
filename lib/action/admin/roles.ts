@@ -1,8 +1,8 @@
-import { headerOptions } from "../utils";
+import { headerOptions } from "../../utils";
 const api_url = process.env.API_URL;
 
 export async function getRoles() {
-  const response = await fetch(`${api_url}/roles`, {
+  const response = await fetch(`${api_url}/admin/roles`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -10,7 +10,7 @@ export async function getRoles() {
 }
 
 export async function getAllPermissions() {
-  const response = await fetch(`${api_url}/permissions`, {
+  const response = await fetch(`${api_url}/admin/permissions`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -19,7 +19,7 @@ export async function getAllPermissions() {
 
 
 export async function getRoleById(id: number) {
-  const response = await fetch(`${api_url}/role/${id}`, {
+  const response = await fetch(`${api_url}/admin/role/${id}`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -27,7 +27,7 @@ export async function getRoleById(id: number) {
 }
 
 export async function updateRole(data: number[], id: number) {
-  const response = await fetch(`${api_url}/role/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/role/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({

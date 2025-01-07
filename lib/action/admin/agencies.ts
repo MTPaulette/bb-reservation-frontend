@@ -1,10 +1,10 @@
-import { headerOptions } from "../utils";
-import { ConfirmPasswordType, AgencyFormType, SuspensionFormType, HorairesType } from "../definitions";
+import { headerOptions } from "../../utils";
+import { ConfirmPasswordType, AgencyFormType, SuspensionFormType, HorairesType } from "../../definitions";
 
 const api_url = process.env.API_URL;
 
 export async function createAgency(data: AgencyFormType) {
-  const response = await fetch(`${api_url}/agency/store`, { 
+  const response = await fetch(`${api_url}/admin/agency/store`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -13,7 +13,7 @@ export async function createAgency(data: AgencyFormType) {
 }
 
 export async function getAgencies() {
-  const response = await fetch(`${api_url}/agencies`, {
+  const response = await fetch(`${api_url}/admin/agencies`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -21,7 +21,7 @@ export async function getAgencies() {
 }
 
 export async function getAgencyById(id: number) {
-  const response = await fetch(`${api_url}/agency/${id}`, {
+  const response = await fetch(`${api_url}/admin/agency/${id}`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -29,7 +29,7 @@ export async function getAgencyById(id: number) {
 }
 
 export async function updateAgency(data: AgencyFormType, id: number, horaires: HorairesType) {
-  const response = await fetch(`${api_url}/agency/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/agency/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -44,7 +44,7 @@ export async function updateAgency(data: AgencyFormType, id: number, horaires: H
 }
 
 export async function suspendAgency(data: SuspensionFormType, id: number, status: string) {
-  const response = await fetch(`${api_url}/agency/${id}/suspend`, {
+  const response = await fetch(`${api_url}/admin/agency/${id}/suspend`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -60,7 +60,7 @@ export async function suspendAgency(data: SuspensionFormType, id: number, status
 
 export async function deleteAgency(data: ConfirmPasswordType, id: number) {
   console.log(id);
-  const response = await fetch(`${api_url}/agency/${id}/delete`, {
+  const response = await fetch(`${api_url}/admin/agency/${id}/delete`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),

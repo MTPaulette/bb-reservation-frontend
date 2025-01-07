@@ -20,7 +20,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import NewCoupon from "../FormElements/Coupon/New";
 import EditCoupon from "../FormElements/Coupon/Edit";
 import DeleteCoupon from "../FormElements/Coupon/Delete";
-import { getCoupons } from '@/lib/action/coupons';
+import { getCoupons } from '@/lib/action/admin/coupons';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 

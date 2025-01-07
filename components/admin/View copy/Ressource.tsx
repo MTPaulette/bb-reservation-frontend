@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react";
-import { getRessourceById } from '@/lib/action/ressources';
+import { getRessourceById } from '@/lib/action/admin/ressources';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";

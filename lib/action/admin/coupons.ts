@@ -1,10 +1,10 @@
-import { headerOptions } from "../utils";
-import { ConfirmPasswordType, CouponFormType } from "../definitions";
+import { headerOptions } from "../../utils";
+import { ConfirmPasswordType, CouponFormType } from "../../definitions";
 
 const api_url = process.env.API_URL;
 
 export async function createCoupon(data: CouponFormType) {
-  const response = await fetch(`${api_url}/coupon/store`, { 
+  const response = await fetch(`${api_url}/admin/coupon/store`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -13,7 +13,7 @@ export async function createCoupon(data: CouponFormType) {
 }
 
 export async function getCoupons() {
-  const response = await fetch(`${api_url}/coupons`, {
+  const response = await fetch(`${api_url}/admin/coupons`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -21,7 +21,7 @@ export async function getCoupons() {
 }
 
 export async function getCouponById(id: number) {
-  const response = await fetch(`${api_url}/coupon/${id}`, {
+  const response = await fetch(`${api_url}/admin/coupon/${id}`, {
     method: "GET",
     headers: await headerOptions()
   })
@@ -29,7 +29,7 @@ export async function getCouponById(id: number) {
 }
 
 export async function updateCoupon(data: CouponFormType, id: number, clients: number[]) {
-  const response = await fetch(`${api_url}/coupon/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/coupon/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -48,7 +48,7 @@ export async function updateCoupon(data: CouponFormType, id: number, clients: nu
 
 export async function deleteCoupon(data: ConfirmPasswordType, id: number) {
   console.log(id);
-  const response = await fetch(`${api_url}/coupon/${id}/delete`, {
+  const response = await fetch(`${api_url}/admin/coupon/${id}/delete`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -57,7 +57,7 @@ export async function deleteCoupon(data: ConfirmPasswordType, id: number) {
 }
 
 export async function applyCoupon(coupon: string, client_id: number) {
-  const response = await fetch(`${api_url}/coupon/apply`, {
+  const response = await fetch(`${api_url}/admin/coupon/apply`, {
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify({

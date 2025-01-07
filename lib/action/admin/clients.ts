@@ -1,10 +1,10 @@
-import { headerOptions } from "../utils";
-import { ConfirmPasswordType, UserFormType } from "../definitions";
+import { headerOptions } from "../../utils";
+import { ConfirmPasswordType, UserFormType } from "../../definitions";
 
 const api_url = process.env.API_URL;
 
 export async function createClient(data: UserFormType) {
-  const response = await fetch(`${api_url}/client/store`, { 
+  const response = await fetch(`${api_url}/admin/client/store`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -13,7 +13,7 @@ export async function createClient(data: UserFormType) {
 }
 
 export async function getClients() {
-  const response = await fetch(`${api_url}/clients`, {
+  const response = await fetch(`${api_url}/admin/clients`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -21,7 +21,7 @@ export async function getClients() {
 }
 
 export async function getClientById(id: number) {
-  const response = await fetch(`${api_url}/client/${id}`, {
+  const response = await fetch(`${api_url}/admin/client/${id}`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -29,7 +29,7 @@ export async function getClientById(id: number) {
 }
 
 export async function updateClient(data: UserFormType, id: number) {
-  const response = await fetch(`${api_url}/client/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/client/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -38,7 +38,7 @@ export async function updateClient(data: UserFormType, id: number) {
 }
 
 export async function suspendClient(data: ConfirmPasswordType, id: number, status: string) {
-  const response = await fetch(`${api_url}/client/${id}/suspend`, {
+  const response = await fetch(`${api_url}/admin/client/${id}/suspend`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -51,7 +51,7 @@ export async function suspendClient(data: ConfirmPasswordType, id: number, statu
 
 
 export async function deleteClient(data: ConfirmPasswordType, id: number) {
-  const response = await fetch(`${api_url}/client/${id}/delete`, { 
+  const response = await fetch(`${api_url}/admin/client/${id}/delete`, { 
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),

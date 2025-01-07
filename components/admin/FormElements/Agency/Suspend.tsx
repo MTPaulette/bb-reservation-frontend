@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { SuspensionFormType } from "@/lib/definitions";
-import { suspendAgency } from "@/lib/action/agencies";
+import { suspendAgency } from "@/lib/action/admin/agencies";
 import Title from "@/components/Title";
 
 export default function SuspendAgency({ id, status }: { id: number, status: string } ) {

@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { SpaceFormType } from "@/lib/definitions";
-import { createSpace } from "@/lib/action/spaces";
+import { createSpace } from "@/lib/action/admin/spaces";
 
 export default function NewSpace() {
   const t = useTranslations("Input");

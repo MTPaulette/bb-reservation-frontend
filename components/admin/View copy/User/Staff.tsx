@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { getStaffById } from '@/lib/action/staff';
+import { getStaffById } from '@/lib/action/admin/staff';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";

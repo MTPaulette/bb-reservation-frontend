@@ -20,7 +20,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import NewReservation from "../FormElements/Reservation/New";
 import EditReservation from "../FormElements/Reservation/Edit";
 import CancelReservation from '../FormElements/Reservation/Cancel';
-import { getReservations } from '@/lib/action/reservations';
+import { getReservations } from '@/lib/action/admin/reservations';
 import { signOut, useSession } from 'next-auth/react';
 import NewPayment from '../FormElements/Payment/New';
 import { redirect } from "next/navigation";
@@ -34,7 +34,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   cancelled: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "initial_amount", "amount_due", "state", "agency", "created_by", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "hour", "state", "agency", "created_at", "actions"];
 
 export default function ReservationsTable() {
   const [reservations, setReservations] = useState([]);
@@ -223,10 +223,15 @@ export default function ReservationsTable() {
         );
       case "date":
         return (
-          <div className="text-sm whitespace-nowrap">
-            <p className="font-semibold text-sm">{`${reservation.start_date} - ${reservation.end_date}`}</p>
-            <p className="dark:text-foreground/60">{`(${reservation.start_hour} - ${reservation.end_hour})`}</p>
-          </div>
+          <p className="text-sm whitespace-nowrap font-medium">
+            {`${reservation.start_date} - ${reservation.end_date}`}
+          </p>
+        );
+      case "hour":
+        return (
+          <p className="text-sm whitespace-nowrap dark:text-foreground/60">
+            {`${reservation.start_hour} - ${reservation.end_hour}`}
+          </p>
         );
       case "initial_amount":
         return (

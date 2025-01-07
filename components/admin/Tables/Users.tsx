@@ -24,7 +24,7 @@ export default function UserTable({ columns, users }: { columns: any[], users: a
           <Link href={`/${locale}/admin/staff/${user.id}`}>
             <User
               avatarProps={
-                {radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
+                {className:"flex-shrink-0", radius: "full", size: "sm", src: user.image? getImageUrl(user.image) : "" }
               }
               classNames={{
                 name: "font-semibold",

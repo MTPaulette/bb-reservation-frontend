@@ -1,9 +1,9 @@
-import { headerOptions } from "../utils";
+import { headerOptions } from "../../utils";
 
 const api_url = process.env.API_URL;
 
 export async function getPermissions() {
-  const response = await fetch(`${api_url}/auth-permissions`, {
+  const response = await fetch(`${api_url}/admin/auth-permissions`, {
     method: "GET",
     headers: await headerOptions(),
   })

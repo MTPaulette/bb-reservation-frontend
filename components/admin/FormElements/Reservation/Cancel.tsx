@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { CancellationFormType } from "@/lib/definitions";
-import { cancelReservation } from "@/lib/action/reservations";
+import { cancelReservation } from "@/lib/action/admin/reservations";
 import Title from "@/components/Title";
 
 export default function CancelReservation({ id, state }: { id: number, state: string } ) {

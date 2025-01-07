@@ -1,10 +1,10 @@
-import { headerOptions } from "../utils";
-import { ConfirmPasswordType, SuspensionFormType, UserFormType } from "../definitions";
+import { headerOptions } from "../../utils";
+import { ConfirmPasswordType, SuspensionFormType, UserFormType } from "../../definitions";
 
 const api_url = process.env.API_URL;
 
 export async function createStaff(data: UserFormType) {
-  const response = await fetch(`${api_url}/staff/store`, { 
+  const response = await fetch(`${api_url}/admin/staff/store`, { 
     method: "POST",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -13,7 +13,7 @@ export async function createStaff(data: UserFormType) {
 }
 
 export async function getStaff() {
-  const response = await fetch(`${api_url}/staff`, {
+  const response = await fetch(`${api_url}/admin/staff`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -21,7 +21,7 @@ export async function getStaff() {
 }
 
 export async function getStaffById(id: number) {
-  const response = await fetch(`${api_url}/staff/${id}`, {
+  const response = await fetch(`${api_url}/admin/staff/${id}`, {
     method: "GET",
     headers: await headerOptions(),
   })
@@ -29,7 +29,7 @@ export async function getStaffById(id: number) {
 }
 
 export async function updateStaff(data: UserFormType, id: number) {
-  const response = await fetch(`${api_url}/staff/${id}/update`, {
+  const response = await fetch(`${api_url}/admin/staff/${id}/update`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),
@@ -38,7 +38,7 @@ export async function updateStaff(data: UserFormType, id: number) {
 }
 
 export async function suspendStaff(data: SuspensionFormType, id: number, status: string) {
-  const response = await fetch(`${api_url}/staff/${id}/suspend`, {
+  const response = await fetch(`${api_url}/admin/staff/${id}/suspend`, {
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify({
@@ -53,7 +53,7 @@ export async function suspendStaff(data: SuspensionFormType, id: number, status:
 
 
 export async function deleteStaff(data: ConfirmPasswordType, id: number) {
-  const response = await fetch(`${api_url}/staff/${id}/delete`, { 
+  const response = await fetch(`${api_url}/admin/staff/${id}/delete`, { 
     method: "PUT",
     headers: await headerOptions(),
     body: JSON.stringify(data),

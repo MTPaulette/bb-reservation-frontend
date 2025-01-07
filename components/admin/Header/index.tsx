@@ -119,7 +119,7 @@ const Header = (props: {
                     name={user? getUsername(user.lastname, user.firstname): ""}
                     description={user? user.role: ""}
                     avatarProps={
-                      {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
+                      {className:"flex-shrink-0", radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                     }
                   />
                   <ChevronDownIcon fill="currentColor" size={10} />
@@ -133,7 +133,7 @@ const Header = (props: {
                   name={user? getUsername(user.lastname, user.firstname): ""}
                   description={user? user.role: ""}
                   avatarProps={
-                    {radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
+                    {className:"flex-shrink-0", radius: "full", size: "sm", src: user && user.image? getImageUrl(user.image) : "" }
                   }
                 />
               </DropdownItem>
@@ -147,7 +147,7 @@ const Header = (props: {
                   {t("profile")}
                 </Link>
               </DropdownItem>
-              <DropdownItem key="team_settings" className="p-0 m-0">
+              <DropdownItem key="settings" className="p-0 m-0">
                 <Link href={`/${locale}/admin/settings?group=general`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
                   <SettingIcon fill="currentColor" size={18} />
                   {t("settings")}

@@ -9,11 +9,11 @@ import { z, ZodType } from "zod";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { AgencyType, AgencyFormType, HorairesType } from "@/lib/definitions";
-import { getOpeningdays } from "@/lib/action/openingdays";
+import { getOpeningdays } from "@/lib/action/admin/openingdays";
 import Title from "@/components/Title";
 import { capitalize } from "@/lib/utils";
 import { Hours } from "@/lib/data";
-import { updateAgency } from "@/lib/action/agencies";
+import { updateAgency } from "@/lib/action/admin/agencies";
 
 
 export default function EditReservation({ agency }: { agency: AgencyType}) {

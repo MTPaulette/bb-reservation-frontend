@@ -9,9 +9,9 @@ import { z, ZodType } from "zod";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { SpaceType, SpaceFormType } from "@/lib/definitions";
-import { getCharacteristics } from "@/lib/action/characteristics";
+import { getCharacteristics } from "@/lib/action/admin/characteristics";
 import Title from "@/components/Title";
-import { deleteImage, updateSpace, uploadImages } from "@/lib/action/spaces";
+import { deleteImage, updateSpace, uploadImages } from "@/lib/action/admin/spaces";
 import { capitalize, getImageUrl } from "@/lib/utils";
 import Image from "next/image";
 

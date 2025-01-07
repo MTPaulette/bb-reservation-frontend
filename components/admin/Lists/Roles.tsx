@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip } from "@nextui-org/react";
 import { columnsRole as columns } from "@/lib/data";
 import { PencilSquareIcon } from "@/components/Icons";
-import { getRoles } from '@/lib/action/roles';
+import { getRoles } from '@/lib/action/admin/roles';
 import { CommonSkeleton } from '@/components/Skeletons';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';

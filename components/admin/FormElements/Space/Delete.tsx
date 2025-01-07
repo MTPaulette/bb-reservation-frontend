@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { deleteSpace } from "@/lib/action/spaces";
+import { deleteSpace } from "@/lib/action/admin/spaces";
 import Title from "@/components/Title";
 
 export default function DeleteSpace({ id }: { id: number} ) {

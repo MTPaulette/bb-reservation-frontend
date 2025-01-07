@@ -18,7 +18,7 @@ import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
 import EditCharacteristic from "../FormElements/Characteristic/Edit";
 import DeleteCharacteristic from "../FormElements/Characteristic/Delete";
-import { getCharacteristics } from '@/lib/action/characteristics';
+import { getCharacteristics } from '@/lib/action/admin/characteristics';
 import { signOut, useSession } from 'next-auth/react';
 import NewCharacteristic from '../FormElements/Characteristic/New';
 import { redirect } from 'next/navigation';

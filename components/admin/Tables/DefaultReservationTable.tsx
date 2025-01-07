@@ -25,7 +25,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   cancelled: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "amount", "state", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "hour", "state", "actions"];
 
 export default function DefaultReservationTable({ reservations }: { reservations: any[] }) {
   const locale = useLocale();
@@ -172,14 +172,6 @@ export default function DefaultReservationTable({ reservations }: { reservations
             </p>
           </div>
         );
-      case "date":
-        return (
-          <div className="text-sm whitespace-nowrap">
-            {/* <p className="font-semibold text-sm">{`${t_table("from")}: ${formatDateTime(reservation.start_date, locale)} - ${t_table("to")}: ${formatDateTime(reservation.end_date, locale)}`}</p> */}
-            <p className="font-semibold text-sm">{`${reservation.start_date} - ${reservation.end_date}`}</p>
-            <p className="dark:text-foreground/60">{`(${reservation.start_hour} - ${reservation.end_hour})`}</p>
-          </div>
-        );
       case "state":
         return (
           <Chip
@@ -195,10 +187,18 @@ export default function DefaultReservationTable({ reservations }: { reservations
             {cellValue}
           </Chip>
         );
-      // case "created_at":
-      //   return (
-      //     <p className="whitespace-nowrap">{formatDateTime(reservation.created_at, locale)}</p>
-      //   );
+      case "date":
+        return (
+          <p className="text-sm whitespace-nowrap font-medium">
+            {`${reservation.start_date} - ${reservation.end_date}`}
+          </p>
+        );
+      case "hour":
+        return (
+          <p className="text-sm whitespace-nowrap dark:text-foreground/60">
+            {`${reservation.start_hour} - ${reservation.end_hour}`}
+          </p>
+        );
       case "amount":
         return (
           <div>

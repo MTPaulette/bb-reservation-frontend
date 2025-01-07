@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { getStaffById } from '@/lib/action/staff';
+import { getStaffById } from '@/lib/action/admin/staff';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
@@ -193,8 +193,12 @@ export default function ViewStaff({id}: {id: string}) {
               </div>
             </div>
 
-            <p className="font-medium capitalize"> {response.user.role} {response.user.agency? ' | '+ response.user.agency: ""}</p>
-            <p className="mt-2 font-light"> {response.user.email} {response.user.phonenumber? ' | '+ response.user.phonenumber: ""}</p>
+            <p className="mt-2 font-light">
+              {response.user.email} {response.user.phonenumber? ' | '+ response.user.phonenumber: ""}
+            </p>
+            <p className="font-semibold capitalize mt-1">
+              {response.user.role ? response.user.role.name : ""}
+            </p>
             <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-2 sm:grid-cols-3 gap-2 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
               <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
                 <span className="font-semibold text-foreground">

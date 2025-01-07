@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { CouponFormType } from "@/lib/definitions";
-import { createCoupon } from "@/lib/action/coupons";
+import { createCoupon } from "@/lib/action/admin/coupons";
 
 export default function NewCoupon() {
   const t = useTranslations("Input");
@@ -22,7 +22,6 @@ export default function NewCoupon() {
       total_usage: z.string().min(1),
       percent: z.string(),
       amount: z.string(),
-      // expired_on: z.date().min(new Date()),
       expired_on: z.string(),
       note_en: z.string(),
       note_fr: z.string(),

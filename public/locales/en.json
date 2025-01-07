@@ -34,6 +34,9 @@
     "no_image": "No image",
     "no_cancelled_reservation": "No cancelled reservation"
   },
+  "Default": {
+    "sits": "sits"
+  },
   "InputError": {
     "name": "the name is required",
     "lastname": "the lastname is required",
@@ -244,7 +247,12 @@
     "signedAs": "Signed as",
     "profile": "my profile",
     "settings": "Account settings",
-    "search_placeholder": "Type to search..."
+    "search_placeholder": "Type to search...",
+    "dashboard": "Dashboard",
+    "login": "Log in",
+    "reservations": "Reservations",
+    "visit_us": "Visit us",
+    "about": "Why choose Brain-Booster ?"
   },
 
   "HomePage": {
@@ -435,6 +443,7 @@
     "payment_revenue": "Payment & Revenu",
     "payment_per_month": "Payment per month",
     "by": "By",
+    "at": "At",
     "left": "Left",
     "created_reservations": "created reservations",
     "ressources": "ressources",

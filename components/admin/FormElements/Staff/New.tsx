@@ -11,7 +11,7 @@ import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { agencies, roles } from "@/lib/data";
 import { UserFormType } from "@/lib/definitions";
-import { createStaff } from "@/lib/action/staff";
+import { createStaff } from "@/lib/action/admin/staff";
 
 export default function NewStaff() {
   const t = useTranslations("Input");

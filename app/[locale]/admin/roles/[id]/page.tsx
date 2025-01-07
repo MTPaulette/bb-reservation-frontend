@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import { getAllPermissions, getRoleById, updateRole } from '@/lib/action/roles';
+import { getAllPermissions, getRoleById, updateRole } from '@/lib/action/admin/roles';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Title from '@/components/Title';

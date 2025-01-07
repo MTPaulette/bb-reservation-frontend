@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
-import { clearLog } from "@/lib/action/logs";
+import { clearLog } from "@/lib/action/admin/logs";
 import Title from "@/components/Title";
 
 export default function ClearLog() {

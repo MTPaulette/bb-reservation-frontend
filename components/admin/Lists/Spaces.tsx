@@ -20,7 +20,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import NewSpace from "../FormElements/Space/New";
 import EditSpace from "../FormElements/Space/Edit";
 import DeleteSpace from "../FormElements/Space/Delete";
-import { getSpaces } from '@/lib/action/spaces';
+import { getSpaces } from '@/lib/action/admin/spaces';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 

@@ -9,17 +9,17 @@ import { useState } from "react";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { UserType, ReservationFormType, RessourceType, Reservation_draftType, CouponType } from "@/lib/definitions";
-import { getRessourceById } from "@/lib/action/ressources";
-import { getClients } from "@/lib/action/clients";
-import { getRessources } from "@/lib/action/ressources";
+import { getRessourceById } from "@/lib/action/admin/ressources";
+import { getClients } from "@/lib/action/admin/clients";
+import { getRessources } from "@/lib/action/admin/ressources";
 import Title from "@/components/Title";
 import Loader from "../../Common/Loader";
 import { signOut } from 'next-auth/react';
 import { capitalize, formatCurrency, getImageUrl } from "@/lib/utils";
 import { BookIcon, CalendarIcon, CurrencyIcon } from "@/components/Icons";
-import { createReservation } from "@/lib/action/reservations";
+import { createReservation } from "@/lib/action/admin/reservations";
 import { validitiesName as validities, Hours, middayPeriods } from "@/lib/data";
-import { applyCoupon } from "@/lib/action/coupons";
+import { applyCoupon } from "@/lib/action/admin/coupons";
 import NewPayment from "../Payment/New";
 import SummaryReservation from "./Summary";
 // import Image from "next/image";
@@ -350,7 +350,7 @@ export default function NewReservation() {
                           <div key={item.key} className="flex items-center gap-2">
                             <User
                               avatarProps={
-                                {radius: "full", size: "sm", src: item.data.image? getImageUrl(item.data.image) : "" }
+                                {className:"flex-shrink-0", radius: "full", size: "sm", src: item.data.image? getImageUrl(item.data.image) : "" }
                               }
                               classNames={{
                                 name: "font-semibold",
@@ -374,7 +374,7 @@ export default function NewReservation() {
                         }}>
                           <User
                             avatarProps={
-                              {radius: "full", size: "sm", src: client.image? getImageUrl(client.image) : "" }
+                              {className:"flex-shrink-0", radius: "full", size: "sm", src: client.image? getImageUrl(client.image) : "" }
                             }
                             classNames={{
                               name: "font-semibold",
