@@ -40,6 +40,7 @@ export async function updateCoupon(data: CouponFormType, id: number, clients: nu
       "expired_on": data.expired_on,
       "note_en": data.note_en,
       "note_fr": data.note_fr,
+      "is_public": data.is_public,
       "clients": clients,
     }),
   })

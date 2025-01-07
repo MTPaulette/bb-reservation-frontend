@@ -208,10 +208,11 @@ export const columns = [
 
 export const columnsCoupon = [
   {name_en: "NAME", name_fr: "NOM", uid: "name", sortable: true},
-  {name_en: "TOTAL USAGE", name_fr: "USAGE TOTAL", uid: "total_usage", sortable: true},
-  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "TYPE OF COUPON", name_fr: "TYPE DE COUPON", uid: "coupon_type"},
   {name_en: "VALUE", name_fr: "VALEUR", uid: "value"},
   {name_en: "EXPIRE ON", name_fr: "EXPIRE LE", uid: "expired_on", sortable: true},
+  {name_en: "STATUS", name_fr: "STATUS", uid: "status", sortable: true},
+  {name_en: "TOTAL USAGE", name_fr: "USAGE TOTAL", uid: "total_usage", sortable: true},
   {name_en: "SENDING TO", name_fr: "ENVOYE A", uid: "sending_to"},
   {name_en: "CREATED BY", name_fr: "CREE PAR", uid: "created_by"},
   {name_en: "CREATED AT", name_fr: "CREE LE", uid: "created_at"},

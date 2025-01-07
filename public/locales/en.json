@@ -214,6 +214,8 @@
     "coupon_discount": "Discount coupon",
     "apply": "apply",
     "coupon_apply_placeholder": "Enter your discount coupon",
+    "public_coupon": "Public coupon",
+    "public_coupon_advise": "Uncheck this box to limit the visibility of the discount coupon to your existing customers.",
 
     "validity": "Validity",
     "validity_placeholder": "Select a validity",

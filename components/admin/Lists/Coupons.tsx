@@ -30,7 +30,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   expired: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "total_usage", "value", "status", "expired_on", "sending_to", "created_by", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "coupon_type", "value", "status", "expired_on", "total_usage", "actions"];
 
 export default function CouponsTable() {
   const [coupons, setCoupons] = useState([]);
@@ -155,6 +155,21 @@ export default function CouponsTable() {
     const cellValue = coupon[columnKey as keyof Coupon];
 
     switch (columnKey) {
+      case "coupon_type":
+        return (
+          <Chip
+            className="capitalize border-none gap-1"
+            color={coupon.is_public ? "primary" : "default"}
+            size="sm"
+            variant="flat"
+          >
+            {locale == "en" ? (
+              <>{coupon.is_public ? "public coupon" : "private coupon"}</>
+            ) : (
+              <>{coupon.is_public ? "coupon publique" : "coupon privé"}</>
+            )}
+          </Chip>
+        );
       case "sending_to":
         return (
           <p className="whitespace-nowrap">{coupon.users_count} client(s)</p>
@@ -201,6 +216,10 @@ export default function CouponsTable() {
           >
             {cellValue}
           </Chip>
+        );
+      case "expired_on":
+        return (
+          <p className="whitespace-nowrap">{coupon.expired_on}</p>
         );
       case "created_at":
         return (

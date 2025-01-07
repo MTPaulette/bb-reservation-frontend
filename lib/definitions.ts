@@ -218,6 +218,7 @@ export type CouponType = {
   amount: number | undefined;
   note_en: string;
   note_fr: string;
+  is_public: boolean;
   created_by: CreatedByType;
   created_at: Date;
   updated_at: Date;
@@ -237,6 +238,7 @@ export type CouponFormType = {
   expired_on: Date | string;
   note_en: string;
   note_fr: string;
+  is_public: boolean;
 }
 
 export type OptionType = {

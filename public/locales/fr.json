@@ -215,6 +215,9 @@
     "coupon_discount": "Coupon de réduction",
     "apply": "appliquer",
     "coupon_apply_placeholder": "Entrer votre coupon",
+    "public_coupon": "Coupon publique",
+    "public_coupon_advise": "Décochez cette case pour limiter la visibilité du coupon de réduction à vos clients existants.",
+
 
     "validity": "Validité",
     "validity_placeholder": "Sélectionner une validité",

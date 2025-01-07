@@ -23,6 +23,7 @@ export default function EditCoupon({ id }: { id: number} ) {
 
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [checkIsPublic, setCheckIsPublic] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const [selectedClients, setSelectedClients] = useState<number[]>([]);
@@ -35,16 +36,17 @@ export default function EditCoupon({ id }: { id: number} ) {
       total_usage: z.string().min(1),
       percent: z.string(),
       amount: z.string(),
-      // expired_on: z.date().min(new Date()),
       expired_on: z.string(),
       note_en: z.string(),
       note_fr: z.string(),
+      is_public: z.boolean().default(true),
   });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue
   } = useForm<CouponFormType>({
     resolver: zodResolver(schema),
   })
@@ -151,7 +153,7 @@ export default function EditCoupon({ id }: { id: number} ) {
       ) : null}
       {coupon ? (
       <form
-        action="#" className="space-y-8 mt-4"
+        action="#" className="space-y-12 mt-4"
         onSubmit={handleSubmit(handleFormSubmit)}
       >
         <Input
@@ -250,36 +252,59 @@ export default function EditCoupon({ id }: { id: number} ) {
           errorMessage={errors.note_fr ? errors.note_fr?.message: null}
           defaultValue={coupon ? coupon.note_fr: ""}
         />
+        <div className="w-full flex items-center justify-start gap-2">
+          <Checkbox
+            isSelected={checkIsPublic}
+            className="z-1"
+            onChange={(e) => {
+              setCheckIsPublic(e.target.checked);
+              setValue("is_public", e.target.checked)
+            }}
+            // {...register("is_public")}
+          />
+          <div>
+            <p>{t_input("public_coupon")}</p>
+            <p className="font-semibold text-sm">
+              <span className="text-danger mr-2">NB:</span>
+              <span>{t_input("public_coupon_advise")}</span>
+            </p>
+          </div>
+        </div>
+
 
         {/* clients */}
-        {clients ? (
+        {checkIsPublic ? null : (
           <>
-          <Title className="text-xl mt-2">{t_input("sended_to_clients")}</Title>
-          <div className="w-full flex items-center justify-end gap-2">
-            <Checkbox
-              onChange={checkAll}
-              className="z-1"
-            />
-            <p className="font-light text-sm">{t_input("select_all")}</p>
-          </div>
-          <div className="pb-4 px-2 sm:px-6 grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-0.5 p-1">
-            {clients.map((client: ClientType) => (
-              <ul key={client.id} className="flex items-center gap-4 p-1">
+            {clients ? (
+              <>
+              <Title className="text-xl mt-2">{t_input("sended_to_clients")}</Title>
+              <div className="w-full flex items-center justify-end gap-2">
                 <Checkbox
-                  value={client.id}
-                  onChange={handleCheckboxChange}
-                  isSelected={selectedClients.includes(client.id)}
+                  onChange={checkAll}
                   className="z-1"
                 />
-                <li className="font-light text-sm text-foreground">
-                  {getUsername(client.lastname, client.firstname)}
-                </li>
-              </ul>
-            ))}
-          </div>
+                <p className="font-light text-sm">{t_input("select_all")}</p>
+              </div>
+              <div className="pb-4 px-2 sm:px-6 grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-0.5 p-1">
+                {clients.map((client: ClientType) => (
+                  <ul key={client.id} className="flex items-center gap-4 p-1">
+                    <Checkbox
+                      value={client.id}
+                      onChange={handleCheckboxChange}
+                      isSelected={selectedClients.includes(client.id)}
+                      className="z-1"
+                    />
+                    <li className="font-light text-sm text-foreground">
+                      {getUsername(client.lastname, client.firstname)}
+                    </li>
+                  </ul>
+                ))}
+              </div>
+              </>
+            ) : (
+              <Loader />
+            )}
           </>
-        ) : (
-          <Loader />
         )}
 
         <div className="w-full">
