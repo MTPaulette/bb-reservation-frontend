@@ -119,7 +119,7 @@ export default function SummaryReservation(
             <div className="mt-6">
               <User
                 avatarProps={
-                  {radius: "full", size: "lg", src: client.image? getImageUrl(client.image) : "" }
+                  {className:"flex-shrink-0", radius: "full", size: "lg", src: client.image? getImageUrl(client.image) : "" }
                 }
                 classNames={{
                   name: "font-semibold",

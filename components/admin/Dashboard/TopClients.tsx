@@ -23,7 +23,7 @@ export default function TopClients({clients}: {clients: TopClient[]}) {
           >
           <User
             avatarProps={
-              {radius: "full", size: "lg", src: client.image? getImageUrl(client.image) : "" }
+              {className:"flex-shrink-0", radius: "full", size: "lg", src: client.image? getImageUrl(client.image) : "" }
             }
             classNames={{
               name: "font-semibold dark:font-normal hover:underline",

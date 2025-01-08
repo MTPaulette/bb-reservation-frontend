@@ -13,6 +13,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, User } from "@nextui-org/react";
 import { getImageUrl, getUsername } from "@/lib/utils";
 import Search from "@/components/Search";
+import { BbLogo } from "@/components/BbLogo";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -72,12 +73,7 @@ const Header = (props: {
           {/* <!-- Hamburger Toggle BTN --> */}
 
           <Link className="block flex-shrink-0 lg:hidden" href="/">
-            <Image
-              width={32}
-              height={32}
-              src={"/images/logo/logo-icon.svg"}
-              alt="Logo"
-            />
+            <BbLogo width={50} />
           </Link>
         </div>
 

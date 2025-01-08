@@ -16,7 +16,7 @@ const options: ApexOptions = {
     position: "top",
     horizontalAlign: "right",
   },
-  colors: ["#3C50E0", "#80CAEE"],
+  colors: ["#3C50E0", "#80CAEE", "#6577F3", "#8FD0EF", "#0FADCF", "#138591", "#262262", "#227bc0", "#5732eb", "#31eeee", "#878787"],
   chart: {
     fontFamily: "Satoshi, sans-serif",
     height: 335, //335,
@@ -139,11 +139,11 @@ export default function ChartOne({series}: {series: ChartType}) {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">{t_statistic("payment_per_month")}</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              {/* <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p> */}
             </div>
           </div>
         </div>
-        <div className="flex w-full max-w-45 justify-end">
+        {/* <div className="flex w-full max-w-45 justify-end">
           <div className="inline-flex items-center rounded-md bg-content2 p-1.5">
             <button className="rounded px-3 py-1 text-xs font-medium hover:shadow-card bg-background hover:bg-background">
               Day
@@ -155,7 +155,7 @@ export default function ChartOne({series}: {series: ChartType}) {
               Month
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div>

@@ -87,7 +87,7 @@ export default function ChartThree({data}: {data: any}) {
               </span>
             </div>
           </div>
-          <div>
+          {/* <div>
             <div className="relative z-20 inline-block">
               <select
                 name=""
@@ -105,13 +105,12 @@ export default function ChartThree({data}: {data: any}) {
                 <ChevronDownIcon fill="currentColor" size={10} />
               </span>
             </div>
-          </div>
+          </div> */}
           <div>
           </div>
         </div>
       </div>
 
-      {/* <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row gap-y-12 w-full justify-between items-center"> */}
       <div className="">
         <Title className="text-lg my-2 text-center">{data[selectedAgency].name}</Title>
         <div className="mb-2">

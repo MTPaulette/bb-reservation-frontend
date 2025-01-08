@@ -8,7 +8,7 @@ import TopClients from "./TopClients";
 import CardDataStats from "../DataStats/Card1";
 import { CalendarIcon, ChevronDownIcon, PeopleIcon, PlusIcon, ShoppingBagIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from 'next-intl';
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import Modal from "@/components/Modal";
 import NewReservation from "../FormElements/Reservation/New";
 import { CommonSkeleton } from "@/components/Skeletons";
@@ -34,6 +34,7 @@ export default function ECommerce() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [selectedStat, setSelectedStat] = useState<string>("Generals stat.");
+  const [period, setPeriod] = useState<string>("");
   const locale = useLocale();
   const t_error = useTranslations("InputError");
   const t_statistic = useTranslations("Statistic");
@@ -46,7 +47,7 @@ export default function ECommerce() {
 
   useEffect(() => {
     setError("");
-    getStatistics()
+    getStatistics(period)
       .then(async (res) => {
         if(res?.ok){
           setStatistics(await res.json());
@@ -78,7 +79,7 @@ export default function ECommerce() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [period]);
 
   const [showNewModal, setShowNewModal] = useState<boolean>(false);
   const t_table = useTranslations("Table");
@@ -123,24 +124,40 @@ export default function ECommerce() {
           )}
         </>
 
-        <div className="relative inline-block mb-3">
-          <select
-            onChange={(e) => {
-              setSelectedStat(e.target.value);
-            }}
-            name=""
-            id=""
-            className="relative inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 outline-none font-semibold text-foreground tracking-wider text-xl"
-          >
-            {availableStats.map((item) => (
-              <option key={item.uid} value={item.uid} className="dark:bg-boxdark">
-                {locale === "en" ? item.name_en: item.name_fr}
-              </option>
-            ))}
-          </select>
-          <span className="absolute right-3 top-1/2 z-1 -translate-y-1/2">
-            <ChevronDownIcon fill="currentColor" size={10} />
-          </span>
+        {/* selection des statistics globales a afficher */}
+        <div className="w-full flex justify-between items-center my-2">
+          <div className="relative inline-block mb-3">
+            <select
+              onChange={(e) => {
+                setSelectedStat(e.target.value);
+              }}
+              name=""
+              id=""
+              className="relative inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 outline-none font-semibold text-foreground tracking-wider text-xl"
+            >
+              {availableStats.map((item) => (
+                <option key={item.uid} value={item.uid} className="dark:bg-boxdark">
+                  {locale === "en" ? item.name_en: item.name_fr}
+                </option>
+              ))}
+            </select>
+            <span className="absolute right-3 top-1/2 z-1 -translate-y-1/2">
+              <ChevronDownIcon fill="currentColor" size={10} />
+            </span>
+          </div>
+          <div>
+            <Input
+              aria-label="define period"
+              type="date"
+              labelPlacement="outside"
+              classNames={{inputWrapper: "bg-input rounded-small"}}
+              className="w-full"
+              value={period}
+              onChange={
+                (e) => setPeriod(e.target.value)
+              }
+            />
+          </div>
         </div>
         {selectedStat == "Generals stat." ? (
         // <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">

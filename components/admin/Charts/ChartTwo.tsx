@@ -13,7 +13,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 const options: ApexOptions = {
-  colors: ["#80CAEE", "#3C50E0"],
+  colors: ["#80CAEE", "#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF", "#138591", "#262262", "#227bc0", "#5732eb", "#31eeee", "#878787"],
   chart: {
     fontFamily: "Satoshi, sans-serif",
     type: "bar",
@@ -94,7 +94,7 @@ export default function ChartTwo({series}: {series: ChartType}) {
         <div>
           <Title className="text-xl">{t_statistic("payment_revenue")}</Title>
         </div>
-        <div>
+        {/* <div>
           <div className="relative z-20 inline-block">
             <select
               name="#"
@@ -112,7 +112,7 @@ export default function ChartTwo({series}: {series: ChartType}) {
               <ChevronDownIcon fill="currentColor" size={10} />
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div>

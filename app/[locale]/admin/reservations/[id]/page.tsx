@@ -1,11 +1,11 @@
 import Breadcrumb from "@/components/admin/Breadcrumb";
 import { Metadata } from "next";
-import ViewRessource from "@/components/admin/View/Ressource";
+import ViewReservation from "@/components/admin/View/Reservation";
 
 export const metadata: Metadata = {
-  title: "Ressource",
+  title: "Reservation | BB-RESERVATION-SYST",
   description:
-    "See more about the ressource",
+    "See more about the reservation",
 };
 
 
@@ -14,8 +14,8 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <>
       <div className="mx-auto max-w-242.5">
-        <Breadcrumb pageName="ressource" />
-        <ViewRessource id={id} />
+        <Breadcrumb pageName="reservation" />
+        <ViewReservation id={id} />
       </div>
     </>
   );
