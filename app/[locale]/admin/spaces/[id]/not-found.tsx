@@ -2,13 +2,13 @@ import NotFound from '@/components/NotFound';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "404 Agency not found | BB-RESERVATION-SYST",
+  title: "404 Space not found | BB-RESERVATION-SYST",
   description:
-    "The Agency is not found ",
+    "The Space is not found ",
 };
 
 export default function NotFoundPage() {
   return (
-    <NotFound title="agency_not_found" />
+    <NotFound title="space_not_found" />
   );
 }

@@ -65,6 +65,7 @@
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
     "page_not_found": "Page not found",
     "staff_not_found": "Staff not found",
+    "client_not_found": "Client not found",
     "back": "Go back",
     "unauthenticated": "unauthenticated"
  },

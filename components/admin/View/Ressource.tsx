@@ -31,6 +31,7 @@ export default function ViewRessource({id}: {id: string}) {
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [notFoundStatus, setNotFoundStatus] = useState(false);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
   const t_error = useTranslations("InputError");
@@ -71,7 +72,8 @@ export default function ViewRessource({id}: {id: string}) {
               setError(t_error("acces_denied"));
               break;
             case 404:
-              setError(t_error("server_not_found"));
+              // setError(t_error("server_not_found"));
+              setNotFoundStatus(true);
               break;
             case 500:
               setError(t_error("something_wrong"));
@@ -88,7 +90,7 @@ export default function ViewRessource({id}: {id: string}) {
   }, []);
 
 
-  if (!response) {
+  if (notFoundStatus) {
     notFound();
   }
 

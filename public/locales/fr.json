@@ -53,9 +53,9 @@
     "user_not_found": "Utilisateur non trouvé",
     "role_not_found": "Role non trouvé",
     "server_not_found": "Elément non trouvé dans le serveur",
-    "agency_not_found": "Agence non trouvé",
+    "agency_not_found": "Agence non trouvée",
     "payment_not_found": "Paiement non trouvé",
-    "coupon_not_found": "Coupon de reduction non trouvé",
+    "coupon_not_found": "Coupon de réduction non trouvé",
     "characteristic_not_found": "caractérisque non trouvée",
     "space_not_found": "Espace non trouvé",
     "image_not_found": "Image non trouvée",
@@ -65,7 +65,8 @@
     "unauthenticated": "vous n'etes pas connecté",
     "description": "Veuillez reverifiez la barre d'adresse du navigateur ou utiliser le navigateur pour aller à une page connue.",
     "page_not_found": "Page non trouvée",
-    "staff_not_found": "Membre du staff  non trouvé",
+    "staff_not_found": "Membre du staff non trouvé",
+    "client_not_found": "Client non trouvé",
     "back": "Retour"
   },
   "Input": {

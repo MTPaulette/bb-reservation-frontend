@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react";
 import Image from "next/image";
 import { getStaffById } from '@/lib/action/admin/staff';
 import { notFound } from 'next/navigation';
@@ -10,7 +9,7 @@ import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize, formatDateTime, getImageUrl, getUsername } from "@/lib/utils";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Tabs, Tab, Avatar } from "@nextui-org/react";
-import { CalendarIcon, PeopleIcon, ShoppingBagIcon, VerticalDotsIcon } from "@/components/Icons";
+import { VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
 import EditStaff from "@/components/admin/FormElements/Staff/Edit";
@@ -31,9 +30,10 @@ export default function ViewStaff({id}: {id: string}) {
   const { data: session } = useSession();
   const authUserId = session?.user.id;
   const [loading, setLoading] = useState(true);
-  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [notFoundStatus, setNotFoundStatus] = useState(false);
   const [error, setError] = useState<string>("");
   const t = useTranslations("Profile");
   const locale = useLocale();
@@ -42,7 +42,7 @@ export default function ViewStaff({id}: {id: string}) {
   const t_tabs = useTranslations("Tabs");
   const t_alert = useTranslations("Alert");
   const t_statistic = useTranslations("Statistic");
-  const [selected, setSelected] = React.useState<string>("reservations");
+  const [selected, setSelected] = useState<string>("reservations");
   const [response, setResponse] = useState([]);
   
   const permissions = session?.permissions;
@@ -76,7 +76,8 @@ export default function ViewStaff({id}: {id: string}) {
               setError(t_error("acces_denied"));
               break;
             case 404:
-              setError(t_error("server_not_found"));
+              // setError(t_error("server_not_found"));
+              setNotFoundStatus(true);
               break;
             case 500:
               setError(t_error("something_wrong"));
@@ -93,10 +94,10 @@ export default function ViewStaff({id}: {id: string}) {
   }, []);
 
 
-  if (!response) {
+  // if (!response) {
+  if (notFoundStatus) {
     notFound();
   }
-
 
   return (
     <>

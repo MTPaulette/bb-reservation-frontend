@@ -28,6 +28,7 @@ export default function ViewSpace({id}: {id: string}) {
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [notFoundStatus, setNotFoundStatus] = useState(false);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
   const t_error = useTranslations("InputError");
@@ -63,7 +64,8 @@ export default function ViewSpace({id}: {id: string}) {
               setError(t_error("acces_denied"));
               break;
             case 404:
-              setError(t_error("server_not_found"));
+              // setError(t_error("server_not_found"));
+              setNotFoundStatus(true);
               break;
             case 500:
               setError(t_error("something_wrong"));
@@ -80,7 +82,8 @@ export default function ViewSpace({id}: {id: string}) {
   }, []);
 
 
-  if (!space) {
+  // if (!space) {
+  if (notFoundStatus) {
     notFound();
   }
 
@@ -150,17 +153,13 @@ export default function ViewSpace({id}: {id: string}) {
             </div>
             <p className="font-light text-justify my-8">
               {locale === "en" ? space.description_en: space.description_fr}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque posuere fermentum urna, eu condimentum mauris
-              tempus ut. Donec fermentum blandit aliquet. Etiam dictum
-              dapibus ultricies. Sed vel aliquet libero. Nunc a augue
-              fermentum, pharetra ligula sed, aliquam lacus.
             </p>
 
-            {/* characteristics */}
+            {/* characteristics 
+                className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"*/}
             <div>
               <Title
-                className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"
+                className="text-lg font-medium mb-5"
               >{capitalize(t_space("characteristics"))}</Title>
               <ul className="flex flex-wrap">
                   {space.characteristics.map((item) => (
@@ -174,7 +173,7 @@ export default function ViewSpace({id}: {id: string}) {
             {/* images */}
             <div className="my-10">
               <Title
-                className="text-lg font-medium mb-5 border-l-5 border-primary p-1 pl-4 bg-content2"
+                className="text-lg font-medium mb-5"
               >{capitalize(t_space("images"))}</Title>
               {space.images.length > 0 ? (
               <div className="flex flex-wrap items-center gap-2 lg:gap-4 xl:gap-6 w-full">
@@ -200,7 +199,7 @@ export default function ViewSpace({id}: {id: string}) {
             {/* stats */}
             <div>
               <Title
-                className="text-lg font-medium my-8 border-l-5 border-primary p-1 pl-4 bg-content2"
+                className="text-lg font-medium my-8"
               >{capitalize(t_table("some_stats"))}</Title>
             <div className="mt-4.5 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
               <CardDataStats title="Total views" total="$3.456K" rate="0.43%" levelUp>

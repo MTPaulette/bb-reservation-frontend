@@ -171,53 +171,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           route: `/${locale}/admin/calendar`,
           permissions: ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"]
         },
-        /*
-        {
-          icon: (
-            <TableIcon fill="none" size={18} />
-          ),
-          label: "Tables",
-          route: `/${locale}/admin/tables`,
-          permissions: null
-        },
-        {
-          icon: (
-            <FormIcon fill="none" size={18} />
-          ),
-          label: "Forms",
-          route: "#",
-          children: [
-            { label: "Form Elements", route: `/${locale}/admin/forms/form-elements` },
-            { label: "Form Layout", route: `/${locale}/admin/forms/form-layout` },
-          ],
-        },
-        {
-          icon: (
-            <TableIcon fill="none" size={18} />
-          ),
-          label: "Tables",
-          route: `/${locale}/admin/tables`,
-        },
-        {
-          icon: (
-            <SettingIcon fill="none" size={18} />
-          ),
-          label: t_sidebar("settings"),
-          route: "#",
-          children: [
-            {
-              label: t_sidebar("my_profile"),
-              route: `/${locale}/admin/settings?group=profile`,
-              permissions: null
-            },
-            {
-              label: t_sidebar("settings"),
-              route: `/${locale}/admin/settings?group=general`,
-              permissions: ["manage_options"]
-            },
-          ],
-          permissions: null //["view_dashboard"]
-        }, */
         {
           icon: (
             <SettingIcon fill="none" size={18} />
@@ -231,40 +184,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     {
       name: "OTHERS",
       menuItems: [
-        /*
-        {
-          icon: (
-            <ChartIcon fill="none" size={18} />
-          ),
-          label: "Chart",
-          route: `/${locale}/admin/chart`,
-          permissions: ["view_dashboard"]
-        },
-        {
-          icon: (
-            <UiIcon fill="none" size={18} />
-          ),
-          label: "UI Elements",
-          route: "#",
-          children: [
-            { label: "Alerts", route: `/${locale}/admin/ui/alerts` },
-            { label: "Buttons", route: `/${locale}/admin/ui/buttons` },
-          ],
-          permissions: ["view_dashboard"]
-        },
-        {
-          icon: (
-            <LogoutIcon fill="none" size={18} />
-          ),
-          label: "Authentication",
-          route: "#",
-          children: [
-            { label: "Sign In", route: `/${locale}/admin/auth/signin` },
-            { label: "Sign Up", route: `/${locale}/admin/auth/signup` },
-          ],
-          permissions: null
-        },
-        */
       ],
     },
   ];

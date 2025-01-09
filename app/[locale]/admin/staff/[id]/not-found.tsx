@@ -2,9 +2,9 @@ import NotFound from '@/components/NotFound';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "404 User not found | BB-RESERVATION-SYST",
+  title: "404 Staff not found | BB-RESERVATION-SYST",
   description:
-    "The User is not found ",
+    "The Staff is not found ",
 };
 
 export default function NotFoundPage() {

@@ -24,7 +24,6 @@ import Link from "next/link";
 import { columnsTabsClientCoupon } from "@/lib/data";
 import DefaultCouponTable from "../../Tables/DefaultCouponTable";
 import DefaultReservationTable from "../../Tables/DefaultReservationTable";
-import CardDataStats from "../../DataStats/Card1";
 
 export default function ViewClient({id}: {id: string}) {
   const { data: session } = useSession();
@@ -33,6 +32,7 @@ export default function ViewClient({id}: {id: string}) {
   const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+  const [notFoundStatus, setNotFoundStatus] = useState(false);
   const [error, setError] = useState<string>("");
   const t = useTranslations("Profile");
   const locale = useLocale();
@@ -73,7 +73,8 @@ export default function ViewClient({id}: {id: string}) {
               setError(t_error("acces_denied"));
               break;
             case 404:
-              setError(t_error("server_not_found"));
+              // setError(t_error("server_not_found"));
+              setNotFoundStatus(true);
               break;
             case 500:
               setError(t_error("something_wrong"));
@@ -90,7 +91,7 @@ export default function ViewClient({id}: {id: string}) {
   }, []);
 
 
-  if (!response) {
+  if (notFoundStatus) {
     notFound();
   }
 

@@ -34,6 +34,7 @@ export default function ViewAgency({id}: {id: string}) {
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [notFoundStatus, setNotFoundStatus] = useState(false);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
   const t_error = useTranslations("InputError");
@@ -73,7 +74,8 @@ export default function ViewAgency({id}: {id: string}) {
               setError(t_error("acces_denied"));
               break;
             case 404:
-              setError(t_error("server_not_found"));
+              // setError(t_error("server_not_found"));
+              setNotFoundStatus(true);
               break;
             case 500:
               setError(t_error("something_wrong"));
@@ -90,7 +92,8 @@ export default function ViewAgency({id}: {id: string}) {
   }, []);
 
 
-  if (!response) {
+  // if (!response) {
+  if (notFoundStatus) {
     notFound();
   }
 
