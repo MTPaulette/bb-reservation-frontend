@@ -44,6 +44,9 @@ export default function EmailSettings () {
       setLoading(false);
       if(res?.ok) {
         setSuccess(t("update_options_success_msg"));
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         const status = res.status;
         switch(status) {
@@ -154,6 +157,7 @@ export default function EmailSettings () {
               }}
             />
             <Input
+              isDisabled
               label={t("email_protocol")}
               labelPlacement="outside"
               type="text"

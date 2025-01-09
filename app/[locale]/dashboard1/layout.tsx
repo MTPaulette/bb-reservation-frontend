@@ -1,5 +1,5 @@
-import SessionProviderWrapper from "@/components/layout/SessionProviderWrapper";
-import BaseLayout from "@/components/layout/BaseLayout";
+import SessionProviderWrapper from "@/components/Layout/SessionProviderWrapper";
+import BaseLayout from "@/components/Layout/BaseLayout";
 import { routing } from "@/i18n/routing";
 import Sidebar from "@/components/dashboard1/Sidebar";
 import Footer from "@/components/admin/Footer";

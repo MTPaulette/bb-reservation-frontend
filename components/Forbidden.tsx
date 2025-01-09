@@ -6,7 +6,7 @@ import Title from '@/components/Title';
 import Head from 'next/head';
 
 export default function ForbiddenComponent() {
-  const t = useTranslations("NotFoundPage");
+  const t = useTranslations("NotFound");
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-2">

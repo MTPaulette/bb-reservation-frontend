@@ -122,8 +122,8 @@ export type LogType = {
   ip: string;
   agent: string;
   user_id: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   firstname: string;
   lastname: string;
 }
@@ -146,8 +146,8 @@ export type ImageType = ({
   id: number;
   src: string;
   space_id: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 })
 
 export type SpaceType = {
@@ -180,8 +180,8 @@ export type RessourceType = {
   agency_id: number;
   space_id: number;
   created_by: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
   agency: string;
   space: string;
   nb_place: number;
@@ -213,15 +213,15 @@ export type CouponType = {
   code: string;
   total_usage: number;
   status: string;
-  expired_on: Date;
+  expired_on: string;
   percent: number | undefined;
   amount: number | undefined;
   note_en: string;
   note_fr: string;
   is_public: boolean;
   created_by: CreatedByType;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export type CreatedByType = {
@@ -267,8 +267,8 @@ export type ReservationType = {
   id:           number;
   ressource_id: number;
   client_id:    number;
-  start_date:   Date;
-  end_date:     Date;
+  start_date:   string;
+  end_date:     string;
   start_hour:   string;
   end_hour:     string;
   state:        string;
@@ -280,8 +280,8 @@ export type ReservationType = {
   created_by:   CreatedByType;
   cancelled_by: string | undefined;
   cancelled_at: string | undefined;
-  created_at:   Date;
-  updated_at:   Date;
+  created_at:   string;
+  updated_at:   string;
   ressource:    RessourceType_2;
   client:       CreatedByType;
   coupon:       SampleCouponType | undefined;
@@ -299,8 +299,8 @@ export type RessourceType_2 = {
   agency_id:    number;
   space_id:     number;
   created_by:   number;
-  created_at:   Date;
-  updated_at:   Date;
+  created_at:   string;
+  updated_at:   string;
   space:        SampleAgencyType;
   agency:       SampleAgencyType;
 }
@@ -338,8 +338,8 @@ export type PaymentType = {
   bill_number:    string | undefined;
   reservation_id: number;
   processed_by:   CreatedByType;
-  created_at:     Date;
-  updated_at:     Date;
+  created_at:     string;
+  updated_at:     string;
 }
 
 export type PaymentFormType = {
@@ -364,7 +364,7 @@ export type TopClient = {
   firstname:                string;
   lastname:                 string;
   email:                    string;
-  email_verified_at:        Date;
+  email_verified_at:        string;
   phonenumber:              null;
   image:                    null;
   status:                   string;
@@ -375,8 +375,8 @@ export type TopClient = {
   created_by:               number;
   suspended_by:             null;
   suspended_at:             null;
-  created_at:               Date;
-  updated_at:               Date;
+  created_at:               string;
+  updated_at:               string;
   work_at:                  null;
   reservations_count:       number;
   reservations:             ReservationType[];
@@ -386,8 +386,8 @@ export type CurrentReservation = {
   id:                      number;
   ressource_id:            number;
   client_id:               number;
-  start_date:              Date;
-  end_date:                Date;
+  start_date:              string;
+  end_date:                string;
   start_hour:              string;
   end_hour:                string;
   initial_amount:          number;
@@ -399,8 +399,8 @@ export type CurrentReservation = {
   created_by:              number;
   cancelled_by:            number | null;
   cancelled_at:            Date | null;
-  created_at:              Date;
-  updated_at:              Date;
+  created_at:              string;
+  updated_at:              string;
   client:                  CreatedByType;
   ressource:               RessourceType_2;
 }

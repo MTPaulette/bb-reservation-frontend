@@ -174,6 +174,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         /*
         {
           icon: (
+            <TableIcon fill="none" size={18} />
+          ),
+          label: "Tables",
+          route: `/${locale}/admin/tables`,
+          permissions: null
+        },
+        {
+          icon: (
             <FormIcon fill="none" size={18} />
           ),
           label: "Forms",

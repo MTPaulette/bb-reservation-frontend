@@ -107,7 +107,7 @@ export default function ECommerce() {
         {error != "" ? (
           <Alert color="danger" message={error} />
         ) : null}
-        {/* <!-- new purchase --> */}
+        {/* <!-- new reservation --> */}
         <>
           {new_reservation_permissions.some(permission =>
           permissions.includes(permission)) && (

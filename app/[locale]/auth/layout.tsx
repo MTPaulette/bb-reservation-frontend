@@ -1,6 +1,6 @@
 import Footer from "@/components/admin/Footer";
 import { BbLogo } from "@/components/BbLogo";
-import BaseLayout from '@/components/layout/BaseLayout';
+import BaseLayout from '@/components/Layout/BaseLayout';
 import { routing } from "@/i18n/routing";
 
 export default function AuthLayout({

@@ -15,7 +15,6 @@ import { EventType, RessourceDefaultType } from "@/lib/definitions";
 import RessourceCard from "./RessourceCard";
 import SelectFilter from "./SelectFilter";
 import Calendar from "./Calendar";
-import RessourcesWrapper from "./RessourcesWrapper";
 import Alert from "../Alert";
 
 export default function Reservations() {
@@ -190,8 +189,6 @@ export default function Reservations() {
                 </label>
               </div>
             </div>
-              {/* <Pagination totalPages={8} /> */}
-            {/* <RessourcesWrapper /> */}
           </>
         )}
         </>

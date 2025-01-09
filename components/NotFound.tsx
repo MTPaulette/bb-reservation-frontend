@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Title from './Title';
 
 export default function NotFound({title}: {title: string}) {
-  const t = useTranslations("NotFoundPage");
+  const t = useTranslations("InputError");
   const router = useRouter();
   return (
     <div className="flex h-full flex-col items-center justify-center gap-2">

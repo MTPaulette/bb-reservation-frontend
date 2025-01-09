@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -8,15 +8,19 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import frLocale from "@fullcalendar/core/locales/fr";
+import enLocale from "@fullcalendar/core/locales/en-gb";
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { useLocale, useTranslations } from 'next-intl';
-import { getCalendar } from "@/lib/action/admin/reservations";
+import { getCalendar, getReservationById } from "@/lib/action/admin/reservations";
 import { signOut, useSession } from "next-auth/react";
 import { notFound, redirect } from "next/navigation";
 import { CommonSkeleton } from "../Skeletons";
-import { Chip, ChipProps, Select, SelectItem } from "@nextui-org/react";
-import { EventType } from "@/lib/definitions";
+import { Button, Chip, ChipProps, Link, Select, SelectItem } from "@nextui-org/react";
+import { EventType, ReservationType } from "@/lib/definitions";
+import { ReservationCard } from "../Card/Reservation";
+import NewReservation from "./FormElements/Reservation/New";
+import Loader from "./Common/Loader";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   pending: "warning",
@@ -31,7 +35,7 @@ const renderEventContent = (eventInfo: any) => {
     <>
       <div className="flex w-full flex-col rounded-sm border-l-[3px] border-primary bg-default bg-opacity-30 dark:bg-opacity-80 p-1 text-left">
         <span className="event-name text-sm font-semibold text-foreground truncate">
-        {eventInfo.event.title}
+          {eventInfo.event.title}
         </span>
         <span className="time text-sm font-medium text-foreground">
           {eventInfo.timeText}
@@ -60,25 +64,76 @@ const renderEventContent = (eventInfo: any) => {
 
 export default function Calendar() {
   const t_alert = useTranslations("Alert");
+  const t_table = useTranslations("Table");
   const t_error = useTranslations("InputError");
-  const [showModal, setShowModal] = React.useState<boolean>(false);
-  const [selectedCell, setSelectedCell] = React.useState<any>();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showReservationModal, setShowReservationModal] = useState<boolean>(false);
+  // const [selectedCell, setSelectedCell] = useState<any>();
   const [reservations, setReservations] = useState<EventType[]>([]);
   const [filteredReservations, setFilteredReservations] = useState<EventType[]>([]);
-  const [agencyFilter, setAgencyFilter] = React.useState<string>("all");
+  const [agencyFilter, setAgencyFilter] = useState<string>("all");
   const locale = useLocale();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [reservation, setReservation] = useState<ReservationType>();
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
   const requiredPermissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
 
+  const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
+  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
+
   const clickOnCell = (info: any) => {
-    console.log("clicked on: ");
-    console.log(info);
-    setSelectedCell(info.dateStr);
-    setShowModal(true);
+    console.log("date click on: ");
+    // console.log(info);
+    // setSelectedCell(info.dateStr);
+    if(
+      new_reservation_permissions.some(permission =>
+      permissions.includes(permission))
+    ) {
+      setShowModal(true);
+    }
+  }
+
+  const handleEventClick = (info: any) => {
+    console.log("event click on ===============: ");
+    const id = info.event.extendedProps.reservation_id;
+    setError("");
+    getReservationById(Number(id))
+      .then(async (res) => {
+        if(res?.ok){
+          const response = await res.json();
+          setReservation(response.reservation);
+          setLoading(false);
+        }else {
+          const status = res.status;
+          switch(status) {
+            case 401:
+              setError(t_error("unauthenticated"));
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+              break;
+            case 403:
+              setError(t_error("acces_denied"));
+              break;
+            case 404:
+              setError(t_error("server_not_found"));
+              break;
+            case 500:
+              setError(t_error("something_wrong"));
+              break;
+            default:
+              break;
+          }
+        }
+      })
+      .catch(error => {
+        setError(t_error("something_wrong"));
+        console.error(error);
+      });
+      setShowReservationModal(true);
   }
 
   useEffect(() => {
@@ -183,7 +238,7 @@ export default function Calendar() {
             <div className="bg-background rounded-small mt-7 p-4 md:p-5 relative">
               <FullCalendar
                 dateClick={clickOnCell}
-                locale={frLocale}
+                locale={locale == "en" ? enLocale : frLocale}
                 plugins={[
                   dayGridPlugin,
                   timeGridPlugin,
@@ -192,7 +247,8 @@ export default function Calendar() {
                 // events={reservation3}
                 events={filteredReservations}
                 eventContent={renderEventContent}
-                initialView="dayGridMonth"
+                eventClick={handleEventClick}
+                initialView="timeGridDay"
                 headerToolbar={{
                   left: "dayGridMonth,timeGridWeek,timeGridDay",
                   center: "title",
@@ -215,12 +271,41 @@ export default function Calendar() {
             <div>
               <Modal
                 open={showModal} close={() => setShowModal(false)}
-                title="Etat des réservations"
+                title=""
               >
-                {selectedCell} <br />
-                Lorem ipsum dolor sit, amet consectetur adipisic
-                ing elit. Possimus nulla ex sunt earum nesciunt ducimus error! Libero eligendi quis cumque saepe autem eveniet eiu
-                s temporibus, perferendis, doloremque pariatur nihil aliquam.
+                <NewReservation />
+              </Modal>
+            </div>
+
+            {/* reservation details */}
+            <div>
+              <Modal
+                open={showReservationModal} close={() => setShowReservationModal(false)}
+                title=""
+              >
+                {!reservation ? <Loader /> : (
+                  <>
+                    <ReservationCard reservation={reservation} />
+                    <div
+                      className={
+                        view_reservation_permissions.some(permission =>
+                        permissions.includes(permission)) ? "w-full block mb-4" : "hidden"
+                      }
+                    >
+                      <Link
+                        href={`/${locale}/admin/reservations/${reservation.id}`}
+                        className="hover:no-underline w-full"
+                      >
+                        <Button
+                          color="primary"
+                          className="w-full uppercase truncate fomt-medium"
+                        >
+                          {t_table("view")}
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
+                )}
               </Modal>
             </div>
           </>
@@ -233,3 +318,4 @@ export default function Calendar() {
     </>
   );
 }
+

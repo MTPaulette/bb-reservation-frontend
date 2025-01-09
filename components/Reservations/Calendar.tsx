@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -8,6 +8,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import frLocale from "@fullcalendar/core/locales/fr";
+import enLocale from "@fullcalendar/core/locales/en-gb";
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { useLocale, useTranslations } from 'next-intl';
@@ -34,10 +35,10 @@ const renderEventContent = (eventInfo: any) => {
 
 export default function Calendar({ events }: { events: EventType[] }) {
   const t_alert = useTranslations("Alert");
-  const [showModal, setShowModal] = React.useState<boolean>(false);
-  const [selectedCell, setSelectedCell] = React.useState<any>();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedCell, setSelectedCell] = useState<any>();
   const [filteredEvents, setFilteredEvents] = useState<EventType[]>(events);
-  const [agencyFilter, setAgencyFilter] = React.useState<string>("all");
+  const [agencyFilter, setAgencyFilter] = useState<string>("all");
   const locale = useLocale();
 
 
@@ -90,7 +91,7 @@ export default function Calendar({ events }: { events: EventType[] }) {
     <div className="bg-background rounded-small mt-7 p-4 md:p-5 relative">
       <FullCalendar
         dateClick={clickOnCell}
-        locale={frLocale}
+        locale={locale == "en" ? enLocale : frLocale}
         plugins={[
           dayGridPlugin,
           timeGridPlugin,
@@ -99,11 +100,10 @@ export default function Calendar({ events }: { events: EventType[] }) {
         // events={event3}
         events={filteredEvents}
         eventContent={renderEventContent}
-        initialView="dayGridMonth"
+        initialView="timeGridDay"
         headerToolbar={{
           left: "dayGridMonth,timeGridWeek,timeGridDay",
           center: "title",
-          // right: "prevYear,prev,next,nextYear today",
           right: "prev,next today",
         }}
         nowIndicator={true}

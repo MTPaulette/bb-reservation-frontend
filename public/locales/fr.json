@@ -32,7 +32,8 @@
     "no_ressource": "Aucune ressource",
     "no_reservation": "Aucune réservation",
     "no_image": "Aucune image",
-    "no_cancelled_reservation": "Aucune réservation annulée"
+    "no_cancelled_reservation": "Aucune réservation annulée",
+    "reservation_not_totally_paid_warning": "Nous vous rappelons que le paiement n'etant pas total, le client devra payer avant le début de l'heure de la réservation. De plus, si les 50% de la réservation n'ont pas été versés, rien ne garantit que la ressource soit disponible en agence."
   },
   "Default": {
     "sits": "places assises"
@@ -61,7 +62,11 @@
     "ressource_not_found": "Ressource non trouvée",
     "reservation_not_found": "Réservation non trouvée",
     "permissions_not_found": "Permissions non trouvées",
-    "unauthenticated": "vous n'etes pas connecté"
+    "unauthenticated": "vous n'etes pas connecté",
+    "description": "Veuillez reverifiez la barre d'adresse du navigateur ou utiliser le navigateur pour aller à une page connue.",
+    "page_not_found": "Page non trouvée",
+    "staff_not_found": "Membre du staff  non trouvé",
+    "back": "Retour"
   },
   "Input": {
     "register": "S'inscrire",
@@ -270,7 +275,7 @@
   "Modal": {
     "close": "Fermer"
   },
-  "NotFoundPage": {
+  "NotFound": {
     "description": "Veuillez reverifiez la barre d'adresse du navigateur ou utiliser le navigateur pour aller à une page connue.",
     "page_not_found": "Page non trouvée",
     "staff_not_found": "Membre du staff  non trouvé",
@@ -476,7 +481,45 @@
     "confirm_reservation_btn": "Confirmer réservation",
     "client_informations": "Informations du client",
     "ressource_informations": "Informations sur la ressource",
+    "payment_informations": "Informations sur les paiements",
     "transaction_informations": "Informations sur la transaction",
+    "reservation_informations": "Informations sur la réservation",
     "confirm_reservation": "Veuillez, cliquer sur le bounton en dessous pour valider la réservation. Sinon elle sera annulée dans les prochaines minutes."
+  },
+  "Coupon": {
+    "discount_coupon": "Coupon de réduction",
+    "name": "Nom",
+    "code": "Code",
+    "amount": "Montant",
+    "percent": "Pourcentage",
+    "type": "Type",
+    "coupon_usage": "Usage du coupon",
+    "total_usage": "Usage total",
+    "expired_on": "Expire le"
+  },
+  "Payment": {
+    "payment_details": "Détails sur le paiement",
+    "amount": "Montant",
+    "transaction_id":"Transaction ID",
+    "bill_number":"Numéro de la facture",
+    "staff": "Staff",
+    "payment_method": "Méthode de paiement",
+    "at": "Le"
+  },
+  "Reservation": {
+    "id": "Réservation ID",
+    "state": "Etat",
+    "total_amount": "Montant total",
+    "amount_due": "Montant restant à payer",
+    "agency": "Agence",
+    "date": "Date",
+    "start": "Début",
+    "end": "Fin",
+    "hour": "Heure",
+    "staff": "Staff",
+    "created_by": "Crée par",
+    "cancelled_by": "Annulée par",
+    "at": "Le",
+    "reason_for_cancellation": "Raison"
   }
 }
