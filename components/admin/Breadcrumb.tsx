@@ -19,7 +19,7 @@ const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
       <nav>
         <ol className="flex items-center gap-2">
           <li>
-            <Link className="font-medium text-foreground/50" href={`/${locale}`}>
+            <Link className="font-medium text-foreground/50" href={`/${locale}/admin`}>
               { capitalize(t("dashboard")) } /
             </Link>
           </li>

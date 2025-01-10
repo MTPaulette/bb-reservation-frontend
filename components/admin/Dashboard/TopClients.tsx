@@ -17,7 +17,7 @@ export default function TopClients({clients}: {clients: TopClient[]}) {
       <div>
         {clients.map((client, key) => (
           <Link
-            href={`/${locale}/admin/staff/${client.id}`}
+            href={`/${locale}/admin/clients/${client.id}`}
             className="w-full flex justify-between items-center py-2 hover:bg-content2/80 hover:!no-underline"
             key={key}
           >

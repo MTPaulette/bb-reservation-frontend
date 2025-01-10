@@ -1,20 +1,19 @@
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import Title from "@/components/Title";
 import { ChevronDownIcon } from "@/components/Icons";
 import { ChartType } from "@/lib/definitions";
 import { useTranslations } from 'next-intl';
+import moment from "moment";
 
 const options: ApexOptions = (labels: string[]) => {
   return {
-  // const options: ApexOptions = {
   chart: {
     fontFamily: "Satoshi, sans-serif",
     type: "donut",
   },
   colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF", "#138591", "#262262", "#227bc0", "#5732eb", "#31eeee", "#878787"],
-  // labels: ["Desktop", "Tablet", "Mobile", "Unknown"],
   labels: labels,
   legend: {
     show: true,
@@ -53,19 +52,25 @@ const options: ApexOptions = (labels: string[]) => {
   }
 };
 
-export default function ChartThree({data}: {data: any}) {
-  const [selectedAgency, setSelectedAgency] = React.useState<number|string>(0);
+export default function ChartThree({data, period}: {data: any, period: string}) {
+  const [selectedAgency, setSelectedAgency] = useState<number|string>(0);
   const t_statistic = useTranslations("Statistic");
+    const year = period != "" ? moment(period).year() : moment().year();
 
   return (
     <div className="col-span-12 rounded-sm border border-divider bg-background px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5">
       <div className="mb-3 justify-between gap-x-4 sm:flex lg:block">
-        <div>
-          <Title className="mb-1.5 text-xl">{t_statistic("ressource_with_reservations")}</Title>
-          <p className="text-foreground/60 font-med font-medium mb-6">{t_statistic("ressource_with_reservations_description")}</p>
+        <div className="mb-6">
+          <Title className="text-xl">{t_statistic("ressource_with_reservations")}</Title>
+          <p className="text-foreground/60 font-medium mt-2 leading-none">
+            {t_statistic("ressource_with_reservations_description")}
+          </p>
+          <p className="text-foreground/60 font-medium mt-1 leading-none">
+            {t_statistic("year")}:
+            <span className="font-medium text-sm text-foreground ml-2">{year}</span>
+          </p>
         </div>
         <div className="flex gap-x-2">
-          {/* {selectedAgency} */}
           <div>
             <div className="relative z-20 inline-block">
               <select

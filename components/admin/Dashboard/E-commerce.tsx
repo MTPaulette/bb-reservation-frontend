@@ -162,36 +162,46 @@ export default function ECommerce() {
         {selectedStat == "Generals stat." ? (
         // <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <div className="flex flex-wrap justify-between items-center gap-4 md:gap-5">
-          <CardDataStats3
-            title={t_statistic("best_agency")}
-            subtitle={t_statistic("reservations")}
-            value={statistics.bestAgency.name}
-            total={statistics.bestAgency.reservations_count}
-          />
-          <CardDataStats3
-            title={t_statistic("most_ressource_agency")}
-            subtitle={t_statistic("ressources")}
-            value={statistics.agencyWithMostRessources.name}
-            total={statistics.agencyWithMostRessources.ressources_count}
-          />
-          <CardDataStats3
-            title={t_statistic("best_staff")}
-            subtitle={t_statistic("created_reservations")}
-            value={getUsername(statistics.bestStaff.lastname, statistics.bestStaff.firstname)}
-            total={statistics.bestStaff.created_reservations_count}
-          />
-          <CardDataStats3
-            title={t_statistic("best_client")}
-            subtitle={t_statistic("reservations")}
-            value={getUsername(statistics.bestClient.lastname, statistics.bestClient.firstname)}
-            total={statistics.bestClient.reservations_count}
-          />
-          <CardDataStats3
-            title={t_statistic("best_ressource")}
-            subtitle={t_statistic("reservations")}
-            value={statistics.bestRessource.space.name}
-            total={statistics.bestRessource.reservations_count}
-          />
+          {statistics.bestAgency != null ? (
+            <CardDataStats3
+              title={t_statistic("best_agency")}
+              subtitle={t_statistic("reservations")}
+              value={statistics.bestAgency.name}
+              total={statistics.bestAgency.reservations_count}
+            />
+          ) : null}
+          {statistics.agencyWithMostRessources != null ? (
+            <CardDataStats3
+              title={t_statistic("most_ressource_agency")}
+              subtitle={t_statistic("ressources")}
+              value={statistics.agencyWithMostRessources.name}
+              total={statistics.agencyWithMostRessources.ressources_count}
+            />
+          ) : null}
+          {statistics.bestStaff != null ? (
+            <CardDataStats3
+              title={t_statistic("best_staff")}
+              subtitle={t_statistic("created_reservations")}
+              value={getUsername(statistics.bestStaff.lastname, statistics.bestStaff.firstname)}
+              total={statistics.bestStaff.created_reservations_count}
+            />
+          ) : null}
+          {statistics.bestClient != null ? (
+            <CardDataStats3
+              title={t_statistic("best_client")}
+              subtitle={t_statistic("reservations")}
+              value={getUsername(statistics.bestClient.lastname, statistics.bestClient.firstname)}
+              total={statistics.bestClient.reservations_count}
+            />
+          ) : null}
+          {statistics.bestRessource != null ? (
+            <CardDataStats3
+              title={t_statistic("best_ressource")}
+              subtitle={t_statistic("reservations")}
+              value={statistics.bestRessource.space.name}
+              total={statistics.bestRessource.reservations_count}
+            />
+          ) : null}
           {statistics.bestMonth != null ? (
             <CardDataStats3
               title={t_statistic("best_month")}
@@ -243,19 +253,29 @@ export default function ECommerce() {
         ) : null}
 
         <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-          <div className="col-span-12">
-            <CurrentReservations reservations={statistics.currentReservations} />
-          </div>
+          {statistics.currentReservations != null ? (
+            <div className="col-span-12">
+              <CurrentReservations reservations={statistics.currentReservations} />
+            </div>
+          ) : null}
           {/* payment par mois sur un an pour chaque agence /> */}
-          <ChartOne series={statistics.agency_with_payments_per_month} />
+          {statistics.agency_with_payments_per_month != null ? (
+            <ChartOne series={statistics.agency_with_payments_per_month} period={period} />
+          ) : null}
           {/* comparaison payment revenu de la semain en cours /> */}
-          <ChartTwo series={statistics.payment_revenu_of_current_week} />
+          {statistics.payment_revenu_of_current_week != null ? (
+            <ChartTwo series={statistics.payment_revenu_of_current_week} period={period} />
+          ) : null}
           {/* ressource avec les reservations/> */}
-          <ChartThree data={statistics.ressource_with_reservations} />
+          {statistics.ressource_with_reservations != null ? (
+            <ChartThree data={statistics.ressource_with_reservations} period={period} />
+          ) : null}
           <MapOne title={t_statistic("map")} />
-          <div className="col-span-12">
-            <TopClients clients={statistics.topClients} />
-          </div>
+          {statistics.topClients != null ? (
+            <div className="col-span-12">
+              <TopClients clients={statistics.topClients} />
+            </div>
+          ) : null}
         </div>
 
         <div>

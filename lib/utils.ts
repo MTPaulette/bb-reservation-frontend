@@ -1,6 +1,6 @@
 import { getSession, getCsrfToken } from "next-auth/react";
-import moment from 'moment';
 import * as crypto from 'crypto';
+import moment from 'moment';
 
 
 export const getToken = async () => {
@@ -59,15 +59,24 @@ export const getImageUrl = (link : string) => {
 
 export const formatDateTime = (dateTime: moment.MomentInput, lang = 'fr') => {
   moment.locale(lang);
-  const now = moment();
+  moment.localeData();
+  const now = moment(); //moment().utcOffset(120);  definir le fuseau horaire sur GMT+1 : 60min = 1h
   const diff = now.diff(dateTime, 'days');
   if (diff > 7) {
-    // return `${moment(dateTime).format('DD/MM/YYYY')} à ${moment(dateTime).format('HH:mm')}`;
     return `${moment(dateTime).format('D MMM YYYY')}  ${moment(dateTime).format('HH:mm')}`;
   } else {
     return `${moment(dateTime).fromNow()}`;
   }
-};
+}
+
+export const startAndEndOfWeek = (date: moment.MomentInput) => {
+  const startOfWeek = moment(date).startOf('week').format('DD.MM.YYYY');
+  const endOfWeek = moment(date).endOf('week').format('DD.MM.YYYY');
+
+  return {
+    startOfWeek, endOfWeek
+  }
+}
 
 
 const encryptionKey = process.env.ENCRYPTION_KEY;

@@ -5,6 +5,9 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { ChartType } from "@/lib/definitions";
 import { useTranslations } from 'next-intl';
+import { startAndEndOfWeek } from "@/lib/utils";
+import moment from "moment";
+import Title from "@/components/Title";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -124,38 +127,21 @@ const options: ApexOptions = {
 };
 
 
-// const ChartOne: React.FC = () => {
-
-export default function ChartOne({series}: {series: ChartType}) {
+export default function ChartOne({series, period}: {series: ChartType, period: string}) {
   const t_statistic = useTranslations("Statistic");
+  const year = period != "" ? moment(period).year() : moment().year();
 
   return (
     <div className="col-span-12 rounded-sm border border-divider bg-background px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-8">
-      <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-        <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          <div className="flex min-w-47.5">
-            <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-            </span>
-            <div className="w-full">
-              <p className="font-semibold text-primary">{t_statistic("payment_per_month")}</p>
-              {/* <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p> */}
-            </div>
-          </div>
-        </div>
-        {/* <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-content2 p-1.5">
-            <button className="rounded px-3 py-1 text-xs font-medium hover:shadow-card bg-background hover:bg-background">
-              Day
-            </button>
-            <button className="rounded px-3 py-1 text-xs font-medium hover:shadow-card bg-transparent hover:bg-background">
-              Week
-            </button>
-            <button className="rounded px-3 py-1 text-xs font-medium hover:shadow-card bg-transparent hover:bg-background">
-              Month
-            </button>
-          </div>
-        </div> */}
+      <div className="mb-4">
+        <Title className="text-xl">{t_statistic("payment_per_month")}</Title>
+        <p className="text-foreground/60 font-medium mt-2 leading-none">
+          {t_statistic("payment_per_month_description")}
+        </p>
+        <p className="text-foreground/60 font-medium mt-1 leading-none">
+          {t_statistic("year")}:
+          <span className="font-medium text-sm text-foreground ml-2">{year}</span>
+        </p>
       </div>
 
       <div>

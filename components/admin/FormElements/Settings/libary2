@@ -196,3 +196,15 @@ const Reservations = ({ reservations }) => {
     </div>
   );
 };
+
+=================================
+jsx
+import moment from 'moment';
+
+const date = moment('2023-03-15'); // Date précise
+
+const debutSemaine = date.startOf('week'); // Début de la semaine
+const finSemaine = date.endOf('week'); // Fin de la semaine
+
+console.log(debutSemaine.format('YYYY-MM-DD')); // Affiche la date de début de la semaine
+console.log(finSemaine.format('YYYY-MM-DD')); // Affiche la date de fin de la semaine
