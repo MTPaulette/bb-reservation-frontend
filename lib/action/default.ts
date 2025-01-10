@@ -18,3 +18,12 @@ export async function getCalendar() {
   })
   return response;
 }
+
+export async function getAgencies() {
+  const response = await fetch(`${api_url}/agencies`, {
+    method: "GET",
+    headers: await headerOptions()
+  })
+  return response;
+}
+

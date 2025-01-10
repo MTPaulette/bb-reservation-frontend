@@ -14,7 +14,7 @@ import { SearchIcon, ChevronDownIcon, EyeIcon } from "@/components/Icons";
 import { capitalize, getUsername, formatCurrency, formatDateTime } from "@/lib/utils";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
-import { columnsTabsReservation as columns, statusReservation as statusOptions } from "@/lib/data";
+import { columnsTabsReservation as columns, statusReservationTable as statusOptions } from "@/lib/data";
 import { useSession } from 'next-auth/react';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {

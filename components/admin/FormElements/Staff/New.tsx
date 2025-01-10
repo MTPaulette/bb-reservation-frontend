@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Input, Select, SelectItem} from "@nextui-org/react";
 import { EnvelopIcon, EyeIcon, EyeSlashIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
@@ -9,9 +9,10 @@ import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { agencies, roles } from "@/lib/data";
+import { roles } from "@/lib/data";
 import { UserFormType } from "@/lib/definitions";
 import { createStaff } from "@/lib/action/admin/staff";
+import { getAgencies } from "@/lib/action/default";
 
 export default function NewStaff() {
   const t = useTranslations("Input");
@@ -40,6 +41,24 @@ export default function NewStaff() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+  const [agencies, setAgencies] = useState([]);
+
+
+  useEffect(() => {
+    setError("");
+    getAgencies()
+      .then(async (res) => {
+        if(res?.ok){
+          setAgencies(await res.json());
+        }else {
+          setError(t_error("something_wrong"));
+        }
+      })
+      .catch(error => {
+        setError(t_error("something_wrong"));
+        console.error(error);
+      });
+  }, []);
 
   const {
     register,

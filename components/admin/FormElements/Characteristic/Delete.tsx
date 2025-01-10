@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
 import { deleteCharacteristic } from "@/lib/action/admin/characteristics";
@@ -16,6 +16,7 @@ import Title from "@/components/Title";
 export default function DeleteCharacteristic({ id }: { id: number} ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
+    const locale = useLocale();
 
   const schema: ZodType<ConfirmPasswordType> = z
     .object({
@@ -57,7 +58,11 @@ export default function DeleteCharacteristic({ id }: { id: number} ) {
             break;
           case 422:
             const err = await res.json();
-            setError(err.password? t_error("wrongPassword"): "")
+            if(err.errors.en){
+              setError(locale === "en" ? err.errors.en : err.errors.fr);
+            } else {
+              setError(JSON.stringify(err));
+            }
             break;
           case 403:
             setError(t_error("acces_denied"));

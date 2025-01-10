@@ -73,6 +73,13 @@ export const statusReservation = [
   {name_en: "Cancelled", name_fr: "Annulée", uid: "cancelled"},
 ];
 
+export const statusReservationTable = [
+  {name_en: "Pending", name_fr: "Sollicitée", uid: "pending"},
+  {name_en: "Partially paid", name_fr: "Partiellement payée", uid: "partially paid"},
+  {name_en: "Confirmed", name_fr: "Confirmée", uid: "confirmed"},
+  {name_en: "Totally Paid", name_fr: "Totalement payée", uid: "totally paid"},
+  {name_en: "Cancelled", name_fr: "Annulée", uid: "cancelled"},
+];
 
 // export const statusOptions = [
 //   {name: "Active", uid: "active"},

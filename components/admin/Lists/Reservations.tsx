@@ -10,7 +10,7 @@ import {
 import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
 import { ReservationType } from "@/lib/definitions";
 import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
-import { columnsReservation as columns, statusReservation as statusOptions } from "@/lib/data";
+import { columnsReservation as columns, statusReservationTable as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
@@ -321,7 +321,7 @@ export default function ReservationsTable() {
                     {t_table("view")}
                   </Link>
                 </DropdownItem>
-                <DropdownItem
+                {/* <DropdownItem
                   className={
                     update_reservation_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
@@ -330,7 +330,7 @@ export default function ReservationsTable() {
                     setSelectedReservation(reservation);
                     setShowEditModal(true);
                   }}
-                >{t_table("edit")}</DropdownItem>
+                >{t_table("edit")}</DropdownItem> */}
                 <DropdownItem
                   className={
                     new_reservation_permissions.some(permission =>

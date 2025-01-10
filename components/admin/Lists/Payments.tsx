@@ -124,7 +124,7 @@ export default function PaymentsTable() {
 
     if (hasSearchFilter) {
       filteredPayments = filteredPayments.filter((payment) =>
-        payment.reservation_id.toLowerCase().includes(filterValue.toLowerCase()),
+        payment.payment_method.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
     if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
@@ -319,7 +319,7 @@ export default function PaymentsTable() {
                 onValueChange={onSearchChange}
               />
               <div className="flex gap-3">
-                <Dropdown>
+                {/* <Dropdown>
                   <DropdownTrigger className="flex z-1">
                     <Button
                       endContent={<ChevronDownIcon fill="currentColor" size={10} />}
@@ -343,7 +343,7 @@ export default function PaymentsTable() {
                       </DropdownItem>
                     ))}
                   </DropdownMenu>
-                </Dropdown>
+                </Dropdown> */}
                 <Dropdown>
                   <DropdownTrigger className="flex z-1">
                     <Button
@@ -369,7 +369,7 @@ export default function PaymentsTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                <>
+                {/* <>
                   {new_payment_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
@@ -380,7 +380,7 @@ export default function PaymentsTable() {
                       {t_table("new")}
                     </Button>
                   )}
-                </>
+                </> */}
               </div>
             </div>
             <div className="flex justify-between items-center">

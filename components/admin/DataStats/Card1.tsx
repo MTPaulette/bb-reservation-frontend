@@ -20,7 +20,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   children,
 }) => {
   return (
-    <div className="rounded-sm border border-divider bg-background px-7.5 py-6 shadow-default">
+    <div className="rounded-sm border border-divider bg-background px-7.5 py-6 max-w-full shadow-default">
       <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
         {children}
       </div>
@@ -30,7 +30,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
           <span className="text-sm font-medium">{title}</span>
         </div>
 
-        <span
+        {/* <span
           className={`flex items-center gap-1 text-sm font-medium ${
             levelUp && "text-meta-3"
           } ${levelDown && "text-meta-5"} `}
@@ -47,7 +47,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
               <ArrowDownIcon fill="currentColor" size={16} />
             </span>
           )}
-        </span>
+        </span> */}
       </div>
     </div>
   );

@@ -177,25 +177,11 @@ export default function CouponsTable() {
       case "name":
         return (
           <div className="min-w-[80px]">
-            <>
-            {!permissions || !coupon.created_by  ? null : (
-              <>
-              {view_coupon_permissions.some(permission =>
-              permissions.includes(permission)) ? (
-                <Link
-                  href={`/${locale}/admin/coupons/${coupon.id}`}
-                  className="font-semibold whitespace-nowrap"
-                >{coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}</Link>
-              ): (
-                <span>
-                  {coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}
-                </span>
-              )}
-              </>
-            )}
-            </>
-            <p className="font-light text-small text-foreground/70">
-              {capitalize(locale === "en" ? coupon.note_en: coupon.note_fr)}
+            <p>
+              {coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}
+            </p>
+            <p className="font-light text-small text-foreground/70"> {locale == 'fr'? 'fr' : 'en'}
+              {capitalize(locale == "en" ? coupon.note_en: coupon.note_fr)}
             </p>
           </div>
         );
@@ -256,7 +242,7 @@ export default function CouponsTable() {
               <>
               {!permissions ? null : (
               <DropdownMenu>
-                <DropdownItem
+                {/* <DropdownItem
                   className={
                     view_coupon_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
@@ -265,7 +251,7 @@ export default function CouponsTable() {
                   <Link href={`/${locale}/admin/coupons/${coupon.id}`}>
                     {t_table("view")}
                   </Link>
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem
                   className={
                     update_coupon_permissions.some(permission =>
