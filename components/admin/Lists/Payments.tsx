@@ -7,18 +7,11 @@ import {
   DropdownItem, Pagination, Selection, SortDescriptor, Chip, ChipProps
 } from "@nextui-org/react";
 
-import { PlusIcon, SearchIcon, ChevronDownIcon, VerticalDotsIcon } from "@/components/Icons";
+import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
 import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsPayment as columns, statusCoupon as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
-
-/*
-import Modal from "@/components/Modal";
-import NewPayment from "../FormElements/Payment/New";
-import EditPayment from "../FormElements/Payment/Edit";
-import DeletePayment from "../FormElements/Payment/Delete";
-*/
 
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
@@ -31,7 +24,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   expired: "danger"
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["reservation_id", "amount", "payment_method", "transaction_id", "bill_number", "processed_by", "created_at", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["reservation_id", "amount", "payment_method", "transaction_id", "bill_number", "processed_by", "created_at"];
 
 export default function PaymentsTable() {
   const [payments, setPayments] = useState([]);
@@ -45,9 +38,6 @@ export default function PaymentsTable() {
   const { data: session } = useSession();
   const permissions = session?.permissions;
   const requiredPermissions: string[] = ["manage_payments", "show_all_payment"];
-
-  const new_payment_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
-  const view_payment_permissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
 
   const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
   const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
@@ -104,12 +94,6 @@ export default function PaymentsTable() {
   const [page, setPage] = React.useState(1);
 
   const pages = Math.ceil(payments.length / rowsPerPage);
-  /*
-  const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
-  const [selectedPayment, setSelectedPayment] = React.useState<PaymentType>();
-*/
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -220,55 +204,6 @@ export default function PaymentsTable() {
             {cellValue}
           </Chip>
         );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <VerticalDotsIcon fill="none" size={24} />
-                </Button>
-              </DropdownTrigger>
-              <>
-              {!permissions ? null : (
-              <DropdownMenu>
-                <DropdownItem
-                  className={
-                    view_payment_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                >
-                  <Link href={`/${locale}/admin/payments/${payment.id}`}>
-                    {t_table("view")}
-                  </Link>
-                </DropdownItem>
-                <DropdownItem
-                  className={
-                    view_payment_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  onClick={() => {
-                    setSelectedPayment(payment);
-                    setShowEditModal(true);
-                  }}
-                >{t_table("edit")}</DropdownItem>
-                <DropdownItem
-                  className={
-                    view_payment_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                  color="danger"
-                  onClick={() => {
-                    setSelectedPayment(payment);
-                    setShowDeleteModal(true);
-                  }}
-                >{t_table("delete")}</DropdownItem>
-              </DropdownMenu>
-              )}
-              </>
-            </Dropdown>
-          </div>
-        );
       default:
         return cellValue;
     }
@@ -369,18 +304,6 @@ export default function PaymentsTable() {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
-                {/* <>
-                  {new_payment_permissions.some(permission =>
-                  permissions.includes(permission)) && (
-                    <Button
-                      endContent={<PlusIcon fill="currentColor" size={14} />}
-                      size="sm" variant="solid" color="primary"
-                      onClick={() => setShowNewModal(true)}
-                    >
-                      {t_table("new")}
-                    </Button>
-                  )}
-                </> */}
               </div>
             </div>
             <div className="flex justify-between items-center">
@@ -497,27 +420,6 @@ export default function PaymentsTable() {
           )}
         </TableBody>
       </Table>
-
-      {/* <Modal
-        open={showNewModal} close={() => setShowNewModal(false)}
-        title={t_table("newPayment")}
-      >
-        <NewPayment />
-      </Modal>
-
-      <Modal
-        open={showEditModal} close={() => setShowEditModal(false)}
-        title={`${t_table("editPayment")} "${selectedPayment? selectedPayment.name: ''}"`}
-      >
-        <EditPayment id={selectedPayment?.id} />
-      </Modal>
-      
-      <Modal
-        open={showDeleteModal} close={() => setShowDeleteModal(false)}
-        title={`${t_table("deletePayment")} "${selectedPayment? selectedPayment.name: ''}"`}
-      >
-        <DeletePayment id={selectedPayment?.id} />
-      </Modal> */}
       </div>
       )}
     </>

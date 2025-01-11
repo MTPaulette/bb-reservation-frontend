@@ -180,7 +180,7 @@ export default function CouponsTable() {
             <p>
               {coupon.name? capitalize(coupon.name): ''}  |  {coupon.code? coupon.code: ''}
             </p>
-            <p className="font-light text-small text-foreground/70"> {locale == 'fr'? 'fr' : 'en'}
+            <p className="font-light text-small text-foreground/70">
               {capitalize(locale == "en" ? coupon.note_en: coupon.note_fr)}
             </p>
           </div>

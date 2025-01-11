@@ -483,6 +483,7 @@
     "administrators": "Administrateurs",
     "ressources": "Ressources",
     "reservations": "Réservations",
+    "rooms_availables": "Bureaux disponible(s)",
     "confirm_reservation_btn": "Confirmer réservation",
     "client_informations": "Informations du client",
     "ressource_informations": "Informations sur la ressource",

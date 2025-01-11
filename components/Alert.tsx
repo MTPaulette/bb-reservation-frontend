@@ -7,9 +7,9 @@ export default function Alert({message, color}: {message: string, color: "defaul
   return (
     <div className={`flex w-full border-l-6 bg-opacity-[15%] px-5 py-3 shadow-sm bg-white dark:bg-black dark:bg-opacity-20 md:p-6 text-sm
       ${color === "default"? "border-default bg-background/100" : " "}
-      ${color === "warning"? "text-yellow-500 dark:text-yellow-400 border-yellow-400" : " "}
-      ${color === "danger"? "text-red--400 border-red-400 bg-red-200" : " "}
-      ${color === "success"? "text-green-500 border-green-500 bg-green-200" : " "}
+      ${color === "warning"? "dark:text-yellow-400 border-yellow-400" : " "}
+      ${color === "danger"? " border-red-400 bg-red-200" : " "}
+      ${color === "success"? "border-green-500 bg-green-200" : " "}
     `}>
       <div className="shrink-0">
         {color === "success" ? <CheckIcon fill="#22c55e" size={16} /> : ""}

@@ -22,12 +22,13 @@ export function PaymentCard({payment} :{ payment: PaymentType }) {
           <dt className="font-semibold">{t_payment("transaction_id")}</dt>
           <dd className="text-foreground/60">{payment.transaction_id}</dd>
         </dl>
-      ): (
+      ): null }
+      {payment.bill_number ? (
         <dl className="w-full flex items-center justify-between">
           <dt className="font-semibold">{t_payment("bill_number")}</dt>
           <dd className="text-foreground/60">{payment.bill_number}</dd>
         </dl>
-      )}
+      ): null }
       <dl className="w-full flex items-center justify-between">
         <dt className="font-semibold">{t_payment("staff")}</dt>
         <dd className="text-foreground/60 truncate text-xs">{payment.processed_by ? getUsername(payment.processed_by.lastname, payment.processed_by.firstname): ""}</dd>

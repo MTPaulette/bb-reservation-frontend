@@ -273,7 +273,7 @@ export default function ECommerce() {
           <MapOne title={t_statistic("map")} />
           {statistics.topClients != null ? (
             <div className="col-span-12">
-              <TopClients clients={statistics.topClients} />
+              <TopClients clients={statistics.topClients} period={period} />
             </div>
           ) : null}
         </div>

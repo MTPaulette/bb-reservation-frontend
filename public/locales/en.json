@@ -482,6 +482,7 @@
     "administrators": "Administrators",
     "ressources": "Ressources",
     "reservations": "Reservations",
+    "rooms_availables": "Office(s) available(s)",
     "confirm_reservation_btn": "Confirm reservation",
     "client_informations": "Client's informations",
     "ressource_informations": "Ressource's informations",

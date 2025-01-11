@@ -50,7 +50,7 @@ export default function NewAgency() {
         setSuccess(t("new_account_success_msg"));
         setTimeout(() => {
           window.location.reload();
-        }, 1000);
+        }, 3000);
       } else {
         const status = res.status;
         switch(status) {

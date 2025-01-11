@@ -115,7 +115,7 @@ export default function ViewRessource({id}: {id: string}) {
     ) : (
     <div>
     <div className="grid grid-cols-12 md:gap-8">
-      <div className="col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-4 min-ww-45">
+      <div className="col-span-12 md:col-span-6 order-2 md:order-1 lg:col-span-5 xl:col-span-4 min-ww-45">
         <div className="flex flex-col gap-y-8 cursor-text">
           {/* prices */}
           <div className="rounded-sm border border-divider bg-background shadow-default min-w-45">
@@ -166,7 +166,7 @@ export default function ViewRessource({id}: {id: string}) {
         </div>
       </div>
 
-      <div className="col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-8 my-8 md:my-0">
+      <div className="col-span-12 md:col-span-6 order-1 md:order-2 lg:col-span-7 xl:col-span-8 my-8 md:my-0">
         <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default py-8 antialiased">
           <div className="mx-auto max-w-screen-lg px-4 2xl:px-0">
             <div className="mb-4 md:mb-6">
@@ -205,6 +205,14 @@ export default function ViewRessource({id}: {id: string}) {
                     </DropdownMenu>
                   </Dropdown>
                 </div>
+              </div>
+              <div className="flex gap-2 items-center mb-4">
+                <span className="font-semibold">
+                  {response.ressource.quantity}
+                </span>
+                <span className="text-sm sm:whitespace-nowrap">
+                  {capitalize(t_ressource("rooms_availables"))}
+                </span>
               </div>
               
               
@@ -285,7 +293,7 @@ export default function ViewRessource({id}: {id: string}) {
         </div>
       </div>
 
-      <div className="col-span-12 mt-6 md:mt-8 py-6 md:py-8 border-t border-divider z-1">
+      <div className="col-span-12 order-3 mt-6 md:mt-8 py-6 md:py-8 border-t border-divider z-1">
         <div className="flex w-full flex-col">
           <Tabs
             fullWidth

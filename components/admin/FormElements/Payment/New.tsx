@@ -26,7 +26,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
       amount: z.string().min(1),
       payment_method: z.string().min(1),
       transaction_id: z.string().optional(),
-      bill_number: z.string().optional(),
+      bill_number: z.string().min(1),
       note: z.string().max(1000).optional(),
   });
 
@@ -49,7 +49,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
         setSuccess(t_input("new_payment_success_msg"));
         setTimeout(() => {
           window.location.reload();
-        }, 1000);
+        }, 3000);
       } else {
         const status = res.status;
         switch(status) {
@@ -129,27 +129,28 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
           ))}
         </Select>
         <div className="flex flex-row justify-center items-center gap-4 w-full">
-        <Input
-          label={t_input("transaction_id")}
-          labelPlacement="outside"
-          type="text"
-          placeholder={t_input("transaction_id_placeholder")}
-          className="w-full bg-input rounded-small"
-          {...register("transaction_id")}
-          isInvalid={errors.transaction_id ? true: false}
-          errorMessage={errors.transaction_id ? errors.transaction_id?.message: null}
-        />
-        <p className="text-foreground/60 font-bold uppercase text-sm">{t_input("or")}</p>
-        <Input
-          label={t_input("bill_number")}
-          labelPlacement="outside"
-          type="text"
-          placeholder={t_input("bill_number_placeholder")}
-          className="w-full bg-input rounded-small"
-          {...register("bill_number")}
-          isInvalid={errors.bill_number ? true: false}
-          errorMessage={errors.bill_number ? errors.bill_number?.message: null}
-        />
+          <Input
+            isRequired
+            label={t_input("bill_number")}
+            labelPlacement="outside"
+            type="text"
+            placeholder={t_input("bill_number_placeholder")}
+            className="w-full bg-input rounded-small"
+            {...register("bill_number")}
+            isInvalid={errors.bill_number ? true: false}
+            errorMessage={errors.bill_number ? errors.bill_number?.message: null}
+          />
+          {/* <p className="text-foreground/60 font-bold uppercase text-sm">{t_input("or")}</p> */}
+          <Input
+            label={t_input("transaction_id")}
+            labelPlacement="outside"
+            type="text"
+            placeholder={t_input("transaction_id_placeholder")}
+            className="w-full bg-input rounded-small"
+            {...register("transaction_id")}
+            isInvalid={errors.transaction_id ? true: false}
+            errorMessage={errors.transaction_id ? errors.transaction_id?.message: null}
+          />
         </div>
         <Textarea
           endContent={
