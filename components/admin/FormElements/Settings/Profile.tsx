@@ -51,7 +51,13 @@ export default function Profile () {
     .object({
       lastname: z.string().min(1, { message: t_error("lastname") }).max(250),
       firstname: z.string().min(1, { message: t_error("firstname") }).max(250),
-      phonenumber: z.string().max(250).optional(),
+      // phonenumber: z.string().max(250).optional(),
+      phonenumber: z
+      .string()
+      .regex(/^(2[0-9]{2}[6](2|5|6|7|8|9)[0-9]{7})$/, {
+        message: t_error("phonenumber")
+      })
+      .length(12),
       language: z.string().optional(),
       email: z.string().email({ message: t_error("email") }).max(250),
   });
@@ -341,6 +347,7 @@ export default function Profile () {
                 errorMessage={errors.email ? errors.email?.message: null}
               />
               <Input
+                isRequired
                 endContent={
                   <TelephoneIcon fill="currentColor" size={18} />
                 }
