@@ -1,20 +1,22 @@
 "use client"
 
 import React from "react";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { EnvelopIcon, EyeIcon, EyeSlashIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { UserFormType } from "@/lib/definitions";
 import { createClient } from "@/lib/action/admin/clients";
+import { languages } from "@/lib/data";
 
 export default function NewClient() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
+  const locale = useLocale();
 
   const schema: ZodType<UserFormType> = z
     .object({
@@ -29,7 +31,13 @@ export default function NewClient() {
       .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
         message: t_error("password")
       }).max(50),
-      phonenumber: z.string().min(1).max(250),
+      phonenumber: z
+      .string()
+      .regex(/^(2[0-9]{2}[6](2|5|6|7|8|9)[0-9]{7})$/, {
+        message: t_error("phonenumber")
+      })
+      .length(12),
+      language: z.string().min(1),
   });
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
@@ -177,6 +185,27 @@ export default function NewClient() {
           isInvalid={errors.phonenumber ? true: false}
           errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
         />
+
+        {/* language */}
+        <Select
+          isRequired
+          aria-label={t("language")}
+          label={t("language")}
+          labelPlacement="outside"
+          variant="bordered"
+          placeholder={t("language_placeholder")}
+          isInvalid={errors.language ? true: false}
+          errorMessage={errors.language ? errors.language?.message: null}
+          defaultSelectedKeys={['fr']}
+          {...register("language")}
+        >
+          {languages.map((item) => (
+            <SelectItem key={item.uid}>
+              {locale === "en" ? item.name_en: item.name_fr}
+            </SelectItem>
+          ))}
+        </Select>
+
         <div className="w-full">
           <Button 
             type="submit"

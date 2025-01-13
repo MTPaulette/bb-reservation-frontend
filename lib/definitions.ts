@@ -42,6 +42,7 @@ export type UserType = {
   email: string;
   password: string;
   phonenumber: string;
+  language: string;
   image: string|undefined;
   status: string;
   role_id: number;

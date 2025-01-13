@@ -67,7 +67,8 @@
     "staff_not_found": "Staff not found",
     "client_not_found": "Client not found",
     "back": "Go back",
-    "unauthenticated": "unauthenticated"
+    "unauthenticated": "unauthenticated",
+    "phonenumber": "Enter the calling code. eg: for Cameroon, the phone number format is: 237xxxxxxxxx"
  },
   "Input": {
     "register": "Register",

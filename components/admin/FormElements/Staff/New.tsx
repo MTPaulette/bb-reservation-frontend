@@ -7,16 +7,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { roles } from "@/lib/data";
 import { UserFormType } from "@/lib/definitions";
 import { createStaff } from "@/lib/action/admin/staff";
 import { getAgencies } from "@/lib/action/default";
+import { languages } from "@/lib/data";
 
 export default function NewStaff() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
+  const locale = useLocale();
 
   const schema: ZodType<UserFormType> = z
     .object({
@@ -31,7 +33,13 @@ export default function NewStaff() {
       .regex(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/, {
         message: t_error("password")
       }).max(50),
-      phonenumber: z.string().max(250),
+      phonenumber: z
+      .string()
+      .regex(/^(2[0-9]{2}[6](2|5|6|7|8|9)[0-9]{7})$/, {
+        message: t_error("phonenumber")
+      })
+      .length(12),
+      language: z.string().min(1),
       role_id: z.string(),
       agency_id: z.string(),
   });
@@ -186,6 +194,7 @@ export default function NewStaff() {
           errorMessage={errors.password ? errors.password?.message: null}
         />
         <Input
+          isRequired
           endContent={
             <TelephoneIcon fill="currentColor" size={18} />
           }
@@ -232,6 +241,26 @@ export default function NewStaff() {
             ))}
           </Select>
         </div>
+
+        {/* language */}
+        <Select
+          isRequired
+          aria-label={t("language")}
+          label={t("language")}
+          labelPlacement="outside"
+          variant="bordered"
+          placeholder={t("language_placeholder")}
+          isInvalid={errors.language ? true: false}
+          errorMessage={errors.language ? errors.language?.message: null}
+          defaultSelectedKeys={['fr']}
+          {...register("language")}
+        >
+          {languages.map((item) => (
+            <SelectItem key={item.uid}>
+              {locale === "en" ? item.name_en: item.name_fr}
+            </SelectItem>
+          ))}
+        </Select>
 
         <div className="w-full">
           <Button 

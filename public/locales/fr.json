@@ -67,7 +67,8 @@
     "page_not_found": "Page non trouvée",
     "staff_not_found": "Membre du staff non trouvé",
     "client_not_found": "Client non trouvé",
-    "back": "Retour"
+    "back": "Retour",
+    "phonenumber": "Veuillez entrer l'identifiant. eg: Pour le Cameroun, le format du numero de telephone est: 237xxxxxxxxx"
   },
   "Input": {
     "register": "S'inscrire",

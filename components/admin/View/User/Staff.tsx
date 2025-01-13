@@ -24,7 +24,6 @@ import DefaultUserTable from "../../Tables/DefaultUserTable";
 import { columnsTabsStaffStaff, columnsTabsClientStaff, columnsTabsStaffCoupon } from "@/lib/data";
 import DefaultCouponTable from "../../Tables/DefaultCouponTable";
 import DefaultReservationTable from "../../Tables/DefaultReservationTable";
-import CardDataStats from "../../DataStats/Card1";
 
 export default function ViewStaff({id}: {id: string}) {
   const { data: session } = useSession();
