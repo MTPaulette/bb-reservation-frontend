@@ -62,6 +62,7 @@ export default function General () {
         setSuccessHolidays(t("update_holidays_success_msg"));
         setTimeout(() => {
           setSuccessHolidays("");
+          window.location.reload();
         }, 5000);
       } else {
         const status = res.status;
@@ -107,6 +108,7 @@ export default function General () {
       if(res?.ok) {
         setSuccess(t("update_options_success_msg"));
         setTimeout(() => {
+          window.location.reload();
           setSuccess("");
         }, 5000);
       } else {

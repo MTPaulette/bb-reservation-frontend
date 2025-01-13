@@ -35,9 +35,9 @@ export default function RolesTable() {
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
-            await signOut({
-              callbackUrl: `/${locale}/auth/login`
-            });
+            // await signOut({
+            //   callbackUrl: `/${locale}/auth/login`
+            // });
             break;
           case 403:
             setError(t_error("acces_denied"));

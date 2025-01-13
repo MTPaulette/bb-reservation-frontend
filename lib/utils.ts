@@ -35,6 +35,7 @@ export const headerOptions = async () => {
   const csrftoken = await getCSRFToken();
   const encryptedToken = await getToken()
   const token = encryptedToken? decryptToken(encryptedToken): "";
+  console.log("encryptToken: "+encryptedToken);
   console.log("decryptToken: "+token);
   return {
     "Accept": "application/json",
@@ -85,6 +86,7 @@ const key =
   crypto
     .createHash("sha256").update(String(encryptionKey))
     .digest("base64").substring(0, 32);
+
 const iv =
   crypto
     .createHash("sha256").update(String(encryptionKey))
@@ -107,20 +109,4 @@ export const decryptToken = (encryptedToken: string) => {
   const decryptedToken = decrypt_token.toString();
 
   return decryptedToken;
-};
-
-export const encryptTokenn = (token: string) => {
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv('aes-256-cbc', encryptionKey, iv);
-  const encryptedToken = Buffer.concat([cipher.update(token), cipher.final()]);
-
-  return encryptedToken.toString('hex');
-};
-
-export const decryptTokenn = (encryptedToken: string) => {
-  const decipher = crypto.createDecipheriv('aes-256-cbc', encryptionKey, crypto.randomBytes(16));
-  decipher.setAutoPadding(false);
-  const decryptedToken = Buffer.concat([decipher.update(Buffer.from(encryptedToken, 'hex')), decipher.final()]);
-
-  return decryptedToken.toString();
 };

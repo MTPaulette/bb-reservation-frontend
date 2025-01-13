@@ -39,7 +39,8 @@ export default function EditCoupon({ id }: { id: number} ) {
       expired_on: z.string(),
       note_en: z.string(),
       note_fr: z.string(),
-      is_public: z.boolean().default(true),
+      is_public: z.boolean(),
+      // is_public: z.boolean().default(true),
   });
 
   const {
@@ -58,6 +59,7 @@ export default function EditCoupon({ id }: { id: number} ) {
         if(res?.ok){
           const coupon = await res.json();
           setCoupon(coupon);
+          setCheckIsPublic(coupon.is_public);
           coupon.users.forEach(client => {
             default_clients.push(client.user_id);
           });

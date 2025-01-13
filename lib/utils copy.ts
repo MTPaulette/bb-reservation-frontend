@@ -65,13 +65,13 @@ export const formatDateTime = (dateTime: moment.MomentInput, lang = 'fr') => {
 };
 
 export const cryptedToken = (token: string) => {
-  console.log(process.env.CRYPT_KEY);
-  return token + process.env.CRYPT_KEY;
+  console.log(process.env.ENCRYPTION_KEY);
+  return token + process.env.ENCRYPTION_KEY;
 };
 
 export const decryptedToken = (token: string|undefined) => {
-  if(token && process.env.CRYPT_KEY) {
-    return token.replace(process.env.CRYPT_KEY, '');
+  if(token && process.env.ENCRYPTION_KEY) {
+    return token.replace(process.env.ENCRYPTION_KEY, '');
   }
   return '';
 };

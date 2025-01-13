@@ -58,7 +58,7 @@ export default function LoginPage() {
     .then((res) => {
       setLoading(false);
       if(res?.ok) {
-          router.push(`/${locale}/admin`);
+        router.push(`/${locale}/admin/profile`);
       } else {
         if(res?.error === "CredentialsSignin"){
           setError(t_error("invalid_credentials"));

@@ -7,9 +7,7 @@ import { CameraIcon } from "@/components/Icons"
 import { useTranslations } from 'next-intl';
 import Title from "@/components/Title";
 import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
-import CardDataStats from "@/components/admin/DataStats/Card1";
 
-import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
 import Modal from "@/components/Modal";
 import EditClient from "@/components/admin/FormElements/Client/Edit";
 import DeleteClient from "@/components/admin/FormElements/Client/Delete";
@@ -101,7 +99,7 @@ export default function ViewProfile() {
           <div className="mx-auto mb-5.5 mt-4.5 grid maxx-w-94 max-w-150 grid-cols-3 rounded-md border border-divider py-2.5 shadow-1 dark:bg-content2">
             <div className="flex flex-col justify-start items-center sm:justify-center gap-1 border-r border-divider px-4 xsm:flex-row">
               <span className="font-semibold text-foreground">
-                259
+                2591
               </span>
               <span className="text-sm sm:whitespace-nowrap">{capitalize(t("reservations"))}</span>
             </div>

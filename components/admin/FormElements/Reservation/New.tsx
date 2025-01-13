@@ -45,7 +45,6 @@ export default function NewReservation() {
   const [selectedValidity, setSelectedValidity] = useState<string>("");
   const [errorCoupon, setErrorCoupon] = useState<string>("");
   const [clientNotFound, setClientNotFound] = useState<string>("");
-  const [loadingCoupon, setLoadingCoupon] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = React.useState<string>("reservations");
   const [reservation_id, setReservation_id] = useState<string>();
 
@@ -77,7 +76,6 @@ export default function NewReservation() {
   useEffect(() => {
     getClients()
       .then(async (res) => {
-        // setLoading(false);
         if(res?.ok){
           setClients(await res.json());
         }else {
@@ -221,51 +219,6 @@ export default function NewReservation() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }
-
-  const handleApplyCoupon = () => {
-    if(coupon && selectedClient_id) {
-      setErrorCoupon("");
-      setClientNotFound("");
-      setLoadingCoupon(true);
-      applyCoupon(coupon, Number(selectedClient_id))
-        .then(async (res) => {
-          setLoadingCoupon(false);
-          const response = await res.json();
-          if(res?.ok){
-            setValue("coupon", response.coupon.code)
-          }else {
-            const status = res.status;
-            switch(status) {
-              case 401:
-                setErrorCoupon(t_error("unauthenticated"));
-                await signOut({
-                  callbackUrl: `/${locale}/auth/login`
-                });
-                break;
-              case 403:
-                setErrorCoupon(t_error("acces_denied"));
-                break;
-              case 404:
-                if(response.errors.en == "client not found") {
-                  setClientNotFound(locale === "en" ? response.errors.en : response.errors.fr);
-                } else {
-                  setErrorCoupon(locale === "en" ? response.errors.en : response.errors.fr);
-                }
-                break;
-              case 500:
-                setErrorCoupon(locale === "en" ? response.errors.en : response.errors.fr);
-                break;
-              default:
-                break;
-            }
-          }
-        })
-        .catch(error => {
-          setErrorCoupon(t_error("something_wrong"));
-          console.error(error);
-        });
-    }
   }
 
   const handleConfirmReservation = (reservation_id: string) => {
@@ -640,20 +593,6 @@ export default function NewReservation() {
                         isInvalid={errorCoupon || clientNotFound ? true: false}
                         errorMessage={errorCoupon ? errorCoupon || clientNotFound: null}
                         classNames={classNames}
-                        endContent={
-                          <Button
-                            isDisabled={selectedClient_id == "" ? true : false}
-                            isLoading={loadingCoupon}
-                            type="button"
-                            // className="bg-content4 text-foreground text-xs rounded-md px-3 pt-1 pb-1.5"
-                            className="bg-foreground text-background text-xs rounded-md !max-h-6"
-                            onClick={() =>{
-                              handleApplyCoupon()
-                            }}
-                          >
-                            {t_input("apply")}
-                          </Button>
-                        }
                         onChange={(e) => setCoupon(e.target.value)}
                       />
                       <div className="w-full mt-4 md:mt-8">

@@ -8,7 +8,7 @@ import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { UserType, ReservationFormType, RessourceType, Reservation_draftType } from "@/lib/definitions";
+import { UserType, ReservationFormType, RessourceType, Reservation_draftType, CouponType } from "@/lib/definitions";
 import { getRessourceById } from "@/lib/action/admin/ressources";
 import { getClients } from "@/lib/action/admin/clients";
 import { getRessources } from "@/lib/action/admin/ressources";
@@ -39,12 +39,15 @@ export default function NewReservation() {
   const [reservation_draft, setReservation_draft] = useState<Reservation_draftType>();
   const [selectedRessource, setSelectedRessource] = useState<RessourceType>();
   const [selectedClient_id, setSelectedClient_id] = useState<string|number>("");
+  const [selectedClient, setSelectedClient] = useState<UserType>();
   const [coupon, setCoupon] = useState<string>("");
+  const [applied_coupon, setApplied_coupon] = useState<CouponType>();
   const [selectedValidity, setSelectedValidity] = useState<string>("");
   const [errorCoupon, setErrorCoupon] = useState<string>("");
   const [clientNotFound, setClientNotFound] = useState<string>("");
   const [loadingCoupon, setLoadingCoupon] = useState<boolean>(false);
   const [selectedTab, setSelectedTab] = React.useState<string>("reservations");
+  const [reservation_id, setReservation_id] = useState<string>();
 
   const schema: ZodType<ReservationFormType> = z
     .object({
@@ -138,7 +141,8 @@ export default function NewReservation() {
       });
   }, []);
 
-  const handleFormSubmit = async (data: ReservationFormType) => {
+  const handleFormSubmit = async (data: ReservationFormType, e: { preventDefault: () => void; }) => {
+    e.preventDefault();
     setError("");
     setSuccess("");
     setSave(true);
@@ -147,12 +151,14 @@ export default function NewReservation() {
       setSave(false);
       const response = await res.json();
       if(res?.ok) {
-        setReservation_draft(response.reservation_draft)
-        setSuccess(t_input("new_ressource_success_msg"));
-        setSelectedTab("summary");
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 1000);
+        setReservation_draft(response.reservation_draft);
+        setApplied_coupon(response.coupon);
+        setSuccess(t_input("new_reservation_draft_success_msg"));
+        setTimeout(() => {
+          setSelectedTab("summary");
+          setSuccess("");
+          //window.location.reload();
+        }, 3000);
       } else {
         const status = res.status;
         switch(status) {
@@ -262,6 +268,12 @@ export default function NewReservation() {
     }
   }
 
+  const handleConfirmReservation = (reservation_id: string) => {
+    console.log(reservation_id);
+    setReservation_id(reservation_id);
+    setSelectedTab("payment");
+  }
+
   const classNames = React.useMemo(
     () => ({
       inputWrapper: [
@@ -356,7 +368,10 @@ export default function NewReservation() {
                       }}
                     >
                       {(client) => (
-                        <SelectItem key={client.id} textValue={client.lastname}>
+                        <SelectItem key={client.id} textValue={client.lastname} 
+                        onClick={() => {
+                          setSelectedClient(client);
+                        }}>
                           <User
                             avatarProps={
                               {className:"flex-shrink-0", radius: "full", size: "sm", src: client.image? getImageUrl(client.image) : "" }
@@ -621,7 +636,7 @@ export default function NewReservation() {
                         placeholder={t_input("coupon_apply_placeholder")}
                         labelPlacement="outside"
                         size="sm"
-                        // {...register("coupon")}
+                        {...register("coupon")}
                         isInvalid={errorCoupon || clientNotFound ? true: false}
                         errorMessage={errorCoupon ? errorCoupon || clientNotFound: null}
                         classNames={classNames}
@@ -630,7 +645,6 @@ export default function NewReservation() {
                             isDisabled={selectedClient_id == "" ? true : false}
                             isLoading={loadingCoupon}
                             type="button"
-                            // className="bg-content4 text-foreground text-xs rounded-md px-3 pt-1 pb-1.5"
                             className="bg-foreground text-background text-xs rounded-md !max-h-6"
                             onClick={() =>{
                               handleApplyCoupon()
@@ -667,15 +681,14 @@ export default function NewReservation() {
               </div>
             }
           >
-            <SummaryReservation client={selectedClient_id} ressource={selectedRessource} reservation_draft={reservation_draft} />
-            {/* {JSON.stringify(reservation_draft)} */}
-            <br/>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa eligendi expedita, 
-            quod maiores quos maxime iste animi. Facere, reiciendis nam? Possimus asperiore
-            s harum nesciunt sint ut? Blanditiis accusamus ex ut?
+            <SummaryReservation
+              client={selectedClient} ressource={selectedRessource}
+              reservation_draft={reservation_draft} coupon={applied_coupon}
+              click_to_confirm={handleConfirmReservation}
+            />
           </Tab>
           <Tab
-            isDisabled={reservation_draft? false : true}
+            isDisabled={reservation_id? false: true}
             key="payment"
             title={
               <div className="flex items-center space-x-2">
@@ -684,8 +697,8 @@ export default function NewReservation() {
               </div>
             }
           >
-            {reservation_draft? (
-              <NewPayment reservation_id={reservation_draft.id} />
+            {reservation_id? (
+              <NewPayment reservation_id={reservation_id} />
             ) : null}
           </Tab>
         </Tabs>

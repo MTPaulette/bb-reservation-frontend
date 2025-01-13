@@ -84,15 +84,18 @@ export const authOptions: NextAuthOptions = {
       // when login
       if (user) {
         token.user = user.user;
-        token.accessToken = user.token;
+        token.accessToken = encryptToken(String(user.token));
         token.permissions = user.permissions;
       }
       return token
     },
     async session({ session, token }) {
-      // console.log("session token============")
-      // console.log(token)
-      session.accessToken = encryptToken(String(token.accessToken));
+
+      console.log("session token============")
+      console.log(token)
+
+      // session.accessToken = encryptToken(String(token.accessToken));
+      session.accessToken = token.accessToken;
       session.user = token.user;
       session.permissions = token.permissions;
       return session

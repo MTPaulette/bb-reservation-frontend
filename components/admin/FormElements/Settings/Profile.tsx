@@ -195,11 +195,12 @@ export default function Profile () {
     .then(async (res) => {
       setLoadingPwd(false);
       if(res?.ok) {
+        /*
         const response = await res.json();
         update({
           accessToken: response.token
         })
-        console.log("wanda");
+        console.log("wanda"); */
         setSuccessPwd(t_input("update_account_success_msg"));
         setTimeout(() => {
           setSuccessPwd("");
