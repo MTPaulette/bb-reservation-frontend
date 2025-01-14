@@ -72,7 +72,7 @@
  },
   "Input": {
     "register": "Register",
-    "have_account_link": "You already have an account ? Sign in",
+    "create_account": "You don't have an account ?",
     "name": "Name",
     "lastname": "Lastname",
     "firstname": "Firstname",
@@ -116,6 +116,16 @@
     "save": "Enregistrer",
     "add": "Add",
     "confirm": "Confirm",
+    "forgot_password": "Forgot your password?",
+    "forgot_password_description": "Don't fret! Just type in your email and we will send you a link to reset your password!",
+    "have_account": "Already have an account?",
+    "sent_reset_link": "Sent reset link",
+    "forgot_password_success_msg": "A password reset link has been sent to your email. Please, follow it to create a new password. The link expires in 1 hour",
+
+    "reset": "Reset",
+    "reset_password": "reset password",
+    "reset_password_description": "Your password is now reset. Please enter the new password.",
+    "reset_password_success_msg": "Password successfully reset.",
 
     "new_account_success_msg": "Account successfully created.",
     "update_account_success_msg": "Account successfully updated.",

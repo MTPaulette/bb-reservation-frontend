@@ -33,7 +33,7 @@ export const getUsername = (lastname: string, firstname: string) => {
 export const headerOptions = async () => {
   const csrftoken = await getCSRFToken();
   const token = await getToken()
-  console.log("token: "+token);
+  // console.log("token: "+token);
   return {
     "Accept": "application/json",
     "Content-Type": "application/json",

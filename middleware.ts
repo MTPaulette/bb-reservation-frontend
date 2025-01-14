@@ -8,6 +8,8 @@ const publicPages = [
   '/login',
   '/(fr|en)/auth/login',
   '/(fr|en)/auth/register',
+  '/(fr|en)/auth/forgot-password',
+  '/(fr|en)/auth/reset-password',
   '/(fr|en)/reservations*',
   // (/secret requires auth)
 ];

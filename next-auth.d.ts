@@ -9,9 +9,9 @@ declare module "next-auth" {
     } & Session["user"]
   }
   interface User {
-    access_token: string
+    accessToken: string
   }
   interface JWT {
-    access_token: string
+    accessToken: string
   }
 }
