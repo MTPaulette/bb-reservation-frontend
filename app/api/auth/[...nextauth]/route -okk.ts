@@ -1,3 +1,4 @@
+import { encryptToken } from "@/lib/utils";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 const api_url = process.env.API_URL;
@@ -65,20 +66,42 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, trigger, user }) {
+    async jwt({ token, trigger, user, session }) {
+      console.log("jwt user============")
+      console.log(user)
+      // when update
+      if(trigger == 'update') {
+        if (session?.user) {
+          token.user = session.user;
+        }
+        if (session?.accessToken) {
+          token.accessToken = encryptToken(String(session.accessToken));
+        }
+        if (session?.permissions) {
+          token.permissions = session.permissions;
+        }
+      }
+      // when login
       if (user) {
-        token.user = user;
-        token.accessToken = user.token;
+        token.user = user.user;
+        token.accessToken = encryptToken(String(user.token));
+        token.permissions = user.permissions;
       }
       return token
     },
     async session({ session, token }) {
-      session.accessToken = token.user.token;
-      session.user = token.user.user;
+
+      console.log("session token============")
+      console.log(token)
+
+      // session.accessToken = encryptToken(String(token.accessToken));
+      session.accessToken = token.accessToken;
+      session.user = token.user;
+      session.permissions = token.permissions;
       return session
     },
   },
 }
 const handler = NextAuth(authOptions)
-// export { handler as GET, handler as POST }
+//export { handler as GET, handler as POST }
 export { handler as GET, handler as POST, handler as DELETE, handler as UPDATE }

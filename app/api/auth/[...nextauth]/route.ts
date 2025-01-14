@@ -1,4 +1,3 @@
-import { encryptToken } from "@/lib/utils";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 const api_url = process.env.API_URL;
@@ -75,7 +74,7 @@ export const authOptions: NextAuthOptions = {
           token.user = session.user;
         }
         if (session?.accessToken) {
-          token.accessToken = encryptToken(String(session.accessToken));
+          token.accessToken = session.accessToken;
         }
         if (session?.permissions) {
           token.permissions = session.permissions;
@@ -84,7 +83,7 @@ export const authOptions: NextAuthOptions = {
       // when login
       if (user) {
         token.user = user.user;
-        token.accessToken = encryptToken(String(user.token));
+        token.accessToken = user.token;
         token.permissions = user.permissions;
       }
       return token
@@ -94,7 +93,6 @@ export const authOptions: NextAuthOptions = {
       console.log("session token============")
       console.log(token)
 
-      // session.accessToken = encryptToken(String(token.accessToken));
       session.accessToken = token.accessToken;
       session.user = token.user;
       session.permissions = token.permissions;

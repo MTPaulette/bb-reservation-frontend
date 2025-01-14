@@ -5,7 +5,6 @@ import moment from 'moment';
 
 export const getToken = async () => {
   const session = await getSession();
-  // return session?.user.token;
   return session?.accessToken;
 };
 
@@ -33,17 +32,14 @@ export const getUsername = (lastname: string, firstname: string) => {
 
 export const headerOptions = async () => {
   const csrftoken = await getCSRFToken();
-  const encryptedToken = await getToken()
-  const token = encryptedToken? decryptToken(encryptedToken): "";
-  console.log("encryptToken: "+encryptedToken);
-  console.log("decryptToken: "+token);
+  const token = await getToken()
+  console.log("token: "+token);
   return {
     "Accept": "application/json",
     "Content-Type": "application/json",
     "X-XSRF-TOKEN": `${csrftoken}`,
     "X-CSRF-TOKEN": `${csrftoken}`,
     "X-Requested-With": "XMLHttpRequest",
-    // "Authorization": `Bearer ${decryptToken(token)}`,
     "Authorization": `Bearer ${token}`,
   }
 }
