@@ -18,7 +18,9 @@
     "summary": "Reservation summary",
     "newReservation": "New reservation",
     "define_time_slot": "Define a time slot",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "cancelled_reservations": "Cancelled Reservations",
+    "reason_for_suspension": "Reason for suspension"
   },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
@@ -328,6 +330,7 @@
     "new": "Add new",
     "total": "Total",
     "row_per_page": "Row per page:",
+    "item_per_page": "Item per page:",
     "of": "of",
     "from": "from",
     "to": "to",

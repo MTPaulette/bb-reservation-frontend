@@ -6,7 +6,7 @@ import SidebarItem from "@/components/admin/Sidebar/SidebarItem";
 import ClickOutside from "@/components/admin/ClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { BbLogo } from "@/components/BbLogo";
-import { CalendarIcon, UserIcon, FormIcon, TableIcon, SettingIcon, ChartIcon, LogoutIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon, ActivityIcon, CurrencyIcon, ExclamationTriangleIcon } from "@/components/Icons";
+import { CalendarIcon, UserIcon, SettingIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon, ActivityIcon, CurrencyIcon, ExclamationTriangleIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from "next-intl";
 import Logout from "@/components/admin/FormElements/Logout";
 import { useSession } from "next-auth/react";

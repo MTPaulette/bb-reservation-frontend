@@ -174,7 +174,7 @@ export default function Reservations() {
                   {`${t_table("total")}`}: <span className="font-semibold">{ressources.length}</span>
                 </span>
                 <label className="flex items-center text-default-400 text-small">
-                  {t_table("row_per_page")}
+                  {t_table("item_per_page")}
                   <select
                     className="bg-transparent outline-none text-default-400 text-small"
                     onChange={onRowsPerPageChange}

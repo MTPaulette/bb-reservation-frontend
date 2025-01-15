@@ -20,6 +20,17 @@ export default function Logout() {
         await signOut({
           callbackUrl: "/fr/reservations"
         });
+      } else {
+        const status = res.status;
+        switch(status) {
+          case 401:
+            await signOut({
+              callbackUrl: "/fr/reservations"
+            });
+            break;
+          default:
+            break;
+        }
       }
     })
     .catch((error) => {

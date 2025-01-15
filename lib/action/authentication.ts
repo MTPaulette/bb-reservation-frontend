@@ -51,6 +51,14 @@ export async function resetPassword(email: string, password: string, token:  str
   return response;
 }
 
+// show user profile
+export async function getProfile() {
+  const response = await fetch(`${api_url}/profile`, {
+    method: "GET",
+    headers: await headerOptions(),
+  })
+  return response;
+}
 
 
 // token: this.$route.query.token,

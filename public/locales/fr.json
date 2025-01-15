@@ -18,7 +18,9 @@
     "summary": "Récapitulatif de réservation",
     "newReservation": "Nouvelle réservation",
     "define_time_slot": "Définir une plage horaire",
-    "cancelled": "Annulées"
+    "cancelled": "Annulées",
+    "cancelled_reservations": "Réservations annulées",
+    "reason_for_suspension": "Raison de la suspension"
   },
   "Alert": {
     "mobileDisplayWarning": "Faites pivoter votre appareil en position horizontale pour un meilleur affichage.",
@@ -96,7 +98,7 @@
     "name_placeholder": "Entrer le nom",
     "lastname_placeholder": "Entrer le nom",
     "firstname_placeholder": "Entrer le prénom",
-    "email_placeholder": "Entrer le email",
+    "email_placeholder": "Entrer l'email",
     "password_placeholder": "Entrer le mot de passe",
     "current_password_placeholder": "Entrer le mot de passe actuel",
     "address_placeholder": "Entrer l'adresse",
@@ -328,6 +330,7 @@
     "new": "Nouveau",
     "total": "Total",
     "row_per_page": "Ligne par page:",
+    "item_per_page": "Elément par page:",
     "of": "de",
     "from": "De",
     "to": "A",

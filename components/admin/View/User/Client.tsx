@@ -1,15 +1,14 @@
 "use client"
 
-import React from "react";
 import Image from "next/image";
-import { CalendarIcon, CameraIcon } from "@/components/Icons";
+import { CameraIcon } from "@/components/Icons";
 import { getClientById } from '@/lib/action/admin/clients';
 import { notFound } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
-import { capitalize, getImageUrl, getUsername } from "@/lib/utils";
+import { getImageUrl, getUsername } from "@/lib/utils";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Tabs, Tab, Avatar } from "@nextui-org/react";
 import { VerticalDotsIcon } from "@/components/Icons";
 
@@ -29,9 +28,9 @@ export default function ViewClient({id}: {id: string}) {
   const { data: session } = useSession();
   const authUserId = session?.user.id;
   const [loading, setLoading] = useState(true);
-  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
-  const [showSuspendModal, setShowSuspendModal] = React.useState<boolean>(false);
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showSuspendModal, setShowSuspendModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [notFoundStatus, setNotFoundStatus] = useState(false);
   const [error, setError] = useState<string>("");
   const t = useTranslations("Profile");
@@ -41,7 +40,7 @@ export default function ViewClient({id}: {id: string}) {
   const t_tabs = useTranslations("Tabs");
   const t_alert = useTranslations("Alert");
   const t_statistic = useTranslations("Statistic");
-  const [selected, setSelected] = React.useState<string>("reservations");
+  const [selected, setSelected] = useState<string>("reservations");
   const [response, setResponse] = useState([]);
 
   const permissions = session?.permissions;
@@ -258,13 +257,6 @@ export default function ViewClient({id}: {id: string}) {
                 </>
               )}
               </>
-              <p className="mt-4.5">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque posuere fermentum urna, eu condimentum mauris
-                tempus ut. Donec fermentum blandit aliquet. Etiam dictum
-                dapibus ultricies. Sed vel aliquet libero. Nunc a augue
-                fermentum, pharetra ligula sed, aliquam lacus.
-              </p>
             </div>
           </div>
         </div>
@@ -286,7 +278,7 @@ export default function ViewClient({id}: {id: string}) {
                 key="coupons"
                 title={t_tabs("coupons")}
               >
-                {response.coupons.length > 0 ? (
+                {response.coupons && response.coupons.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
                     <DefaultCouponTable columns={columnsTabsClientCoupon} coupons={response.coupons} />
                   </div>
@@ -297,13 +289,13 @@ export default function ViewClient({id}: {id: string}) {
                 )}
               </Tab>
               <Tab key="reservations" title={t_tabs("reservations")}>
-                {response.reservations.length > 0 ? (
+                {response.reservations && response.reservations.length > 0 ? (
                   <div className="overflow-hidden rounded-sm border border-divider bg-background shadow-default mt-2 px-3 py-5 antialiased">
                     <DefaultReservationTable reservations={response.reservations} />
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
-                    <Alert color="default" message={t_alert("no_cancelled_reservation")} />
+                    <Alert color="default" message={t_alert("no_reservation")} />
                   </div>
                 )}
               </Tab>

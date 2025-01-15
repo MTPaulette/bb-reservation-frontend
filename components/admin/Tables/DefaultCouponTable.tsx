@@ -16,7 +16,7 @@ import { useSession } from 'next-auth/react';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
-  suspended: "danger"
+  expired: "danger"
 };
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "total_usage", "value", "status", "expired_on"];

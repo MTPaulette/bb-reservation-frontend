@@ -46,7 +46,6 @@ export default function CouponsTable() {
   const requiredPermissions: string[] = ["manage_coupons", "show_all_coupon"];
   
   const new_coupon_permissions: string[] = ["manage_coupons", "create_coupon"];
-  const view_coupon_permissions: string[] = ["manage_coupons", "view_coupon"];
   const update_coupon_permissions: string[] = ["manage_coupons", "edit_coupon"];
   const delete_coupon_permissions: string[] = ["manage_coupons", "delete_coupon"];
 

@@ -315,27 +315,16 @@ export default function ViewStaff({id}: {id: string}) {
                       </span>
                     </p>
                   )}
+
+                  <div className="mt-1.5 font-light text-tiny text-danger">
+                    <p>{t_tabs("reason_for_suspension")}:</p>
+                    <p className="font-medium">
+                      {locale === "en" ? response.user.reason_for_suspension_en: response.user.reason_for_suspension_fr}
+                    </p>
+                  </div>
                   </>
                 )}
               </>
-
-              <div>
-                {response.user.status != "active" ? (
-                  <p className="mt-4.5">
-                    {locale === "en" ? response.user.reason_for_suspension_en: response.user.reason_for_suspension_fr}
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Pellentesque posuere fermentum urna, eu condimentum mauris
-                    tempus ut. Donec fermentum blandit aliquet. Etiam dictum
-                    dapibus ultricies. Sed vel aliquet libero. Nunc a augue
-                    fermentum, pharetra ligula sed, aliquam lacus.
-                  </p>
-                ): null}
-              </div>
-
-              {/* stats
-              <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-6 py-4 md:py-6">
-                <CardWrapper />
-              </div> */}
             </div>
           </div>
         </div>
@@ -402,7 +391,7 @@ export default function ViewStaff({id}: {id: string}) {
                   </div>
                 ): (
                   <div className="mt-2 px-3 py-5">
-                    <Alert color="default" message={t_alert("no_cancelled_reservation")} />
+                    <Alert color="default" message={t_alert("no_reservation")} />
                   </div>
                 )}
               </Tab>
