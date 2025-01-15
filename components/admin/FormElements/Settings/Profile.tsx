@@ -109,9 +109,11 @@ export default function Profile () {
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
-            await signOut({
-              callbackUrl: `/${locale}/auth/login`
-            });
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
             break;
           case 404:
             setError(t_error("user_not_found"));
@@ -162,6 +164,14 @@ export default function Profile () {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setErrorImg(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setErrorImg(t_error("user_not_found"));
             break;
@@ -208,6 +218,14 @@ export default function Profile () {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setErrorPwd(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setErrorPwd(t_error("user_not_found"));
             break;
@@ -255,6 +273,14 @@ export default function Profile () {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setErrorImg(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setErrorImg(t_error("user_not_found"));
             break;

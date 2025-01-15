@@ -9,7 +9,7 @@ import Title from '@/components/Title';
 import { Button, Checkbox } from '@nextui-org/react';
 import { CommonSkeleton } from '@/components/Skeletons';
 import Alert from '@/components/Alert';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -89,6 +89,14 @@ export default function Page({ params }: { params: { id: string } }) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("role_not_found"));
             break;

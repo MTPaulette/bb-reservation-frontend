@@ -12,6 +12,7 @@ import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
 import { deleteAgency } from "@/lib/action/admin/agencies";
 import Title from "@/components/Title";
+import { signOut } from "next-auth/react";
 
 export default function DeleteAgency({ id }: { id: number} ) {
   const t = useTranslations("Input");
@@ -53,6 +54,14 @@ export default function DeleteAgency({ id }: { id: number} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("agency_not_found"));
             break;

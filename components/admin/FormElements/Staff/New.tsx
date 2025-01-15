@@ -14,6 +14,7 @@ import { UserFormType } from "@/lib/definitions";
 import { createStaff } from "@/lib/action/admin/staff";
 import { getAgencies } from "@/lib/action/default";
 import { languages } from "@/lib/data";
+import { signOut } from "next-auth/react";
 
 export default function NewStaff() {
   const t = useTranslations("Input");
@@ -92,6 +93,14 @@ export default function NewStaff() {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 422:
             const err = await res.json();
             setError(JSON.stringify(err.errors));

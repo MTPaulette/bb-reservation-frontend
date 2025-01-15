@@ -11,6 +11,7 @@ import Alert from "@/components/Alert";
 import { PaymentFormType } from "@/lib/definitions";
 import { paymentMethods } from "@/lib/data";
 import { createdPayment } from "@/lib/action/admin/payments";
+import { signOut } from "next-auth/react";
 
 export default function NewPayment({ reservation_id }: { reservation_id: number|string} ) {
   const t_input = useTranslations("Input");
@@ -53,6 +54,14 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("reservation_not_found"));
             break;

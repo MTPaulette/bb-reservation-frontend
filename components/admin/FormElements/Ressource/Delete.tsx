@@ -12,6 +12,7 @@ import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
 import { deleteRessource } from "@/lib/action/admin/ressources";
 import Title from "@/components/Title";
+import { signOut } from "next-auth/react";
 
 export default function DeleteRessource({ id }: { id: number} ) {
   const t = useTranslations("Input");
@@ -53,6 +54,14 @@ export default function DeleteRessource({ id }: { id: number} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("ressource_not_found"));
             break;

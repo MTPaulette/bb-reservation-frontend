@@ -7,14 +7,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { AgencyFormType } from "@/lib/definitions";
 import { createAgency } from "@/lib/action/admin/agencies";
+import { signOut } from "next-auth/react";
 
 export default function NewAgency() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
+  const locale = useLocale();
 
   const schema: ZodType<AgencyFormType> = z
     .object({
@@ -54,6 +56,14 @@ export default function NewAgency() {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 422:
             const err = await res.json();
             setError(JSON.stringify(err.errors));

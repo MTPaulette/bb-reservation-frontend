@@ -7,15 +7,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
 import { suspendStaff } from "@/lib/action/admin/staff";
 import Title from "@/components/Title";
+import { signOut } from "next-auth/react";
 
 export default function SuspendStaff({ id, status }: { id: number, status: string } ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
+  const locale = useLocale();
 
   const schema: ZodType<ConfirmPasswordType> = z
     .object({
@@ -52,6 +54,14 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("user_not_found"));
             break;

@@ -13,6 +13,7 @@ import { agencies, roles } from "@/lib/data";
 import { UserType, UserFormType } from "@/lib/definitions";
 import { updateStaff } from "@/lib/action/admin/staff";
 import { languages } from "@/lib/data";
+import { signOut } from "next-auth/react";
 
 
 export default function EditStaff({ user }: { user: UserType} ) {
@@ -63,6 +64,14 @@ export default function EditStaff({ user }: { user: UserType} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("user_not_found"));
             break;

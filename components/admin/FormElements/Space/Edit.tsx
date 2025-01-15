@@ -14,6 +14,7 @@ import Title from "@/components/Title";
 import { deleteImage, updateSpace, uploadImages } from "@/lib/action/admin/spaces";
 import { capitalize, getImageUrl } from "@/lib/utils";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 
 export default function EditSpace({ space }: { space: SpaceType} ) {
@@ -95,6 +96,14 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("space_not_found"));
             break;
@@ -138,6 +147,14 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("space_not_found"));
             break;
@@ -177,6 +194,14 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("image_not_found"));
             break;

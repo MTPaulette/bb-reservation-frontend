@@ -14,6 +14,7 @@ import Title from "@/components/Title";
 import { capitalize } from "@/lib/utils";
 import { Hours } from "@/lib/data";
 import { updateAgency } from "@/lib/action/admin/agencies";
+import { signOut } from "next-auth/react";
 
 
 export default function EditAgency({ agency }: { agency: AgencyType}) {
@@ -106,6 +107,14 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("agency_not_found"));
             break;

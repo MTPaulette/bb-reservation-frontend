@@ -9,7 +9,7 @@ import {
 
 import { SearchIcon, ChevronDownIcon, TrashIcon } from "@/components/Icons";
 import { LogType } from "@/lib/definitions";
-import { capitalize, getUsername } from "@/lib/utils";
+import { capitalize, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsLog as columns } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Modal from "@/components/Modal";
@@ -143,6 +143,10 @@ export default function LogsTable() {
         return (
           <p className="font-medium text-small">{log.lastname && log.firstname? getUsername(log.lastname, log.firstname): ""}</p>
         );
+      case "created_at":
+        return (
+          <p className="whitespace-nowrap">{formatDateTime(log.created_at, locale)}</p>
+      );
       default:
         return cellValue;
     }

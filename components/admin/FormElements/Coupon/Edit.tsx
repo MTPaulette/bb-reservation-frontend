@@ -14,6 +14,7 @@ import Title from "@/components/Title";
 import { getCouponById, updateCoupon } from "@/lib/action/admin/coupons";
 import { getUsername } from "@/lib/utils";
 import Loader from "../../Common/Loader";
+import { signOut } from "next-auth/react";
 
 
 export default function EditCoupon({ id }: { id: number} ) {
@@ -118,6 +119,14 @@ export default function EditCoupon({ id }: { id: number} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("coupon_not_found"));
             break;

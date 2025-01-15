@@ -12,6 +12,7 @@ import Alert from "@/components/Alert";
 import { UserType, UserFormType } from "@/lib/definitions";
 import { updateClient } from "@/lib/action/admin/clients";
 import { languages } from "@/lib/data";
+import { signOut } from "next-auth/react";
 
 
 export default function EditClient({ user }: { user: UserType} ) {
@@ -60,6 +61,14 @@ export default function EditClient({ user }: { user: UserType} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("user_not_found"));
             break;

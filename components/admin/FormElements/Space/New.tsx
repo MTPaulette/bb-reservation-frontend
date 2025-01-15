@@ -5,16 +5,18 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import { PencilSquareIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z, ZodType } from "zod";
+import { z, ZodType, ZodType } from "zod";
 import { useState } from "react";
 import { useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { SpaceFormType } from "@/lib/definitions";
 import { createSpace } from "@/lib/action/admin/spaces";
+import { signOut } from "next-auth/react";
 
 export default function NewSpace() {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
+  const locale = useLocale();
 
   const schema: ZodType<SpaceFormType> = z
     .object({
@@ -52,6 +54,14 @@ export default function NewSpace() {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 422:
             const err = await res.json();
             setError(JSON.stringify(err.errors));

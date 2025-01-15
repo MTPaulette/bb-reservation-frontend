@@ -8,6 +8,7 @@ import { CouponType, Reservation_draftType, RessourceType, UserType } from "@/li
 import Title from "@/components/Title";
 import { capitalize, formatCurrency, getImageUrl, getUsername } from "@/lib/utils";
 import { confirmReservation } from "@/lib/action/admin/reservations";
+import { signOut } from "next-auth/react";
 
 export default function SummaryReservation(
   { 
@@ -45,6 +46,14 @@ export default function SummaryReservation(
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 422:
             if(response.errors.en){
               setError(locale === "en" ? response.errors.en : response.errors.fr);

@@ -116,9 +116,11 @@ export default function General () {
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
-            await signOut({
-              callbackUrl: `/${locale}/auth/login`
-            });
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
             break;
           case 404:
             setError(t_error("options_not_found"));

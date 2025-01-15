@@ -7,15 +7,17 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z, ZodType } from "zod";
 import { useState } from "react";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
 import { SuspensionFormType } from "@/lib/definitions";
 import { suspendAgency } from "@/lib/action/admin/agencies";
 import Title from "@/components/Title";
+import { signOut } from "next-auth/react";
 
 export default function SuspendAgency({ id, status }: { id: number, status: string } ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
+  const locale = useLocale();
 
   const schema: ZodType<SuspensionFormType> = z
     .object({
@@ -54,6 +56,14 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("agency_not_found"));
             break;

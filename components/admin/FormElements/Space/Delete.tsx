@@ -12,6 +12,7 @@ import Alert from "@/components/Alert";
 import { ConfirmPasswordType } from "@/lib/definitions";
 import { deleteSpace } from "@/lib/action/admin/spaces";
 import Title from "@/components/Title";
+import { signOut } from "next-auth/react";
 
 export default function DeleteSpace({ id }: { id: number} ) {
   const t = useTranslations("Input");
@@ -53,12 +54,19 @@ export default function DeleteSpace({ id }: { id: number} ) {
       } else {
         const status = res.status;
         switch(status) {
+          case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
           case 404:
             setError(t_error("space_not_found"));
             break;
           case 422:
             const err = await res.json();
-            // setError(err.password? t_error("wrongPassword"): "")
 
             if(err.errors.en){
               setError(locale === "en" ? err.errors.en : err.errors.fr);
