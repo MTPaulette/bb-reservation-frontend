@@ -60,7 +60,7 @@ export default function ResetPasswordComponent() {
         setSuccess(t("reset_password_success_msg"));
         setTimeout(() => {
           router.push(`/${locale}/auth/login`);
-        }, 1000);
+        }, 500);
       } else {
         const err = await res.json();
         setError(JSON.stringify(err.errors));

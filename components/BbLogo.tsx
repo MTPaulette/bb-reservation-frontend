@@ -23,7 +23,7 @@ export const BbLogo = ({width=72}) => (
       height={width}
       alt="bb logo"
       style={{
-        width: "auto",
+        // width: "auto",
         height: "auto",
       }}
     />
