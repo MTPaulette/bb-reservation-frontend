@@ -52,6 +52,7 @@
     "confirm_warning": "Etes-vous sur(e) de vouloir continuer cette action ? Veuillez, confirmer en saisissant votre mot de passe.",
     "wrongPassword": "Mauvais mot de passe",
     "acces_denied": "accès interdit",
+    "suspended_account": "Compte suspendu",
     "user_not_found": "Utilisateur non trouvé",
     "role_not_found": "Role non trouvé",
     "server_not_found": "Elément non trouvé dans le serveur",

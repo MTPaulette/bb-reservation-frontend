@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Input, Select, SelectItem} from "@nextui-org/react";
 import { EnvelopIcon, TelephoneIcon, UserIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
@@ -9,17 +9,20 @@ import { z, ZodType } from "zod";
 import { useState } from "react";
 import { useLocale, useTranslations } from 'next-intl';
 import Alert from "@/components/Alert";
-import { agencies, roles } from "@/lib/data";
+// import { agencies, roles } from "@/lib/data";
+import { roles } from "@/lib/data";
 import { UserType, UserFormType } from "@/lib/definitions";
 import { updateStaff } from "@/lib/action/admin/staff";
 import { languages } from "@/lib/data";
 import { signOut } from "next-auth/react";
+import { getAgencies } from "@/lib/action/default";
 
 
 export default function EditStaff({ user }: { user: UserType} ) {
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
   const locale = useLocale();
+  const [agencies, setAgencies] = useState([]);
 
   const schema: ZodType<UserFormType> = z
     .object({
@@ -32,8 +35,8 @@ export default function EditStaff({ user }: { user: UserType} ) {
       })
       .length(12),
       language: z.string().min(1),
-      role_id: z.string(),
-      agency_id: z.string(),
+      role_id: z.string().min(1),
+      agency_id: z.string().min(1),
   });
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,6 +52,22 @@ export default function EditStaff({ user }: { user: UserType} ) {
     resolver: zodResolver(schema),
   })
 
+  useEffect(() => {
+    setError("");
+    getAgencies()
+      .then(async (res) => {
+        if(res?.ok){
+          setAgencies(await res.json());
+        }else {
+          setError(t_error("something_wrong"));
+        }
+      })
+      .catch(error => {
+        setError(t_error("something_wrong"));
+        console.error(error);
+      });
+  }, []);
+
   const handleFormSubmit = async (data: UserFormType) => {
     setError("");
     setSuccess("");
@@ -59,10 +78,11 @@ export default function EditStaff({ user }: { user: UserType} ) {
       if(res?.ok) {
         setSuccess(t("update_account_success_msg"));
         setTimeout(() => {
-          window.location.reload();
+          // window.location.reload();
         }, 1000);
       } else {
         const status = res.status;
+        const err = await res.json();
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
@@ -76,7 +96,6 @@ export default function EditStaff({ user }: { user: UserType} ) {
             setError(t_error("user_not_found"));
             break;
           case 422:
-            const err = await res.json();
             setError(JSON.stringify(err.errors));
             break;
           case 403:
@@ -86,6 +105,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
             setError(t_error("something_wrong"));
             break;
           default:
+            setError(locale === "en" ? err.errors.en : err.errors.fr);
             break;
         }
       }
@@ -170,11 +190,12 @@ export default function EditStaff({ user }: { user: UserType} ) {
           isInvalid={errors.phonenumber ? true: false}
           errorMessage={errors.phonenumber ? errors.phonenumber?.message: null}
         />
-        <div className="flex gap-4">
+        <div className="flex items-start gap-4">
           <Select
             label={t("role")}
             labelPlacement="outside"
-            className="w-full bg-input rounded-small"
+            variant="bordered"
+            // className="w-full bg-input rounded-small"
             placeholder={t("role_placeholder")}
             isInvalid={errors.role_id ? true: false}
             errorMessage={errors.role_id ? errors.role_id?.message: null}
@@ -190,11 +211,12 @@ export default function EditStaff({ user }: { user: UserType} ) {
           <Select
             label={t("agency")}
             labelPlacement="outside"
-            className="w-full bg-input rounded-small"
+            variant="bordered"
+            // className="w-full bg-input rounded-small"
             placeholder={t("agency_placeholder")}
             isInvalid={errors.agency_id ? true: false}
             errorMessage={errors.agency_id ? errors.agency_id?.message: null}
-            defaultSelectedKeys={[user.work_at.toString()]}
+            // defaultSelectedKeys={[user.work_at.toString()]}
             {...register("agency_id")}
           >
             {agencies.map((agency) => (

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { Button, Input, Link} from "@nextui-org/react";
+import { Button, Checkbox, Input, Link} from "@nextui-org/react";
 import { EnvelopIcon, EyeIcon, EyeSlashIcon } from "@/components/Icons";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,13 +55,15 @@ export default function Login() {
         redirect: false,
     })
     .then((res) => {
+        console.log("error credential");
+        console.log(res);
+
       setLoading(false);
       if(res?.ok) {
-        router.push(`/${locale}/admin/profile`);
-      } else if(res?.status == 423) {
+        // router.push(`/${locale}/admin/profile`);
+      } else if(res?.status === 423) {
         console.log("suspended");
       } else {
-        console.log("error credential");
         if(res?.error === "CredentialsSignin"){
           setError(t_error("invalid_credentials"));
         } else {

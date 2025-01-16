@@ -57,11 +57,13 @@ export default function ReservationsTable() {
           const status = res.status;
           switch(status) {
             case 401:
-              setError(t_error("unauthenticated"));
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
               await signOut({
                 callbackUrl: `/${locale}/auth/login`
               });
-              break;
+            }, 500);
+            break;
             case 403:
               setError(t_error("acces_denied"));
               break;
@@ -98,7 +100,7 @@ export default function ReservationsTable() {
 
   const pages = Math.ceil(reservations.length / rowsPerPage);
   const [showNewModal, setShowNewModal] = React.useState<boolean>(false);
-  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
+  // const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
   const [showPaymentModal, setShowPaymentModal] = React.useState<boolean>(false);
   const [showCancelModal, setShowCancelModal] = React.useState<boolean>(false);
   const [selectedReservation, setSelectedReservation] = React.useState<ReservationType>();
@@ -109,7 +111,7 @@ export default function ReservationsTable() {
 
   const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
   const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
-  const update_reservation_permissions: string[] = ["manage_reservations", "edit_reservation", "edit_reservation_of_agency"];
+  // const update_reservation_permissions: string[] = ["manage_reservations", "edit_reservation", "edit_reservation_of_agency"];
   const cancel_reservation_permissions: string[] = ["manage_reservations", "cancel_all_reservation", "cancel_reservation_of_agency", "cancel_own_reservation"];
 
   const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
@@ -604,12 +606,12 @@ export default function ReservationsTable() {
         <NewReservation />
       </Modal>
 
-      <Modal
+      {/* <Modal
         open={showEditModal} close={() => setShowEditModal(false)}
         title={`${t_table("editReservation")} "${selectedReservation? selectedReservation.ressource.space.name: ''}"`}
       >
         <EditReservation reservation={selectedReservation} />
-      </Modal>
+      </Modal> */}
     
 
       <Modal

@@ -49,11 +49,13 @@ export default function LogsTable() {
           const status = res.status;
           switch(status) {
             case 401:
-              setError(t_error("unauthenticated"));
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
               await signOut({
                 callbackUrl: `/${locale}/auth/login`
               });
-              break;
+            }, 500);
+            break;
             case 403:
               setError(t_error("acces_denied"));
               break;

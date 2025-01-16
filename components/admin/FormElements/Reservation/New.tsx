@@ -11,7 +11,7 @@ import Alert from "@/components/Alert";
 import { UserType, ReservationFormType, RessourceType, Reservation_draftType, CouponType } from "@/lib/definitions";
 import { getRessourceById } from "@/lib/action/admin/ressources";
 import { getClients } from "@/lib/action/admin/clients";
-import { getRessources } from "@/lib/action/admin/ressources";
+import { getRessources } from "@/lib/action/default";
 import Title from "@/components/Title";
 import Loader from "../../Common/Loader";
 import { signOut } from 'next-auth/react';
@@ -19,10 +19,8 @@ import { capitalize, formatCurrency, getImageUrl } from "@/lib/utils";
 import { BookIcon, CalendarIcon, CurrencyIcon } from "@/components/Icons";
 import { createReservation } from "@/lib/action/admin/reservations";
 import { validitiesName as validities, Hours, middayPeriods } from "@/lib/data";
-import { applyCoupon } from "@/lib/action/admin/coupons";
 import NewPayment from "../Payment/New";
 import SummaryReservation from "./Summary";
-// import Image from "next/image";
 
 export default function NewReservation() {
   const t_input = useTranslations("Input");
@@ -105,32 +103,13 @@ export default function NewReservation() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
+
     getRessources()
       .then(async (res) => {
-        // setLoading(false);
         if(res?.ok){
           setRessources(await res.json());
         }else {
-          const status = res.status;
-          switch(status) {
-            case 401:
-              setError(t_error("unauthenticated"));
-              await signOut({
-                callbackUrl: `/${locale}/auth/login`
-              });
-              break;
-            case 403:
-              setError(t_error("acces_denied"));
-              break;
-            case 404:
-              setError(t_error("server_not_found"));
-              break;
-            case 500:
-              setError(t_error("something_wrong"));
-              break;
-            default:
-              break;
-          }
+          setError(t_error("something_wrong"));
         }
       })
       .catch(error => {
@@ -182,6 +161,7 @@ export default function NewReservation() {
             setError(t_error("something_wrong"));
             break;
           default:
+            setError(locale === "en" ? response.errors.en : response.errors.fr);
             break;
         }
       }

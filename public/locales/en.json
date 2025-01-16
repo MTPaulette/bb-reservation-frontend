@@ -52,6 +52,7 @@
     "confirm_warning": "Are you sure that you want to continue this action ? Please, confirm with your password.",
     "wrongPassword": "Wrong password",
     "acces_denied": "acces denied",
+    "suspended_account": "Suspended account",
     "user_not_found": "User not found",
     "role_not_found": "Role not found",
     "server_not_found": "Element not found in server",

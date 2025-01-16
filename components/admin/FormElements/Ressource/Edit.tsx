@@ -77,6 +77,7 @@ export default function EditRessource({ ressource }: { ressource: RessourceType}
         }, 1000);
       } else {
         const status = res.status;
+        const err = await res.json();
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
@@ -90,7 +91,6 @@ export default function EditRessource({ ressource }: { ressource: RessourceType}
             setError(t_error("ressource_not_found"));
             break;
           case 422:
-            const err = await res.json();
             setError(JSON.stringify(err.errors));
             break;
           case 403:
@@ -100,6 +100,7 @@ export default function EditRessource({ ressource }: { ressource: RessourceType}
             setError(t_error("something_wrong"));
             break;
           default:
+            setError(locale === "en" ? err.errors.en : err.errors.fr);
             break;
         }
       }

@@ -53,6 +53,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
         }, 3000);
       } else {
         const status = res.status;
+        const err = await res.json();
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
@@ -66,11 +67,10 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
             setError(t_error("reservation_not_found"));
             break;
           case 422:
-            const response = await res.json();
-            if(response.errors.en){
-              setError(locale === "en" ? response.errors.en : response.errors.fr);
+            if(err.errors.en){
+              setError(locale === "en" ? err.errors.en : err.errors.fr);
             } else {
-              setError(JSON.stringify(response));
+              setError(JSON.stringify(err));
             }
             break;
           case 403:
@@ -80,6 +80,7 @@ export default function NewPayment({ reservation_id }: { reservation_id: number|
             setError(t_error("something_wrong"));
             break;
           default:
+            setError(locale === "en" ? err.errors.en : err.errors.fr);
             break;
         }
       }

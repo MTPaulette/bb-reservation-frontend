@@ -92,6 +92,7 @@ export default function NewStaff() {
         }, 1000);
       } else {
         const status = res.status;
+        const err = await res.json();
         switch(status) {
           case 401:
             setError(t_error("unauthenticated"));
@@ -102,7 +103,6 @@ export default function NewStaff() {
             }, 500);
             break;
           case 422:
-            const err = await res.json();
             setError(JSON.stringify(err.errors));
             break;
           case 403:
@@ -112,6 +112,7 @@ export default function NewStaff() {
             setError(t_error("something_wrong"));
             break;
           default:
+            setError(locale === "en" ? err.errors.en : err.errors.fr);
             break;
         }
       }

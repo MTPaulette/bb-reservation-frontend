@@ -55,11 +55,19 @@ export const authOptions: NextAuthOptions = {
         }
         const response = await fetch(`${api_url}/login`, options);
         
+        console.log("login response");
+        console.log(response.status);
         if (response.status == 201) {
           const res = await response.json();
           return res;
+        };
+        // return null;
+        if(response.status === 423) {
+          const res = await response.json();
+          return response.json();
         }
-        return null;
+        const ress = await response.json();
+        return ress.status(401).json({error: "erreur d'authentification."});
       },
     }),
   ],
@@ -97,6 +105,21 @@ export const authOptions: NextAuthOptions = {
       session.permissions = token.permissions;
       return session;
     },
+    /*
+    async error(error, req, res) {
+      if(error.status === 423) {
+        return res.status(423).json({error: "votre compte est suspendu."});
+      }
+      return res.status(401).json({error: "erreur d'authentification."});
+    } 
+      
+        if(response.status === 423) {
+          const res = await response.json();
+          return res.status(423).json({error: "votre compte est suspendu."});
+        }
+        const ress = await response.json();
+        return ress.status(401).json({error: "erreur d'authentification."});
+        */
   },
 }
 const handler = NextAuth(authOptions);

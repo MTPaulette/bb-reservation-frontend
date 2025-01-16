@@ -46,9 +46,19 @@ export default function ViewProfile() {
           switch(status) {
             case 401:
               setError(t_error("unauthenticated"));
-              await signOut({
-                callbackUrl: `/${locale}/auth/login`
-              });
+              setTimeout(async () => {
+                await signOut({
+                  callbackUrl: `/${locale}/auth/login`
+                });
+              }, 500);
+              break;
+            case 423:
+              setError(t_error("suspended_account"));
+              setTimeout(async () => {
+                await signOut({
+                  callbackUrl: `/${locale}/auth/login`
+                });
+              }, 500);
               break;
             case 403:
               setError(t_error("acces_denied"));
