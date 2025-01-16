@@ -3,7 +3,7 @@
 import React from "react";
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Profile from "@/components/admin/FormElements/Settings/Profile";
-import Email from "@/components/admin/FormElements/Settings/Email";
+// import Email from "@/components/admin/FormElements/Settings/Email";
 import General from "@/components/admin/FormElements/Settings/General";
 import Finance from "@/components/admin/FormElements/Settings/Finance";
 import Pdf from "@/components/admin/FormElements/Settings/Pdf";
@@ -12,7 +12,8 @@ import { useSession } from "next-auth/react";
 import { CommonSkeleton } from "@/components/Skeletons";
 
 const links: string[] = ["profile"];
-const links_with_options_setting: string[] = ["general", "profile", "email", "finance", "pdf"];
+const links_with_options_setting: string[] = ["general", "profile", "finance", "pdf"];
+// const links_with_options_setting: string[] = ["general", "profile", "email", "finance", "pdf"];
 
 export default function IndexSettings () {
 
@@ -82,7 +83,7 @@ export default function IndexSettings () {
         permissions.includes(permission)) && (
           <>
             {currentGroup === "general" ? <General /> : ""}
-            {currentGroup === "email" ? <Email /> : ""}
+            {/* {currentGroup === "email" ? <Email /> : ""} */}
             {currentGroup === "finance" ? <Finance /> : ""}
             {currentGroup === "pdf" ? <Pdf /> : ""}
           </>

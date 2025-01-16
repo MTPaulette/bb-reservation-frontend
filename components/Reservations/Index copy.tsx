@@ -20,12 +20,10 @@ import Alert from "../Alert";
 export default function Reservations() {
   const [ressources, setRessources] = useState<RessourceDefaultType[]>([]);
   const [events, setEvents] = useState<EventType[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const locale = useLocale();
   const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
-  const t_alert = useTranslations("Alert");
 
   useEffect(() => {
     setError("");
@@ -137,23 +135,15 @@ export default function Reservations() {
           <Alert color="danger" message={error} />
         ) : (
         <>
-        {/* {calendarDisplay || events.length == 0 ? */}
         {calendarDisplay ?
-          <>
-           {events.length > 0 ? (
-            <Calendar events={events} />
-            ): (
-              <div className="my-12">
-                <Alert color="default" message={t_alert("no_reservation")} />
-              </div>
-            )}
-          </>
+          <Calendar events={events} />
           : (
           <>
             <FindRessource />
             <div className="my-8 w-full flex flex-wrap justify-center sm:justify-around items-center gap-6">
-              {/* {ressources.length == 0 || events.length == 0 ? ( */}
-              {ressources.length > 0 ? (
+              {ressources.length == 0 || events.length == 0 ? (
+                <CommonSkeleton />
+              ):(
                 <div className="w-full flex flex-wrap justify-center sm:justify-around items-center gap-6">
                   {items.map((ressource, index) => (
                     <div key={index}>
@@ -161,17 +151,12 @@ export default function Reservations() {
                     </div>
                   ))}
                 </div>
-              ):(
-                <div className="my-12 w-full">
-                  <Alert color="default" message={t_alert("no_ressource")} />
-                </div>
-                // <CommonSkeleton />
               )}
             </div>
 
-            {ressources.length > 0 ? (
+            {/* <div className="py-2 px-2 flex justify-between items-center z-1"> */}
             <div className="block sm:flex justify-between items-center mb-12">
-              <div className="flex mb-2 sm:mb-0 justify-center sm:justify-between items-center z-1">
+              <div className="flex w-fulll justify-center sm:justify-between items-center z-1">
                 <Pagination
                   showControls
                   classNames={{
@@ -204,7 +189,6 @@ export default function Reservations() {
                 </label>
               </div>
             </div>
-            ): null}
           </>
         )}
         </>

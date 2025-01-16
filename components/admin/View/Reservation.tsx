@@ -101,8 +101,9 @@ export default function ViewReservation({id}: {id: string}) {
       <CommonSkeleton />
     ) : (
     <div>
-    <div className="grid grid-cols-12 gap-6 md:gap-12">
-      <div className="col-span-12 sm:col-span-8 px-0 sm:px-4 md::pl-0 sm:pr-8 flex flex-col gap-4 md:gap-8">
+    <div className="grid grid-cols-12 gap-6 lg:gap-12">
+      {/* <div className="col-span-12 sm:col-span-8 px-0 sm:px-4 lg::pl-0 sm:pr-8 flex flex-col gap-4 lg:gap-8"> */}
+      <div className="col-span-12 lg:col-span-8 px-0 lg:px-4 lg:pl-0 lg:pr-8 flex flex-col gap-4 lg:gap-8">
         {reservation.state != "totally paid" && reservation.state != "cancelled" ?
           <div className="block max-w-screen">
             <Alert color="warning" message={t_alert("reservation_not_totally_paid_warning")} />
@@ -116,19 +117,22 @@ export default function ViewReservation({id}: {id: string}) {
 
 
       {/* payment informations */}
-      <div className="col-span-12 sm:col-span-4">
+      {/* <div className="col-span-12 sm:col-span-4"> */}
+      <div className="col-span-12 lg:col-span-4">
         <div className="border-t-2 border-divider pt-6 mt-6 sm:border-none sm:pt-0 sm:mt-0">
           <Title className="font-semibold text-xl text-foreground mb:mb-6 sm:my-6">{t_ressource("payment_informations")}</Title>
 
           {/* characteristics */}
-          <div className="mb-4 md:mb-6">
+          <div className="mb-4 lg:mb-6">
             {coupon ?
               <div className="my-8">
                 <CouponCard coupon={coupon} />
               </div>
             : null}
             {payments.length > 0 ? (
-              <ul className="w-full flex flex-col justify-between mt-6 gap-4 md:gap-8">
+              // <ul className="w-full flex flex-col justify-between mt-6 gap-4 lg:gap-8">
+              <ul className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-1 justify-between mt-6 gap-4 sm:gap-6 md:gap-8 lg:gap-8">
+              {/* <ul className="w-full flex flex-row flex-wrap lg:flex-col justify-between mt-6 gap-4 lg:gap-8"> */}
                 {payments.map((payment) => (
                   <li key={payment.id}>
                     <PaymentCard payment={payment} />

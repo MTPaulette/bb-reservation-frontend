@@ -1,4 +1,4 @@
-import { headerOptions, getCSRFToken, getToken, decryptToken } from "../../utils";
+import { headerOptions, getCSRFToken, getToken } from "../../utils";
 import { ConfirmPasswordType, SpaceFormType } from "../../definitions";
 
 
@@ -55,8 +55,9 @@ export async function deleteSpace(data: ConfirmPasswordType, id: number) {
 }
 
 export async function uploadImages(data: FormData, space_id: number) {
-  const encryptedToken = await getToken()
-  const token = encryptedToken? decryptToken(encryptedToken): "";
+  // const encryptedToken = await getToken()
+  // const token = encryptedToken? decryptToken(encryptedToken): "";
+  const token = await getToken();
   const response = await fetch(`${api_url}/admin/space/${space_id}/image/store`, {
     method: "POST",
     headers: {

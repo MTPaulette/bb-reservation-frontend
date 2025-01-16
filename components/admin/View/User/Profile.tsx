@@ -154,7 +154,7 @@ export default function ViewProfile() {
                 <span className="font-semibold text-foreground">
                   {response.totalCancelledReservations}
                 </span>
-                <span className="text-sm sm:whitespace-nowrap truncate">{t_statistic("total_cancelled_reservations")} </span>
+                <span className="text-sm sm:whitespace-nowrap truncate max-w-full">{t_statistic("total_cancelled_reservations")} </span>
               </div>
             </div>
 

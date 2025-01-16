@@ -15,6 +15,7 @@ import {
 import { useSession } from 'next-auth/react';
 import CancelReservation from '../admin/FormElements/Reservation/Cancel';
 import { useState } from 'react';
+import NewPayment from '../admin/FormElements/Payment/New';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   pending: "warning",
@@ -31,6 +32,7 @@ export function ReservationCard({reservation} :{ reservation: ReservationType })
   const t_ressource = useTranslations("Ressource");
   const t_reservation = useTranslations("Reservation");
   const [showCancelModal, setShowCancelModal] = useState<boolean>(false);
+  const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
@@ -39,6 +41,7 @@ export function ReservationCard({reservation} :{ reservation: ReservationType })
   const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
   const view_client_permissions: string[] = ["view_client"];
   const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
+  const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
 
   return (
     <>
@@ -54,6 +57,16 @@ export function ReservationCard({reservation} :{ reservation: ReservationType })
             <DropdownMenu>
               <DropdownItem
                 className={
+                  new_reservation_permissions.some(permission =>
+                  permissions.includes(permission)) ? "block" : "hidden"
+                }
+                color="success"
+                onClick={() => {
+                  setShowPaymentModal(true);
+                }}
+              >{t_table("new_payment")}</DropdownItem>
+              <DropdownItem
+                className={
                   cancel_reservation_permissions.some(permission =>
                   permissions.includes(permission)) ? "block" : "hidden"
                 }
@@ -67,7 +80,7 @@ export function ReservationCard({reservation} :{ reservation: ReservationType })
         </div>
       </div>
 
-      <ul className="my-4 text-sm">
+      <ul className="my-4 text-sm space-y-1 md:space-y-0.5">
         <li>
           <dl className="w-full flex items-center justify-between font-semibold">
             <dt>{t_reservation("id")} :</dt>
@@ -318,6 +331,13 @@ export function ReservationCard({reservation} :{ reservation: ReservationType })
 
       {/* MODALS */}
       <div>
+        <Modal
+          open={showPaymentModal} close={() => setShowPaymentModal(false)}
+          title={`${t_table("editReservation")} "${reservation.ressource.space.name}"`}
+        >
+          <NewPayment reservation_id={reservation.id} />
+        </Modal>
+
         <Modal
           open={showCancelModal} close={() => setShowCancelModal(false)}
           title={`${t_table("cancelReservation")} "${reservation ? reservation.id: ''}"`}

@@ -1,4 +1,4 @@
-import { headerOptions, getCSRFToken, getToken, decryptToken } from "../utils";
+import { headerOptions, getCSRFToken, getToken } from "../utils";
 import { UserFormType } from "../definitions";
 
 const api_url = process.env.API_URL;
@@ -6,7 +6,6 @@ const api_url = process.env.API_URL;
 export async function updateProfile(data: UserFormType) {
   const response = await fetch(`${api_url}/profile`, {
     method: "PUT",
-    //headers: await headerOptions(),
     headers: await headerOptions(),
     body: JSON.stringify(data),
   })
@@ -14,8 +13,9 @@ export async function updateProfile(data: UserFormType) {
 }
 
 export async function uploadImage(data: FormData) {
-  const encryptedToken = await getToken()
-  const token = encryptedToken? decryptToken(encryptedToken): "";
+  // const encryptedToken = await getToken()
+  // const token = encryptedToken? decryptToken(encryptedToken): "";
+  const token = await getToken();
   const response = await fetch(`${api_url}/profile/image/store`, { 
     method: "POST",
     headers: {

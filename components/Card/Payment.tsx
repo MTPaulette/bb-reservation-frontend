@@ -2,7 +2,6 @@
 
 import { PaymentType } from '@/lib/definitions';
 import { formatCurrency, formatDateTime, getUsername } from '@/lib/utils';
-import { Image } from "@nextui-org/react";
 import Title from '../Title';
 import { useTranslations } from 'next-intl';
 import { CurrencyIcon } from '../Icons';
@@ -36,15 +35,15 @@ export function PaymentCard({payment} :{ payment: PaymentType }) {
       <dl className="mt-2">
         <dt className="mb-1 font-semibold">{t_payment("payment_method")}</dt>
         <dd className="flex items-center space-x-4 text-foreground/60">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-content2">
-            <Image
+          <div className="flex h-12 w-12 text-blue-400 shrink-0 items-center justify-center rounded-lg bg-content2">
+            {/* <Image
               width={16}
               height={16}
               src={"/images/logo/logo-icon.svg"}
               alt="Logo"
               className="h-4 w-auto"
-            />
-            {/* <CurrencyIcon fill="currentColor" size={20} /> */}
+            /> */}
+            <CurrencyIcon fill="currentColor" size={20} />
           </div>
           <div>
             <div className="text-sm">

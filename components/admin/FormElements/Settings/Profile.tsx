@@ -191,6 +191,7 @@ export default function Profile () {
       }
     })
     .catch((error) => {
+      setLoadingImg(false);
       setErrorImg(t_error("something_wrong"));
       console.error(error);
     })
