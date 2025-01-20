@@ -58,10 +58,7 @@ export default function Login() {
       setLoading(false);
       if(res?.ok) {
         router.push(`/${locale}/admin/profile`);
-      } else if(res?.status == 423) {
-        console.log("suspended");
-      } else {
-        console.log("error credential");
+      }else {
         if(res?.error === "CredentialsSignin"){
           setError(t_error("invalid_credentials"));
         } else {

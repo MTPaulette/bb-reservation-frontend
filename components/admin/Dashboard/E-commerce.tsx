@@ -272,19 +272,16 @@ export default function ECommerce() {
           {statistics.ressource_with_reservations != null ? (
             <ChartThree data={statistics.ressource_with_reservations} period={period} />
           ) : null}
-          <MapOne title={t_statistic("map")} />
           {statistics.topClients != null ? (
-            <div className="col-span-12">
-              <TopClients clients={statistics.topClients} period={period} />
-            </div>
+            <TopClients clients={statistics.topClients} period={period} />
           ) : null}
+          <MapOne title={t_statistic("map")} />
         </div>
 
         <div>
           <Modal
             open={showNewModal} close={() => setShowNewModal(false)}
             title="" size="4xl"
-            // title={t_table("newReservation")} size="4xl"
           >
             <NewReservation />
           </Modal>

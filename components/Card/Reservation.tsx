@@ -80,7 +80,7 @@ export function ReservationCard({reservation} :{ reservation: ReservationType })
         </div>
       </div>
 
-      <ul className="my-4 text-sm space-y-1 md:space-y-0.5">
+      <ul className="mt-4 text-sm space-y-1 md:space-y-0.5">
         <li>
           <dl className="w-full flex items-center justify-between font-semibold">
             <dt>{t_reservation("id")} :</dt>
@@ -233,6 +233,14 @@ export function ReservationCard({reservation} :{ reservation: ReservationType })
             </dl>
           </li>
         ): null }
+
+        <li>
+          {/* <dl className="w-full flex items-center justify-between mb-8"> */}
+          <dl className="w-full mt-2 mb-8">
+            <dt className="font-semibold">{t_reservation("note")} :</dt>
+            <dd className="dark:font-extralight text-justify mt-1">{reservation.note ? reservation.note : "-"}</dd>
+          </dl>
+        </li>
 
         {/* client informations */}
         <li className="my-8 py-8 border-y-2 border-divider dark:border-white/20">

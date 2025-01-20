@@ -8,7 +8,6 @@ import Title from "@/components/Title";
 
 export default function MapOne({title}: {title: string}) {
   useEffect(() => {
-    
     const mapOne = new jsVectorMap({
       selector: "#mapOne",
       // map: "us_aea_en",
@@ -54,7 +53,8 @@ export default function MapOne({title}: {title: string}) {
   }, []);
 
   return (
-    <div className="col-span-12 rounded-sm border border-divider bg-background px-7.5 py-6 shadow-default xl:col-span-7">
+    // <div className="col-span-12 rounded-sm border border-divider bg-background px-7.5 py-6 shadow-default xl:col-span-7">
+    <div className="col-span-12 rounded-sm border border-divider bg-background px-7.5 py-6 shadow-default">
       <Title className="mb-6 text-xl">{title}</Title>
       <div className="h-90">
         <div id="mapOne" className="mapOne map-btn"></div>

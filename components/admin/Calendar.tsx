@@ -33,11 +33,12 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 const renderEventContent = (eventInfo: any) => {
   return (
     <>
-      <div className="flex w-full flex-col rounded-sm border-l-[3px] border-primary bg-default bg-opacity-30 dark:bg-opacity-80 p-1 text-left">
+    {/* <div className="flex w-full flex-col rounded-sm border-l-[3px] border-primary bg-default bg-opacity-30 dark:bg-opacity-80 p-1 text-left"> */}
+    <div className="flex w-full flex-col rounded-sm border-l-[3px] p-1 text-left">
         <span className="event-name text-sm font-semibold text-foreground truncate">
           {eventInfo.event.title}
         </span>
-        <span className="time text-sm font-medium text-foreground">
+        <span className="time text-xs font-medium text-foreground">
           {eventInfo.timeText}
         </span>
         <span className="text-xs font-extralight text-foreground">
@@ -256,7 +257,6 @@ export default function Calendar() {
                 headerToolbar={{
                   left: "dayGridMonth,timeGridWeek,timeGridDay",
                   center: "title",
-                  // right: "prevYear,prev,next,nextYear today",
                   right: "prev,next today",
                 }}
                 nowIndicator={true}

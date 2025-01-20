@@ -396,7 +396,7 @@
     "reservations": "reservation(s)",
     "given_gift": "given gift(s)",
     "receiven_gift": "receiven gift(s)",
-    "about": "about"
+    "about": "About"
   },
   "Breadcrumb": {
     "dashboard": "dashboard",
@@ -474,7 +474,7 @@
     "ressources": "ressources",
     "payments": "payments",
     "ressource_with_reservations": "Ressource with reservations",
-    "ressource_with_reservations_description": "List of ressources per agency and number of reservations",
+    "ressource_with_reservations_description": "List of ressources per agency and number of reservations totally paid",
     "best_clients": "Five best clients",
     "best_clients_description": "Top 5 of clients which have done more reservations",
     "payment_per_month_description": "Yearly comparison of total payments made by month and by agency",
@@ -540,6 +540,7 @@
     "created_by": "Created by",
     "cancelled_by": "Cancelled by",
     "at": "At",
+    "note": "Note",
     "reason_for_cancellation": "Reason"
   }
 }

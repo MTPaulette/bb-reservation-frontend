@@ -475,7 +475,7 @@
     "ressources": "ressources",
     "payments": "paiements",
     "ressource_with_reservations": "Ressource avec réservations",
-    "ressource_with_reservations_description": "Liste des ressources par agence et le nombre de réservations",
+    "ressource_with_reservations_description": "Liste des ressources par agence et le nombre de réservations totallement payées",
     "best_clients": "Cinq meilleurs clients",
     "best_clients_description": "Top 5 des clients ayant fait le plus de réservations",
     "payment_per_month_description": "Comparaison annuelle du total des paiements effectués par mois et par agence",
@@ -541,6 +541,7 @@
     "created_by": "Crée par",
     "cancelled_by": "Annulée par",
     "at": "Le",
+    "note": "Note",
     "reason_for_cancellation": "Raison"
   }
 }

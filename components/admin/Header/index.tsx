@@ -3,8 +3,6 @@
 import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import DropdownNotification from "./DropdownNotification";
-// import User from "@/components/User";
-import Image from "next/image";
 import { ChevronDownIcon, SettingIcon, UserIcon } from "@/components/Icons";
 import Logout from "@/components/admin/FormElements/Logout";
 import { useSession } from "next-auth/react";
@@ -12,7 +10,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar, User } from "@nextui-org/react";
 import { getImageUrl, getUsername } from "@/lib/utils";
-import Search from "@/components/Search";
+// import Search from "@/components/Search";
 import { BbLogo } from "@/components/BbLogo";
 
 const Header = (props: {
@@ -77,13 +75,13 @@ const Header = (props: {
           </Link>
         </div>
 
-        <div className="hidden sm:block">
+        {/* <div className="hidden sm:block">
           <div className="w-full sm:w-[250px] xl:w-125">
             <Search placeholder={t("search_placeholder")} />
           </div>
-        </div>
+        </div> */}
 
-        <div className="flex items-center gap-3 2xsm:gap-7">
+        <div className="flex items-center gap-3 2xsm:gap-7 lg:w-full lg:justify-end">
           <ul className="flex items-center gap-2 2xsm:gap-4">
             {/* <!-- Dark Mode Toggler --> */}
             <li><ThemeSwitcher /></li>
@@ -144,7 +142,7 @@ const Header = (props: {
                 </Link>
               </DropdownItem>
               <DropdownItem key="settings" className="p-0 m-0">
-                <Link href={`/${locale}/admin/settings?group=general`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
+                <Link href={`/${locale}/admin/settings?group=profile`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
                   <SettingIcon fill="currentColor" size={18} />
                   {t("settings")}
                 </Link>

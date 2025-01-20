@@ -245,7 +245,7 @@ export default function NavBarComponent() {
               </Link>
             </DropdownItem>
             <DropdownItem key="settings" className="p-0 m-0">
-              <Link href={`/${locale}/admin/settings?group=general`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
+              <Link href={`/${locale}/admin/settings?group=profile`} className="truncate group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-foreground duration-300 ease-in-out hover:bg-default">
                 <SettingIcon fill="currentColor" size={18} />
                 {t("settings")}
               </Link>

@@ -13,7 +13,8 @@ export default function TopClients({clients, period}: {clients: TopClient[], per
   // const year = period != "" ? moment(period).year() : moment().year();
 
   return (
-    <div className="col-span-12 rounded-sm border border-divider bg-background px-7.5 py-6 shadow-default xl:col-span-4">
+    // <div className="col-span-12 xl:col-span-4 rounded-sm border border-divider bg-background px-7.5 py-6 shadow-default">
+    <div className="col-span-12 xl:col-span-7 rounded-sm border border-divider bg-background px-7.5 py-6 shadow-default">
       <div className="mb-6">
         <Title className="text-xl">{t_statistic("best_clients")}</Title>
         <p className="text-foreground/60 font-medium mt-2 leading-none">
@@ -24,10 +25,6 @@ export default function TopClients({clients, period}: {clients: TopClient[], per
           <span className="font-medium text-sm text-foreground ml-2">{year}</span>
         </p>
       </div>
-      
-      {/* <Title className="mb-1.5 text-xl">{t_statistic("best_clients")}</Title>
-      <p className="text-foreground/60 font-med font-medium mb-6">{t_statistic("best_clients_description")}</p> */}
-
       <div>
         {clients.map((client, key) => (
           <Link

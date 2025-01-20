@@ -5,7 +5,6 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { ChartType } from "@/lib/definitions";
 import { useTranslations } from 'next-intl';
-import { startAndEndOfWeek } from "@/lib/utils";
 import moment from "moment";
 import Title from "@/components/Title";
 
