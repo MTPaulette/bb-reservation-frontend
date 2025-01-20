@@ -1,3 +1,0 @@
-NEXTAUTH_SECRET=uHvJnOtC2UydiuNHxbWlEI9IHvrJHTwMxabpXLw3xVE=
-NEXTAUTH_URL=http://localhost:3000/ #this url is for dev/local purpose only, use your production url while deployong
-ENCRYPTION_KEY=Tc1GRf0kyej0bL9SMYd2d55ad1
