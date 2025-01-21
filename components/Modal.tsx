@@ -1,16 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 
 import Title from "@/components/Title"
 import { useTranslations } from "next-intl";
-
-const classNames = {
-  body: "py-6",
-  backdrop: "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20",
-  base: "top-12 border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
-  header: "border-b-[1px] border-divider",
-  footer: "border-t-[1px] border-divider",
-  closeButton: "hover:bg-white/5 active:bg-white/10",
-}
 
 export default function MyModal({
   open, close, children, title, size="2xl"
@@ -18,15 +10,12 @@ export default function MyModal({
   open: boolean, close: any, children: React.ReactNode, title: string, 
   size: string
 }) {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  // const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const {onOpenChange} = useDisclosure();
   const t = useTranslations("Modal");
 
   return (
     <>
-      {/* <Button onPress={onOpen}>Open Modal</Button> 
-        classNames = {{
-          base: "top-12"
-        }}*/}
       <Modal 
         backdrop="blur"
         // size="2xl"
@@ -67,13 +56,10 @@ export default function MyModal({
                 {children}
               </ModalBody>
               <ModalFooter>
-                <Button color="default" variant="light" onPress={() => {onClose ; close()}}>
-                {/* <Button color="default" variant="flat" onPress={() => {onClose ; close()}}> */}
+                {/* <Button color="default" variant="light" onPress={() => {onClose ; close()}}> */}
+                <Button color="default" variant="light" onPress={() => {onClose() ; close()}}>
                   {t("close")}
                 </Button>
-                {/* <Button color="primary" onPress={() => {onClose ; close()}}>
-                  Action
-                </Button> */}
               </ModalFooter>
             </>
           )}

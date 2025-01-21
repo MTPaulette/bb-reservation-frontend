@@ -8,6 +8,7 @@ import Title from "@/components/Title";
 
 export default function MapOne({title}: {title: string}) {
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const mapOne = new jsVectorMap({
       selector: "#mapOne",
       // map: "us_aea_en",

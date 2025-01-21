@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -43,14 +43,16 @@ export default function CouponsTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_coupons", "show_all_coupon"];
-  
-  const new_coupon_permissions: string[] = ["manage_coupons", "create_coupon"];
-  const update_coupon_permissions: string[] = ["manage_coupons", "edit_coupon"];
-  const delete_coupon_permissions: string[] = ["manage_coupons", "delete_coupon"];
 
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["manage_coupons", "show_all_coupon"],
+      new_coupon_permissions: ["manage_coupons", "create_coupon"],
+      update_coupon_permissions: ["manage_coupons", "edit_coupon"],
+      delete_coupon_permissions: ["manage_coupons", "delete_coupon"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"]
+    };
+  }, []);
 
   useEffect(() => {
     setError("");
@@ -88,7 +90,7 @@ export default function CouponsTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Coupon = typeof coupons[0];
 
@@ -133,7 +135,7 @@ export default function CouponsTable() {
     }
 
     return filteredCoupons;
-  }, [coupons, filterValue, statusFilter]);
+  }, [coupons, filterValue, hasSearchFilter, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -217,7 +219,7 @@ export default function CouponsTable() {
           <>
           {!permissions || !coupon.created_by  ? null : (
             <>
-            {view_staff_permissions.some(permission =>
+            {custom_permissions.view_staff_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/staff/${coupon.created_by.id}`}>
                 {coupon.created_by.lastname && coupon.created_by.firstname? getUsername(coupon.created_by.lastname, coupon.created_by.firstname): ""}
@@ -243,19 +245,9 @@ export default function CouponsTable() {
               <>
               {!permissions ? null : (
               <DropdownMenu>
-                {/* <DropdownItem
-                  className={
-                    view_coupon_permissions.some(permission =>
-                    permissions.includes(permission)) ? "block" : "hidden"
-                  }
-                >
-                  <Link href={`/${locale}/admin/coupons/${coupon.id}`}>
-                    {t_table("view")}
-                  </Link>
-                </DropdownItem> */}
                 <DropdownItem
                   className={
-                    update_coupon_permissions.some(permission =>
+                    custom_permissions.update_coupon_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   onClick={() => {
@@ -265,7 +257,7 @@ export default function CouponsTable() {
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
                   className={
-                    delete_coupon_permissions.some(permission =>
+                    custom_permissions.delete_coupon_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="danger"
@@ -283,7 +275,7 @@ export default function CouponsTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [locale, permissions, custom_permissions.view_staff_permissions, custom_permissions.update_coupon_permissions, custom_permissions.delete_coupon_permissions, t_table]);
 
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -381,7 +373,7 @@ export default function CouponsTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {new_coupon_permissions.some(permission =>
+                  {custom_permissions.new_coupon_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -417,8 +409,7 @@ export default function CouponsTable() {
       )}
       </>
     );
-  }, [
-    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, statusFilter, visibleColumns, custom_permissions.new_coupon_permissions, coupons.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -442,7 +433,7 @@ export default function CouponsTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -467,7 +458,7 @@ export default function CouponsTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}

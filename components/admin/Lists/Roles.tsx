@@ -59,7 +59,7 @@ export default function RolesTable() {
       setError(t_error("something_wrong"));
       console.error(error);
     });
-  }, []);
+  }, [locale, t_error]);
 
   type Role = typeof roles[0];
 
@@ -98,7 +98,7 @@ export default function RolesTable() {
       default:
         return cellValue;
     }
-  }, []);
+  }, [locale]);
 
   const classNames = React.useMemo(
     () => ({

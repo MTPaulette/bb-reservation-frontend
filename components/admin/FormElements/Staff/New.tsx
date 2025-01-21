@@ -67,12 +67,11 @@ export default function NewStaff() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [t_error]);
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<UserFormType>({
     resolver: zodResolver(schema),

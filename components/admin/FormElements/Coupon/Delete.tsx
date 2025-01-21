@@ -34,7 +34,6 @@ export default function DeleteCoupon({ id }: { id: number} ) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ConfirmPasswordType>({
     resolver: zodResolver(schema),

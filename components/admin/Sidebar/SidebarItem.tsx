@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { capitalize } from "@/lib/utils";
 
 
-const SidebarItem = ({ item, pageName, setPageName }: any) => {
+const SidebarItem = ({ item, pageName, setPageName }: unknown) => {
   const handleClick = () => {
     const updatedPageName =
       pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : "";
@@ -14,10 +14,10 @@ const SidebarItem = ({ item, pageName, setPageName }: any) => {
 
   const pathname = usePathname();
 
-  const isActive = (item: any) => {
+  const isActive = (item: unknown) => {
     if (item.route === pathname) return true;
     if (item.children) {
-      return item.children.some((child: any) => isActive(child));
+      return item.children.some((child: unknown) => isActive(child));
     }
     return false;
   };

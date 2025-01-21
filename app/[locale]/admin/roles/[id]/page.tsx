@@ -10,32 +10,61 @@ import { Button, Checkbox } from '@nextui-org/react';
 import { CommonSkeleton } from '@/components/Skeletons';
 import Alert from '@/components/Alert';
 import { signOut, useSession } from 'next-auth/react';
+import { RoleType, PermissionType } from '@/lib/definitions';
 
 export default function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const t = useTranslations("Input");
   const t_error = useTranslations("InputError");
 
-  const [role, setRole] = useState([]);
+  const [role, setRole] = useState<RoleType>();
   const locale = useLocale();
-  const [permissions, setPermissions] = useState([]);
+  const [permissions, setPermissions] = useState<PermissionType[]>([]);
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [save, setSave] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const { update } = useSession();
+    const [notFoundStatus, setNotFoundStatus] = useState(false);
 
   let perms: number[]= [];
   useEffect(() => {
     getRoleById(Number(id))
-      .then(response => {
-        setRole(response[0]);
-        response[0].permissions.forEach((permission: { id: number; }) => {
-          perms.push(permission.id);
-        });
-        setSelectedPermissions(perms);
-        perms = [];
+      .then(async (res) => {
+        if(res?.ok){
+          const response = await res.json();
+          setRole(response[0]);
+          response[0].permissions.forEach((permission: { id: number; }) => {
+            perms.push(permission.id);
+          });
+          setSelectedPermissions(perms);
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+          perms = [];
+        }else {
+          const status = res.status;
+          switch(status) {
+            case 401:
+            setError(t_error("unauthenticated"));
+            setTimeout(async () => {
+              await signOut({
+                callbackUrl: `/${locale}/auth/login`
+              });
+            }, 500);
+            break;
+            case 403:
+              setError(t_error("acces_denied"));
+              break;
+            case 404:
+              setNotFoundStatus(true);
+              break;
+            case 500:
+              setError(t_error("something_wrong"));
+              break;
+            default:
+              break;
+          }
+        }
       })
       .catch(error => {
         console.error(error);
@@ -52,12 +81,13 @@ export default function Page({ params }: { params: { id: string } }) {
 
   }, []);
 
-  if (!role) {
+  // if (!role) {
+  if (notFoundStatus) {
     notFound();
   }
  
 
-  const handleCheckboxChange = (e: { target: { value: string; checked: any; }; }) => {
+  const handleCheckboxChange = (e: { target: { value: string; checked: boolean; }; }) => {
     const permissionId = parseInt(e.target.value);
     const isChecked = e.target.checked;
 
@@ -121,7 +151,7 @@ export default function Page({ params }: { params: { id: string } }) {
     })
   }
 
-  type PermissionType = typeof permissions[0];
+  // type PermissionType = typeof permissions[0];
 
   return (
     <>
@@ -136,18 +166,18 @@ export default function Page({ params }: { params: { id: string } }) {
         {success != "" ? (
           <Alert color="success" message={success} />
         ) : null}
-        <Title className="text-xl font-medium my-4">Permissions {`Role ${role.name? role.name: ''}`} </Title>
+        <Title className="text-xl font-medium my-4">Permissions {`Role ${role && role.name? role.name: ''}`} </Title>
         {/* <form onSubmit={handleFormSubmit}> */}
           {permissions.map((permission: PermissionType) => (
             <div key={permission.id} className="flex gap-4 p-1">
               <Checkbox
-                value={permission.id}
+                value={String(permission.id)}
                 onChange={handleCheckboxChange}
                 isSelected={selectedPermissions.includes(permission.id)}
                 className="z-1"
               />
               <p className="font-light text-sm text-foreground">
-                {permission.id}.
+                {permission.id}. 
                 <span className="font-medium text-sm mx-4">
                   {permission.name}
                 </span>

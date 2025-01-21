@@ -33,7 +33,6 @@ export default function DeleteClient({ id }: { id: number} ) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ConfirmPasswordType>({
     resolver: zodResolver(schema),

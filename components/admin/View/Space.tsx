@@ -81,7 +81,7 @@ export default function ViewSpace({id}: {id: string}) {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [id, locale, t_error]);
 
 
   // if (!space) {
@@ -203,17 +203,17 @@ export default function ViewSpace({id}: {id: string}) {
               <Title
                 className="text-lg font-medium my-8"
               >{capitalize(t_table("some_stats"))}</Title>
-            <div className="mt-4.5 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-              <CardDataStats title="Total views" total="$3.456K" rate="0.43%" levelUp>
+            <div className="mt-4.5 grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+              <CardDataStats title="Total views" total="$3.456K">
                 <EyeIcon fill="currentColor" size={20} />
               </CardDataStats>
-              <CardDataStats title="Total Profit" total="$45,2K" rate="4.35%" levelUp>
+              <CardDataStats title="Total Profit" total="$45,2K">
                 <CharetIcon fill="currentColor" size={20} />
               </CardDataStats>
-              <CardDataStats title="Total Product" total="2.450" rate="2.59%" levelUp>
+              <CardDataStats title="Total Product" total="2.450">
                 <ShoppingBagIcon fill="currentColor" size={22} />
               </CardDataStats>
-              <CardDataStats title="Total Spaces" total="3.456" rate="0.95%" levelDown>
+              <CardDataStats title="Total Spaces" total="3.456">
                 <PeopleIcon fill="currentColor" size={22} />
               </CardDataStats>
             </div>

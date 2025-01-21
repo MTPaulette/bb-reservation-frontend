@@ -1,5 +1,4 @@
-import { encryptToken } from "@/lib/utils";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 const api_url = process.env.API_URL;
 
@@ -16,24 +15,24 @@ export const authOptions: NextAuthOptions = {
           method: "GET",
         })
 
-        const setCookieHeader = res.headers.get("set-cookie")
+        const setCookieHeader = res.headers.get("set-cookie");
         //console.log("setCookieHeader", setCookieHeader)
         // you'll find your_site_session key in this console log
 
-        const cookies = setCookieHeader?.split(", ")
+        const cookies = setCookieHeader?.split(", ");
         // console.log(cookies)
-        let sessionKey = null
-        let xsrfToken = null
+        let sessionKey = null;
+        let xsrfToken = null;
 
         for (const cookie of cookies!) {
           if (cookie.startsWith("laravel_session=")) {
-            sessionKey = cookie.split("=")[1]
+            sessionKey = cookie.split("=")[1];
           } else if (cookie.startsWith("XSRF-TOKEN=")) {
-            xsrfToken = cookie.split("=")[1]
+            xsrfToken = cookie.split("=")[1];
           }
 
           if (sessionKey && xsrfToken) {
-            break
+            break;
           }
         }
         const data = {
@@ -46,7 +45,7 @@ export const authOptions: NextAuthOptions = {
         })
 
         if (xsrfToken) {
-          headers.append("X-XSRF-TOKEN", xsrfToken)
+          headers.append("X-XSRF-TOKEN", xsrfToken);
         }
 
         const options = {
@@ -54,28 +53,27 @@ export const authOptions: NextAuthOptions = {
           headers,
           body: JSON.stringify(data),
         }
-        const response = await fetch(`${api_url}/login`, options)
+        const response = await fetch(`${api_url}/login`, options);
         
-        // console.log(response)
         if (response.status == 201) {
-          const res = await response.json()
-          return res
+          const res = await response.json();
+          return res;
         }
-        return null
+        return null;
       },
     }),
   ],
   callbacks: {
     async jwt({ token, trigger, user, session }) {
-      console.log("jwt user============")
-      console.log(user)
+      console.log("jwt user============");
+      console.log(user);
       // when update
       if(trigger == 'update') {
         if (session?.user) {
           token.user = session.user;
         }
         if (session?.accessToken) {
-          token.accessToken = encryptToken(String(session.accessToken));
+          token.accessToken = session.accessToken;
         }
         if (session?.permissions) {
           token.permissions = session.permissions;
@@ -84,24 +82,20 @@ export const authOptions: NextAuthOptions = {
       // when login
       if (user) {
         token.user = user.user;
-        token.accessToken = encryptToken(String(user.token));
+        token.accessToken = user.token;
         token.permissions = user.permissions;
       }
       return token
     },
     async session({ session, token }) {
 
-      console.log("session token============")
-      console.log(token)
+      console.log("session token============");
+      console.log(token);
 
-      // session.accessToken = encryptToken(String(token.accessToken));
       session.accessToken = token.accessToken;
       session.user = token.user;
       session.permissions = token.permissions;
-      return session
+      return session;
     },
   },
 }
-const handler = NextAuth(authOptions)
-//export { handler as GET, handler as POST }
-export { handler as GET, handler as POST, handler as DELETE, handler as UPDATE }

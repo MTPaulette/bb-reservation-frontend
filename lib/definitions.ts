@@ -49,6 +49,32 @@ export type UserType = {
   work_at: string
 };
 
+export type RoleType = {
+  id:          number;
+  name:        string;
+  permissions: PermissionType[];
+}
+
+export type PermissionType = {
+  id:             number;
+  name:           string;
+  description_en: string;
+  description_fr: string;
+}
+
+export type EventInfoType = {
+  event: {
+    title: string;
+    extendedProps: {
+      reservation_id: number;
+      agency: string;
+      state: string;
+    }
+  };
+  timeText: string;
+  dateStr: string;
+}
+
 export type AgencyType = {
   id: number;
   name: string;

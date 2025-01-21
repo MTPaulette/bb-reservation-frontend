@@ -18,19 +18,8 @@ export default function RessourceCard(
   const locale = useLocale();
   const t_default = useTranslations("Default");
 
-  const [isFollowed, setIsFollowed] = React.useState(false);
-
   return (
     <>
-    {/* <Card className="max-w--[340px] max-w-full lg:max-w-[420px] xl:max-w-[340px]">
-          <div className="relative drop-shadow-2 h-25 w-25 sm:h-30 sm:w-30 md:h-40 md:w-40">
-            <Avatar
-              src={ressource.image? getImageUrl(ressource.image): "/images/brain-orange-400.png"}
-              isBordered
-              className="rounded-full h-full w-full"
-              alt="profile pic"
-            />
-          </div>*/}
     <Card className="max-w-[340px]">
       <CardHeader className="justify-between">
         <div className="flex gap-x-5 w-full">

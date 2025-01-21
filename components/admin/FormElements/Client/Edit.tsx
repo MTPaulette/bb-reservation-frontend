@@ -40,7 +40,6 @@ export default function EditClient({ user }: { user: UserType} ) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<UserFormType>({
     resolver: zodResolver(schema),

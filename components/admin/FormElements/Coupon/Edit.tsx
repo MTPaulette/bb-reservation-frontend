@@ -65,6 +65,7 @@ export default function EditCoupon({ id }: { id: number} ) {
             default_clients.push(client.user_id);
           });
           setSelectedClients(default_clients);
+          // eslint-disable-next-line react-hooks/exhaustive-deps
           default_clients = [];
         }
     });
@@ -76,7 +77,7 @@ export default function EditCoupon({ id }: { id: number} ) {
     });
   }, []);
 
-  const handleCheckboxChange = (e: { target: { value: string; checked: any; }; }) => {
+  const handleCheckboxChange = (e: { target: { value: string; checked: boolean; }; }) => {
     const clientId = parseInt(e.target.value);
     const isChecked = e.target.checked;
 
@@ -89,7 +90,7 @@ export default function EditCoupon({ id }: { id: number} ) {
     }
   };
 
-  const checkAll = (e: { target: { checked: any; }; }) => {
+  const checkAll = (e: { target: { checked: boolean; }; }) => {
     const isChecked = e.target.checked;
     if (isChecked) {
       clients.forEach(client => {

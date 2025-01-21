@@ -3,7 +3,6 @@ import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import Title from "@/components/Title";
 import { ChevronDownIcon } from "@/components/Icons";
-import { ChartType } from "@/lib/definitions";
 import { useTranslations } from 'next-intl';
 import moment from "moment";
 
@@ -52,8 +51,14 @@ const options: ApexOptions = (labels: string[]) => {
   }
 };
 
-export default function ChartThree({data, period}: {data: any, period: string}) {
-  const [selectedAgency, setSelectedAgency] = useState<number|string>(0);
+type DataType = {
+  name:  string;
+  label: string[];
+  data:  number[];
+}
+
+export default function ChartThree({data, period}: { data: DataType[], period: string }) {
+  const [selectedAgency, setSelectedAgency] = useState<number>(0);
   const t_statistic = useTranslations("Statistic");
     const year = period != "" ? moment(period).year() : moment().year();
 
@@ -75,13 +80,13 @@ export default function ChartThree({data, period}: {data: any, period: string}) 
             <div className="relative z-20 inline-block">
               <select
                 onChange={(e) => {
-                  setSelectedAgency(e.target.value);
+                  setSelectedAgency(Number(e.target.value));
                 }}
                 name=""
                 id=""
                 className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
               >
-                {data.map((item: ChartType, index: number) => (
+                {data.map((item: DataType, index: number) => (
                   <option key={index} value={index} className="dark:bg-boxdark">
                     {item.name}
                   </option>
@@ -92,25 +97,6 @@ export default function ChartThree({data, period}: {data: any, period: string}) 
               </span>
             </div>
           </div>
-          {/* <div>
-            <div className="relative z-20 inline-block">
-              <select
-                name=""
-                id=""
-                className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
-              >
-                <option value="" className="dark:bg-boxdark">
-                  Monthly
-                </option>
-                <option value="" className="dark:bg-boxdark">
-                  Yearly
-                </option>
-              </select>
-              <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
-                <ChevronDownIcon fill="currentColor" size={10} />
-              </span>
-            </div>
-          </div> */}
           <div>
           </div>
         </div>
@@ -131,5 +117,3 @@ export default function ChartThree({data, period}: {data: any, period: string}) 
     </div>
   );
 };
-
-// export default ChartThree;

@@ -14,10 +14,9 @@ export default function AuthLayout({
       <div className="absolute right-4 top-4">
         <ThemeSwitcher />
       </div>
-      {/* <main className="flex items-center justify-center h-screen w-screen bg-gradient-to-t from-success via-success/30 via-success/20 via-success/5 to-transparent"> */}
       <main className="flex items-center justify-center h-screen w-screen bg-gradient-to-t overflow-x-hidden over-y
-        from-success via-success/30 via-success/20 via-success/5 to-transparent
-      dark:from-[#262262] dark:via-[#262262]/30 dark:via-[#262262]/20 dark:via-[#262262]/5"
+        from-success via-success/30 to-transparent
+      dark:from-[#262262] dark:via-[#262262]/30"
       >
         <div className="h-full max-w-[400px] flex flex-col items-center justify-center">
           <div className="relative mx-auto flex flex-col space-y-2.5 pt-22">

@@ -91,7 +91,7 @@ export default function ViewAgency({id}: {id: string}) {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [id, locale, t_error]);
 
 
   // if (!response) {
@@ -290,13 +290,13 @@ export default function ViewAgency({id}: {id: string}) {
             </div>
           </div>
           <div className="mt-4 md:mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-3 2xl:gap-7.5">
-            <CardDataStats title={t_statistic("total_administrators")} total={response.totalAdministrators} rate="0.95%" levelDown>
+            <CardDataStats title={t_statistic("total_administrators")} total={response.totalAdministrators}>
               <PeopleIcon fill="currentColor" size={22} />
             </CardDataStats>
-            <CardDataStats title={t_statistic("total_ressources")} total={response.totalRessources} rate="2.55%" levelUp>
+            <CardDataStats title={t_statistic("total_ressources")} total={response.totalRessources}>
               <ShoppingBagIcon fill="currentColor" size={22} />
             </CardDataStats>
-            <CardDataStats title={t_statistic("total_reservations")} total={response.totalReservations} rate="0.43%" levelUp>
+            <CardDataStats title={t_statistic("total_reservations")} total={response.totalReservations}>
               <CalendarIcon fill="currentColor" size={20} />
             </CardDataStats>
           </div>

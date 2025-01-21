@@ -31,7 +31,6 @@ export default function NewCharacteristic() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<CharacteristicFormType>({
     resolver: zodResolver(schema),

@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -17,7 +17,7 @@ import { useSession } from 'next-auth/react';
 
 const INITIAL_VISIBLE_COLUMNS = ["space", "price", "nb_place", "quantity", "created_at", "actions"];
 
-export default function DefaultRessourceTable({ ressources }: { ressources: any[] }) {
+export default function DefaultRessourceTable({ ressources }: { ressources: unknown[] }) {
   const locale = useLocale();
   const t_table = useTranslations("Table");
   type Ressource = typeof ressources[0];
@@ -38,10 +38,14 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
   const { data: session } = useSession();
   const permissions = session?.permissions;
 
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
-  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
-  const view_space_permissions: string[] = ["manage_spaces", "view_space"];
+  const custom_permissions = useMemo(() => {
+    return {
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      view_agency_permissions: ["manage_agency", "manage_all_agencies"],
+      view_ressource_permissions: ["manage_ressources", "view_ressource", "view_ressource_of_agency"],
+      view_space_permissions: ["manage_spaces", "view_space"]
+    };
+  }, []);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -60,7 +64,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
       );
     }
     return filteredRessources;
-  }, [ressources, filterValue]);
+  }, [ressources, hasSearchFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -88,7 +92,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
           <>
           {!permissions ? null : (
             <>
-            {view_space_permissions.some(permission =>
+            {custom_permissions.view_space_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
                 {capitalize(ressource.space)}
@@ -132,7 +136,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
           <>
           {!permissions ? null : (
             <>
-            {view_agency_permissions.some(permission =>
+            {custom_permissions.view_agency_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
                 {capitalize(ressource.agency)}
@@ -154,7 +158,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
             <>
             {!permissions || !ressource.created_by  ? null : (
               <>
-              {view_staff_permissions.some(permission =>
+              {custom_permissions.view_staff_permissions.some(permission =>
               permissions.includes(permission)) ? (
                 <>
                   {t_table("by")}:
@@ -186,7 +190,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
         return (
           <div
             className={
-              view_ressource_permissions.some(permission =>
+              custom_permissions.view_ressource_permissions.some(permission =>
               permissions.includes(permission)) ? "block" : "hidden"
             }
           >
@@ -202,7 +206,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_space_permissions, custom_permissions.view_agency_permissions, custom_permissions.view_staff_permissions, custom_permissions.view_ressource_permissions, locale, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -290,8 +294,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
       </div>
       </>
     );
-  }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, ressources.length, hasSearchFilter, ]);
+  }, [t_table, filterValue, onSearchChange, visibleColumns, ressources.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -315,7 +318,7 @@ export default function DefaultRessourceTable({ ressources }: { ressources: any[
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({

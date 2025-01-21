@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -8,7 +8,6 @@ import {
 } from "@nextui-org/react";
 
 import { SearchIcon, ChevronDownIcon, TrashIcon } from "@/components/Icons";
-import { LogType } from "@/lib/definitions";
 import { capitalize, formatDateTime, getUsername } from "@/lib/utils";
 import { columnsLog as columns } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
@@ -20,7 +19,6 @@ import { getLogs } from '@/lib/action/admin/logs';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 
-// const INITIAL_VISIBLE_COLUMNS = ["description", "url", "agent", "author", "created_at"];
 const INITIAL_VISIBLE_COLUMNS = ["description", "agent", "author", "created_at"];
 
 export default function LogsTable() {
@@ -34,9 +32,13 @@ export default function LogsTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["view_logactivity"];
 
-  const clear_log_permissions: string[] = ["delete_logactivity"];
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["view_logactivity"],
+      clear_log_permissions: ["delete_logactivity"]
+    };
+  }, []);
 
   useEffect(() => {
     setError("");
@@ -74,14 +76,13 @@ export default function LogsTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Log = typeof logs[0];
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-  const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "created_at",
@@ -92,8 +93,6 @@ export default function LogsTable() {
 
   const pages = Math.ceil(logs.length / rowsPerPage);
   const [showClearModal, setShowClearModal] = React.useState<boolean>(false);
-  const [selectedLog, setSelectedLog] = React.useState<LogType>();
-
   const hasSearchFilter = Boolean(filterValue);
 
   const headerColumns = React.useMemo(() => {
@@ -112,7 +111,7 @@ export default function LogsTable() {
     }
 
     return filteredLogs;
-  }, [logs, filterValue,]);
+  }, [logs, hasSearchFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -152,7 +151,7 @@ export default function LogsTable() {
       default:
         return cellValue;
     }
-  }, []);
+  }, [locale]);
   
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setRowsPerPage(Number(e.target.value));
@@ -223,7 +222,7 @@ export default function LogsTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {clear_log_permissions.some(permission =>
+                  {custom_permissions.clear_log_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<TrashIcon fill="currentColor" size={14} />}
@@ -259,8 +258,7 @@ export default function LogsTable() {
       )}
       </>
     );
-  }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, logs.length, hasSearchFilter, session, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, visibleColumns, custom_permissions.clear_log_permissions, logs.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -284,7 +282,7 @@ export default function LogsTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -310,7 +308,7 @@ export default function LogsTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}
@@ -362,7 +360,7 @@ export default function LogsTable() {
         open={showClearModal} close={() => setShowClearModal(false)}
         title={`${t_table("clear_log")}`}
       >
-        <ClearLog id={selectedLog?.id} />
+        <ClearLog />
       </Modal>
       </div>
       )}

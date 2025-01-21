@@ -33,7 +33,6 @@ export default function NewSpace() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<SpaceFormType>({
     resolver: zodResolver(schema),

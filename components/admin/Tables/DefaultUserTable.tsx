@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -22,7 +22,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const INITIAL_VISIBLE_COLUMNS = ["lastname", "email", "phonenumber", "status", "created_at", "actions"];
 
-export default function DefaultUserTable({ columns, users }: { columns: any[], users: any[] }) {
+export default function DefaultUserTable({ columns, users }: { columns: unknown[], users: unknown[] }) {
   const locale = useLocale();
   const t_table = useTranslations("Table");
   type User = typeof users[0];
@@ -44,9 +44,13 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
   const { data: session } = useSession();
   const permissions = session?.permissions;
 
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
-  const view_client_permissions: string[] = ["view_client"];
+  const custom_permissions = useMemo(() => {
+    return {
+      view_client_permissions: ["view_client"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      view_agency_permissions: ["manage_agency", "manage_all_agencies"],
+    };
+  }, []);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -54,7 +58,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-  }, [visibleColumns]);
+  }, [columns, visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...users];
@@ -71,7 +75,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [users, hasSearchFilter, statusFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -118,7 +122,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
           <>
           {!permissions || !user.work_at ? null : (
             <>
-            {view_agency_permissions.some(permission =>
+            {custom_permissions.view_agency_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
                 {capitalize(user.agency)}
@@ -141,7 +145,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
           <>
           {!permissions || !user.created_by ? null : (
             <>
-            {view_staff_permissions.some(permission =>
+            {custom_permissions.view_staff_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/staff/${user.created_by}`}>
                 {
@@ -167,7 +171,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
           {user.role == 'client' ? (
             <div
               className={
-                view_client_permissions.some(permission =>
+                custom_permissions.view_client_permissions.some(permission =>
                 permissions.includes(permission)) ? "block" : "hidden"
               }
             >
@@ -184,7 +188,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
           {user.role != 'client' ? (
             <div
               className={
-                view_staff_permissions.some(permission =>
+                custom_permissions.view_staff_permissions.some(permission =>
                 permissions.includes(permission)) ? "block" : "hidden"
               }
             >
@@ -202,7 +206,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_agency_permissions, custom_permissions.view_staff_permissions, custom_permissions.view_client_permissions, locale, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -316,8 +320,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
       </div>
       </>
     );
-  }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, ]);
+  }, [t_table, filterValue, onSearchChange, statusFilter, visibleColumns, columns, users.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -341,7 +344,7 @@ export default function DefaultUserTable({ columns, users }: { columns: any[], u
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({

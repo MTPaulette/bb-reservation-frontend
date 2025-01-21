@@ -3,7 +3,7 @@
 import { ApexOptions } from "apexcharts";
 import React from "react";
 import dynamic from "next/dynamic";
-import { ChartType } from "@/lib/definitions";
+// import { ChartType } from "@/lib/definitions";
 import { useTranslations } from 'next-intl';
 import moment from "moment";
 import Title from "@/components/Title";
@@ -58,10 +58,6 @@ const options: ApexOptions = {
     width: [2, 2],
     curve: "straight",
   },
-  // labels: {
-  //   show: false,
-  //   position: "top",
-  // },
   grid: {
     xaxis: {
       lines: {
@@ -126,7 +122,8 @@ const options: ApexOptions = {
 };
 
 
-export default function ChartOne({series, period}: {series: ChartType, period: string}) {
+export default function ChartOne({series, period}: {series: undefined, period: string}) {
+  // export default function ChartOne({series, period}: {series: ChartType, period: string}) {
   const t_statistic = useTranslations("Statistic");
   const year = period != "" ? moment(period).year() : moment().year();
 
@@ -157,5 +154,3 @@ export default function ChartOne({series, period}: {series: ChartType, period: s
     </div>
   );
 };
-
-// export default ChartOne;

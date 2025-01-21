@@ -46,7 +46,6 @@ export default function EditStaff({ user }: { user: UserType} ) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<UserFormType>({
     resolver: zodResolver(schema),
@@ -66,7 +65,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [t_error]);
 
   const handleFormSubmit = async (data: UserFormType) => {
     setError("");

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -44,15 +44,18 @@ export default function UsersTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["show_all_admin", "show_all_admin_of_agency", "show_all_superadmin"];
-  
-  const new_staff_permissions: string[] = ["create_superadmin", "create_admin"];
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const update_staff_permissions: string[] = ["edit_admin", "edit_superadmin"];
-  const delete_staff_permissions: string[] = ["delete_admin", "delete_superadmin"];
-  const suspend_staff_permissions: string[] = ["suspend_staff"];
 
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["show_all_admin", "show_all_admin_of_agency", "show_all_superadmin"],
+      new_staff_permissions: ["create_superadmin", "create_admin"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      update_staff_permissions: ["edit_admin", "edit_superadmin"],
+      delete_staff_permissions: ["delete_admin", "delete_superadmin"],
+      suspend_staff_permissions: ["suspend_staff"],
+      view_agency_permissions: ["manage_agency", "manage_all_agencies"]
+    };
+  }, []);
 
   useEffect(() => {
     setError("");
@@ -90,7 +93,7 @@ export default function UsersTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
 
   type User = typeof users[0];
@@ -139,7 +142,7 @@ export default function UsersTable() {
     }
 
     return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+  }, [users, hasSearchFilter, statusFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -186,7 +189,7 @@ export default function UsersTable() {
           <>
           {!permissions || !user.work_at  ? null : (
             <>
-            {view_agency_permissions.some(permission =>
+            {custom_permissions.view_agency_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/agencies/${user.work_at}`} className="font-medium">
                 {capitalize(user.agency)}
@@ -209,7 +212,7 @@ export default function UsersTable() {
           <>
           {!permissions || !user.created_by  ? null : (
             <>
-            {view_staff_permissions.some(permission =>
+            {custom_permissions.view_staff_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/staff/${user.created_by}`}>
                 {user.parent_firstname && user.parent_lastname? getUsername(user.parent_lastname, user.parent_firstname): ""}
@@ -248,7 +251,7 @@ export default function UsersTable() {
               <DropdownMenu>
                 <DropdownItem
                   className={
-                    view_staff_permissions.some(permission =>
+                    custom_permissions.view_staff_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                 >
@@ -258,7 +261,7 @@ export default function UsersTable() {
                 </DropdownItem>
                 <DropdownItem
                   className={
-                    update_staff_permissions.some(permission =>
+                    custom_permissions.update_staff_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   onClick={() => {
@@ -268,7 +271,7 @@ export default function UsersTable() {
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
                   className={
-                    suspend_staff_permissions.some(permission =>
+                    custom_permissions.suspend_staff_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="warning"
@@ -279,7 +282,7 @@ export default function UsersTable() {
                 >{user.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                 <DropdownItem
                   className={
-                    delete_staff_permissions.some(permission =>
+                    custom_permissions.delete_staff_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="danger"
@@ -297,7 +300,7 @@ export default function UsersTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_agency_permissions, custom_permissions.view_staff_permissions, custom_permissions.update_staff_permissions, custom_permissions.suspend_staff_permissions, custom_permissions.delete_staff_permissions, locale, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -394,7 +397,7 @@ export default function UsersTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {new_staff_permissions.some(permission =>
+                  {custom_permissions.new_staff_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -430,8 +433,7 @@ export default function UsersTable() {
       )}
       </>
     );
-  }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, users.length, hasSearchFilter, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, statusFilter, visibleColumns, custom_permissions.new_staff_permissions, users.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -455,7 +457,7 @@ export default function UsersTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -480,7 +482,7 @@ export default function UsersTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}

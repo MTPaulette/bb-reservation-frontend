@@ -35,7 +35,6 @@ export default function ForgotPasswordComponent() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TSignInForm>({
     resolver: zodResolver(schema),

@@ -35,7 +35,6 @@ export default function NewAgency() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<AgencyFormType>({
     resolver: zodResolver(schema),

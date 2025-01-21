@@ -35,7 +35,6 @@ export default function SuspendAgency({ id, status }: { id: number, status: stri
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<SuspensionFormType>({
     resolver: zodResolver(schema),

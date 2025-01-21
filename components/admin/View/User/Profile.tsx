@@ -78,7 +78,7 @@ export default function ViewProfile() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
 
   // if (!response) {

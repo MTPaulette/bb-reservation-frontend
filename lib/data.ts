@@ -65,6 +65,8 @@ export const statusCoupon = [
   {name_en: "Expired", name_fr: "Expiré", uid: "expired"},
 ];
 
+export const statusPayment = [];
+
 export const statusReservation = [
   {name_en: "Pending", name_fr: "Sollicitée", uid: "pending"},
   {name_en: "Partially paid", name_fr: "Partiellement payée", uid: "partially_paid"},

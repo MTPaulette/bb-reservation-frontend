@@ -40,7 +40,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TSignInForm>({
     resolver: zodResolver(schema),

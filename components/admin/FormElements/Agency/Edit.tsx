@@ -51,7 +51,6 @@ export default function EditAgency({ agency }: { agency: AgencyType}) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<AgencyFormType>({
     resolver: zodResolver(schema),

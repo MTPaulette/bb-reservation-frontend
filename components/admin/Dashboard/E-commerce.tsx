@@ -77,11 +77,11 @@ export default function ECommerce() {
         }
         setLoading(false);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, [period]);
+  }, [locale, period, t_error]);
 
   const [showNewModal, setShowNewModal] = useState<boolean>(false);
   const t_table = useTranslations("Table");
@@ -217,10 +217,10 @@ export default function ECommerce() {
 
         {selectedStat == "Users stat." ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:gap-3 xl:grid-cols-4 2xl:gap-7.5">
-          <CardDataStats title={t_statistic("total_clients")} total={statistics.totalClients} rate="0.95%" levelDown>
+          <CardDataStats title={t_statistic("total_clients")} total={statistics.totalClients}>
             <PeopleIcon fill="currentColor" size={22} />
           </CardDataStats>
-          <CardDataStats title={t_statistic("total_staff")} total={statistics.totalStaff} rate="0.95%" levelDown>
+          <CardDataStats title={t_statistic("total_staff")} total={statistics.totalStaff}>
             <PeopleIcon fill="currentColor" size={22} />
           </CardDataStats>
         </div>
@@ -228,13 +228,13 @@ export default function ECommerce() {
 
         {selectedStat == "Payments stat." ? (
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:gap-4 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-7.5">
-          <CardDataStats title={t_statistic("total_revenue")} total={formatCurrency(Number(statistics.totalRevenue))} rate="2.55%" levelUp>
+          <CardDataStats title={t_statistic("total_revenue")} total={formatCurrency(Number(statistics.totalRevenue))}>
             <ShoppingBagIcon fill="currentColor" size={22} />
           </CardDataStats>
-          <CardDataStats title={t_statistic("total_payment")} total={formatCurrency(Number(statistics.totalPayments))} rate="0.95%" levelDown>
+          <CardDataStats title={t_statistic("total_payment")} total={formatCurrency(Number(statistics.totalPayments))}>
             <PeopleIcon fill="currentColor" size={22} />
           </CardDataStats>
-          <CardDataStats title={t_statistic("total_due")} total={formatCurrency(Number(statistics.totalDue))} rate="0.95%" levelDown>
+          <CardDataStats title={t_statistic("total_due")} total={formatCurrency(Number(statistics.totalDue))}>
             <PeopleIcon fill="currentColor" size={22} />
           </CardDataStats>
         </div>
@@ -242,13 +242,13 @@ export default function ECommerce() {
 
         {selectedStat == "Reservations stat." ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-7.5">
-          <CardDataStats title={t_statistic("total_ressources")} total={statistics.totalRessources} rate="2.55%" levelUp>
+          <CardDataStats title={t_statistic("total_ressources")} total={statistics.totalRessources}>
             <ShoppingBagIcon fill="currentColor" size={22} />
           </CardDataStats>
-          <CardDataStats title={t_statistic("total_reservations")} total={statistics.totalReservations} rate="0.43%" levelUp>
+          <CardDataStats title={t_statistic("total_reservations")} total={statistics.totalReservations}>
             <CalendarIcon fill="currentColor" size={20} />
           </CardDataStats>
-          <CardDataStats title={t_statistic("total_cancelled_reservations")} total={statistics.totalCancelledReservations} rate="0.43%" levelUp>
+          <CardDataStats title={t_statistic("total_cancelled_reservations")} total={statistics.totalCancelledReservations}>
             <CalendarIcon fill="currentColor" size={20} />
           </CardDataStats>
         </div>

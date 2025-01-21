@@ -294,7 +294,9 @@
     "description": "Veuillez reverifiez la barre d'adresse du navigateur ou utiliser le navigateur pour aller à une page connue.",
     "page_not_found": "Page non trouvée",
     "staff_not_found": "Membre du staff  non trouvé",
-    "back": "Retour"
+    "back": "Retour",
+    "title_forbidden": "Erreur 403 - Accès interdit",
+    "subtitle_forbidden": "Vous n'avez pas les droits nécessaires pour accéder à cette page."
   },
   "Sidebar": {
     "dashboard": "tableau de bord",

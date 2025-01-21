@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -21,7 +21,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "total_usage", "value", "status", "expired_on"];
 
-export default function DefaultCouponTable({ columns, coupons }: { columns: any[], coupons: any[] }) {
+export default function DefaultCouponTable({ columns, coupons }: { columns: unknown[], coupons: unknown[] }) {
   const locale = useLocale();
   const t_table = useTranslations("Table");
   type Coupon = typeof coupons[0];
@@ -43,8 +43,13 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
   const { data: session } = useSession();
   const permissions = session?.permissions;
 
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const view_coupon_permissions: string[] = ["manage_coupons", "view_coupon"];
+  const custom_permissions = useMemo(() => {
+    return {
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      view_coupon_permissions: ["manage_coupons", "view_coupon"]
+    };
+  }, []);
+
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -52,7 +57,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
-  }, [visibleColumns]);
+  }, [columns, visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filteredCoupons = [...coupons];
@@ -69,7 +74,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
     }
 
     return filteredCoupons;
-  }, [coupons, filterValue, statusFilter]);
+  }, [coupons, filterValue, hasSearchFilter, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -102,7 +107,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
             <>
             {!permissions || !coupon.created_by ? null : (
               <>
-                {view_coupon_permissions.some(permission =>
+                {custom_permissions.view_coupon_permissions.some(permission =>
                 permissions.includes(permission)) ? (
                   <Link
                     href={`/${locale}/admin/coupons/${coupon.id}`}
@@ -148,7 +153,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
           <>
           {!permissions || !coupon.created_by ? null : (
             <>
-            {view_staff_permissions.some(permission =>
+            {custom_permissions.view_staff_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/staff/${coupon.created_by.id}`}>
                 {coupon.created_by.lastname && coupon.created_by.firstname? getUsername(coupon.created_by.lastname, coupon.created_by.firstname): ""}
@@ -165,7 +170,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_coupon_permissions, custom_permissions.view_staff_permissions, locale]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -279,8 +284,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
       </div>
       </>
     );
-  }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, coupons.length, hasSearchFilter, ]);
+  }, [t_table, filterValue, onSearchChange, statusFilter, visibleColumns, columns, coupons.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -304,7 +308,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -322,6 +326,7 @@ export default function DefaultCouponTable({ columns, coupons }: { columns: any[
     }),
     [],
   );
+
   return (
     <>
       <Table

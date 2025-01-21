@@ -13,9 +13,9 @@ import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { useLocale, useTranslations } from 'next-intl';
 import { Select, SelectItem } from "@nextui-org/react";
-import { EventType } from "@/lib/definitions";
+import { EventInfoType, EventType } from "@/lib/definitions";
 
-const renderEventContent = (eventInfo: any) => {
+const renderEventContent = (eventInfo: EventInfoType) => {
   return (
     <>
       {/* <div className="flex w-full flex-col rounded-sm border-l-[3px] border-primary bg-default bg-opacity-30 dark:bg-opacity-80 p-1 text-left"> */}
@@ -37,13 +37,13 @@ const renderEventContent = (eventInfo: any) => {
 export default function Calendar({ events }: { events: EventType[] }) {
   const t_alert = useTranslations("Alert");
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [selectedCell, setSelectedCell] = useState<any>();
+  const [selectedCell, setSelectedCell] = useState<string>();
   const [filteredEvents, setFilteredEvents] = useState<EventType[]>(events);
   const [agencyFilter, setAgencyFilter] = useState<string>("all");
   const locale = useLocale();
 
 
-  const clickOnCell = (info: any) => {
+  const clickOnCell = (info: EventInfoType) => {
     console.log("clicked on: ");
     console.log(info);
     setSelectedCell(info.dateStr);

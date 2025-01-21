@@ -73,7 +73,7 @@ export default function ViewReservation({id}: {id: string}) {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [id, locale, t_error]);
 
 
   // if (!reservation) {

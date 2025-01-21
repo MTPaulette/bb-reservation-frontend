@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -78,7 +78,7 @@ export default function AgenciesTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Agency = typeof agencies[0];
 
@@ -103,14 +103,16 @@ export default function AgenciesTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_agency", "manage_all_agencies"];
-  
-  const new_agency_permissions: string[] = ["create_agency"];
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
-  const delete_agency_permissions: string[] = ["delete_agency"];
 
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["manage_agency", "manage_all_agencies"],
+      new_agency_permissions: ["create_agency"],
+      view_agency_permissions: ["manage_agency", "manage_all_agencies"],
+      delete_agency_permissions: ["delete_agency"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+    };
+  }, []);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -135,7 +137,7 @@ export default function AgenciesTable() {
     }
 
     return filteredAgencies;
-  }, [agencies, filterValue, statusFilter]);
+  }, [agencies, filterValue, hasSearchFilter, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -214,7 +216,7 @@ export default function AgenciesTable() {
             <>
             {!permissions ? null : (
               <>
-              {view_staff_permissions.some(permission =>
+              {custom_permissions.view_staff_permissions.some(permission =>
               permissions.includes(permission)) ? (
                 <Link href={`/${locale}/admin/staff/${agency.created_by.id}`}>
                   {getUsername(agency.created_by.lastname, agency.created_by.firstname)}
@@ -242,7 +244,7 @@ export default function AgenciesTable() {
               <DropdownMenu>
                 <DropdownItem
                   className={
-                    view_agency_permissions.some(permission =>
+                    custom_permissions.view_agency_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                 >
@@ -252,7 +254,7 @@ export default function AgenciesTable() {
                 </DropdownItem>
                 <DropdownItem
                   className={
-                    view_agency_permissions.some(permission =>
+                    custom_permissions.view_agency_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   onClick={() => {
@@ -262,7 +264,7 @@ export default function AgenciesTable() {
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
                   className={
-                    view_agency_permissions.some(permission =>
+                    custom_permissions.view_agency_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="warning"
@@ -273,7 +275,7 @@ export default function AgenciesTable() {
                 >{agency.status == 'active'? t_table("suspend"): t_table("cancel_suspend")}</DropdownItem>
                 <DropdownItem
                   className={
-                    delete_agency_permissions.some(permission =>
+                    custom_permissions.delete_agency_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="danger"
@@ -291,7 +293,7 @@ export default function AgenciesTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [custom_permissions.delete_agency_permissions, custom_permissions.view_agency_permissions, custom_permissions.view_staff_permissions, locale, permissions, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -388,7 +390,7 @@ export default function AgenciesTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {new_agency_permissions.some(permission =>
+                  {custom_permissions.new_agency_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -424,8 +426,7 @@ export default function AgenciesTable() {
       )}
       </>
     );
-  }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, agencies.length, hasSearchFilter, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, statusFilter, visibleColumns, custom_permissions.new_agency_permissions, agencies.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -449,7 +450,7 @@ export default function AgenciesTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -476,7 +477,7 @@ export default function AgenciesTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}

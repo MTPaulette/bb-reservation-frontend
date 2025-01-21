@@ -17,7 +17,7 @@ import { signOut, useSession } from "next-auth/react";
 import { notFound, redirect } from "next/navigation";
 import { CommonSkeleton } from "../Skeletons";
 import { Button, Chip, ChipProps, Link, Select, SelectItem } from "@nextui-org/react";
-import { EventType, ReservationType } from "@/lib/definitions";
+import { EventInfoType, EventType, ReservationType } from "@/lib/definitions";
 import { ReservationCard } from "../Card/Reservation";
 import NewReservation from "./FormElements/Reservation/New";
 import Loader from "./Common/Loader";
@@ -30,10 +30,9 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   cancelled: "danger"
 };
 
-const renderEventContent = (eventInfo: any) => {
+const renderEventContent = (eventInfo: EventInfoType) => {
   return (
     <>
-    {/* <div className="flex w-full flex-col rounded-sm border-l-[3px] border-primary bg-default bg-opacity-30 dark:bg-opacity-80 p-1 text-left"> */}
     <div className="flex w-full flex-col rounded-sm border-l-[3px] p-1 text-left">
         <span className="event-name text-sm font-semibold text-foreground truncate">
           {eventInfo.event.title}
@@ -69,7 +68,7 @@ export default function Calendar() {
   const t_error = useTranslations("InputError");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showReservationModal, setShowReservationModal] = useState<boolean>(false);
-  // const [selectedCell, setSelectedCell] = useState<any>();
+  // const [selectedCell, setSelectedCell] = useState<undefined>();
   const [reservations, setReservations] = useState<EventType[]>([]);
   const [filteredReservations, setFilteredReservations] = useState<EventType[]>([]);
   const [agencyFilter, setAgencyFilter] = useState<string>("all");
@@ -85,7 +84,7 @@ export default function Calendar() {
   const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
   const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
 
-  const clickOnCell = (info: any) => {
+  const clickOnCell = () => {
     console.log("date click on: ");
     // console.log(info);
     // setSelectedCell(info.dateStr);
@@ -97,10 +96,11 @@ export default function Calendar() {
     }
   }
 
-  const handleEventClick = (info: any) => {
+  const handleEventClick = (info: EventInfoType) => {
     console.log("event click on ===============: ");
-    const id = info.event.extendedProps.reservation_id;
+    const id = info? info.event.extendedProps.reservation_id: null;
     setError("");
+    if(id){
     getReservationById(Number(id))
       .then(async (res) => {
         if(res?.ok){
@@ -137,6 +137,7 @@ export default function Calendar() {
         console.error(error);
       });
       setShowReservationModal(true);
+    }
   }
 
   useEffect(() => {
@@ -177,7 +178,7 @@ export default function Calendar() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, [permissions]);
+  }, [locale, permissions, t_error]);
 
   const agencies: string[] = Array.from(new Set(reservations.map((reservation) => reservation.agency)));
 

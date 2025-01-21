@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -38,12 +38,16 @@ export default function SpacesTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_spaces", "show_all_space"];
-  
-  const new_space_permissions: string[] = ["manage_spaces", "create_space"];
-  const view_space_permissions: string[] = ["manage_spaces", "view_space"];
-  const update_space_permissions: string[] = ["manage_spaces", "edit_space"];
-  const delete_space_permissions: string[] = ["manage_spaces", "delete_space"];
+
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["manage_spaces", "show_all_space"],
+      new_space_permissions: ["manage_spaces", "create_space"],
+      view_space_permissions: ["manage_spaces", "view_space"],
+      update_space_permissions: ["manage_spaces", "edit_space"],
+      delete_space_permissions: ["manage_spaces", "delete_space"]
+    };
+  }, []);
 
   useEffect(() => {
     setError("");
@@ -81,7 +85,7 @@ export default function SpacesTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Space = typeof spaces[0];
 
@@ -122,7 +126,7 @@ export default function SpacesTable() {
     }
 
     return filteredSpaces;
-  }, [spaces, filterValue]);
+  }, [spaces, hasSearchFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -198,7 +202,7 @@ export default function SpacesTable() {
               <DropdownMenu>
                 <DropdownItem
                   className={
-                    view_space_permissions.some(permission =>
+                    custom_permissions.view_space_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                 >
@@ -208,7 +212,7 @@ export default function SpacesTable() {
                 </DropdownItem>
                 <DropdownItem
                   className={
-                    update_space_permissions.some(permission =>
+                    custom_permissions.update_space_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   onClick={() => {
@@ -218,7 +222,7 @@ export default function SpacesTable() {
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
                   className={
-                    delete_space_permissions.some(permission =>
+                    custom_permissions.delete_space_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="danger"
@@ -236,7 +240,7 @@ export default function SpacesTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [locale, permissions, custom_permissions.view_space_permissions, custom_permissions.update_space_permissions, custom_permissions.delete_space_permissions, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -308,7 +312,7 @@ export default function SpacesTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {new_space_permissions.some(permission =>
+                  {custom_permissions.new_space_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -344,8 +348,7 @@ export default function SpacesTable() {
       )}
       </>
     );
-  }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, spaces.length, hasSearchFilter, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, visibleColumns, custom_permissions.new_space_permissions, spaces.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -369,7 +372,7 @@ export default function SpacesTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter, permissions]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -395,7 +398,7 @@ export default function SpacesTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}

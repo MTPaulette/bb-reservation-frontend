@@ -35,7 +35,6 @@ export default function SuspendStaff({ id, status }: { id: number, status: strin
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<ConfirmPasswordType>({
     resolver: zodResolver(schema),

@@ -28,7 +28,7 @@ export default function NewReservation() {
   const t_ressource = useTranslations("Ressource");
   const t_error = useTranslations("InputError");
   const locale = useLocale();
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [save, setSave] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -36,12 +36,12 @@ export default function NewReservation() {
   const [ressources, setRessources] = useState<RessourceType>();
   const [reservation_draft, setReservation_draft] = useState<Reservation_draftType>();
   const [selectedRessource, setSelectedRessource] = useState<RessourceType>();
-  const [selectedClient_id, setSelectedClient_id] = useState<string|number>("");
+  // const [selectedClient_id, setSelectedClient_id] = useState<string|number>("");
   const [selectedClient, setSelectedClient] = useState<UserType>();
-  const [coupon, setCoupon] = useState<string>("");
+  // const [coupon, setCoupon] = useState<string>("");
   const [applied_coupon, setApplied_coupon] = useState<CouponType>();
   const [selectedValidity, setSelectedValidity] = useState<string>("");
-  const [errorCoupon, setErrorCoupon] = useState<string>("");
+  // const [errorCoupon, setErrorCoupon] = useState<string>("");
   const [clientNotFound, setClientNotFound] = useState<string>("");
   const [selectedTab, setSelectedTab] = React.useState<string>("reservations");
   const [reservation_id, setReservation_id] = useState<string>();
@@ -116,7 +116,7 @@ export default function NewReservation() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   const handleFormSubmit = async (data: ReservationFormType, e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -176,7 +176,7 @@ export default function NewReservation() {
     setError("");
     getRessourceById(Number(id))
       .then(async (res) => {
-        setLoading(false);
+        // setLoading(false);
         if(res?.ok){
           const response = await res.json();
           setSelectedRessource(response.ressource);
@@ -303,7 +303,7 @@ export default function NewReservation() {
                         ));
                       }}
                       onChange={(e) => {
-                        setSelectedClient_id(e.target.value);
+                        // setSelectedClient_id(e.target.value);
                         setClientNotFound('');
                         setValue("client_id", e.target.value)
                       }}
@@ -578,10 +578,13 @@ export default function NewReservation() {
                         labelPlacement="outside"
                         size="sm"
                         {...register("coupon")}
-                        isInvalid={errorCoupon || clientNotFound ? true: false}
-                        errorMessage={errorCoupon ? errorCoupon || clientNotFound: null}
+                        isInvalid={errors.coupon ? true: false}
+                        errorMessage={errors.coupon ? errors.coupon?.message: null}
+                        
+                        // isInvalid={errorCoupon || clientNotFound ? true: false}
+                        // errorMessage={errorCoupon ? errorCoupon || clientNotFound: null}
                         classNames={classNames}
-                        onChange={(e) => setCoupon(e.target.value)}
+                        // onChange={(e) => setCoupon(e.target.value)}
                       />
                       <div className="w-full mt-4 md:mt-8">
                         <Button

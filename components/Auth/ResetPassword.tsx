@@ -38,13 +38,12 @@ export default function ResetPasswordComponent() {
   const [success, setSuccess] = useState<string>("");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [token, setToken] = useState<string|null>(searchParams.get("token")? searchParams.get('token'): '');
+  // const [token, setToken] = useState<string|null>();
   
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<TSignInForm>({
     resolver: zodResolver(schema),
@@ -53,6 +52,7 @@ export default function ResetPasswordComponent() {
   const handleFormSubmit = async (data: TSignInForm) => {
     setError("");
     setLoading(true);
+    const token = searchParams.get("token")? searchParams.get('token'): '';
     resetPassword(data.email, data.password, token? token: "")
     .then(async (res) => {
       setLoading(false);

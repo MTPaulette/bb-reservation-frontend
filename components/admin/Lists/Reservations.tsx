@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -18,7 +18,6 @@ import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
 import NewReservation from "../FormElements/Reservation/New";
-import EditReservation from "../FormElements/Reservation/Edit";
 import CancelReservation from '../FormElements/Reservation/Cancel';
 import { getReservations } from '@/lib/action/admin/reservations';
 import { signOut, useSession } from 'next-auth/react';
@@ -82,7 +81,7 @@ export default function ReservationsTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Reservation = typeof reservations[0];
 
@@ -107,18 +106,19 @@ export default function ReservationsTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"];
 
-  const new_reservation_permissions: string[] = ["manage_reservations", "create_reservation", "create_reservation_of_agency"];
-  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
-  // const update_reservation_permissions: string[] = ["manage_reservations", "edit_reservation", "edit_reservation_of_agency"];
-  const cancel_reservation_permissions: string[] = ["manage_reservations", "cancel_all_reservation", "cancel_reservation_of_agency", "cancel_own_reservation"];
-
-  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
-  const view_client_permissions: string[] = ["view_client"];
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
-
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["manage_reservations", "show_all_reservation", "show_all_reservation_of_agency"],
+      new_reservation_permissions: ["manage_reservations", "create_reservation", "create_reservation_of_agency"],
+      view_reservation_permissions: ["manage_reservations", "view_reservation", "view_reservation_of_agency"],
+      cancel_reservation_permissions: ["manage_reservations", "cancel_all_reservation", "cancel_reservation_of_agency", "cancel_own_reservation"],
+      view_ressource_permissions: ["manage_ressources", "view_ressource", "view_ressource_of_agency"],
+      view_client_permissions: ["view_client"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      view_agency_permissions: ["manage_agency", "manage_all_agencies"]
+    };
+  }, []);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -143,7 +143,7 @@ export default function ReservationsTable() {
     }
 
     return filteredReservations;
-  }, [reservations, filterValue, statusFilter]);
+  }, [reservations, hasSearchFilter, statusFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -171,7 +171,7 @@ export default function ReservationsTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_ressource_permissions.some(permission =>
+            {custom_permissions.view_ressource_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
                 {capitalize(reservation.ressource.space.name)}
@@ -190,7 +190,7 @@ export default function ReservationsTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_client_permissions.some(permission =>
+            {custom_permissions.view_client_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
                 {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
@@ -209,7 +209,7 @@ export default function ReservationsTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_agency_permissions.some(permission =>
+            {custom_permissions.view_agency_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/agencies/${reservation.ressource.agency.id}`}>
                 {capitalize(reservation.ressource.agency.name)}
@@ -287,7 +287,7 @@ export default function ReservationsTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_staff_permissions.some(permission =>
+            {custom_permissions.view_staff_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/staff/${reservation.created_by.id}`} className="font-medium">
                 {reservation.created_by.firstname && reservation.created_by.lastname? getUsername(reservation.created_by.lastname, reservation.created_by.firstname): ""}
@@ -315,7 +315,7 @@ export default function ReservationsTable() {
               <DropdownMenu>
                 <DropdownItem
                   className={
-                    view_reservation_permissions.some(permission =>
+                    custom_permissions.view_reservation_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                 >
@@ -325,7 +325,7 @@ export default function ReservationsTable() {
                 </DropdownItem>
                 {/* <DropdownItem
                   className={
-                    update_reservation_permissions.some(permission =>
+                    custom_permissions.update_reservation_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   onClick={() => {
@@ -335,7 +335,7 @@ export default function ReservationsTable() {
                 >{t_table("edit")}</DropdownItem> */}
                 <DropdownItem
                   className={
-                    new_reservation_permissions.some(permission =>
+                    custom_permissions.new_reservation_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="success"
@@ -346,7 +346,7 @@ export default function ReservationsTable() {
                 >{t_table("new_payment")}</DropdownItem>
                 <DropdownItem
                   className={
-                    cancel_reservation_permissions.some(permission =>
+                    custom_permissions.cancel_reservation_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="warning"
@@ -364,7 +364,7 @@ export default function ReservationsTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_ressource_permissions, custom_permissions.view_client_permissions, custom_permissions.view_agency_permissions, custom_permissions.view_staff_permissions, custom_permissions.view_reservation_permissions, custom_permissions.new_reservation_permissions, custom_permissions.cancel_reservation_permissions, locale, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -462,7 +462,7 @@ export default function ReservationsTable() {
                     </DropdownMenu>
                   </Dropdown>
                   <>
-                    {new_reservation_permissions.some(permission =>
+                    {custom_permissions.new_reservation_permissions.some(permission =>
                     permissions.includes(permission)) && (
                       <Button
                         endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -498,9 +498,7 @@ export default function ReservationsTable() {
       )}
       </>
     );
-  }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, reservations.length, hasSearchFilter, permissions
-  ]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, statusFilter, visibleColumns, custom_permissions.new_reservation_permissions, reservations.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -524,7 +522,7 @@ export default function ReservationsTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -550,7 +548,7 @@ export default function ReservationsTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}

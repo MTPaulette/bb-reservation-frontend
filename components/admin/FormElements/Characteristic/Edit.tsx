@@ -31,7 +31,6 @@ export default function EditCharacteristic({ characteristic }: { characteristic:
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<CharacteristicFormType>({
     resolver: zodResolver(schema),

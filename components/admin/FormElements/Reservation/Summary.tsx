@@ -18,7 +18,7 @@ export default function SummaryReservation(
   }: {
     client: UserType, ressource: RessourceType ,
     reservation_draft: Reservation_draftType, coupon: CouponType|undefined,
-    click_to_confirm: any
+    click_to_confirm: unknown
   } ) {
   const t_input = useTranslations("Input");
   const t_ressource = useTranslations("Ressource");

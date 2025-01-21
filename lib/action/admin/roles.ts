@@ -23,7 +23,7 @@ export async function getRoleById(id: number) {
     method: "GET",
     headers: await headerOptions(),
   })
-  return response.json();
+  return response;//.json();
 }
 
 export async function updateRole(data: number[], id: number) {

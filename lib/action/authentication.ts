@@ -59,8 +59,3 @@ export async function getProfile() {
   })
   return response;
 }
-
-
-// token: this.$route.query.token,
-// email: this.email,
-// password: this.password,

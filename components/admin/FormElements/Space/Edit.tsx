@@ -22,8 +22,7 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
   const t_error = useTranslations("InputError");
   const locale = useLocale();
 
-
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const [selectedCharacteristics, setSelectedCharacteristics] = useState<number[]>([]);
@@ -42,7 +41,6 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<SpaceFormType>({
     resolver: zodResolver(schema),
@@ -52,7 +50,7 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
   useEffect(() => {
     getCharacteristics()
       .then(async (res) => {
-        setLoading(false);
+        // setLoading(false);
         if(res?.ok){
           setCharacteristics(await res.json());
         }
@@ -61,10 +59,11 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
       perms.push(characteristic.id);
     });
     setSelectedCharacteristics(perms);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     perms = [];
   }, []);
 
-  const handleCheckboxChange = (e: { target: { value: string; checked: any; }; }) => {
+  const handleCheckboxChange = (e: { target: { value: string; checked: unknown; }; }) => {
     const characteristicId = parseInt(e.target.value);
     const isChecked = e.target.checked;
 
@@ -83,12 +82,12 @@ export default function EditSpace({ space }: { space: SpaceType} ) {
       formData.append('images[]', images![i]);
     }
     setError("");
-    setLoading(true);
+    // setLoading(true);
     uploadImages(formData, space.id)
     .then(async (res) => {
-      setLoading(false);
+      // setLoading(false);
       if(res?.ok) {
-        const response = await res.json();
+        // const response = await res.json();
         setSuccess(t("update_space_success_msg"));
         setTimeout(() => {
           window.location.reload();

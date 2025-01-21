@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -71,7 +71,7 @@ export default function RessourcesTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Ressource = typeof ressources[0];
 
@@ -94,16 +94,19 @@ export default function RessourcesTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_ressources", "show_all_ressource", "show_all_ressource_of_agency"];
-  
-  const new_ressource_permissions: string[] = ["manage_ressources", "create_ressource", "create_ressource_of_agency"];
-  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
-  const update_ressource_permissions: string[] = ["manage_ressources", "edit_ressource", "edit_ressource_of_agency"];
-  const delete_ressource_permissions: string[] = ["manage_ressources", "delete_ressource", "delete_ressource_of_agency"];
 
-  const view_space_permissions: string[] = ["manage_spaces", "view_space"];
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const view_agency_permissions: string[] = ["manage_agency", "manage_all_agencies"];
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["manage_ressources", "show_all_ressource", "show_all_ressource_of_agency"],
+      new_ressource_permissions: ["manage_ressources", "create_ressource", "create_ressource_of_agency"],
+      view_ressource_permissions: ["manage_ressources", "view_ressource", "view_ressource_of_agency"],
+      update_ressource_permissions: ["manage_ressources", "edit_ressource", "edit_ressource_of_agency"],
+      delete_ressource_permissions: ["manage_ressources", "delete_ressource", "delete_ressource_of_agency"],
+      view_space_permissions: ["manage_spaces", "view_space"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      view_agency_permissions: ["manage_agency", "manage_all_agencies"],
+    };
+  }, []);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -123,7 +126,7 @@ export default function RessourcesTable() {
     }
 
     return filteredRessources;
-  }, [ressources, filterValue]);
+  }, [ressources, hasSearchFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -151,7 +154,7 @@ export default function RessourcesTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_space_permissions.some(permission =>
+            {custom_permissions.view_space_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/spaces/${ressource.space_id}`} className="font-semibold">
                 {capitalize(ressource.space)}
@@ -195,7 +198,7 @@ export default function RessourcesTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_agency_permissions.some(permission =>
+            {custom_permissions.view_agency_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/agencies/${ressource.agency_id}`}>
                 {capitalize(ressource.agency)}
@@ -218,7 +221,7 @@ export default function RessourcesTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_staff_permissions.some(permission =>
+            {custom_permissions.view_staff_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/staff/${ressource.created_by}`} className="font-medium">
                 {ressource.parent_firstname && ressource.parent_lastname? getUsername(ressource.parent_lastname, ressource.parent_firstname): ""}
@@ -246,7 +249,7 @@ export default function RessourcesTable() {
                 <DropdownMenu>
                   <DropdownItem
                     className={
-                      view_ressource_permissions.some(permission =>
+                      custom_permissions.view_ressource_permissions.some(permission =>
                       permissions.includes(permission)) ? "block" : "hidden"
                     }
                   >
@@ -256,7 +259,7 @@ export default function RessourcesTable() {
                   </DropdownItem>
                   <DropdownItem
                     className={
-                      update_ressource_permissions.some(permission =>
+                      custom_permissions.update_ressource_permissions.some(permission =>
                       permissions.includes(permission)) ? "block" : "hidden"
                     }
                     onClick={() => {
@@ -266,7 +269,7 @@ export default function RessourcesTable() {
                   >{t_table("edit")}</DropdownItem>
                   <DropdownItem
                     className={
-                      delete_ressource_permissions.some(permission =>
+                      custom_permissions.delete_ressource_permissions.some(permission =>
                       permissions.includes(permission)) ? "block" : "hidden"
                     }
                     color="danger"
@@ -284,7 +287,7 @@ export default function RessourcesTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_space_permissions, custom_permissions.view_agency_permissions, custom_permissions.view_staff_permissions, custom_permissions.view_ressource_permissions, custom_permissions.update_ressource_permissions, custom_permissions.delete_ressource_permissions, locale, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -356,7 +359,7 @@ export default function RessourcesTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {new_ressource_permissions.some(permission =>
+                  {custom_permissions.new_ressource_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -392,8 +395,7 @@ export default function RessourcesTable() {
       )}
       </>
     );
-  }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, ressources.length, hasSearchFilter, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, visibleColumns, custom_permissions.new_ressource_permissions, ressources.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -417,7 +419,7 @@ export default function RessourcesTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -443,7 +445,7 @@ export default function RessourcesTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}
@@ -452,12 +454,6 @@ export default function RessourcesTable() {
         <CommonSkeleton />
       ) : (
       <div>
-      {/* <div className="full">
-        {permissions.map((permission, index) => (
-          <p key={index}>
-          {permission}</p>
-        ))}
-      </div> */}
       <Table
         isCompact
         aria-label="bb-reservation table"

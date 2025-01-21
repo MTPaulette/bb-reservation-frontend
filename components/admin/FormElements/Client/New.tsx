@@ -50,7 +50,6 @@ export default function NewClient() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<UserFormType>({
     resolver: zodResolver(schema),

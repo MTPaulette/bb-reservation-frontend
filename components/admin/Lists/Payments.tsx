@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -9,7 +9,7 @@ import {
 
 import { SearchIcon, ChevronDownIcon } from "@/components/Icons";
 import { capitalize, formatCurrency, formatDateTime, getUsername } from "@/lib/utils";
-import { columnsPayment as columns, statusCoupon as statusOptions } from "@/lib/data";
+import { columnsPayment as columns, statusPayment as statusOptions } from "@/lib/data";
 import { useLocale, useTranslations } from 'next-intl';
 import Link from "next/link";
 
@@ -37,11 +37,14 @@ export default function PaymentsTable() {
   
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_payments", "show_all_payment"];
 
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
-
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["manage_payments", "show_all_payment"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      view_reservation_permissions: ["manage_reservations", "view_reservation", "view_reservation_of_agency"]
+    };
+  }, []);
 
   useEffect(() => {
     setError("");
@@ -79,7 +82,7 @@ export default function PaymentsTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Payment = typeof payments[0];
 
@@ -120,7 +123,7 @@ export default function PaymentsTable() {
     }
 
     return filteredPayments;
-  }, [payments, filterValue, statusFilter]);
+  }, [payments, hasSearchFilter, statusFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -148,7 +151,7 @@ export default function PaymentsTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_reservation_permissions.some(permission =>
+            {custom_permissions.view_reservation_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/reservations/${payment.reservation_id}`}>
                 {payment.reservation_id}
@@ -177,7 +180,7 @@ export default function PaymentsTable() {
           <>
           {!permissions ? null : (
             <>
-            {view_staff_permissions.some(permission =>
+            {custom_permissions.view_staff_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/staff/${payment.processed_by.id}`}>
                 {payment.processed_by.lastname && payment.processed_by.firstname? getUsername(payment.processed_by.lastname, payment.processed_by.firstname): ""}
@@ -209,7 +212,7 @@ export default function PaymentsTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_reservation_permissions, custom_permissions.view_staff_permissions, locale]);
   
 
 
@@ -256,7 +259,7 @@ export default function PaymentsTable() {
                 onValueChange={onSearchChange}
               />
               <div className="flex gap-3">
-                {/* <Dropdown>
+                <Dropdown>
                   <DropdownTrigger className="flex z-1">
                     <Button
                       endContent={<ChevronDownIcon fill="currentColor" size={10} />}
@@ -280,7 +283,7 @@ export default function PaymentsTable() {
                       </DropdownItem>
                     ))}
                   </DropdownMenu>
-                </Dropdown> */}
+                </Dropdown>
                 <Dropdown>
                   <DropdownTrigger className="flex z-1">
                     <Button
@@ -331,8 +334,7 @@ export default function PaymentsTable() {
       )}
       </>
     );
-  }, [
-    filterValue,statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, payments.length, hasSearchFilter, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, statusFilter, visibleColumns, payments.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -356,7 +358,7 @@ export default function PaymentsTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -381,7 +383,7 @@ export default function PaymentsTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}

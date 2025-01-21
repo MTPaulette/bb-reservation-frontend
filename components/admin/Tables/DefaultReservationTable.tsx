@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -27,7 +27,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const INITIAL_VISIBLE_COLUMNS = ["id", "ressource", "client", "date", "hour", "state", "actions"];
 
-export default function DefaultReservationTable({ reservations }: { reservations: any[] }) {
+export default function DefaultReservationTable({ reservations }: { reservations: unknown[] }) {
   const locale = useLocale();
   const t_table = useTranslations("Table");
   type Reservation = typeof reservations[0];
@@ -48,10 +48,14 @@ export default function DefaultReservationTable({ reservations }: { reservations
   const { data: session } = useSession();
   const permissions = session?.permissions;
 
-  const view_ressource_permissions: string[] = ["manage_ressources", "view_ressource", "view_ressource_of_agency"];
-  const view_reservation_permissions: string[] = ["manage_reservations", "view_reservation", "view_reservation_of_agency"];
-  const view_staff_permissions: string[] = ["view_admin", "view_admin_of_agency", "view_superadmin"];
-  const view_client_permissions: string[] = ["view_client"];
+  const custom_permissions = useMemo(() => {
+    return {
+      view_ressource_permissions: ["manage_ressources", "view_ressource", "view_ressource_of_agency"],
+      view_reservation_permissions: ["manage_reservations", "view_reservation", "view_reservation_of_agency"],
+      view_staff_permissions: ["view_admin", "view_admin_of_agency", "view_superadmin"],
+      view_client_permissions: ["view_client"]
+    };
+  }, []);
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -76,7 +80,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
     }
 
     return filteredReservations;
-  }, [reservations, filterValue, statusFilter]);
+  }, [reservations, hasSearchFilter, statusFilter, filterValue]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -104,7 +108,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
           <>
           {!permissions ? null : (
             <>
-            {view_ressource_permissions.some(permission =>
+            {custom_permissions.view_ressource_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/ressources/${reservation.ressource.id}`}>
                 {capitalize(reservation.ressource.space.name)}
@@ -123,7 +127,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
           <>
           {!permissions ? null : (
             <>
-            {view_client_permissions.some(permission =>
+            {custom_permissions.view_client_permissions.some(permission =>
             permissions.includes(permission)) ? (
               <Link href={`/${locale}/admin/clients/${reservation.client.id}`}>
                 {reservation.client.firstname && reservation.client.lastname? getUsername(reservation.client.lastname, reservation.client.firstname): ""}
@@ -145,7 +149,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
               <>
               {!permissions ? null : (
                 <>
-                {view_staff_permissions.some(permission =>
+                {custom_permissions.view_staff_permissions.some(permission =>
                 permissions.includes(permission)) ? (
                   <>
                     {t_table("by")}:
@@ -219,7 +223,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
         return (
           <div
             className={
-              view_reservation_permissions.some(permission =>
+              custom_permissions.view_reservation_permissions.some(permission =>
               permissions.includes(permission)) ? "block" : "hidden"
             }
           >
@@ -235,7 +239,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [permissions, custom_permissions.view_ressource_permissions, custom_permissions.view_client_permissions, custom_permissions.view_staff_permissions, custom_permissions.view_reservation_permissions, locale, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -346,8 +350,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
         </div>
       </div>
     );
-  }, [
-    filterValue, statusFilter, visibleColumns, onSearchChange, onRowsPerPageChange, reservations.length, hasSearchFilter, ]);
+  }, [t_table, filterValue, onSearchChange, statusFilter, visibleColumns, reservations.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -371,7 +374,7 @@ export default function DefaultReservationTable({ reservations }: { reservations
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({

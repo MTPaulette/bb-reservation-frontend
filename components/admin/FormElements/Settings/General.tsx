@@ -43,7 +43,7 @@ export default function General () {
       setLoading(false);
       const data = await res.json();
       setOptions(data);
-      const holidaysOption = data.find((option: any) => option.name === 'holidays');
+      const holidaysOption = data.find((option) => option.name === 'holidays');
       const holidaysValues = holidaysOption.value.split(",");
       setHolidays(holidaysValues);
     })

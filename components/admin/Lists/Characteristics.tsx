@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
   Input, Button, DropdownTrigger, Dropdown, DropdownMenu,
@@ -36,9 +36,13 @@ export default function CharacteristicsTable() {
 
   const { data: session } = useSession();
   const permissions = session?.permissions;
-  const requiredPermissions: string[] = ["manage_spaces", "create_space", "edit_space"];
   
-  const characteristic_permissions: string[] = ["manage_spaces", "create_space", "edit_space"];
+  const custom_permissions = useMemo(() => {
+    return {
+      requiredPermissions: ["manage_spaces", "create_space", "edit_space"],
+      characteristic_permissions: ["manage_spaces", "create_space", "edit_space"],
+      };
+  }, []);
 
   useEffect(() => {
     setError("");
@@ -76,7 +80,7 @@ export default function CharacteristicsTable() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [locale, t_error]);
 
   type Characteristic = typeof characteristics[0];
 
@@ -118,7 +122,7 @@ export default function CharacteristicsTable() {
     }
 
     return filteredCharacteristics;
-  }, [characteristics, filterValue]);
+  }, [characteristics, filterValue, hasSearchFilter, locale]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -161,7 +165,7 @@ export default function CharacteristicsTable() {
               <DropdownMenu>
                 <DropdownItem
                   className={
-                    characteristic_permissions.some(permission =>
+                    custom_permissions.characteristic_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   onClick={() => {
@@ -171,7 +175,7 @@ export default function CharacteristicsTable() {
                 >{t_table("edit")}</DropdownItem>
                 <DropdownItem
                   className={
-                    characteristic_permissions.some(permission =>
+                    custom_permissions.characteristic_permissions.some(permission =>
                     permissions.includes(permission)) ? "block" : "hidden"
                   }
                   color="danger"
@@ -189,7 +193,7 @@ export default function CharacteristicsTable() {
       default:
         return cellValue;
     }
-  }, [session, permissions]);
+  }, [locale, permissions, custom_permissions.characteristic_permissions, t_table]);
   
 
   const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -261,7 +265,7 @@ export default function CharacteristicsTable() {
                   </DropdownMenu>
                 </Dropdown>
                 <>
-                  {characteristic_permissions.some(permission =>
+                  {custom_permissions.characteristic_permissions.some(permission =>
                   permissions.includes(permission)) && (
                     <Button
                       endContent={<PlusIcon fill="currentColor" size={14} />}
@@ -297,8 +301,7 @@ export default function CharacteristicsTable() {
       )}
       </>
     );
-  }, [
-    filterValue, visibleColumns, onSearchChange, onRowsPerPageChange, characteristics.length, hasSearchFilter, permissions]);
+  }, [permissions, t_alert, t_table, filterValue, onSearchChange, visibleColumns, custom_permissions.characteristic_permissions, characteristics.length, onRowsPerPageChange, locale]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -322,7 +325,7 @@ export default function CharacteristicsTable() {
         </span>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [hasSearchFilter, page, pages, selectedKeys, t_table, items.length]);
 
   const classNames = React.useMemo(
     () => ({
@@ -348,7 +351,7 @@ export default function CharacteristicsTable() {
       <CommonSkeleton />
     ) : (
     <>
-      {requiredPermissions.every(permission =>
+      {custom_permissions.requiredPermissions.every(permission =>
         !permissions.includes(permission)) && (
           redirect(`/${locale}/admin/forbidden`)
       )}

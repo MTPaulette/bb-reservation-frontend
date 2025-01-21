@@ -6,10 +6,8 @@ import { CalendarIcon, ViewColumnsIcon } from "@/components/Icons";
 
 import Title from "@/components/Title";
 import FindRessource from "@/components/FindRessource";
-// import Pagination from "@/components/Pagination";
-import { CommonSkeleton } from '@/components/Skeletons';
 import { _agencies, _service_types, _validities } from "@/lib/data";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { getCalendar, getRessources } from "@/lib/action/default";
 import { EventType, RessourceDefaultType } from "@/lib/definitions";
 import RessourceCard from "./RessourceCard";
@@ -20,9 +18,7 @@ import Alert from "../Alert";
 export default function Reservations() {
   const [ressources, setRessources] = useState<RessourceDefaultType[]>([]);
   const [events, setEvents] = useState<EventType[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
-  const locale = useLocale();
   const t_error = useTranslations("InputError");
   const t_table = useTranslations("Table");
   const t_alert = useTranslations("Alert");
@@ -53,7 +49,7 @@ export default function Reservations() {
         setError(t_error("something_wrong"));
         console.error(error);
       });
-  }, []);
+  }, [t_error]);
 
   const colors: string[] = ["#10b94e", "#ffa81d", "#F0950C", "#6577F3", "#0FADCF", "#138591", "#262262", "#227bc0", "#5732eb", "#31eeee", "#878787"];
 
