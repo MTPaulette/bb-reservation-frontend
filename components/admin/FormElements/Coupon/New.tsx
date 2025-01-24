@@ -66,7 +66,11 @@ export default function NewCoupon() {
             break;
           case 422:
             const err = await res.json();
-            setError(JSON.stringify(err.errors));
+            if(err.errors.en){
+              setError(locale === "en" ? err.errors.en : err.errors.fr);
+            } else {
+              setError(JSON.stringify(err.errors));
+            }
             break;
           case 403:
             setError(t_error("acces_denied"));

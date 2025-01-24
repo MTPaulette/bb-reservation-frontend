@@ -18,11 +18,12 @@ export default function SummaryReservation(
   }: {
     client: UserType, ressource: RessourceType ,
     reservation_draft: Reservation_draftType, coupon: CouponType|undefined,
-    click_to_confirm: unknown
+    click_to_confirm: undefined
   } ) {
   const t_input = useTranslations("Input");
   const t_ressource = useTranslations("Ressource");
   const t_error = useTranslations("InputError");
+  const t_summary = useTranslations("Summary");
   const locale = useLocale();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -101,23 +102,23 @@ export default function SummaryReservation(
           <div className="mb-6 sm:mb-0">
             <Title className="font-semibold text-xl text-foreground">{t_ressource("transaction_informations")}</Title>
             <div className="mt-6 text-justify text-foreground/60">
-              Vous avez entamé la réservation de la ressource <span className="font-semibold text-foreground">{ressource.space.name} </span>
-              de l&apos;agence de <span className="font-semibold text-foreground">{ressource.agency.name}</span> pour le client
+              {t_summary("text_1")} <span className="font-semibold text-foreground">{ressource.space.name} </span>
+              {t_summary("text_2")} <span className="font-semibold text-foreground">{ressource.agency.name}</span> {t_summary("text_3")}
               <span className="font-semibold text-foreground"> {getUsername(client.lastname, client.firstname)} </span>
-              allant du <span className="font-semibold text-foreground">{reservation_draft.start_date}</span> au
+              {t_summary("text_4")} <span className="font-semibold text-foreground">{reservation_draft.start_date}</span> {t_summary("text_5")}
               <span className="font-semibold text-foreground"> {reservation_draft.end_date} </span>
-              de <span className="font-semibold text-foreground">{reservation_draft.start_hour}</span> au
+              {t_summary("text_6")} <span className="font-semibold text-foreground">{reservation_draft.start_hour}</span> {t_summary("text_5")}
               <span className="font-semibold text-foreground"> {reservation_draft.end_hour}</span>.
 
               <p className="mt-6">
-                La somme à payer pour cette réservation est:
+              {t_summary("text_7")}
                 <span className="inline-block rounded ml-1 px-1.5 py-0.5 uppercase font-bold text-sm bg-success text-white"> {formatCurrency(reservation_draft.initial_amount)}</span>
               </p>
               {coupon ? (
                 <p className="mt-6">
-                  Grace à l&apos;utilisation du coupon <span className="font-semibold text-foreground whitespace-nowrap">{coupon.name}  |  {coupon.code} </span>
-                  qui vous donne droit à une réduction de <span className="font-semibold text-foreground"> {coupon.percent ? coupon.percent+' %' :  coupon.amount? formatCurrency(coupon.amount): ''}</span>,
-                  le reste à payer pour cette reservation est donc de 
+                  {t_summary("text_8")} <span className="font-semibold text-foreground whitespace-nowrap">{coupon.name}  |  {coupon.code} </span>
+                  {t_summary("text_9")} <span className="font-semibold text-foreground"> {coupon.percent ? coupon.percent+' %' :  coupon.amount? formatCurrency(coupon.amount): ''}</span>,
+                  {t_summary("text_10")} 
                   <span className="inline-block rounded ml-1 px-1.5 py-0.5 uppercase font-bold text-sm bg-success text-white"> {formatCurrency(reservation_draft.amount_due)}</span>
                 </p>
               ) : null }

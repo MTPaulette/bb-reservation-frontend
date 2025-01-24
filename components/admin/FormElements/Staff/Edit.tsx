@@ -77,7 +77,7 @@ export default function EditStaff({ user }: { user: UserType} ) {
       if(res?.ok) {
         setSuccess(t("update_account_success_msg"));
         setTimeout(() => {
-          // window.location.reload();
+          window.location.reload();
         }, 1000);
       } else {
         const status = res.status;

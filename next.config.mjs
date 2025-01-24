@@ -16,10 +16,16 @@ const nextConfig = {
         port: "8000",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "reservation.bbdesign.dev",
+        port: "",
+        pathname: "/**",
+      },
     ]
   },
   typescript: {
     ignoreBuildErrors: true,
-  }
+  },
 };
 export default withNextIntl(nextConfig);

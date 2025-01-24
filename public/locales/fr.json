@@ -545,5 +545,17 @@
     "at": "Le",
     "note": "Note",
     "reason_for_cancellation": "Raison"
+  },
+  "Summary": {
+    "text_1": "Vous avez entamé la réservation de la ressource",
+    "text_2": "de l'agence de",
+    "text_3": "pour le client",
+    "text_4": "allant du",
+    "text_5": "au",
+    "text_6": "de",
+    "text_7": "La somme à payer pour cette réservation est:",
+    "text_8": "Grace à l'utilisation du coupon",
+    "text_9": "qui vous donne droit à une réduction de",
+    "text_10": "le reste à payer pour cette reservation est donc de"
   }
 }

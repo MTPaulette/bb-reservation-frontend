@@ -544,5 +544,17 @@
     "at": "At",
     "note": "Note",
     "reason_for_cancellation": "Reason"
+  },
+  "Summary": {
+    "text_1": "You have started booking the resource",
+    "text_2": "from the agency of",
+    "text_3": "for the client",
+    "text_4": "from",
+    "text_5": "to",
+    "text_6": "from",
+    "text_7": "The amount to pay for this booking is:",
+    "text_8": "Thanks to the use of the coupon",
+    "text_9": "which entitles you to a reduction of",
+    "text_10": "the remainder to pay for this booking is therefore"
   }
 }

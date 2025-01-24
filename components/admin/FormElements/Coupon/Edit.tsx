@@ -38,10 +38,10 @@ export default function EditCoupon({ id }: { id: number} ) {
       percent: z.string(),
       amount: z.string(),
       expired_on: z.string(),
-      note_en: z.string(),
-      note_fr: z.string(),
-      is_public: z.boolean(),
-      // is_public: z.boolean().default(true),
+      note_en: z.string().optional(),
+      note_fr: z.string().optional(),
+      //is_public: z.boolean(),
+      is_public: z.boolean().default(true),
   });
 
   const {
@@ -60,6 +60,7 @@ export default function EditCoupon({ id }: { id: number} ) {
         if(res?.ok){
           const coupon = await res.json();
           setCoupon(coupon);
+          setValue("is_public", coupon.is_public? true: false)
           setCheckIsPublic(coupon.is_public);
           coupon.users.forEach(client => {
             default_clients.push(client.user_id);
@@ -133,7 +134,11 @@ export default function EditCoupon({ id }: { id: number} ) {
             break;
           case 422:
             const err = await res.json();
-            setError(JSON.stringify(err.errors));
+            if(err.errors.en){
+              setError(locale === "en" ? err.errors.en : err.errors.fr);
+            } else {
+              setError(JSON.stringify(err.errors));
+            }
             break;
           case 403:
             setError(t_error("acces_denied"));
@@ -227,7 +232,7 @@ export default function EditCoupon({ id }: { id: number} ) {
         <Input
           isRequired
           label={t_input("expired_on")}
-          type="text"
+          type="date"
           placeholder={t_input("percent_placeholder")}
           labelPlacement="outside"
           classNames={{inputWrapper: "bg-input rounded-small"}}

@@ -91,7 +91,12 @@ export default function EditRessource({ ressource }: { ressource: RessourceType}
             setError(t_error("ressource_not_found"));
             break;
           case 422:
-            setError(JSON.stringify(err.errors));
+            // setError(JSON.stringify(err.errors));
+            if(err.errors.en){
+              setError(locale === "en" ? err.errors.en : err.errors.fr);
+            } else {
+              setError(JSON.stringify(err.errors));
+            }
             break;
           case 403:
             setError(t_error("acces_denied"));

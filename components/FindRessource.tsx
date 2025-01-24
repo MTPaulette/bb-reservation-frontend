@@ -32,7 +32,7 @@ export default function FindRessource() {
             hourCycle={24}
             defaultValue={new Time(thishour, 0)}
             minValue={new Time(8)}
-            maxValue={new Time(21)}
+            // maxValue={new Time(21)}
             endContent={<ClockIcon fill="currentColor" size={18} />}
             className="w-32 md:w-36 rounded-small" radius="sm"
           />
@@ -43,7 +43,7 @@ export default function FindRessource() {
             label="Heure de fin" labelPlacement="inside" color="primary"
             hourCycle={24}
             minValue={new Time(8)}
-            maxValue={new Time(21)}
+            // maxValue={new Time(21)}
             defaultValue={new Time(thishour+1, 0)}
             className="w-32 md:w-36 rounded-small" radius="sm"
           />
