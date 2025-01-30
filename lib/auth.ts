@@ -14,6 +14,7 @@ export const authOptions: NextAuthOptions = {
         const res =await fetch(`${api_url}/csrf-cookie`, {
           method: "GET",
         })
+        console.log("---------=================res");
 
         const setCookieHeader = res.headers.get("set-cookie");
         //console.log("setCookieHeader", setCookieHeader)
@@ -54,6 +55,8 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify(data),
         }
         const response = await fetch(`${api_url}/login`, options);
+        console.log("-----------------------------------response");
+        console.log(response);
         
         if (response.status == 201) {
           const res = await response.json();
