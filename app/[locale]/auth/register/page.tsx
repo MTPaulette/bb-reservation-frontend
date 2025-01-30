@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Register from "@/components/Auth/Register";
+import Register from "@/components/auth/Register";
 
 export const metadata: Metadata = {
   title: "Register | BB-RESERVATION-SYST",

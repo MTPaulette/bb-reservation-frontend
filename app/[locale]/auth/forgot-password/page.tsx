@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ForgotPassword from "@/components/Auth/ForgotPassword";
+import ForgotPassword from "@/components/auth/ForgotPassword";
 
 export const metadata: Metadata = {
   title: "Forgot-password | BB-RESERVATION-SYST",

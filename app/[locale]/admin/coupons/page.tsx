@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import CouponsTable from "@/components/admin/Lists/Coupons";
+import CouponsTable from "@/components/admin/lists/Coupons";
 
 export const metadata: Metadata = {
   title: "Coupons | BB-RESERVATION-SYST",

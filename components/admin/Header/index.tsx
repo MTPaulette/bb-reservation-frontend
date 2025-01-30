@@ -4,7 +4,7 @@ import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import DropdownNotification from "./DropdownNotification";
 import { ChevronDownIcon, SettingIcon, UserIcon } from "@/components/Icons";
-import Logout from "@/components/admin/FormElements/Logout";
+import Logout from "@/components/admin/formElements/Logout";
 import { useSession } from "next-auth/react";
 import { useLocale, useTranslations } from 'next-intl';
 

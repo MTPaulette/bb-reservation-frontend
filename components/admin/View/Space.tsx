@@ -9,15 +9,15 @@ import { useState, useEffect } from "react";
 import { CommonSkeleton } from '@/components/Skeletons';
 import Title from "@/components/Title";
 import { capitalize, getImageUrl } from "@/lib/utils";
-import CardDataStats from "@/components/admin/DataStats/Card1";
+import CardDataStats from "@/components/admin/dataStats/Card1";
 
 import { CharetIcon, EyeIcon, PeopleIcon, ShoppingBagIcon } from "@/components/Icons";
 import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Image } from "@nextui-org/react";
 import { VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
-import EditSpace from "@/components/admin/FormElements/Space/Edit";
-import DeleteSpace from "@/components/admin/FormElements/Space/Delete";
+import EditSpace from "@/components/admin/formElements/space/Edit";
+import DeleteSpace from "@/components/admin/formElements/space/Delete";
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";

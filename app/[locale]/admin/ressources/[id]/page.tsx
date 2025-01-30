@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/admin/Breadcrumb";
 import { Metadata } from "next";
-import ViewRessource from "@/components/admin/View/Ressource";
+import ViewRessource from "@/components/admin/view/Ressource";
 
 export const metadata: Metadata = {
   title: "Ressource | BB-RESERVATION-SYST",

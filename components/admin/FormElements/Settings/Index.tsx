@@ -2,11 +2,11 @@
 
 import React from "react";
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import Profile from "@/components/admin/FormElements/Settings/Profile";
+import Profile from "@/components/admin/formElements/settings/Profile";
 // import Email from "@/components/admin/FormElements/Settings/Email";
-import General from "@/components/admin/FormElements/Settings/General";
-import Finance from "@/components/admin/FormElements/Settings/Finance";
-import Pdf from "@/components/admin/FormElements/Settings/Pdf";
+import General from "@/components/admin/formElements/settings/General";
+import Finance from "@/components/admin/formElements/settings/Finance";
+import Pdf from "@/components/admin/formElements/settings/Pdf";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { CommonSkeleton } from "@/components/Skeletons";

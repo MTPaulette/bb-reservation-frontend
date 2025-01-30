@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import CharacteristicsTable from "@/components/admin/Lists/Characteristics";
+import CharacteristicsTable from "@/components/admin/lists/Characteristics";
 
 export const metadata: Metadata = {
   title: "Characteristics | BB-RESERVATION-SYST",

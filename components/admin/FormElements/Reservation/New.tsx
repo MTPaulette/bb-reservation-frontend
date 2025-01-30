@@ -19,7 +19,7 @@ import { capitalize, formatCurrency, getImageUrl } from "@/lib/utils";
 import { BookIcon, CalendarIcon, CurrencyIcon } from "@/components/Icons";
 import { createReservation } from "@/lib/action/admin/reservations";
 import { validitiesName as validities, Hours, middayPeriods } from "@/lib/data";
-import NewPayment from "../Payment/New";
+import NewPayment from "../payment/New";
 import SummaryReservation from "./Summary";
 
 export default function NewReservation() {

@@ -17,11 +17,11 @@ import Link from "next/link";
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewReservation from "../FormElements/Reservation/New";
-import CancelReservation from '../FormElements/Reservation/Cancel';
+import NewReservation from "../formElements/reservation/New";
+import CancelReservation from '../formElements/reservation/Cancel';
 import { getReservations } from '@/lib/action/admin/reservations';
 import { signOut, useSession } from 'next-auth/react';
-import NewPayment from '../FormElements/Payment/New';
+import NewPayment from '../formElements/payment/New';
 import { redirect } from "next/navigation";
 
 

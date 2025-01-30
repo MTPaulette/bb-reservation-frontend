@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/admin/Breadcrumb";
 import { Metadata } from "next";
-import ViewStaff from "@/components/admin/View/User/Staff";
+import ViewStaff from "@/components/admin/view/user/Staff";
 
 export const metadata: Metadata = {
   title: "Staff Profile | BB-RESERVATION-SYST",

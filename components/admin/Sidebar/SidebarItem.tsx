@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import SidebarDropdown from "@/components/admin/Sidebar/SidebarDropdown";
+import SidebarDropdown from "@/components/admin/sidebar/SidebarDropdown";
 import { usePathname } from "next/navigation";
 import { capitalize } from "@/lib/utils";
 

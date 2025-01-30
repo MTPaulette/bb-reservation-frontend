@@ -16,11 +16,11 @@ import { useLocale, useTranslations } from 'next-intl';
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import EditCharacteristic from "../FormElements/Characteristic/Edit";
-import DeleteCharacteristic from "../FormElements/Characteristic/Delete";
+import EditCharacteristic from "../formElements/Characteristic/Edit";
+import DeleteCharacteristic from "../formElements/Characteristic/Delete";
 import { getCharacteristics } from '@/lib/action/admin/characteristics';
 import { signOut, useSession } from 'next-auth/react';
-import NewCharacteristic from '../FormElements/Characteristic/New';
+import NewCharacteristic from '../formElements/Characteristic/New';
 import { redirect } from 'next/navigation';
 
 const INITIAL_VISIBLE_COLUMNS = ["characteristic", "actions"];

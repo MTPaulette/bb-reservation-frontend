@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Sidebar from "@/components/admin/Sidebar";
-import Header from "@/components/admin/Header";
+import Sidebar from "@/components/admin/sidebar";
+import Header from "@/components/admin/header";
 import Footer from "@/components/admin/Footer";
 
 export default function AdminLayout({

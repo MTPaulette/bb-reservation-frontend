@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/admin/Breadcrumb";
 import { Metadata } from "next";
-import ViewSpace from "@/components/admin/View/Space";
+import ViewSpace from "@/components/admin/view/Space";
 
 export const metadata: Metadata = {
   title: "Space | BB-RESERVATION-SYST",

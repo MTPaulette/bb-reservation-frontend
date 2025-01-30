@@ -17,13 +17,13 @@ import {
 } from "@nextui-org/react";
 
 import Modal from "@/components/Modal";
-import EditRessource from "@/components/admin/FormElements/Ressource/Edit";
-import DeleteRessource from "@/components/admin/FormElements/Ressource/Delete";
+import EditRessource from "@/components/admin/formElements/ressource/Edit";
+import DeleteRessource from "@/components/admin/formElements/ressource/Delete";
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import Link from "next/link";
-import DefaultReservationTable from "../Tables/DefaultReservationTable";
+import DefaultReservationTable from "../tables/DefaultReservationTable";
 // import Image from "next/image";
 
 export default function ViewRessource({id}: {id: string}) {

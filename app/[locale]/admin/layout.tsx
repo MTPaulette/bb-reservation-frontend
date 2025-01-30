@@ -6,9 +6,9 @@ import "@/styles/satoshi.css";
 
 import React from "react";
 
-import SessionProviderWrapper from "@/components/Layout/SessionProviderWrapper";
-import AdminLayout from "@/components/Layout/AdminLayout";
-import BaseLayout from "@/components/Layout/BaseLayout";
+import SessionProviderWrapper from "@/components/layout/SessionProviderWrapper";
+import AdminLayout from "@/components/layout/AdminLayout";
+import BaseLayout from "@/components/layout/BaseLayout";
 import { routing } from "@/i18n/routing";
 
 export default function RootLayout({

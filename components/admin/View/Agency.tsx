@@ -15,18 +15,18 @@ import {
   DropdownItem, } from "@nextui-org/react";
 
 import Modal from "@/components/Modal";
-import EditAgency from "@/components/admin/FormElements/Agency/Edit";
-import SuspendAgency from "@/components/admin/FormElements/Agency/Suspend";
-import DeleteAgency from "@/components/admin/FormElements/Agency/Delete";
+import EditAgency from "@/components/admin/formElements/agency/Edit";
+import SuspendAgency from "@/components/admin/formElements/agency/Suspend";
+import DeleteAgency from "@/components/admin/formElements/agency/Delete";
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import Link from "next/link";
 import { columnsTabsStaffAgency } from "@/lib/data";
-import DefaultUserTable from "../Tables/DefaultUserTable";
-import DefaultRessourceTable from "../Tables/DefaultRessourceTable";
-import DefaultReservationTable from "../Tables/DefaultReservationTable";
-import CardDataStats from "../DataStats/Card1";
+import DefaultUserTable from "../tables/DefaultUserTable";
+import DefaultRessourceTable from "../tables/DefaultRessourceTable";
+import DefaultReservationTable from "../tables/DefaultReservationTable";
+import CardDataStats from "../dataStats/Card1";
 
 export default function ViewAgency({id}: {id: string}) {
   const [response, setResponse] = useState([]);

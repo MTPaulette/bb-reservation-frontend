@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import { BbLogo } from "@/components/BbLogo";
 import { ChevronDownIcon, SettingIcon, UserIcon } from "@/components/Icons";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import Logout from "@/components/admin/FormElements/Logout";
+import Logout from "@/components/admin/formElements/Logout";
 
 import { getImageUrl, getUsername } from "@/lib/utils";
 

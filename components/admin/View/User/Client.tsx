@@ -13,16 +13,16 @@ import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Tabs, Ta
 import { VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
-import EditClient from "@/components/admin/FormElements/Client/Edit";
-import DeleteClient from "@/components/admin/FormElements/Client/Delete";
-import SuspendClient from '@/components/admin/FormElements/Client/Suspend';
+import EditClient from "@/components/admin/formElements/client/Edit";
+import DeleteClient from "@/components/admin/formElements/client/Delete";
+import SuspendClient from '@/components/admin/formElements/client/Suspend';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import Link from "next/link";
 import { columnsTabsClientCoupon } from "@/lib/data";
-import DefaultCouponTable from "../../Tables/DefaultCouponTable";
-import DefaultReservationTable from "../../Tables/DefaultReservationTable";
+import DefaultCouponTable from "../../tables/DefaultCouponTable";
+import DefaultReservationTable from "../../tables/DefaultReservationTable";
 
 export default function ViewClient({id}: {id: string}) {
   const { data: session } = useSession();

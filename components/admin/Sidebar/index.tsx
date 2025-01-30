@@ -2,13 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import SidebarItem from "@/components/admin/Sidebar/SidebarItem";
+import SidebarItem from "@/components/admin/sidebar/SidebarItem";
 import ClickOutside from "@/components/admin/ClickOutside";
 import useLocalStorage from "@/lib/hooks/useLocalStorage";
 import { BbLogo } from "@/components/BbLogo";
 import { CalendarIcon, UserIcon, SettingIcon, ThreeHorizontalBarIcon, UiIcon, DashboardIcon, PeopleIcon, ActivityIcon, CurrencyIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from "next-intl";
-import Logout from "@/components/admin/FormElements/Logout";
+import Logout from "@/components/admin/formElements/Logout";
 import { useSession } from "next-auth/react";
 
 

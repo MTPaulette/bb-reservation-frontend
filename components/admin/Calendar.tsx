@@ -18,8 +18,8 @@ import { notFound, redirect } from "next/navigation";
 import { CommonSkeleton } from "../Skeletons";
 import { Button, Chip, ChipProps, Link, Select, SelectItem } from "@nextui-org/react";
 import { EventInfoType, EventType, ReservationType } from "@/lib/definitions";
-import { ReservationCard } from "../Card/Reservation";
-import NewReservation from "./FormElements/Reservation/New";
+import { ReservationCard } from "../card/Reservation";
+import NewReservation from "./formElements/reservation/New";
 import Loader from "../Loader";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {

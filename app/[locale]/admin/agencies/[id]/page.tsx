@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/admin/Breadcrumb";
 import { Metadata } from "next";
-import ViewAgency from "@/components/admin/View/Agency";
+import ViewAgency from "@/components/admin/view/Agency";
 
 export const metadata: Metadata = {
   title: "Agency | BB-RESERVATION-SYST",

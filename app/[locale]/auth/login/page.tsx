@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Login from "@/components/Auth/Login";
+import Login from "@/components/auth/Login";
 
 export const metadata: Metadata = {
   title: "Login | BB-RESERVATION-SYST",

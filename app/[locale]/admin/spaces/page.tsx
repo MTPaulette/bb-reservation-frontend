@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import SpacesTable from "@/components/admin/Lists/Spaces";
+import SpacesTable from "@/components/admin/lists/Spaces";
 
 export const metadata: Metadata = {
   title: "Spaces | BB-RESERVATION-SYST",

@@ -17,11 +17,11 @@ import Link from "next/link";
 import Modal from "@/components/Modal";
 import Alert from "@/components/Alert";
 import { CommonSkeleton } from '@/components/Skeletons';
-import NewStaff from "../FormElements/Staff/New";
-import EditStaff from "../FormElements/Staff/Edit";
-import DeleteStaff from "../FormElements/Staff/Delete";
+import NewStaff from "../formElements/staff/New";
+import EditStaff from "../formElements/staff/Edit";
+import DeleteStaff from "../formElements/staff/Delete";
 import { getStaff } from '@/lib/action/admin/staff';
-import SuspendStaff from '../FormElements/Staff/Suspend';
+import SuspendStaff from '../formElements/staff/Suspend';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 

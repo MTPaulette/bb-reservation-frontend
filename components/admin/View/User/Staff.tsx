@@ -12,18 +12,18 @@ import { Button, DropdownTrigger, Dropdown, DropdownMenu, DropdownItem, Tabs, Ta
 import { VerticalDotsIcon } from "@/components/Icons";
 
 import Modal from "@/components/Modal";
-import EditStaff from "@/components/admin/FormElements/Staff/Edit";
-import DeleteStaff from "@/components/admin/FormElements/Staff/Delete";
-import SuspendStaff from '@/components/admin/FormElements/Staff/Suspend';
+import EditStaff from "@/components/admin/formElements/staff/Edit";
+import DeleteStaff from "@/components/admin/formElements/staff/Delete";
+import SuspendStaff from '@/components/admin/formElements/staff/Suspend';
 import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Link from "next/link";
 import Alert from "@/components/Alert";
-import DefaultRessourceTable from "../../Tables/DefaultRessourceTable";
-import DefaultUserTable from "../../Tables/DefaultUserTable";
+import DefaultRessourceTable from "../../tables/DefaultRessourceTable";
+import DefaultUserTable from "../../tables/DefaultUserTable";
 import { columnsTabsStaffStaff, columnsTabsClientStaff, columnsTabsStaffCoupon } from "@/lib/data";
-import DefaultCouponTable from "../../Tables/DefaultCouponTable";
-import DefaultReservationTable from "../../Tables/DefaultReservationTable";
+import DefaultCouponTable from "../../tables/DefaultCouponTable";
+import DefaultReservationTable from "../../tables/DefaultReservationTable";
 
 export default function ViewStaff({id}: {id: string}) {
   const { data: session } = useSession();

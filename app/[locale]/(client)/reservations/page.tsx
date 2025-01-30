@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Reservations from "@/components/Reservations/Index";
+import Reservations from "@/components/reservations/Index";
 
 export const metadata: Metadata = {
   title: "BB-RESERVATION-SYST",

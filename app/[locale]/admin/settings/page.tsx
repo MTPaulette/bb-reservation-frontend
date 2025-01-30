@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Breadcrumb from "@/components/admin/Breadcrumb";
-import IndexSettings from "@/components/admin/FormElements/Settings/Index";
+import IndexSettings from "@/components/admin/formElements/settings/Index";
 
 export const metadata: Metadata = {
   title: "Settings | BB-RESERVATION-SYST",

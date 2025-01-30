@@ -13,9 +13,9 @@ import {
   DropdownItem, User, Chip, Image, ChipProps
 } from "@nextui-org/react";
 import { useSession } from 'next-auth/react';
-import CancelReservation from '../admin/FormElements/Reservation/Cancel';
+import CancelReservation from '../admin/formElements/reservation/Cancel';
 import { useState } from 'react';
-import NewPayment from '../admin/FormElements/Payment/New';
+import NewPayment from '../admin/formElements/payment/New';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   pending: "warning",

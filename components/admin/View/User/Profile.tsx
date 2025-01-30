@@ -12,8 +12,8 @@ import { signOut } from 'next-auth/react';
 import Alert from "@/components/Alert";
 import { getProfile } from "@/lib/action/authentication";
 import { columnsTabsClientCoupon } from "@/lib/data";
-import DefaultCouponTable from "../../Tables/DefaultCouponTable";
-import DefaultReservationTable from "../../Tables/DefaultReservationTable";
+import DefaultCouponTable from "../../tables/DefaultCouponTable";
+import DefaultReservationTable from "../../tables/DefaultReservationTable";
 
 
 

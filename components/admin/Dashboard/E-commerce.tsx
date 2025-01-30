@@ -2,30 +2,30 @@
 
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import ChartOne from "../Charts/ChartOne";
-import ChartTwo from "../Charts/ChartTwo";
+import ChartOne from "../charts/ChartOne";
+import ChartTwo from "../charts/ChartTwo";
 import TopClients from "./TopClients";
-import CardDataStats from "../DataStats/Card1";
+import CardDataStats from "../dataStats/Card1";
 import { CalendarIcon, ChevronDownIcon, PeopleIcon, PlusIcon, ShoppingBagIcon } from "@/components/Icons";
 import { useLocale, useTranslations } from 'next-intl';
 import { Button, Input } from "@nextui-org/react";
 import Modal from "@/components/Modal";
-import NewReservation from "../FormElements/Reservation/New";
+import NewReservation from "../formElements/reservation/New";
 import { CommonSkeleton } from "@/components/Skeletons";
 import { signOut, useSession } from "next-auth/react";
 import { getStatistics } from "@/lib/action/admin/dashbord";
 import Alert from "@/components/Alert";
 import { formatCurrency, getUsername } from "@/lib/utils";
 import { availableStats, Months } from "@/lib/data";
-import CardDataStats3 from "../DataStats/Card3";
+import CardDataStats3 from "../dataStats/Card3";
 import CurrentReservations from "./CurrentReservations";
 import { redirect } from "next/navigation";
 
-const MapOne = dynamic(() => import("@/components/admin/Maps/MapOne"), {
+const MapOne = dynamic(() => import("@/components/admin/maps/MapOne"), {
   ssr: false,
 });
 
-const ChartThree = dynamic(() => import("@/components/admin/Charts/ChartThree"), {
+const ChartThree = dynamic(() => import("@/components/admin/charts/ChartThree"), {
   ssr: false,
 });
 

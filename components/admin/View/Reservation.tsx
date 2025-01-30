@@ -12,9 +12,9 @@ import { signOut, useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Alert from "@/components/Alert";
 import { CouponType, PaymentType, ReservationType } from "@/lib/definitions";
-import { PaymentCard } from "@/components/Card/Payment";
-import { CouponCard } from "@/components/Card/Coupon";
-import { ReservationCard } from "@/components/Card/Reservation";
+import { PaymentCard } from "@/components/card/Payment";
+import { CouponCard } from "@/components/card/Coupon";
+import { ReservationCard } from "@/components/card/Reservation";
 
 
 export default function ViewReservation({id}: {id: string}) {
