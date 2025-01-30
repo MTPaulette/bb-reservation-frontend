@@ -48,7 +48,6 @@ export const getImageUrl = (link : string) => {
   if(process.env.API_URL) {
   const url = new URL(process.env.API_URL);
   const image_src = process.env.IMAGE_SRC;
-  console.log(image_src);
   url.pathname = `${image_src}/${link}`;
   // url.pathname = `/storage/${link}`;
   // url.pathname = `/backend/core/storage/app/public/${link}`;

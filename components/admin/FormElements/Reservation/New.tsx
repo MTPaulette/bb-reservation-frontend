@@ -13,7 +13,7 @@ import { getRessourceById } from "@/lib/action/admin/ressources";
 import { getClients } from "@/lib/action/admin/clients";
 import { getRessources } from "@/lib/action/default";
 import Title from "@/components/Title";
-import Loader from "../../Common/Loader";
+import Loader from "../../Common/Loader/index";
 import { signOut } from 'next-auth/react';
 import { capitalize, formatCurrency, getImageUrl } from "@/lib/utils";
 import { BookIcon, CalendarIcon, CurrencyIcon } from "@/components/Icons";

@@ -20,7 +20,7 @@ import { Button, Chip, ChipProps, Link, Select, SelectItem } from "@nextui-org/r
 import { EventInfoType, EventType, ReservationType } from "@/lib/definitions";
 import { ReservationCard } from "../Card/Reservation";
 import NewReservation from "./FormElements/Reservation/New";
-import Loader from "./Common/Loader";
+import Loader from "./Common/Loader/index";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   pending: "warning",
