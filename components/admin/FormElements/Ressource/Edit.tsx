@@ -13,7 +13,7 @@ import { updateRessource } from "@/lib/action/admin/ressources";
 import { getAgencies } from "@/lib/action/admin/agencies";
 import { getSpaces } from "@/lib/action/admin/spaces";
 import Title from "@/components/Title";
-import Loader from "../../Common/Loader/index";
+import Loader from "../../../Loader";
 import { signOut } from "next-auth/react";
 
 export default function EditRessource({ ressource }: { ressource: RessourceType} ) {

@@ -13,7 +13,7 @@ import { getClients } from "@/lib/action/admin/clients";
 import Title from "@/components/Title";
 import { getCouponById, updateCoupon } from "@/lib/action/admin/coupons";
 import { getUsername } from "@/lib/utils";
-import Loader from "../../Common/Loader/index";
+import Loader from "../../../Loader";
 import { signOut } from "next-auth/react";
 
 
